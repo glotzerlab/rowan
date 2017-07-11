@@ -12,8 +12,8 @@ setup(name='quaternion',
       url='http://github.com/vramasub/quaternion',
       author='Vyas Ramasubramani',
       author_email='vramasub@umich.com',
-      packages=find_packages(),
-      zip_safe=True
+      packages=find_packages(exclude=["tests"]),
+      zip_safe=True,
 
       install_requires=[
           'numpy>=1.13'

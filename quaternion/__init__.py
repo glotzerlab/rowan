@@ -250,10 +250,6 @@ def quat_to_euler(q):
 
     return (alpha, beta, gamma)
 
-
-
-
-
 def quat_from_matrix(mat, require_orthogonal = True):
     R"""Convert the rotation matrices mat to quaternions
 
