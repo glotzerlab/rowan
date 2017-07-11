@@ -10,16 +10,17 @@ The quaternion package provides a simple and consistent interface for using quat
 
 ## Setup
 
-TBD
+### Installation from source
 
-## Documentation
+To install from source, execute:
 
-TBD
-
-## Quickstart
-
-TBD
+	git clone https://bitbucket.org/vramasub/quaternion.git
+	cd quaternion
+	python setup.py install --user
 
 ## Testing
 
-TBD
+To run the packaged unit tests, execute:
+
+    python -m unittest discover tests
+
