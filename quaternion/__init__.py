@@ -3,21 +3,21 @@
 import numpy as np
 import warnings
 
-__all__ = ['quat_conjugate',
-        'quat_multiply',
+__all__ = ['conjugate',
+        'multiply',
         'norm',
         'normalize',
-        'quat_rotate',
-        'quat_about_axis',
+        'rotate',
+        'about_axis',
         'vector_vector_rotation',
-        'quat_from_euler',
-        'quat_to_euler',
-        'quat_from_matrix',
-        'quat_to_matrix']
+        'from_euler',
+        'to_euler',
+        'from_matrix',
+        'to_matrix']
 
 __version__ = 0.1
 
-def quat_conjugate(q):
+def conjugate(q):
     R"""Returns the conjugate of quaternion array q
 
     Args:
@@ -28,13 +28,13 @@ def quat_conjugate(q):
 
     Example::
 
-        q_star = quat_conjugate(q)
+        q_star = conjugate(q)
     """
     conjugate = q.copy()
     conjugate[..., 1:] *= -1
     return conjugate
 
-def quat_multiply(qi, qj):
+def multiply(qi, qj):
     R"""Multiplies the quaternions in the array qi by those in qj
 
     Args:
@@ -48,7 +48,7 @@ def quat_multiply(qi, qj):
 
         qi = np.array([[1, 0, 0, 0]])
         qj = np.array([[1, 0, 0, 0]])
-        prod = quat_multiply(qi, qj)
+        prod = multiply(qi, qj)
     """
     if not qi.shape == qj.shape:
         raise ValueError("The two arrays must be the same size!")
@@ -94,7 +94,7 @@ def normalize(q):
     norms = norm(q)
     return q/norms[..., np.newaxis]
 
-def quat_rotate(q, v):
+def rotate(q, v):
     R"""Rotates the vectors v by the quaternions q
 
     Args:
@@ -108,11 +108,11 @@ def quat_rotate(q, v):
 
         q = np.random.rand(1, 4)
         v = np.random.rand(1, 3)
-        v_rot = quat_rotate(q, v)
+        v_rot = rotate(q, v)
     """
     # Convert vector to quaternion representation
     quat_v = np.concatenate((np.zeros(v.shape[:-1]+(1,)), v), axis = -1)
-    return quat_multiply(q, quat_multiply(quat_v, quat_conjugate(q)))[..., 1:]
+    return multiply(q, multiply(quat_v, conjugate(q)))[..., 1:]
 
 def _vector_bisector(v1, v2):
     R"""Find the vector bisecting v1 and v2
@@ -135,7 +135,7 @@ def _vector_bisector(v1, v2):
         #raise ValueError("The two inputs must both be 1x3 vectors")
     return normalize(normalize(v1) + normalize(v2))
 
-def quat_about_axis(v, theta):
+def about_axis(v, theta):
     R"""Find the quaternions corresponding to rotations about the axes v by angles theta
 
     Args:
@@ -147,7 +147,7 @@ def quat_about_axis(v, theta):
         import numpy as np
         axis = np.array([[1, 0, 0]])
         ang = np.pi/3
-        quat = quat_about_axis(axis, ang)
+        quat = about_axis(axis, ang)
     """
 
     # Now normalize
@@ -166,9 +166,9 @@ def vector_vector_rotation(v1, v2):
         v2 ((...,3) np.array): Desired vector
 
     """
-    return quat_about_axis(_vector_bisector(v1, v2), np.pi)
+    return about_axis(_vector_bisector(v1, v2), np.pi)
 
-def quat_from_euler(alpha, beta, gamma):
+def from_euler(alpha, beta, gamma):
     R"""Convert Euler angles to quaternion (3-2-1 convention)
 
     Args:
@@ -190,7 +190,7 @@ def quat_from_euler(alpha, beta, gamma):
 
         rands = np.random.rand(100, 3)
         alpha, beta, gamma = rands.T
-        ql.quat_from_euler(alpha, beta, gamma)
+        ql.from_euler(alpha, beta, gamma)
     """
 
     if any(type(x) == np.ndarray for x in (alpha, beta, gamma)):
@@ -214,7 +214,7 @@ def quat_from_euler(alpha, beta, gamma):
 
     return np.stack([np.atleast_1d(x) for x in (r, i, j, k)], axis = -1)
 
-def quat_to_euler(q):
+def to_euler(q):
     R"""Convert quaternions to Euler angles (3-2-1 convention)
 
     Args:
@@ -230,8 +230,8 @@ def quat_to_euler(q):
 
         rands = np.random.rand(100, 3)
         alpha, beta, gamma = rands.T
-        ql.quat_from_euler(alpha, beta, gamma)
-        alpha_return, beta_return, gamma_return = ql.quat_to_euler(full)
+        ql.from_euler(alpha, beta, gamma)
+        alpha_return, beta_return, gamma_return = ql.to_euler(full)
 
     """
 
@@ -261,7 +261,7 @@ def quat_to_euler(q):
 
     return (alpha, beta, gamma)
 
-def quat_from_matrix(mat, require_orthogonal = True):
+def from_matrix(mat, require_orthogonal = True):
     R"""Convert the rotation matrices mat to quaternions
 
     Uses the algorithm described in this paper by Bar-Itzhack
@@ -304,7 +304,7 @@ def quat_from_matrix(mat, require_orthogonal = True):
     # The conventions in the paper are very confusing for quaternions in terms of the order of the components
     return np.concatenate((v[..., -1, -1, np.newaxis], -v[..., :-1, -1]), axis = -1)
 
-def quat_to_matrix(q, require_unit = True):
+def to_matrix(q, require_unit = True):
     R"""Convert the quaternions in q to rotation matrices.
 
     Uses the conversion described on Wikipedia

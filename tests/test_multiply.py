@@ -21,11 +21,11 @@ class TestMultiply(unittest.TestCase):
     def test_single_quaternion(self):
         """Simplest case of quaternion multiplication"""
         # Multiply zeros
-        product = quaternion.quat_multiply(zero, zero)
+        product = quaternion.multiply(zero, zero)
         self.assertTrue(np.all(product == np.array([0, 0, 0, 0])))
 
         # Multiply ones
-        product = quaternion.quat_multiply(one, one)
+        product = quaternion.multiply(one, one)
         self.assertTrue(np.all(product == np.array([1, 0, 0, 0])))
 
     def test_2d_array(self):
@@ -34,15 +34,15 @@ class TestMultiply(unittest.TestCase):
         ones = np.repeat(one[np.newaxis, :], 10, axis = 0)
 
         # Multiply zeros
-        product = quaternion.quat_multiply(zeros, zeros)
+        product = quaternion.multiply(zeros, zeros)
         self.assertTrue(np.all(product == np.repeat(np.array([0, 0, 0, 0])[np.newaxis, :], 10, axis = 0)))
 
         # Multiply ones
-        product = quaternion.quat_multiply(ones, ones)
+        product = quaternion.multiply(ones, ones)
         self.assertTrue(np.all(product == np.repeat(np.array([1, 0, 0, 0])[np.newaxis, :], 10, axis = 0)))
 
         # Complex random array
-        product = quaternion.quat_multiply(input1, input2)
+        product = quaternion.multiply(input1, input2)
         self.assertTrue(np.allclose(product, stored_product))
 
     def test_3d_array(self):
@@ -55,15 +55,15 @@ class TestMultiply(unittest.TestCase):
         expected_product_ones = np.reshape(np.repeat(np.array([1, 0, 0, 0])[np.newaxis, :], num_reps, axis = 0), expanded_shape)
 
         # Zeros
-        product = quaternion.quat_multiply(zeros, zeros)
+        product = quaternion.multiply(zeros, zeros)
         self.assertTrue(np.all(product == expected_product_zeros))
 
         # Ones
-        product = quaternion.quat_multiply(ones, ones)
+        product = quaternion.multiply(ones, ones)
         self.assertTrue(np.all(product == expected_product_ones))
 
         # Complex random array
         num_reps = input1.shape[0]
         expanded_shape = (int(num_reps/5), 5, 4)
-        product = quaternion.quat_multiply(np.reshape(input1, expanded_shape), np.reshape(input2, expanded_shape))
+        product = quaternion.multiply(np.reshape(input1, expanded_shape), np.reshape(input2, expanded_shape))
         self.assertTrue(np.allclose(product, np.reshape(stored_product, expanded_shape)))
