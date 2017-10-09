@@ -3,7 +3,17 @@
 import numpy as np
 import warnings
 
-__all__ = []
+__all__ = ['quat_conjugate',
+        'quat_multiply',
+        'norm',
+        'normalize',
+        'quat_rotate',
+        'quat_about_axis',
+        'vector_vector_rotation',
+        'quat_from_euler',
+        'quat_to_euler',
+        'quat_from_matrix',
+        'quat_to_matrix']
 
 __version__ = 0.1
 
@@ -130,13 +140,14 @@ def quat_about_axis(v, theta):
 
     Args:
         v ((...,3) np.array): Axes to rotate about
-        theta (float or np.array): Angle (in radians). Will be broadcast to match shape of v if scalar is provided
+        theta (float or (...) np.array): Angle (in radians). Will be broadcast to match shape of v if scalar is provided
 
     Example::
 
-        qi = np.array([[1, 0, 0, 0]])
-        qj = np.array([[1, 0, 0, 0]])
-        prod = quat_multiply(qi, qj)
+        import numpy as np
+        axis = np.array([[1, 0, 0]])
+        ang = np.pi/3
+        quat = quat_about_axis(axis, ang)
     """
 
     # Now normalize
@@ -397,5 +408,6 @@ def _check_quat(q):
         An Nx4 array of quaternions that can be used throughout this module.
     """
     return _check_array(q, 4)
+
 
 
