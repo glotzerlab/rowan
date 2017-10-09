@@ -30,6 +30,7 @@ def conjugate(q):
 
         q_star = conjugate(q)
     """
+    q = np.asarray(q)
     conjugate = q.copy()
     conjugate[..., 1:] *= -1
     return conjugate
@@ -50,6 +51,8 @@ def multiply(qi, qj):
         qj = np.array([[1, 0, 0, 0]])
         prod = multiply(qi, qj)
     """
+    qi = np.asarray(qi)
+    qj = np.asarray(qj)
     if not qi.shape == qj.shape:
         raise ValueError("The two arrays must be the same size!")
 
@@ -75,6 +78,7 @@ def norm(q):
         q = np.random.rand(10, 4)
         norms = norm(q)
     """
+    q = np.asarray(q)
     return np.linalg.norm(q, axis = -1)
 
 def normalize(q):
@@ -91,6 +95,7 @@ def normalize(q):
         q = np.random.rand(10, 4)
         u = normalize(q)
     """
+    q = np.asarray(q)
     norms = norm(q)
     return q/norms[..., np.newaxis]
 
@@ -110,6 +115,8 @@ def rotate(q, v):
         v = np.random.rand(1, 3)
         v_rot = rotate(q, v)
     """
+    q = np.asarray(q)
+    v = np.asarray(v)
     # Convert vector to quaternion representation
     quat_v = np.concatenate((np.zeros(v.shape[:-1]+(1,)), v), axis = -1)
     return multiply(q, multiply(quat_v, conjugate(q)))[..., 1:]
@@ -149,6 +156,7 @@ def about_axis(v, theta):
         ang = np.pi/3
         quat = about_axis(axis, ang)
     """
+    v = np.asarray(v)
 
     # Now normalize
     u = normalize(v)
@@ -166,6 +174,8 @@ def vector_vector_rotation(v1, v2):
         v2 ((...,3) np.array): Desired vector
 
     """
+    v1 = np.asarray(v1)
+    v2 = np.asarray(v2)
     return about_axis(_vector_bisector(v1, v2), np.pi)
 
 def from_euler(alpha, beta, gamma):
@@ -192,6 +202,9 @@ def from_euler(alpha, beta, gamma):
         alpha, beta, gamma = rands.T
         ql.from_euler(alpha, beta, gamma)
     """
+    alpha = np.asarray(alpha)
+    beta = np.asarray(beta)
+    gamma = np.asarray(gamma)
 
     if any(type(x) == np.ndarray for x in (alpha, beta, gamma)):
         if not all(type(x) == np.ndarray for x in (alpha, beta, gamma)):
@@ -234,6 +247,7 @@ def to_euler(q):
         alpha_return, beta_return, gamma_return = ql.to_euler(full)
 
     """
+    q = np.asarray(q)
 
     r = q[..., 0]
     i = q[..., 1]
@@ -278,6 +292,7 @@ def from_matrix(mat, require_orthogonal = True):
         An (..., 4) np.array containing the quaternion representations
         of the elements of mat (i.e. the same elements of SO(3))
     """
+    mat = np.asarray(mat)
     if not np.allclose(np.linalg.det(mat), 1) and require_orthogonal:
         warnings.warn("Not all of your matrices are orthogonal. Please ensure that there are no improper rotations. If this was intentional, please set require_orthogonal to False when calling this function.", UserWarning)
 
@@ -317,6 +332,7 @@ def to_matrix(q, require_unit = True):
         The (..., 3, 3) np.array containing the matrix representations
         of the elements of q (i.e. the same elements of SO(3))
     """
+    q = np.asarray(q)
 
     s = norm(q)
     if np.any(s == 0.0):
