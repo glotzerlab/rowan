@@ -3,3 +3,5 @@ test
 *.pyc
 *.egg-info
 *.swp
+build/
+dist/
