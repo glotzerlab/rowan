@@ -1,4 +1,4 @@
-"""Test the basic functionality of the quaternion package"""
+"""Test the rotation of quaternions for various array sizes"""
 
 import unittest
 import numpy as np
