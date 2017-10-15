@@ -1,3 +1,4 @@
+
 """Simple quaternion library containing standard methods"""
 
 import numpy as np
@@ -30,8 +31,7 @@ def conjugate(q):
 
         q_star = conjugate(q)
     """
-    q = np.asarray(q)
-    conjugate = q.copy()
+    conjugate = np.asarray(q)
     conjugate[..., 1:] *= -1
     return conjugate
 
@@ -147,7 +147,10 @@ def about_axis(v, theta):
 
     Args:
         v ((...,3) np.array): Axes to rotate about
-        theta (float or (...) np.array): Angle (in radians). Will be broadcast to match shape of v if scalar is provided
+        theta (float or (...) np.array): Angle (in radians). Will be broadcast to match shape of v as needed
+
+    Returns:
+        An (...,4) np.array of the requested rotation quaternions
 
     Example::
 
@@ -158,13 +161,18 @@ def about_axis(v, theta):
     """
     v = np.asarray(v)
 
-    # Now normalize
-    u = normalize(v)
+    # First reshape theta and compute the half angle
+    theta = np.broadcast_to(theta, v.shape[:-1])[..., np.newaxis]
     ha = theta / 2.0
+
+    # Normalize the vector
+    u = normalize(v)
+
+    # Compute the components of the quaternions
     scalar_comp = np.cos(ha)
     vec_comp = np.sin(ha) * u
-    return np.concatenate((np.broadcast_to(np.atleast_1d(scalar_comp), vec_comp.shape[:-1]+(1,)),
-            vec_comp), axis = -1)
+
+    return np.concatenate((scalar_comp, vec_comp), axis = -1)
 
 def vector_vector_rotation(v1, v2):
     R"""Find the quaternion to rotate v1 onto v2
