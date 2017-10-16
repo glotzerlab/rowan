@@ -233,7 +233,7 @@ def from_euler(alpha, beta, gamma):
     j = c1 * s2 * c3 + s1 * c2 * s3
     k = c1 * c2 * s3 - s1 * s2 * c3
 
-    return np.stack([np.atleast_1d(x) for x in (r, i, j, k)], axis = -1)
+    return np.stack([np.atleast_1d(x) for x in (r, i, j, k)], axis = -1).squeeze()
 
 def to_euler(q):
     R"""Convert quaternions to Euler angles (3-2-1 convention)

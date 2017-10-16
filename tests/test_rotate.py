@@ -21,7 +21,7 @@ with np.load(TESTDATA_FILENAME) as data:
     vector_inputs = data['vector_inputs']
 
 class TestRotate(unittest.TestCase):
-    """Test the core multiplication operation"""
+    """Test the core rotation operation"""
     def test_single_quaternion(self):
         """Testing trivial rotations"""
         self.assertTrue(np.all(quaternion.rotate(zero, one_vector) == zero_vector))
