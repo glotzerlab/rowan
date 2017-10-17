@@ -1,4 +1,3 @@
-
 """Simple quaternion library containing standard methods"""
 
 import numpy as np

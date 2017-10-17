@@ -1,10 +1,11 @@
-"""Test the basic functions of the quaternion package that can be tested easily"""
+"""Test the basic functions of the quaternion package
+that can be tested easily"""
 
 import unittest
 import numpy as np
-import os
 
 import quaternion as quaternion
+
 
 class TestSimple(unittest.TestCase):
     def test_conjugate(self):
@@ -21,7 +22,7 @@ class TestSimple(unittest.TestCase):
         shapes = [(4, ), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
             quats = np.random.random_sample(shape)
-            norms = np.linalg.norm(quats, axis = -1)
+            norms = np.linalg.norm(quats, axis=-1)
             self.assertTrue(np.all(quaternion.norm(quats) == norms))
 
     def test_normalize(self):
@@ -29,5 +30,6 @@ class TestSimple(unittest.TestCase):
         shapes = [(4, ), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
             quats = np.random.random_sample(shape)
-            norms = np.linalg.norm(quats, axis = -1)
-            self.assertTrue(np.all(quaternion.normalize(quats) == quats/norms[..., np.newaxis]))
+            norms = np.linalg.norm(quats, axis=-1)
+            self.assertTrue(np.all(quaternion.normalize(quats)
+                                   == quats / norms[..., np.newaxis]))
