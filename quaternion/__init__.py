@@ -186,18 +186,15 @@ def vector_vector_rotation(v1, v2):
     v2 = np.asarray(v2)
     return about_axis(_vector_bisector(v1, v2), np.pi)
 
-def from_euler(alpha, beta, gamma):
+def from_euler(angles):
     R"""Convert Euler angles to quaternion (3-2-1 convention)
 
     Args:
-        alpha (float, np.array): First angle (in radians). May be an array of angles
-        beta (float, np.array): Second angle (in radians). May be an array of angles
-        gamma (float, np.array): Third angle (in radians). May be an array of angles
+        angles ((...,3) np.array): Array whose last dimension (of size 3) is (alpha, beta, gamma)
 
     Returns:
-        An Nx4 np.array containing the products of row i of qi with column j of qj
+        An (..., 4) np.array containing the converted quaternions
 
-    If the angles provided are arrays, their shapes must all match.
     Standard numpy broadcasting is used to compute the quaternions
     along the last dimension of the angle arrays.
 
@@ -210,30 +207,23 @@ def from_euler(alpha, beta, gamma):
         alpha, beta, gamma = rands.T
         ql.from_euler(alpha, beta, gamma)
     """
-    alpha = np.asarray(alpha)
-    beta = np.asarray(beta)
-    gamma = np.asarray(gamma)
+    angles = np.asarray(angles)
 
-    if any(type(x) == np.ndarray for x in (alpha, beta, gamma)):
-        if not all(type(x) == np.ndarray for x in (alpha, beta, gamma)):
-            raise ValueError("Either all inputs must be arrays, or none of them can be.")
-        if not alpha.shape == beta.shape == gamma.shape:
-            raise ValueError("All input arrays must be the same shape.")
+    try:
+        angles *= 0.5
+    except TypeError:
+        # Can't multiply integral types in place, but avoid copying if possible
+        angles = angles*0.5
 
-    alpha = alpha * 0.5
-    beta = beta * 0.5
-    gamma = gamma * 0.5
+    c = np.cos(angles)
+    s = np.sin(angles)
 
+    r = np.prod(c, axis = -1) + np.prod(s, axis = -1)
+    i = s[..., 0]*c[..., 1]*c[..., 2] - c[..., 0]*s[..., 1]*s[..., 2]
+    j = c[..., 0]*s[..., 1]*c[..., 2] + s[..., 0]*c[..., 1]*s[..., 2]
+    k = c[..., 0]*c[..., 1]*s[..., 2] - s[..., 0]*s[..., 1]*c[..., 2]
 
-    c1, c2, c3 = np.cos((alpha, beta, gamma))
-    s1, s2, s3 = np.sin((alpha, beta, gamma))
-
-    r = c1 * c2 * c3 + s1 * s2 * s3
-    i = s1 * c2 * c3 - c1 * s2 * s3
-    j = c1 * s2 * c3 + s1 * c2 * s3
-    k = c1 * c2 * s3 - s1 * s2 * c3
-
-    return np.stack([np.atleast_1d(x) for x in (r, i, j, k)], axis = -1).squeeze()
+    return np.stack([r, i, j, k], axis = -1)
 
 def to_euler(q):
     R"""Convert quaternions to Euler angles (3-2-1 convention)
@@ -242,7 +232,7 @@ def to_euler(q):
         q ((...,4) np.array): Quaternions to transform
 
     Returns:
-        A tuple of arrays (alpha, beta, gamma) with Euler angles in radians
+        A (..., 3) np.array with Euler angles (alpha, beta, gamma) as the last dimension (in radians)
 
     Note:
         Derived from injavis implementation
@@ -257,10 +247,10 @@ def to_euler(q):
     """
     q = np.asarray(q)
 
-    r = q[..., 0]
-    i = q[..., 1]
-    j = q[..., 2]
-    k = q[..., 3]
+    r = q[..., 0, np.newaxis]
+    i = q[..., 1, np.newaxis]
+    j = q[..., 2, np.newaxis]
+    k = q[..., 3, np.newaxis]
 
     q00 = r * r
     q11 = i * i
@@ -273,15 +263,15 @@ def to_euler(q):
     q13 = i * k
     q23 = j * k
 
-    alpha = np.atleast_1d(np.arctan2(2.0 * (q01 + q23), q00 - q11 - q22 + q33))
-    beta = np.atleast_1d(np.arcsin(2.0 * (q02 - q13)))
-    gamma = np.atleast_1d(np.arctan2(2.0 * (q03 + q12), q00 + q11 - q22 - q33))
+    alpha = np.arctan2(2.0 * (q01 + q23), q00 - q11 - q22 + q33)
+    beta = np.arcsin(2.0 * (q02 - q13))
+    gamma = np.arctan2(2.0 * (q03 + q12), q00 + q11 - q22 - q33)
 
     alpha[np.isnan(alpha)] = np.pi/2
     beta[np.isnan(beta)] = np.pi/2
     gamma[np.isnan(gamma)] = np.pi/2
 
-    return (alpha, beta, gamma)
+    return np.concatenate((alpha, beta, gamma), axis = -1)
 
 def from_matrix(mat, require_orthogonal = True):
     R"""Convert the rotation matrices mat to quaternions
