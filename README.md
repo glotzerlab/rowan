@@ -41,7 +41,19 @@ To run the packaged unit tests, execute:
 This library can be used to work with quaternions by simply instantiating the appropriate numpy arrays and passing them to the required functions.
 For example:
 
-    $ import quaternion
-    $ one = np.array([1, 0, 0, 0])
-    $ if not one == quaternion.quat_multiply(one, one):
-    $     raise RuntimeError("Multiplication failed!")
+    >>> import quaternion
+    >>> one = np.array([10, 0, 0, 0])
+    >>> one_unit = quaternion.normalize(one)
+    >>> assert(one_unit == np.array([1, 0, 0, 0]))
+    >>> if not one_unit == quaternion.quat_multiply(one_unit, one_unit):
+    >>>     raise RuntimeError("Multiplication failed!")
+    >>>
+    >>> one_vec = np.array([1, 0, 0])
+    >>> rotated_vector = quaternion.rotate(one_unit, one_vec)
+    >>>
+    >>> import numpy as np
+    >>> mat = np.eye(3)
+    >>> quat_rotate = quaternion.from_matrix(mat)
+    >>> alpha, beta, gamma = quaternion.to_euler(quat_rotate)
+    >>> quat_rotate_returned = quaternion.from_euler(alpha, beta, gamma)
+    >>> identity = quaternion.to_matrix(quat_rotate_returned)
