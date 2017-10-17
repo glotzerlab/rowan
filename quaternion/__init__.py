@@ -5,18 +5,19 @@ import numpy as np
 import warnings
 
 __all__ = ['conjugate',
-        'multiply',
-        'norm',
-        'normalize',
-        'rotate',
-        'about_axis',
-        'vector_vector_rotation',
-        'from_euler',
-        'to_euler',
-        'from_matrix',
-        'to_matrix']
+           'multiply',
+           'norm',
+           'normalize',
+           'rotate',
+           'about_axis',
+           'vector_vector_rotation',
+           'from_euler',
+           'to_euler',
+           'from_matrix',
+           'to_matrix']
 
 __version__ = 0.1
+
 
 def conjugate(q):
     R"""Returns the conjugate of quaternion array q
@@ -35,6 +36,7 @@ def conjugate(q):
     conjugate[..., 1:] *= -1
     return conjugate
 
+
 def multiply(qi, qj):
     R"""Multiplies the quaternions in the array qi by those in qj
 
@@ -43,7 +45,8 @@ def multiply(qi, qj):
         qj ((...,4) np.array): Second set of quaternions
 
     Returns:
-        An (...,4) np.array containing the products of row i of qi with column j of qj
+        An (...,4) np.array containing the products
+        of row i of qi with column j of qj
 
     Example::
 
@@ -58,11 +61,13 @@ def multiply(qi, qj):
 
     output = np.empty(qi.shape)
 
-    output[..., 0] = qi[..., 0] * qj[..., 0] - np.sum(qi[..., 1:] * qj[..., 1:], axis=-1)
+    output[..., 0] = qi[..., 0] * qj[..., 0] - \
+        np.sum(qi[..., 1:] * qj[..., 1:], axis=-1)
     output[..., 1:] = (qi[..., 0, np.newaxis] * qj[..., 1:] +
-            qj[..., 0, np.newaxis] * qi[..., 1:] +
-            np.cross(qi[..., 1:], qj[..., 1:]))
+                       qj[..., 0, np.newaxis] * qi[..., 1:] +
+                       np.cross(qi[..., 1:], qj[..., 1:]))
     return output
+
 
 def norm(q):
     R"""Trivial reimplementation of norm for both quaternions and vectors
@@ -79,7 +84,8 @@ def norm(q):
         norms = norm(q)
     """
     q = np.asarray(q)
-    return np.linalg.norm(q, axis = -1)
+    return np.linalg.norm(q, axis=-1)
+
 
 def normalize(q):
     R"""Normalize quaternion or vector input
@@ -97,7 +103,8 @@ def normalize(q):
     """
     q = np.asarray(q)
     norms = norm(q)
-    return q/norms[..., np.newaxis]
+    return q / norms[..., np.newaxis]
+
 
 def rotate(q, v):
     R"""Rotates the vectors v by the quaternions q
@@ -118,8 +125,9 @@ def rotate(q, v):
     q = np.asarray(q)
     v = np.asarray(v)
     # Convert vector to quaternion representation
-    quat_v = np.concatenate((np.zeros(v.shape[:-1]+(1,)), v), axis = -1)
+    quat_v = np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
     return multiply(q, multiply(quat_v, conjugate(q)))[..., 1:]
+
 
 def _vector_bisector(v1, v2):
     R"""Find the vector bisecting v1 and v2
@@ -138,16 +146,17 @@ def _vector_bisector(v1, v2):
         v1 = v1[np.newaxis, :]
     if len(v2.shape) == 2:
         v2 = v2[np.newaxis, :]
-    #if not v1.shape == v2.shape == [1, 3]:
-        #raise ValueError("The two inputs must both be 1x3 vectors")
     return normalize(normalize(v1) + normalize(v2))
 
+
 def about_axis(v, theta):
-    R"""Find the quaternions corresponding to rotations about the axes v by angles theta
+    R"""Find the quaternions corresponding to rotations about
+    the axes v by angles theta
 
     Args:
         v ((...,3) np.array): Axes to rotate about
-        theta (float or (...) np.array): Angle (in radians). Will be broadcast to match shape of v as needed
+        theta (float or (...) np.array): Angle (in radians).
+            Will be broadcast to match shape of v as needed
 
     Returns:
         An (...,4) np.array of the requested rotation quaternions
@@ -172,7 +181,8 @@ def about_axis(v, theta):
     scalar_comp = np.cos(ha)
     vec_comp = np.sin(ha) * u
 
-    return np.concatenate((scalar_comp, vec_comp), axis = -1)
+    return np.concatenate((scalar_comp, vec_comp), axis=-1)
+
 
 def vector_vector_rotation(v1, v2):
     R"""Find the quaternion to rotate v1 onto v2
@@ -186,11 +196,13 @@ def vector_vector_rotation(v1, v2):
     v2 = np.asarray(v2)
     return about_axis(_vector_bisector(v1, v2), np.pi)
 
+
 def from_euler(angles):
     R"""Convert Euler angles to quaternion (3-2-1 convention)
 
     Args:
-        angles ((...,3) np.array): Array whose last dimension (of size 3) is (alpha, beta, gamma)
+        angles ((...,3) np.array): Array whose last dimension
+            (of size 3) is (alpha, beta, gamma)
 
     Returns:
         An (..., 4) np.array containing the converted quaternions
@@ -213,17 +225,18 @@ def from_euler(angles):
         angles *= 0.5
     except TypeError:
         # Can't multiply integral types in place, but avoid copying if possible
-        angles = angles*0.5
+        angles = angles * 0.5
 
     c = np.cos(angles)
     s = np.sin(angles)
 
-    r = np.prod(c, axis = -1) + np.prod(s, axis = -1)
-    i = s[..., 0]*c[..., 1]*c[..., 2] - c[..., 0]*s[..., 1]*s[..., 2]
-    j = c[..., 0]*s[..., 1]*c[..., 2] + s[..., 0]*c[..., 1]*s[..., 2]
-    k = c[..., 0]*c[..., 1]*s[..., 2] - s[..., 0]*s[..., 1]*c[..., 2]
+    r = np.prod(c, axis=-1) + np.prod(s, axis=-1)
+    i = s[..., 0] * c[..., 1] * c[..., 2] - c[..., 0] * s[..., 1] * s[..., 2]
+    j = c[..., 0] * s[..., 1] * c[..., 2] + s[..., 0] * c[..., 1] * s[..., 2]
+    k = c[..., 0] * c[..., 1] * s[..., 2] - s[..., 0] * s[..., 1] * c[..., 2]
 
-    return np.stack([r, i, j, k], axis = -1)
+    return np.stack([r, i, j, k], axis=-1)
+
 
 def to_euler(q):
     R"""Convert quaternions to Euler angles (3-2-1 convention)
@@ -232,7 +245,8 @@ def to_euler(q):
         q ((...,4) np.array): Quaternions to transform
 
     Returns:
-        A (..., 3) np.array with Euler angles (alpha, beta, gamma) as the last dimension (in radians)
+        A (..., 3) np.array with Euler angles (alpha, beta, gamma)
+        as the last dimension (in radians)
 
     Note:
         Derived from injavis implementation
@@ -267,13 +281,14 @@ def to_euler(q):
     beta = np.arcsin(2.0 * (q02 - q13))
     gamma = np.arctan2(2.0 * (q03 + q12), q00 + q11 - q22 - q33)
 
-    alpha[np.isnan(alpha)] = np.pi/2
-    beta[np.isnan(beta)] = np.pi/2
-    gamma[np.isnan(gamma)] = np.pi/2
+    alpha[np.isnan(alpha)] = np.pi / 2
+    beta[np.isnan(beta)] = np.pi / 2
+    gamma[np.isnan(gamma)] = np.pi / 2
 
-    return np.concatenate((alpha, beta, gamma), axis = -1)
+    return np.concatenate((alpha, beta, gamma), axis=-1)
 
-def from_matrix(mat, require_orthogonal = True):
+
+def from_matrix(mat, require_orthogonal=True):
     R"""Convert the rotation matrices mat to quaternions
 
     Uses the algorithm described in this paper by Bar-Itzhack
@@ -292,9 +307,14 @@ def from_matrix(mat, require_orthogonal = True):
     """
     mat = np.asarray(mat)
     if not np.allclose(np.linalg.det(mat), 1) and require_orthogonal:
-        warnings.warn("Not all of your matrices are orthogonal. Please ensure that there are no improper rotations. If this was intentional, please set require_orthogonal to False when calling this function.", UserWarning)
+        warnings.warn(
+            "Not all of your matrices are orthogonal. \
+Please ensure that there are no improper rotations. \
+If this was intentional, please set require_orthogonal \
+to False when calling this function.",
+            UserWarning)
 
-    K = np.zeros(mat.shape[:-2]+(4, 4))
+    K = np.zeros(mat.shape[:-2] + (4, 4))
     K[..., 0, 0] = mat[..., 0, 0] - mat[..., 1, 1] - mat[..., 2, 2]
     K[..., 0, 1] = mat[..., 1, 0] + mat[..., 0, 1]
     K[..., 0, 2] = mat[..., 2, 0] + mat[..., 0, 2]
@@ -311,13 +331,16 @@ def from_matrix(mat, require_orthogonal = True):
     K[..., 3, 1] = mat[..., 2, 0] - mat[..., 0, 2]
     K[..., 3, 2] = mat[..., 0, 1] - mat[..., 1, 0]
     K[..., 3, 3] = mat[..., 0, 0] + mat[..., 1, 1] + mat[..., 2, 2]
-    K = K/3.0
+    K = K / 3.0
 
     w, v = np.linalg.eigh(K)
-    # The conventions in the paper are very confusing for quaternions in terms of the order of the components
-    return np.concatenate((v[..., -1, -1, np.newaxis], -v[..., :-1, -1]), axis = -1)
+    # The conventions in the paper are very confusing for quaternions in terms
+    # of the order of the components
+    return np.concatenate(
+        (v[..., -1, -1, np.newaxis], -v[..., :-1, -1]), axis=-1)
 
-def to_matrix(q, require_unit = True):
+
+def to_matrix(q, require_unit=True):
     R"""Convert the quaternions in q to rotation matrices.
 
     Uses the conversion described on Wikipedia
@@ -334,19 +357,24 @@ def to_matrix(q, require_unit = True):
 
     s = norm(q)
     if np.any(s == 0.0):
-        raise ZeroDivisionError("At least one element of q has approximately zero norm")
+        raise ZeroDivisionError(
+            "At least one element of q has approximately zero norm")
     else:
         if not np.allclose(s, 1.0):
-            warnings.warn("Not all quaternions in q are unit quaternions. If this was intentional, please set require_unit to False when calling this function.", UserWarning)
+            warnings.warn(
+                "Not all quaternions in q are unit quaternions. \
+If this was intentional, please set require_unit to False when \
+calling this function.",
+                UserWarning)
         m = np.empty(q.shape[:-1] + (3, 3))
-        s **=-1.0 # For consistency with Wikipedia notation
-        m[..., 0, 0] = 1.0 - 2*s*(q[..., 2]**2 + q[..., 3]**2)
-        m[..., 0, 1] = 2*(q[..., 1]*q[..., 2] - q[..., 3]*q[..., 0])
-        m[..., 0, 2] = 2*(q[..., 1]*q[..., 3] + q[..., 2]*q[..., 0])
-        m[..., 1, 0] = 2*(q[..., 1]*q[..., 2] + q[..., 3]*q[..., 0])
-        m[..., 1, 1] = 1.0 - 2*(q[..., 1]**2 + q[..., 3]**2)
-        m[..., 1, 2] = 2*(q[..., 2]*q[..., 3] - q[..., 1]*q[..., 0])
-        m[..., 2, 0] = 2*(q[..., 1]*q[..., 3] - q[..., 2]*q[..., 0])
-        m[..., 2, 1] = 2*(q[..., 2]*q[..., 3] + q[..., 1]*q[..., 0])
-        m[..., 2, 2] = 1.0 - 2*(q[..., 1]**2 + q[..., 2]**2)
+        s **= -1.0  # For consistency with Wikipedia notation
+        m[..., 0, 0] = 1.0 - 2 * s * (q[..., 2]**2 + q[..., 3]**2)
+        m[..., 0, 1] = 2 * (q[..., 1] * q[..., 2] - q[..., 3] * q[..., 0])
+        m[..., 0, 2] = 2 * (q[..., 1] * q[..., 3] + q[..., 2] * q[..., 0])
+        m[..., 1, 0] = 2 * (q[..., 1] * q[..., 2] + q[..., 3] * q[..., 0])
+        m[..., 1, 1] = 1.0 - 2 * (q[..., 1]**2 + q[..., 3]**2)
+        m[..., 1, 2] = 2 * (q[..., 2] * q[..., 3] - q[..., 1] * q[..., 0])
+        m[..., 2, 0] = 2 * (q[..., 1] * q[..., 3] - q[..., 2] * q[..., 0])
+        m[..., 2, 1] = 2 * (q[..., 2] * q[..., 3] + q[..., 1] * q[..., 0])
+        m[..., 2, 2] = 1.0 - 2 * (q[..., 1]**2 + q[..., 2]**2)
         return m
