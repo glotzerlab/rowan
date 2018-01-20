@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-setup(name='quaternion',
+setup(name='hamilton',
       version='0.1',
       description='Perform quaternion operations using numpy arrays',
       url='http://github.com/vramasub/quaternion',
