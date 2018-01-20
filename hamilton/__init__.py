@@ -31,7 +31,8 @@ def conjugate(q):
 
         q_star = conjugate(q)
     """
-    conjugate = np.asarray(q)
+    # Don't use asarray to avoid modifying in place
+    conjugate = np.array(q)
     conjugate[..., 1:] *= -1
     return conjugate
 
@@ -106,7 +107,10 @@ def normalize(q):
 
 
 def rotate(q, v):
-    R"""Rotates the vectors v by the quaternions q
+    R"""Performs an element-wise rotation of the vectors
+    v by the quaternions q.
+    The shapes of the two arrays must conform up to the
+    last dimension.
 
     Args:
         q ((...,4) np.array): First set of quaternions

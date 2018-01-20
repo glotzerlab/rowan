@@ -3,7 +3,7 @@
 import unittest
 import numpy as np
 
-import quaternion as quaternion
+import hamilton as quaternion
 
 zero = np.array([0, 0, 0, 0])
 one = np.array([1, 0, 0, 0])

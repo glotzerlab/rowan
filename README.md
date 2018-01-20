@@ -2,7 +2,7 @@
 
 ## About
 
-The quaternion package provides a simple and consistent interface for using quaternions in code in the Glotzer Group University of Michigan, Ann Arbor.
+The hamilton package provides a simple and consistent interface for using quaternions in code in the Glotzer Group University of Michigan, Ann Arbor.
 The package is built entirely on top of numpy and represents quaternions using numpy arrays of dimension $...x4$, meaning that all functions support arbitrarily high-dimensional arrays of quaternions.
 
 Quaternions are encoded as numpy arrays of length 4 with the convention that an array $(a, b, c, d)$ represents the quaternion $a + bi + cj + dk$.
@@ -22,8 +22,8 @@ The package is currently tested for python versions 2.7.x and 3.x on both \*nix 
 
 To install from source, execute:
 
-	git clone https://bitbucket.org/vramasub/quaternion.git
-	cd quaternion
+	git clone https://bitbucket.org/vramasub/hamilton.git
+	cd hamilton
 	python setup.py install --user
 
 ### Requirements
@@ -41,19 +41,19 @@ To run the packaged unit tests, execute:
 This library can be used to work with quaternions by simply instantiating the appropriate numpy arrays and passing them to the required functions.
 For example:
 
-    >>> import quaternion
+    >>> import hamilton
     >>> one = np.array([10, 0, 0, 0])
-    >>> one_unit = quaternion.normalize(one)
+    >>> one_unit = hamilton.normalize(one)
     >>> assert(one_unit == np.array([1, 0, 0, 0]))
-    >>> if not one_unit == quaternion.quat_multiply(one_unit, one_unit):
+    >>> if not one_unit == hamilton.quat_multiply(one_unit, one_unit):
     >>>     raise RuntimeError("Multiplication failed!")
     >>>
     >>> one_vec = np.array([1, 0, 0])
-    >>> rotated_vector = quaternion.rotate(one_unit, one_vec)
+    >>> rotated_vector = hamilton.rotate(one_unit, one_vec)
     >>>
     >>> import numpy as np
     >>> mat = np.eye(3)
-    >>> quat_rotate = quaternion.from_matrix(mat)
-    >>> alpha, beta, gamma = quaternion.to_euler(quat_rotate)
-    >>> quat_rotate_returned = quaternion.from_euler(alpha, beta, gamma)
-    >>> identity = quaternion.to_matrix(quat_rotate_returned)
+    >>> quat_rotate = hamilton.from_matrix(mat)
+    >>> alpha, beta, gamma = hamilton.to_euler(quat_rotate)
+    >>> quat_rotate_returned = hamilton.from_euler(alpha, beta, gamma)
+    >>> identity = hamilton.to_matrix(quat_rotate_returned)

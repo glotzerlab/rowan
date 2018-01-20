@@ -4,7 +4,7 @@ that can be tested easily"""
 import unittest
 import numpy as np
 
-import quaternion as quaternion
+import hamilton as quaternion
 
 
 class TestSimple(unittest.TestCase):
