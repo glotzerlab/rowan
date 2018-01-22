@@ -10,7 +10,7 @@ one = np.array([1, 0, 0, 0])
 half = np.array([0.5, 0.5, 0.5, 0.5])
 
 
-class TestMatrix(unittest.TestCase):
+class TestAxisAngle(unittest.TestCase):
     """Test axis angle conversions"""
 
     def test_from_axis_angle(self):
