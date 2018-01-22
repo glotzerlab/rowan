@@ -369,3 +369,51 @@ calling this function.",
         m[..., 2, 1] = 2 * (q[..., 2] * q[..., 3] + q[..., 1] * q[..., 0])
         m[..., 2, 2] = 1.0 - 2 * (q[..., 1]**2 + q[..., 2]**2)
         return m
+
+
+def from_axis_angle(axes, angles):
+    R"""Generate quaternions from axes and angles element-wise
+
+    Args:
+        axes ((...,3) np.array): An array of vectors (the axes)
+        angles ((...,1) np.array): An array of angles in radians.
+            If the last dimension is not singular one will be appended
+            to conform to the axes array.
+
+    Returns:
+        An (..., 4) np.array containing the quaternions equivalent
+        to rotating angles about axes
+    """
+    axes = np.asarray(axes)
+    angles = np.atleast_1d(np.asarray(angles))
+
+    # Ensure conforming shapes
+    if not angles.shape[-1] == 1:
+        angles = angles[..., np.newaxis]
+    return np.concatenate(
+            (np.cos(angles/2), axes*np.sin(angles/2)),
+            axis = -1)
+
+
+def to_axis_angle(q):
+    R"""Convert the quaternions in q to axis angle representations
+
+    Args:
+        q ((...,4) np.array): An array of quaternions
+
+    Returns:
+        A tuple of np.arrays (axes, angles) where axes has
+        shape (..., 3) and angles has shape (..., 1). The
+        angles are in radians
+    """
+    q = np.asarray(q)
+
+    angles = 2*np.atleast_1d(np.arccos(q[..., 0]))
+    sines = np.sin(angles/2)
+    # Avoid divide by zero issues; these values will not be used
+    sines[sines == 0] = 1
+    axes = np.where(angles != 0,
+            q[..., 1:]/sines,
+            0)
+
+    return axes, angles
