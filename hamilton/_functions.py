@@ -301,7 +301,180 @@ def from_euler_old(angles):
     return np.stack([r, i, j, k], axis=-1)
 
 
-def to_euler(q):
+def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
+    R"""Convert quaternions to Euler angles
+
+    All equations derived from information on Wikipedia
+    https://en.wikipedia.org/wiki/Euler_angles#Conversion_to_other_orientation_representations.
+    These can also be easily derived by considering compositions
+    of three elemental rotations about the three Cartesian axes:
+
+    .. math::
+        :nowrap:
+
+        begin{eqnarray*}
+        R_x(\theta)  =& \left(\begin{array}{ccc}
+                            1   & 0             & 0 \\
+                            0   & cos \theta    & -sin \theta \\
+                            0   & sin \theta    & cos \theta    \\
+                         \end{array}\right)
+        R_y(\theta)  =& \left(\begin{array}{ccc}
+                            cos \theta   & 0        & sin \theta \\
+                            0            & 1        &  0\\
+                            -sin \theta  & 1        & cos \theta    \\
+                         \end{array}\right)
+        R_z(\theta)  =& \left(\begin{array}{ccc}
+                            cos \theta  & -sin \theta   & 0 \\
+                            sin \theta  & cos \theta    & 0 \\
+                            0           & 0             & 1 \\
+                         \end{array}\right)
+        \end{eqnarray*}
+
+    Intrinsic rotations are then derived by considering the
+    composition of extrinsic rotations in the opposite order.
+    For proof of the relationship between intrinsic and extrinsic
+    rotations, see the Wikipedia page on Davenport chained rotations:
+    https://en.wikipedia.org/wiki/Davenport_chained_rotations
+
+    Args:
+        q ((...,4) np.array): Quaternions to transform
+        convention (str): One of the 6 valid conventions zxz,
+            xyx, yzy, zyz, xzx, yxy
+        axes (str): Whether to use extrinsic or intrinsic
+
+    Returns:
+        A (..., 3) np.array with Euler angles (alpha, beta, gamma)
+        as the last dimension (in radians)
+
+    Example::
+
+        rands = np.random.rand(100, 3)
+        alpha, beta, gamma = rands.T
+        ql.from_euler(alpha, beta, gamma)
+        alpha_return, beta_return, gamma_return = ql.to_euler(full)
+
+    """
+    q = np.asarray(q)
+
+    mats = to_matrix(q)
+
+    if axis_type == 'extrinsic':
+        # Have to hardcode the different possibilites.
+        # Classical Euler angles
+        if convention == 'xzx':
+            alpha = np.arctan2(mats[..., 2, 0], mats[..., 1, 0])
+            beta = np.arccos(mats[..., 0, 0])
+            gamma = np.arctan2(mats[..., 0, 2], -mats[..., 0, 1])
+        elif convention == 'xyx':
+            alpha = np.arctan2(mats[..., 1, 0], -mats[..., 2, 0])
+            beta = np.arccos(mats[..., 0, 0])
+            gamma = np.arctan2(mats[..., 0, 1], mats[..., 0, 2])
+        elif convention == 'yxy':
+            alpha = np.arctan2(mats[..., 0, 1], mats[..., 2, 1])
+            beta = np.arccos(mats[..., 1, 1])
+            gamma = np.arctan2(mats[..., 1, 0], -mats[..., 1, 2])
+        elif convention == 'yzy':
+            alpha = np.arctan2(mats[..., 2, 1], -mats[..., 0, 1])
+            beta = np.arccos(mats[..., 1, 1])
+            gamma = np.arctan2(mats[..., 1, 2], mats[..., 1, 0])
+        elif convention == 'zyz':
+            alpha = np.arctan2(mats[..., 1, 2], mats[..., 0, 2])
+            beta = np.arccos(mats[..., 2, 2])
+            gamma = np.arctan2(mats[..., 2, 1], -mats[..., 2, 0])
+        elif convention == 'zxz':
+            alpha = np.arctan2(mats[..., 0, 2], -mats[..., 1, 2])
+            beta = np.arccos(mats[..., 2, 2])
+            gamma = np.arctan2(mats[..., 2, 0], mats[..., 2, 1])
+        # Tait-Bryan angles
+        elif convention == 'xzy':
+            alpha = np.arctan2(mats[..., 2, 1], mats[..., 1, 1])
+            beta = np.arcsin(-mats[..., 0, 1])
+            gamma = np.arctan2(mats[..., 0, 2], mats[..., 0, 0])
+        elif convention == 'xyz':
+            alpha = np.arctan2(-mats[..., 1, 2], mats[..., 2, 2])
+            beta = np.arcsin(mats[..., 0, 2])
+            gamma = np.arctan2(-mats[..., 0, 1], mats[..., 0, 0])
+        elif convention == 'yxz':
+            alpha = np.arctan2(mats[..., 0, 2], mats[..., 2, 2])
+            beta = np.arcsin(-mats[..., 1, 2])
+            gamma = np.arctan2(mats[..., 1, 0], mats[..., 1, 1])
+        elif convention == 'yzx':
+            alpha = np.arctan2(-mats[..., 2, 0], mats[..., 0, 0])
+            beta = np.arcsin(mats[..., 1, 0])
+            gamma = np.arctan2(-mats[..., 1, 2], mats[..., 1, 1])
+        elif convention == 'zyx':
+            alpha = np.arctan2(-mats[..., 1, 0], mats[..., 0, 0])
+            beta = np.arcsin(-mats[..., 2, 0])
+            gamma = np.arctan2(mats[..., 2, 1], mats[..., 2, 2])
+        elif convention == 'zxy':
+            alpha = np.arctan2(-mats[..., 0, 1], mats[..., 1, 1])
+            beta = np.arcsin(mats[..., 2, 1])
+            gamma = np.arctan2(-mats[..., 2, 0], mats[..., 2, 2])
+        else:
+            raise ValueError("Unknown convention selected!")
+    elif axis_type == 'intrinsic':
+        # For these, the matrix must be constructed in reverse order
+        # e.g. Z(\alpha)Y'(\beta)Z''(\gamma) (where primes denote the
+        # rotated frames) becomes the extrinsic rotation
+        # Z(\gamma)Y'(\beta)Z''(\alpha).
+        if convention == 'xzx':
+            alpha = np.arctan2(mats[..., 0, 2], -mats[..., 0, 1])
+            beta = np.arccos(mats[..., 0, 0])
+            gamma = np.arctan2(mats[..., 2, 0], mats[..., 1, 0])
+        elif convention == 'xyx':
+            alpha = np.arctan2(mats[..., 0, 1], mats[..., 0, 2])
+            beta = np.arccos(mats[..., 0, 0])
+            gamma = np.arctan2(mats[..., 1, 0], -mats[..., 2, 0])
+        elif convention == 'yxy':
+            alpha = np.arctan2(mats[..., 1, 0], -mats[..., 1, 2])
+            beta = np.arccos(mats[..., 1, 1])
+            gamma = np.arctan2(mats[..., 0, 1], mats[..., 2, 1])
+        elif convention == 'yzy':
+            alpha = np.arctan2(mats[..., 1, 2], mats[..., 1, 0])
+            beta = np.arccos(mats[..., 1, 1])
+            gamma = np.arctan2(mats[..., 2, 1], -mats[..., 0, 1])
+        elif convention == 'zyz':
+            alpha = np.arctan2(mats[..., 2, 1], -mats[..., 2, 0])
+            beta = np.arccos(mats[..., 2, 2])
+            gamma = np.arctan2(mats[..., 1, 2], mats[..., 0, 2])
+        elif convention == 'zxz':
+            alpha = np.arctan2(mats[..., 2, 0], mats[..., 2, 1])
+            beta = np.arccos(mats[..., 2, 2])
+            gamma = np.arctan2(mats[..., 0, 2], -mats[..., 1, 2])
+        # Tait-Bryan angles
+        elif convention == 'xzy':
+            alpha = np.arctan2(-mats[..., 1, 2], mats[..., 1, 1])
+            beta = np.arcsin(mats[..., 1, 0])
+            gamma = np.arctan2(-mats[..., 2, 0], mats[..., 0, 0])
+        elif convention == 'xyz':
+            alpha = np.arctan2(mats[..., 2, 1], mats[..., 2, 2])
+            beta = np.arcsin(-mats[..., 2, 0])
+            gamma = np.arctan2(mats[..., 1, 0], mats[..., 0, 0])
+        elif convention == 'yxz':
+            alpha = np.arctan2(-mats[..., 2, 0], mats[..., 2, 2])
+            beta = np.arcsin(mats[..., 2, 1])
+            gamma = np.arctan2(-mats[..., 0, 1], mats[..., 1, 1])
+        elif convention == 'yzx':
+            alpha = np.arctan2(-mats[..., 0, 2], mats[..., 0, 0])
+            beta = np.arcsin(-mats[..., 0, 1])
+            gamma = np.arctan2(mats[..., 2, 1], mats[..., 1, 1])
+        elif convention == 'zyx':
+            alpha = np.arctan2(-mats[..., 0, 1], mats[..., 0, 0])
+            beta = np.arcsin(mats[..., 0, 2])
+            gamma = np.arctan2(-mats[..., 1, 2], mats[..., 2, 2])
+        elif convention == 'zxy':
+            alpha = np.arctan2(mats[..., 1, 0], mats[..., 1, 1])
+            beta = np.arcsin(-mats[..., 1, 2])
+            gamma = np.arctan2(mats[..., 0, 2], mats[..., 2, 2])
+        else:
+            raise ValueError("Unknown convention selected!")
+    else:
+        raise ValueError("The axis type must be either extrinsic or intrinsic")
+
+    return np.stack((alpha, beta, gamma), axis = -1)
+
+
+def to_euler_old(q):
     R"""Convert quaternions to Euler angles (3-2-1 convention)
 
     Args:
