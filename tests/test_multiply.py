@@ -12,7 +12,7 @@ one = np.array([1, 0, 0, 0])
 # Load test files
 TESTDATA_FILENAME = os.path.join(
     os.path.dirname(__file__),
-    'files/test_arrays.npz')
+    'files/test_arrays2.npz')
 with np.load(TESTDATA_FILENAME) as data:
     input1 = data['input1']
     input2 = data['input2']

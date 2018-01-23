@@ -188,7 +188,79 @@ def vector_vector_rotation(v1, v2):
     return about_axis(_vector_bisector(v1, v2), np.pi)
 
 
-def from_euler(angles):
+def from_euler(angles, convention = 'zyx', axis_type = 'intrinsic'):
+    R"""Convert Euler angles to quaternion
+
+    Args:
+        angles ((...,3) np.array): Array whose last dimension
+            (of size 3) is (alpha, beta, gamma)
+        convention (str): One of the 6 valid conventions zxz,
+            xyx, yzy, zyz, xzx, yxy
+        axes (str): Whether to use extrinsic or intrinsic
+
+    Returns:
+        An (..., 4) np.array containing the converted quaternions
+
+    For generality, the rotations are computed by composing a sequence
+    of quaternions corresponding to axis-angle rotations. While more
+    efficient implementations are possible, this method is more flexible
+    for getting all types.
+
+    Example::
+
+        rands = np.random.rand(100, 3)
+        alpha, beta, gamma = rands.T
+        ql.from_euler(alpha, beta, gamma)
+    """
+    angles = np.asarray(angles)
+    convention = convention.lower()
+    #TODO: USE THE CODE HERE AS A WAY TO DETERMINE WHERE BROADCASTING CAN BE MADE MORE EFFICIENT THROUGHOUT THE MODULE
+
+    basis_axes = {
+            'x': np.array([1, 0, 0]),
+            'y': np.array([0, 1, 0]),
+            'z': np.array([0, 0, 1]),
+            }
+    # Temporary method to ensure shapes conform
+    for ax, vec in basis_axes.items():
+        basis_axes[ax] = np.broadcast_to(
+                            vec,
+                            (*angles.shape[:-1],
+                                vec.shape[-1])
+                            )
+
+    # Split by convention, the easiest
+    rotations = []
+    if axis_type == 'extrinsic':
+        # Loop over the axes and add each rotation
+        for i, char in enumerate(convention):
+            ax = basis_axes[char]
+            rotations.append(from_axis_angle(ax, angles[..., i]))
+    elif axis_type == 'intrinsic':
+        for i, char in enumerate(convention):
+            ax = basis_axes[char]
+            rotations.append(from_axis_angle(ax, angles[..., i]))
+            # Rotate the bases as well
+            for key, value in basis_axes.items():
+                basis_axes[key] = rotate(
+                        rotations[-1],
+                        value
+                        )
+    else:
+        raise ValueError("Only valid axis_types are intrinsic and extrinsic")
+
+    # Compose the total rotation
+    final_rotation = np.broadcast_to(
+            np.array([1, 0, 0, 0]),
+            rotations[0].shape
+            )
+    for q in rotations:
+        final_rotation = multiply(q, final_rotation)
+
+    return final_rotation
+
+
+def from_euler_old(angles):
     R"""Convert Euler angles to quaternion (3-2-1 convention)
 
     Args:
@@ -385,7 +457,14 @@ def from_axis_angle(axes, angles):
         to rotating angles about axes
     """
     axes = np.asarray(axes)
+
+    # Ensure appropriate shape for angles array
     angles = np.atleast_1d(np.asarray(angles))
+    if not angles.shape[-1] == 1:
+        angles = angles[..., np.newaxis]
+
+    if axes.shape[:-1] != angles.shape[:-1]:
+        raise ValueError("The input arrays must conform in dimension")
 
     # Ensure conforming shapes
     if not angles.shape[-1] == 1:
