@@ -17,4 +17,4 @@ __all__ = ['conjugate',
            'from_matrix',
            'to_matrix']
 
-__version__ = 0.0
+__version__ = 0.0.0
