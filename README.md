@@ -9,6 +9,7 @@ Quaternions are encoded as numpy arrays of length 4 with the convention that an 
 Almost all functions use entirely standard; the sole exception are the matrix-quaternion interconversions, which are more involved.
 Matrices are converted to quaternions via the algorithm described by [Bar-Itzhack et al.](https://doi.org/10.2514/2.4654).
 Quaternions are converted to matrices using the standard mathematical formula given on [Wikipedia's page on Quaternions and spatial rotation](https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix).
+Euler angle conversions are derived using standard rotation matrix representations.
 
 ## Authors
 
