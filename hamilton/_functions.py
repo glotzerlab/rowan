@@ -304,9 +304,13 @@ def from_euler_old(angles):
 def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
     R"""Convert quaternions to Euler angles
 
-    All equations derived from information on Wikipedia
-    https://en.wikipedia.org/wiki/Euler_angles#Conversion_to_other_orientation_representations.
-    These can also be easily derived by considering compositions
+    Euler angles are returned in the sequence provided, so in the
+    default case ('zyx') the angles are for a rotation
+    :math:`Z(\alpha) Y(\beta) X(\gamma)`.
+
+    For simplicity, quaternions are converted to matrices, which are
+    then converted to their Euler angle representations. All equations
+    for intrinsic rotations are derived by considering compositions
     of three elemental rotations about the three Cartesian axes:
 
     .. math::
@@ -330,11 +334,27 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
                          \end{array}\right)
         \end{eqnarray*}
 
-    Intrinsic rotations are then derived by considering the
-    composition of extrinsic rotations in the opposite order.
+    For intrinsic rotations, the order of rotations matches the order
+    of matrices *i.e.* the z-y'-x'' convention (yaw, pitch, roll)
+    corresponds to the multiplication of matrices ZYX. For more
+    information, see the Wikipedia page for Euler angles (specifically
+    the section on converting between representations):
+    https://en.wikipedia.org/wiki/Euler_angles.
+
+    Extrinsic rotations are then derived by considering the
+    composition of intrinsic rotations in the opposite order.
     For proof of the relationship between intrinsic and extrinsic
     rotations, see the Wikipedia page on Davenport chained rotations:
     https://en.wikipedia.org/wiki/Davenport_chained_rotations
+
+    It may be more natural to think of extrinsic rotations as
+    applying matrix rotations in the proper order, *i.e.* for standard
+    right-handed coordinate systems and the application of rotations
+    viewed as pre-multiplication of column vectors, an extrinic
+    rotation about x-y-z is the multiplication of the rotation matrices
+    ZYX since X is applied first, then Y, then Z. This order is
+    reversed for intrinsic rotations, so the matrix order is identical
+    to the order in the name (x-y'-z'' rotation represents XYZ).
 
     Args:
         q ((...,4) np.array): Quaternions to transform
@@ -358,7 +378,7 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
 
     mats = to_matrix(q)
 
-    if axis_type == 'extrinsic':
+    if axis_type == 'intrinsic':
         # Have to hardcode the different possibilites.
         # Classical Euler angles
         if convention == 'xzx':
@@ -403,7 +423,7 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
             beta = np.arcsin(mats[..., 1, 0])
             gamma = np.arctan2(-mats[..., 1, 2], mats[..., 1, 1])
         elif convention == 'zyx':
-            alpha = np.arctan2(-mats[..., 1, 0], mats[..., 0, 0])
+            alpha = np.arctan2(mats[..., 1, 0], mats[..., 0, 0])
             beta = np.arcsin(-mats[..., 2, 0])
             gamma = np.arctan2(mats[..., 2, 1], mats[..., 2, 2])
         elif convention == 'zxy':
@@ -412,11 +432,11 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
             gamma = np.arctan2(-mats[..., 2, 0], mats[..., 2, 2])
         else:
             raise ValueError("Unknown convention selected!")
-    elif axis_type == 'intrinsic':
+    elif axis_type == 'extrinsic':
         # For these, the matrix must be constructed in reverse order
         # e.g. Z(\alpha)Y'(\beta)Z''(\gamma) (where primes denote the
         # rotated frames) becomes the extrinsic rotation
-        # Z(\gamma)Y'(\beta)Z''(\alpha).
+        # Z(\gamma)Y(\beta)Z(\alpha).
         if convention == 'xzx':
             alpha = np.arctan2(mats[..., 0, 2], -mats[..., 0, 1])
             beta = np.arccos(mats[..., 0, 0])
@@ -455,7 +475,7 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
             beta = np.arcsin(mats[..., 2, 1])
             gamma = np.arctan2(-mats[..., 0, 1], mats[..., 1, 1])
         elif convention == 'yzx':
-            alpha = np.arctan2(-mats[..., 0, 2], mats[..., 0, 0])
+            alpha = np.arctan2(mats[..., 0, 2], mats[..., 0, 0])
             beta = np.arcsin(-mats[..., 0, 1])
             gamma = np.arctan2(mats[..., 2, 1], mats[..., 1, 1])
         elif convention == 'zyx':
@@ -597,11 +617,11 @@ def to_matrix(q, require_unit=True):
             "At least one element of q has approximately zero norm")
     else:
         if not np.allclose(s, 1.0):
-            warnings.warn(
+            if require_unit:
+                raise RuntimeError(
                 "Not all quaternions in q are unit quaternions. \
 If this was intentional, please set require_unit to False when \
-calling this function.",
-                UserWarning)
+calling this function.")
         m = np.empty(q.shape[:-1] + (3, 3))
         s **= -1.0  # For consistency with Wikipedia notation
         m[..., 0, 0] = 1.0 - 2 * s * (q[..., 2]**2 + q[..., 3]**2)
