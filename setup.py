@@ -1,7 +1,12 @@
 from setuptools import setup, find_packages
 
+import os
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+    'hamilton', '_version.py')) as f:
+    exec(f.read())
+
 setup(name='hamilton',
-      version='0.1',
+      version=__version__,
       description='Perform quaternion operations using numpy arrays',
       url='http://github.com/vramasub/quaternion',
       author='Vyas Ramasubramani',
@@ -15,7 +20,7 @@ setup(name='hamilton',
 
       classifiers=[
         'Development Status :: 3 - Alpha',
-        #'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: BSD License',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4',
         'Topic :: Scientific/Engineering :: Mathematics',

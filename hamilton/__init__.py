@@ -5,6 +5,13 @@
 
 from ._functions import *
 
+# Get the version
+import os
+
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+    '_version.py')) as f:
+    exec(f.read())
+
 __all__ = ['conjugate',
            'multiply',
            'norm',
@@ -17,4 +24,3 @@ __all__ = ['conjugate',
            'from_matrix',
            'to_matrix']
 
-__version__ = '0.1.0'

@@ -194,7 +194,7 @@ def from_euler(angles, convention = 'zyx', axis_type = 'intrinsic'):
 
     Args:
         angles ((...,3) np.array): Array whose last dimension
-            (of size 3) is (alpha, beta, gamma)
+            (of size 3) contains :math:`(\alpha, \beta, \gamma)`
         convention (str): One of the 12 valid conventions xzx, xyx,
             yxy, yzy, zyz, zxz, xzy, xyz, yxz, yzx, zyx, zxy
         axes (str): Whether to use extrinsic or intrinsic rotations
@@ -370,7 +370,7 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
         axes (str): Whether to use extrinsic or intrinsic
 
     Returns:
-        An array with Euler angles (alpha, beta, gamma)
+        An array with Euler angles :math:`(\alpha, \beta, \gamma)`
         as the last dimension (in radians)
 
     Example::
