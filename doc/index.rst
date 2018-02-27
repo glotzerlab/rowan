@@ -21,6 +21,7 @@ Once installed, the package can be installed using setuptools::
    package-hamilton
    license
    changelog
+   credits
 
 
 
