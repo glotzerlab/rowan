@@ -319,22 +319,22 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
     .. math::
         :nowrap:
 
-        begin{eqnarray*}
+        \begin{eqnarray*}
         R_x(\theta)  =& \left(\begin{array}{ccc}
                             1   & 0             & 0 \\
-                            0   & cos \theta    & -sin \theta \\
-                            0   & sin \theta    & cos \theta    \\
-                         \end{array}\right)
+                            0   & \cos \theta    & -\sin \theta \\
+                            0   & \sin \theta    & \cos \theta    \\
+                         \end{array}\right)\\
         R_y(\theta)  =& \left(\begin{array}{ccc}
-                            cos \theta   & 0        & sin \theta \\
+                            \cos \theta   & 0        & \sin \theta \\
                             0            & 1        &  0\\
-                            -sin \theta  & 1        & cos \theta    \\
-                         \end{array}\right)
+                            -\sin \theta  & 1        & \cos \theta    \\
+                         \end{array}\right)\\
         R_z(\theta)  =& \left(\begin{array}{ccc}
-                            cos \theta  & -sin \theta   & 0 \\
-                            sin \theta  & cos \theta    & 0 \\
+                            \cos \theta  & -\sin \theta   & 0 \\
+                            \sin \theta  & \cos \theta    & 0 \\
                             0           & 0             & 1 \\
-                         \end{array}\right)
+                         \end{array}\right)\\
         \end{eqnarray*}
 
     For intrinsic rotations, the order of rotations matches the order
