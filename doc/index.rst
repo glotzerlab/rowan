@@ -15,13 +15,14 @@ Once installed, the package can be installed using setuptools::
     $ python setup.py install --user
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: Contents:
 
-   package-hamilton
-   license
-   changelog
-   credits
+    overview
+    package-hamilton
+    license
+    changelog
+    credits
 
 
 
