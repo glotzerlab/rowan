@@ -7,7 +7,7 @@ import numpy as np
 import warnings
 
 def conjugate(q):
-    R"""Returns the conjugate of quaternion array q
+    R"""Conjugates an array of quaternions
 
     Args:
         q ((...,4) np.array): First set of quaternions
@@ -26,7 +26,9 @@ def conjugate(q):
 
 
 def multiply(qi, qj):
-    R"""Multiplies the quaternions in the array qi by those in qj
+    R"""Multiplies two arrays of quaternions
+
+    Note that quaternion multiplication is generally non-commutative.
 
     Args:
         qi ((...,4) np.array): First set of quaternions
@@ -58,10 +60,10 @@ def multiply(qi, qj):
 
 
 def norm(q):
-    R"""Trivial reimplementation of norm for both quaternions and vectors
+    R"""Compute the quaternion norm
 
     Args:
-        q ((...,4) np.array): Quaternions to normalize
+        q ((...,4) np.array): Quaternions to find norms for
 
     Returns:
         A (...) np.array containing the norms for qi in q
@@ -76,13 +78,13 @@ def norm(q):
 
 
 def normalize(q):
-    R"""Normalize quaternion or vector input
+    R"""Normalize quaternions
 
     Args:
-        q ((...,{3,4}) np.array): Array of quaternions/vectors to normalize
+        q ((...,{3,4}) np.array): Array of quaternions to normalize
 
     Returns:
-        An (...,{3,4}) np.array containing the unit quaternions qi/norm(qi)
+        An (...,{3,4}) np.array containing the unit quaternions q/norm(q)
 
     Example::
 
@@ -95,10 +97,9 @@ def normalize(q):
 
 
 def rotate(q, v):
-    R"""Performs an element-wise rotation of the vectors
-    v by the quaternions q.
-    The shapes of the two arrays must conform up to the
-    last dimension.
+    R"""Rotate a list of vectors by a corresponding set of quaternions
+
+    The shapes of the two arrays must conform up to the last dimension.
 
     Args:
         q ((...,4) np.array): First set of quaternions
@@ -121,7 +122,7 @@ def rotate(q, v):
 
 
 def _vector_bisector(v1, v2):
-    R"""Find the vector bisecting v1 and v2
+    R"""Find the vector bisecting two vectors
 
     Args:
         v1 ((...,3) np.array): First vector
@@ -141,8 +142,7 @@ def _vector_bisector(v1, v2):
 
 
 def about_axis(v, theta):
-    R"""Find the quaternions corresponding to rotations about
-    the axes v by angles theta
+    R"""Find quaternions to rotate a specified angle about a specified axis
 
     Args:
         v ((...,3) np.array): Axes to rotate about
@@ -176,7 +176,7 @@ def about_axis(v, theta):
 
 
 def vector_vector_rotation(v1, v2):
-    R"""Find the quaternion to rotate v1 onto v2
+    R"""Find the quaternion to rotate one vector onto another
 
     Args:
         v1 ((...,3) np.array): Vector to rotate
@@ -189,7 +189,7 @@ def vector_vector_rotation(v1, v2):
 
 
 def from_euler(angles, convention = 'zyx', axis_type = 'intrinsic'):
-    R"""Convert Euler angles to quaternion
+    R"""Convert Euler angles to quaternions
 
     Args:
         angles ((...,3) np.array): Array whose last dimension
@@ -202,9 +202,12 @@ def from_euler(angles, convention = 'zyx', axis_type = 'intrinsic'):
         An (..., 4) np.array containing the converted quaternions
 
     For generality, the rotations are computed by composing a sequence
-    of quaternions corresponding to axis-angle rotations. While more
-    efficient implementations are possible, this method is more flexible
-    for getting all types.
+    of quaternions corresponding to axis-angle rotations.
+
+    Note: While more efficient implementations are possible, this
+    method is more flexible since it works for essentially arbitrary
+    Euler angles as long as intrinsic and extrinsic rotations are not
+    intermixed.
 
     Example::
 
@@ -547,7 +550,7 @@ def to_euler_old(q):
 def from_matrix(mat, require_orthogonal=True):
     R"""Convert the rotation matrices mat to quaternions
 
-    Uses the algorithm described in this paper by Bar-Itzhack
+    Uses the algorithm described Bar-Itzhack described in this paper
     <https://doi.org/10.2514/2.4654>. The idea is to construct a
     matrix K whose largest eigenvalue corresponds to the desired
     quaternion. One of the strengths of the algorithm is that for
@@ -597,7 +600,7 @@ to False when calling this function.",
 
 
 def to_matrix(q, require_unit=True):
-    R"""Convert the quaternions in q to rotation matrices.
+    R"""Convert quaternions into rotation matrices.
 
     Uses the conversion described on Wikipedia
     <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix>
