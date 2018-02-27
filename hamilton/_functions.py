@@ -266,48 +266,6 @@ def from_euler(angles, convention = 'zyx', axis_type = 'intrinsic'):
     return final_rotation
 
 
-def from_euler_old(angles):
-    R"""Convert Euler angles to quaternion (3-2-1 convention)
-
-    Args:
-        angles ((...,3) np.array): Array whose last dimension
-            (of size 3) is (alpha, beta, gamma)
-
-    Returns:
-        An array containing the converted quaternions
-
-    Standard numpy broadcasting is used to compute the quaternions
-    along the last dimension of the angle arrays.
-
-    .. note::
-
-        Derived from injavis implementation
-
-    Example::
-
-        rands = np.random.rand(100, 3)
-        alpha, beta, gamma = rands.T
-        ql.from_euler(alpha, beta, gamma)
-    """
-    angles = np.asarray(angles)
-
-    try:
-        angles *= 0.5
-    except TypeError:
-        # Can't multiply integral types in place, but avoid copying if possible
-        angles = angles * 0.5
-
-    c = np.cos(angles)
-    s = np.sin(angles)
-
-    r = np.prod(c, axis=-1) + np.prod(s, axis=-1)
-    i = s[..., 0] * c[..., 1] * c[..., 2] - c[..., 0] * s[..., 1] * s[..., 2]
-    j = c[..., 0] * s[..., 1] * c[..., 2] + s[..., 0] * c[..., 1] * s[..., 2]
-    k = c[..., 0] * c[..., 1] * s[..., 2] - s[..., 0] * s[..., 1] * c[..., 2]
-
-    return np.stack([r, i, j, k], axis=-1)
-
-
 def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
     R"""Convert quaternions to Euler angles
 
@@ -501,57 +459,6 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
         raise ValueError("The axis type must be either extrinsic or intrinsic")
 
     return np.stack((alpha, beta, gamma), axis = -1)
-
-
-def to_euler_old(q):
-    R"""Convert quaternions to Euler angles (3-2-1 convention)
-
-    Args:
-        q ((...,4) np.array): Quaternions to transform
-
-    Returns:
-        An array with Euler angles (alpha, beta, gamma)
-        as the last dimension (in radians)
-
-    .. note::
-
-        Derived from injavis implementation
-
-    Example::
-
-        rands = np.random.rand(100, 3)
-        alpha, beta, gamma = rands.T
-        ql.from_euler(alpha, beta, gamma)
-        alpha_return, beta_return, gamma_return = ql.to_euler(full)
-
-    """
-    q = np.asarray(q)
-
-    r = q[..., 0, np.newaxis]
-    i = q[..., 1, np.newaxis]
-    j = q[..., 2, np.newaxis]
-    k = q[..., 3, np.newaxis]
-
-    q00 = r * r
-    q11 = i * i
-    q22 = j * j
-    q33 = k * k
-    q01 = r * i
-    q02 = r * j
-    q03 = r * k
-    q12 = i * j
-    q13 = i * k
-    q23 = j * k
-
-    alpha = np.arctan2(2.0 * (q01 + q23), q00 - q11 - q22 + q33)
-    beta = np.arcsin(2.0 * (q02 - q13))
-    gamma = np.arctan2(2.0 * (q03 + q12), q00 + q11 - q22 - q33)
-
-    alpha[np.isnan(alpha)] = np.pi / 2
-    beta[np.isnan(beta)] = np.pi / 2
-    gamma[np.isnan(gamma)] = np.pi / 2
-
-    return np.concatenate((alpha, beta, gamma), axis=-1)
 
 
 def from_matrix(mat, require_orthogonal=True):
