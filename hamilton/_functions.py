@@ -340,15 +340,16 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
     For intrinsic rotations, the order of rotations matches the order
     of matrices *i.e.* the z-y'-x'' convention (yaw, pitch, roll)
     corresponds to the multiplication of matrices ZYX. For more
-    information, see the Wikipedia page for Euler angles (specifically
-    the section on converting between representations):
-    https://en.wikipedia.org/wiki/Euler_angles.
+    information, see the Wikipedia page for `Euler angles
+    <https://en.wikipedia.org/wiki/Euler_angles>`_ (specifically
+    the section on converting between representations).
+
 
     Extrinsic rotations are then derived by considering the
     composition of intrinsic rotations in the opposite order.
     For proof of the relationship between intrinsic and extrinsic
-    rotations, see the Wikipedia page on Davenport chained rotations:
-    https://en.wikipedia.org/wiki/Davenport_chained_rotations
+    rotations, see the `Wikipedia page on Davenport chained rotations
+    <https://en.wikipedia.org/wiki/Davenport_chained_rotations>`_.
 
     It may be more natural to think of extrinsic rotations as
     applying matrix rotations in the proper order, *i.e.* for standard
@@ -550,8 +551,8 @@ def to_euler_old(q):
 def from_matrix(mat, require_orthogonal=True):
     R"""Convert the rotation matrices mat to quaternions
 
-    Uses the algorithm described Bar-Itzhack described in this paper
-    <https://doi.org/10.2514/2.4654>. The idea is to construct a
+    Uses the algorithm described Bar-Itzhack described in this `paper
+    <https://doi.org/10.2514/2.4654>`_. The idea is to construct a
     matrix K whose largest eigenvalue corresponds to the desired
     quaternion. One of the strengths of the algorithm is that for
     nonorthogonal matrices it gives the closest quaternion
@@ -602,8 +603,8 @@ to False when calling this function.",
 def to_matrix(q, require_unit=True):
     R"""Convert quaternions into rotation matrices.
 
-    Uses the conversion described on Wikipedia
-    <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix>
+    Uses the conversion described on `Wikipedia
+    <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix>`_.
 
     Args:
         q ((...,4) np.array): An array of quaternions
