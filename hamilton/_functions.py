@@ -13,7 +13,7 @@ def conjugate(q):
         q ((...,4) np.array): First set of quaternions
 
     Returns:
-        An (...,4) np.array containing the conjugates of q
+        An array containing the conjugates of q
 
     Example::
 
@@ -35,8 +35,8 @@ def multiply(qi, qj):
         qj ((...,4) np.array): Second set of quaternions
 
     Returns:
-        An (...,4) np.array containing the products
-        of row i of qi with column j of qj
+        An array containing the products of row i of qi
+        with column j of qj
 
     Example::
 
@@ -66,7 +66,7 @@ def norm(q):
         q ((...,4) np.array): Quaternions to find norms for
 
     Returns:
-        A (...) np.array containing the norms for qi in q
+        An array containing the norms for qi in q
 
     Example::
 
@@ -81,10 +81,10 @@ def normalize(q):
     R"""Normalize quaternions
 
     Args:
-        q ((...,{3,4}) np.array): Array of quaternions to normalize
+        q ((...,4) np.array): Array of quaternions to normalize
 
     Returns:
-        An (...,{3,4}) np.array containing the unit quaternions q/norm(q)
+        An array containing the unit quaternions q/norm(q)
 
     Example::
 
@@ -106,7 +106,7 @@ def rotate(q, v):
         v ((...,3) np.array): First set of quaternions
 
     Returns:
-        An (...,3) np.array of the vectors in v rotated by q
+        An array of the vectors in v rotated by q
 
     Example::
 
@@ -130,7 +130,6 @@ def _vector_bisector(v1, v2):
 
     Returns:
         The vector that bisects the angle between v1 and v2
-
     """
 
     # Check that the vectors are reasonable
@@ -150,7 +149,7 @@ def about_axis(v, theta):
             Will be broadcast to match shape of v as needed
 
     Returns:
-        An (...,4) np.array of the requested rotation quaternions
+        An array of the desired rotation quaternions
 
     Example::
 
@@ -182,6 +181,8 @@ def vector_vector_rotation(v1, v2):
         v1 ((...,3) np.array): Vector to rotate
         v2 ((...,3) np.array): Desired vector
 
+    Returns:
+        The quaternion that rotates v1 onto v2.
     """
     v1 = np.asarray(v1)
     v2 = np.asarray(v2)
@@ -194,20 +195,22 @@ def from_euler(angles, convention = 'zyx', axis_type = 'intrinsic'):
     Args:
         angles ((...,3) np.array): Array whose last dimension
             (of size 3) is (alpha, beta, gamma)
-        convention (str): One of the 6 valid conventions zxz,
-            xyx, yzy, zyz, xzx, yxy
-        axes (str): Whether to use extrinsic or intrinsic
+        convention (str): One of the 12 valid conventions xzx, xyx,
+            yxy, yzy, zyz, zxz, xzy, xyz, yxz, yzx, zyx, zxy
+        axes (str): Whether to use extrinsic or intrinsic rotations
 
     Returns:
-        An (..., 4) np.array containing the converted quaternions
+        An array containing the converted quaternions
 
     For generality, the rotations are computed by composing a sequence
     of quaternions corresponding to axis-angle rotations.
 
-    Note: While more efficient implementations are possible, this
-    method is more flexible since it works for essentially arbitrary
-    Euler angles as long as intrinsic and extrinsic rotations are not
-    intermixed.
+    .. note::
+
+        While more efficient implementations are possible, this method
+        is more flexible since it works for essentially arbitrary Euler
+        angles as long as intrinsic and extrinsic rotations are not
+        intermixed.
 
     Example::
 
@@ -271,12 +274,13 @@ def from_euler_old(angles):
             (of size 3) is (alpha, beta, gamma)
 
     Returns:
-        An (..., 4) np.array containing the converted quaternions
+        An array containing the converted quaternions
 
     Standard numpy broadcasting is used to compute the quaternions
     along the last dimension of the angle arrays.
 
-    Note:
+    .. note::
+
         Derived from injavis implementation
 
     Example::
@@ -307,8 +311,8 @@ def from_euler_old(angles):
 def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
     R"""Convert quaternions to Euler angles
 
-    Euler angles are returned in the sequence provided, so in the
-    default case ('zyx') the angles are for a rotation
+    Euler angles are returned in the sequence provided, so in, *e.g.*,
+    the default case ('zyx'), the angles returned are for a rotation
     :math:`Z(\alpha) Y(\beta) X(\gamma)`.
 
     For simplicity, quaternions are converted to matrices, which are
@@ -344,7 +348,6 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
     <https://en.wikipedia.org/wiki/Euler_angles>`_ (specifically
     the section on converting between representations).
 
-
     Extrinsic rotations are then derived by considering the
     composition of intrinsic rotations in the opposite order.
     For proof of the relationship between intrinsic and extrinsic
@@ -367,7 +370,7 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
         axes (str): Whether to use extrinsic or intrinsic
 
     Returns:
-        A (..., 3) np.array with Euler angles (alpha, beta, gamma)
+        An array with Euler angles (alpha, beta, gamma)
         as the last dimension (in radians)
 
     Example::
@@ -441,6 +444,8 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
         # e.g. Z(\alpha)Y'(\beta)Z''(\gamma) (where primes denote the
         # rotated frames) becomes the extrinsic rotation
         # Z(\gamma)Y(\beta)Z(\alpha).
+
+        # Classical Euler angles
         if convention == 'xzx':
             alpha = np.arctan2(mats[..., 0, 2], -mats[..., 0, 1])
             beta = np.arccos(mats[..., 0, 0])
@@ -505,10 +510,11 @@ def to_euler_old(q):
         q ((...,4) np.array): Quaternions to transform
 
     Returns:
-        A (..., 3) np.array with Euler angles (alpha, beta, gamma)
+        An array with Euler angles (alpha, beta, gamma)
         as the last dimension (in radians)
 
-    Note:
+    .. note::
+
         Derived from injavis implementation
 
     Example::
@@ -562,7 +568,7 @@ def from_matrix(mat, require_orthogonal=True):
         mat ((...,3,3) np.array): An array of rotation matrices
 
     Returns:
-        An (..., 4) np.array containing the quaternion representations
+        An array containing the quaternion representations
         of the elements of mat (i.e. the same elements of SO(3))
     """
     mat = np.asarray(mat)
@@ -610,7 +616,7 @@ def to_matrix(q, require_unit=True):
         q ((...,4) np.array): An array of quaternions
 
     Returns:
-        The (..., 3, 3) np.array containing the matrix representations
+        The array containing the matrix representations
         of the elements of q (i.e. the same elements of SO(3))
     """
     q = np.asarray(q)
@@ -650,7 +656,7 @@ def from_axis_angle(axes, angles):
             to conform to the axes array.
 
     Returns:
-        An (..., 4) np.array containing the quaternions equivalent
+        The array containing the quaternions equivalent
         to rotating angles about axes
     """
     axes = np.asarray(axes)
@@ -679,7 +685,7 @@ def to_axis_angle(q):
 
     Returns:
         A tuple of np.arrays (axes, angles) where axes has
-        shape (..., 3) and angles has shape (..., 1). The
+        shape (...,3) and angles has shape (...,1). The
         angles are in radians
     """
     q = np.asarray(q)
