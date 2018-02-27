@@ -19,6 +19,8 @@ Once installed, the package can be installed using setuptools::
    :caption: Contents:
 
    package-hamilton
+   license
+   changelog
 
 
 
