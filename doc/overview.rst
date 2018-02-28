@@ -1,3 +1,4 @@
+========
 Overview
 ========
 
@@ -12,7 +13,7 @@ Named for William Rowan Hamilton, who invented quaternions and popularized their
 
 
 Philosophy
-----------
+==========
 
 The goal of hamilton is to provide a flexible, easy-to-use, and scalable approach to dealing with rotation representations.
 To ensure maximum flexibility, hamilton operates entirely on numpy arrays, which serve as the *de facto* standard for efficient multi-dimensional arrays in Python.
@@ -22,4 +23,4 @@ Functions for which this broadcasting is not available should be documented as s
 Since hamilton is designed to work everywhere, all hard dependencies aside from numpy are avoided, although soft dependencies for specific functions are allowed.
 To avoid any dependencies on compilers or other software, all hamilton code is written in **pure Python**.
 This means that while hamilton is intended to provide good performance, it may not be the correct choice in cases where performance is critical.
-The package was written principally for use-cases where quaternion operations are not the primary bottleneck, so it prioritizes maintainability, reusability, and flexibility over optimization.
+The package was written principally for use-cases where quaternion operations are not the primary bottleneck, so it prioritizes portability, maintainability, and flexibility over optimization.

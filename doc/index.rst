@@ -20,6 +20,12 @@ Once installed, the package can be installed using setuptools::
 
     overview
     package-hamilton
+    development
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Reference:
+
     license
     changelog
     credits
