@@ -1,0 +1,106 @@
+# Copyright (c) 2018 The Regents of the University of Michigan
+# All rights reserved.
+# This software is licensed under the BSD 3-Clause License.
+"""Various functions for generating random sets of quaternions"""
+
+import numpy as np
+from .._functions import normalize
+
+__all__ = ['rand',
+           'random_sample',
+           'uniform',
+           'uniform_sample']
+
+def rand(*args):
+    """Generate random quaternions
+
+    .. warning::
+        If your goal is to generate a uniform set of rotations, you should instead use :py:func:`random.random_uniform`.
+
+    This function is modeled after numpy's convenience function **MAKE THIS A LINK**np.random.rand. A corresponding
+    :py:func:`random.random_sample.
+
+    Args:
+        shape (tuple): The shape of the array to generate.
+
+    Return:
+        Random quaternions of the shape provided with an additional axis of length 4.
+    """
+    if len(args) == 0:
+        return random_sample()
+    else:
+        return random_sample(args)
+
+def random_sample(size=None):
+    """Generate random quaternions
+
+    .. warning::
+        If your goal is to generate a uniform set of rotations, you should instead use
+        :py:func:`random_uniform`.
+
+    Args:
+        shape (tuple): The shape of the array to generate.
+
+    Return:
+        Random quaternions of the shape provided with an additional axis of length 4.
+    """
+    if size is None:
+        size = (4,)
+    else:
+        size += (4,)
+    quats = np.random.rand(size)
+    return normalize(quats)
+
+def uniform(*args):
+    """Generate random rotations uniformly
+
+    This is a convenience function a la np.random.rand. If you want a function that takes
+    a tuple as input, use :py:func:`random.uniform_sample` instead.
+
+    Args:
+        shape (tuple): The shape of the array to generate.
+
+    Return:
+        Random quaternions of the shape provided with an additional axis of length 4.
+    """
+    if len(args) == 0:
+        return uniform_sample()
+    else:
+        return uniform_sample(args)
+
+def uniform_sample(size=None):
+    """Generate random rotations unifo
+
+    In general, sampling from the space of all quaternions will not generate uniform rotations.
+    What we want is a distribution that accounts for the density of rotations, *i.e.*, a
+    distribution that is uniform with respect to the appropriate measure. The algorithm used
+    here is detailed in the paper below.
+
+    .. [Shoe79] Shoemake, K.: Uniform random rotations. In: D. Kirk, editor, Graphics Gems III, pages 124-132. Academic, New York, 1992.
+
+
+    Args:
+        shape (tuple): The shape of the array to generate
+
+    Return:
+        Random quaternions of the shape provided with an additional axis of length 4
+    """
+    if size is None:
+        sample_size = (3,)
+    else:
+        sample_size += (3,)
+
+    u = np.random.random_sample(size)
+
+    theta1 = 2*np.pi*u[..., 1]
+    s1 = np.sin(theta1)
+    c1 = np.cos(theta1)
+    theta2 = 2*np.pi*u[..., 2]
+    s2 = np.sin(theta2)
+    c2 = np.cos(theta2)
+
+    r1 = np.sqrt(1-u[..., 0])
+    r2 = np.sqrt(u[..., 0])
+
+    quats = np.stack((s1*r1, c1*r1, s2*r2, c2*r2), axis=-1)
+    return normalize(quats)
