@@ -1,7 +1,15 @@
 # Copyright (c) 2018 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-"""Various functions for generating random sets of quaternions"""
+"""Various functions for generating random sets of quaternions
+
+TODO: Try implementing randomness using this paper or one of the ones it cites:
+    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2896220/
+
+    other alternatives:
+    http://home.lu.lv/~sd20008/papers/essays/Random%20unitary%20[paper].pdf
+
+"""
 
 import numpy as np
 from .._functions import normalize
