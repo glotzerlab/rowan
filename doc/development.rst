@@ -1,8 +1,36 @@
+.. _development:
+
 =================
 Development Guide
 =================
 
-All contributions to hamilton are welcomed. The pages below offer information about how to contribute.
+
+Philosophy
+==========
+
+The goal of hamilton is to provide a flexible, easy-to-use, and scalable approach to dealing with rotation representations.
+To ensure maximum flexibility, hamilton operates entirely on numpy arrays, which serve as the *de facto* standard for efficient multi-dimensional arrays in Python.
+To be available for a wide variety of applications, hamilton aims to work for arbitrarily shaped numpy arrays, mimicking `numpy broadcasting <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_ to the extent possible.
+Functions for which this broadcasting is not available should be documented as such.
+
+Since hamilton is designed to work everywhere, all hard dependencies aside from numpy are avoided, although soft dependencies for specific functions are allowed.
+To avoid any dependencies on compilers or other software, all hamilton code is written in **pure Python**.
+This means that while hamilton is intended to provide good performance, it may not be the correct choice in cases where performance is critical.
+The package was written principally for use-cases where quaternion operations are not the primary bottleneck, so it prioritizes portability, maintainability, and flexibility over optimization.
+
+
+PEP 20
+------
+In general, all code in hamilton should follow the principles in `PEP 20 <https://www.python.org/dev/peps/pep-0020/>`_.
+In particular, prefer simple, explicit code where possible, avoiding unnecessary convolution or complicated code that could be written more simply.
+Avoid writing code that is not easy to parse up front.
+
+Inline comments are **highly encouraged**; however, code should be written in a way that it could be understood without comments.
+Comments such as "Set x to 10" are not helpful and simply clutter code.
+The most useful comments in a package such as hamilton are the ones that explain the underlying algorithm rather than the implementations, which should be simple.
+For example, the comment "compute the spectral decomposition of A" is uninformative, since the code itself should make this obvious, *e.g*, ``np.linalg.eigh``.
+On the other hand, the comment "the eigenvector corresponding to the largest eigenvalue of the A matrix is the quaternion" is instructive.
+
 
 
 Source Code Conventions
@@ -55,20 +83,7 @@ Tests should be written in the style of the standard Python `unittest <https://d
 At all times, tests should be executable by simply running `python -m unittest discover tests` from the root of the project.
 
 
-PEP 20
-======
-In general, all code in hamilton should follow the principles in `PEP 20 <https://www.python.org/dev/peps/pep-0020/>`_.
-In particular, prefer simple, explicit code where possible, avoiding unnecessary convolution or complicated code that could be written more simply.
-Avoid writing code that is not easy to parse up front.
-
-Inline comments are **highly encouraged**; however, code should be written in a way that it could be understood without comments.
-Comments such as "Set x to 10" are not helpful and simply clutter code.
-The most useful comments in a package such as hamilton are the ones that explain the underlying algorithm rather than the implementations, which should be simple.
-For example, the comment "compute the spectral decomposition of A" is uninformative, since the code itself should make this obvious, *e.g*, ``np.linalg.eigh``.
-On the other hand, the comment "the eigenvector corresponding to the largest eigenvalue of the A matrix is the quaternion" is instructive.
-
-
 General Notes
 =============
  * For consistency, NumPy should **always** be imported as ``np`` in code: ``import numpy as np``.
- * Avoid external dependencies where possible, and avoid introducing **any** hard dependencies. Dependencies should always be soft, enabling the rest of the package to function as is.
+ * Avoid external dependencies where possible, and avoid introducing **any** hard dependencies. Dependencies other than NumPy should always be soft, enabling the rest of the package to function as is.
