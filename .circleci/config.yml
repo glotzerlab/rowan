@@ -1,12 +1,13 @@
 version: 2
-jobs:
-  py36:
+references:
+  im36: &im36
     docker:
-      # Minimal image required
       - image: circleci/python:3.6.1
-      
+    
+  wd: &wd
     working_directory: ~/repo
 
+  runall_tests: &runall_tests
     steps:
       - checkout
 
@@ -26,6 +27,12 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
+
+jobs:
+  py36:
+    <<: *im36 
+    <<: *wd
+    <<: *runall_tests
 
 workflows:
     version: 2
