@@ -21,29 +21,42 @@ references:
 
   runall_tests: &runall_tests
     steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
       - run:
           name: run tests
           command: |
             # Test various numpy versions here
-            pip install --user numpy==1.10
+            pip install --user numpy==1.10.4
             python -m unittest discover tests
             pip uninstall -y numpy
 
-            pip install --user numpy==1.11
+            pip install --user numpy==1.11.3
             python -m unittest discover tests
             pip uninstall -y numpy
 
-            pip install --user numpy==1.12
+            pip install --user numpy==1.12.1
             python -m unittest discover tests
             pip uninstall -y numpy
 
-            pip install --user numpy==1.13
+            pip install --user numpy==1.13.3
             python -m unittest discover tests
             pip uninstall -y numpy
 
-            pip install --user numpy==1.14
+            pip install --user numpy==1.14.1
             python -m unittest discover tests
             pip uninstall -y numpy
+
+      - save_cache:
+          paths:
+            - ~/.local
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
 
 jobs:
   py27:
