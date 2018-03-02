@@ -1,0 +1,10 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+source = hamilton
+
+[report]
+ignore_errors = True
+
+[html]
+directory = coverage_html_report
