@@ -1,20 +1,8 @@
 version: 2
 references:
-  im26: &im26
-    docker:
-      - image: circleci/python:2.6.9
-
   im27: &im27
     docker:
       - image: circleci/python:2.7.14
-
-  im32: &im32
-    docker:
-      - image: circleci/python:3.2.6
-
-  im33: &im33
-    docker:
-      - image: circleci/python:3.3.7
 
   im34: &im34
     docker:
@@ -50,23 +38,8 @@ references:
           destination: test-reports
 
 jobs:
-  py26:
-    <<: *im26
-    <<: *wd
-    <<: *runall_tests
-
   py27:
     <<: *im27
-    <<: *wd
-    <<: *runall_tests
-
-  py32:
-    <<: *im32
-    <<: *wd
-    <<: *runall_tests
-
-  py33:
-    <<: *im33
     <<: *wd
     <<: *runall_tests
 
@@ -89,10 +62,7 @@ workflows:
     version: 2
     all:
       jobs:
-        - py26
         - py27
-        - py32
-        - py33
         - py34
         - py35
         - py36
