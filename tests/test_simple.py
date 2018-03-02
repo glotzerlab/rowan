@@ -1,5 +1,5 @@
-"""Test the basic functions of the quaternion package
-that can be tested easily"""
+"""Test the basic functions of the quaternion package that can be tested easily"""
+from __future__ import division, print_function, absolute_import
 
 import unittest
 import numpy as np

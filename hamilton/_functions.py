@@ -2,6 +2,7 @@
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 """Submodule containing all standard functions"""
+from __future__ import division, print_function, absolute_import
 
 import numpy as np
 import warnings
@@ -225,8 +226,7 @@ def from_euler(angles, convention = 'zyx', axis_type = 'intrinsic'):
     for ax, vec in basis_axes.items():
         basis_axes[ax] = np.broadcast_to(
                             vec,
-                            (*angles.shape[:-1],
-                                vec.shape[-1])
+                            angles.shape[:-1] + (vec.shape[-1],)
                             )
 
     # Split by convention, the easiest

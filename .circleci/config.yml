@@ -1,9 +1,33 @@
 version: 2
 references:
+  im26: &im26
+    docker:
+      - image: circleci/python:2.6.9
+
+  im27: &im27
+    docker:
+      - image: circleci/python:2.7.14
+
+  im32: &im32
+    docker:
+      - image: circleci/python:3.2.6
+
+  im33: &im33
+    docker:
+      - image: circleci/python:3.3.7
+
+  im34: &im34
+    docker:
+      - image: circleci/python:3.4.8
+
+  im35: &im35
+    docker:
+      - image: circleci/python:3.5.5
+
   im36: &im36
     docker:
       - image: circleci/python:3.6.1
-    
+   
   wd: &wd
     working_directory: ~/repo
 
@@ -14,14 +38,11 @@ references:
       - run:
           name: install dependencies
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
+            pip install --user -r requirements.txt
 
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
             python -m unittest discover tests
 
       - store_artifacts:
@@ -29,8 +50,38 @@ references:
           destination: test-reports
 
 jobs:
+  py26:
+    <<: *im26
+    <<: *wd
+    <<: *runall_tests
+
+  py27:
+    <<: *im27
+    <<: *wd
+    <<: *runall_tests
+
+  py32:
+    <<: *im32
+    <<: *wd
+    <<: *runall_tests
+
+  py33:
+    <<: *im33
+    <<: *wd
+    <<: *runall_tests
+
+  py34:
+    <<: *im34
+    <<: *wd
+    <<: *runall_tests
+
+  py35:
+    <<: *im35
+    <<: *wd
+    <<: *runall_tests
+
   py36:
-    <<: *im36 
+    <<: *im36
     <<: *wd
     <<: *runall_tests
 
@@ -38,4 +89,10 @@ workflows:
     version: 2
     all:
       jobs:
-        - py36 
+        - py26
+        - py27
+        - py32
+        - py33
+        - py34
+        - py35
+        - py36
