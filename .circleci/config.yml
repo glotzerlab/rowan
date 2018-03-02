@@ -21,21 +21,29 @@ references:
 
   runall_tests: &runall_tests
     steps:
-      - checkout
-
-      - run:
-          name: install dependencies
-          command: |
-            pip install --user -r requirements.txt
-
       - run:
           name: run tests
           command: |
+            # Test various numpy versions here
+            pip install --user numpy==1.10
             python -m unittest discover tests
+            pip uninstall -y numpy
 
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
+            pip install --user numpy==1.11
+            python -m unittest discover tests
+            pip uninstall -y numpy
+
+            pip install --user numpy==1.12
+            python -m unittest discover tests
+            pip uninstall -y numpy
+
+            pip install --user numpy==1.13
+            python -m unittest discover tests
+            pip uninstall -y numpy
+
+            pip install --user numpy==1.14
+            python -m unittest discover tests
+            pip uninstall -y numpy
 
 jobs:
   py27:
