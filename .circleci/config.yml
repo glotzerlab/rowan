@@ -1,20 +1,28 @@
-# Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
 version: 2
-jobs:
-  build:
+references:
+  im27: &im27
     docker:
-      # Minimal image required
+      - image: circleci/python:2.7.14
+
+  im34: &im34
+    docker:
+      - image: circleci/python:3.4.8
+
+  im35: &im35
+    docker:
+      - image: circleci/python:3.5.5
+
+  im36: &im36
+    docker:
       - image: circleci/python:3.6.1
-      
+   
+  wd: &wd
     working_directory: ~/repo
 
+  runall_tests: &runall_tests
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "requirements.txt" }}
@@ -22,24 +30,60 @@ jobs:
           - v1-dependencies-
 
       - run:
-          name: install dependencies
+          name: run tests
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
+            # Test various numpy versions here
+            pip install --user numpy==1.10.4
+            python -m unittest discover tests
+            pip uninstall -y numpy
+
+            pip install --user numpy==1.11.3
+            python -m unittest discover tests
+            pip uninstall -y numpy
+
+            pip install --user numpy==1.12.1
+            python -m unittest discover tests
+            pip uninstall -y numpy
+
+            pip install --user numpy==1.13.3
+            python -m unittest discover tests
+            pip uninstall -y numpy
+
+            pip install --user numpy==1.14.1
+            python -m unittest discover tests
+            pip uninstall -y numpy
 
       - save_cache:
           paths:
-            - ./venv
+            - ~/.local
           key: v1-dependencies-{{ checksum "requirements.txt" }}
-        
-      # run tests!
-      - run:
-          name: run tests
-          command: |
-            . venv/bin/activate
-            python -m unittest discover tests
 
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
+jobs:
+  py27:
+    <<: *im27
+    <<: *wd
+    <<: *runall_tests
+
+  py34:
+    <<: *im34
+    <<: *wd
+    <<: *runall_tests
+
+  py35:
+    <<: *im35
+    <<: *wd
+    <<: *runall_tests
+
+  py36:
+    <<: *im36
+    <<: *wd
+    <<: *runall_tests
+
+workflows:
+    version: 2
+    all:
+      jobs:
+        - py27
+        - py34
+        - py35
+        - py36

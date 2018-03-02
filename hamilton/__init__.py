@@ -3,6 +3,8 @@
 # This software is licensed under the BSD 3-Clause License.
 """Simple quaternion library containing standard methods"""
 
+from __future__ import division, print_function, absolute_import
+
 from ._functions import *
 
 # Get the version
