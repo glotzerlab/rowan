@@ -51,6 +51,8 @@ references:
 
             pip install --user numpy==1.14.1
             python -m unittest discover tests
+            # Get coverage with the final version
+            coverage run -m unittest discover tests
             pip uninstall -y numpy
 
       - save_cache:
