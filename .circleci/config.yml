@@ -52,7 +52,10 @@ references:
             pip install --user numpy==1.14.1
             python -m unittest discover tests
             # Get coverage with the final version
-            coverage run -m unittest discover tests
+            pip install --user coverage
+            # Path issues resolved by specifying full path
+            ~/.local/bin/coverage run -m unittest discover tests
+            ~/.local/bin/coverage report
             pip uninstall -y numpy
 
       - save_cache:
