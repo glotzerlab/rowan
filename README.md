@@ -39,6 +39,10 @@ To run the packaged unit tests, execute:
 
     python -m unittest discover tests
 
+To check test coverage, make sure the coverage module is installed and run the packaged unit tests:
+
+    coverage run -m unittest discover tests
+
 ## Quickstart
 This library can be used to work with quaternions by simply instantiating the appropriate numpy arrays and passing them to the required functions.
 For example:
