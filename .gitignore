@@ -3,5 +3,6 @@ test
 *.pyc
 *.egg-info
 *.swp
+.coverage
 build/
 dist/
