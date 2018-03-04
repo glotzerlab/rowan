@@ -3,7 +3,9 @@
 # This software is licensed under the BSD 3-Clause License.
 """Define a quaternion class for users who desire a more encapsulated class."""
 
-import ._functions as funs
+from .functions import (conjugate, multiply, norm, normalize,
+                        rotate, about_axis, vector_vector_rotation,
+                        from_euler, to_euler, from_matrix, to_matrix)
 
 
 class quaternion:
@@ -46,7 +48,7 @@ class quaternion:
 
     def __mul__(self, other):
         try:
-            return self.__class__(funs.multiply(self.array, other.array))
+            return self.__class__(multiply(self.array, other.array))
         except TypeError:
             raise TypeError(
                 "Quaternions arithmetic only operates on two quaternions")
@@ -55,7 +57,7 @@ class quaternion:
 
     def __truediv__(self, other):
         try:
-            return self.__class__(funs.multiply(self.array, other.conj))
+            return self.__class__(multiply(self.array, other.conj))
         except TypeError:
             raise TypeError(
                 "Quaternions arithmetic only operates on two quaternions")
@@ -76,7 +78,7 @@ class quaternion:
 
     def __rmul__(self, other):
         try:
-            return self.__class__(funs.multiply(other.array, self.array))
+            return self.__class__(multiply(other.array, self.array))
         except TypeError:
             raise TypeError(
                 "Quaternions arithmetic only operates on two quaternions")
@@ -85,7 +87,7 @@ class quaternion:
 
     def __rtruediv__(self, other):
         try:
-            return self.__class__(funs.multiply(other.array, self.conj))
+            return self.__class__(multiply(other.array, self.conj))
         except TypeError:
             raise TypeError(
                 "Quaternions arithmetic only operates on two quaternions")
@@ -112,7 +114,7 @@ class quaternion:
 
     def __imul__(self, other):
         try:
-            self.array = funs.multiply(self.array, other.array)
+            self.array = multiply(self.array, other.array)
         except TypeError:
             raise TypeError(
                 "Quaternions arithmetic only operates on two quaternions")
@@ -121,7 +123,7 @@ class quaternion:
 
     def __itruediv__(self, other):
         try:
-            self.array = funs.multiply(self.array, other.conj)
+            self.array = multiply(self.array, other.conj)
         except TypeError:
             raise TypeError(
                 "Quaternions arithmetic only operates on two quaternions")
@@ -137,7 +139,7 @@ class quaternion:
     @property
     def conj(self):
         """The conjugate of the quaternion"""
-        return self.__class__(funs.conjugate(self.array))
+        return self.__class__(conjugate(self.array))
 
     @property
     def norm(self):

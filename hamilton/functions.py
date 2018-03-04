@@ -222,7 +222,8 @@ def from_euler(angles, convention='zyx', axis_type='intrinsic'):
     """
     angles = np.asarray(angles)
     convention = convention.lower()
-    # TODO: USE THE CODE HERE AS A WAY TO DETERMINE WHERE BROADCASTING CAN BE MADE MORE EFFICIENT THROUGHOUT THE MODULE
+    # TODO: USE THE CODE HERE AS A WAY TO DETERMINE WHERE BROADCASTING CAN
+    # BE MADE MORE EFFICIENT THROUGHOUT THE MODULE
 
     basis_axes = {
         'x': np.array([1, 0, 0]),

@@ -5,7 +5,9 @@
 
 from __future__ import division, print_function, absolute_import
 
-from ._functions import *
+from .functions import (conjugate, multiply, norm, normalize,
+                        rotate, about_axis, vector_vector_rotation,
+                        from_euler, to_euler, from_matrix, to_matrix)
 
 # Get the version
 import os

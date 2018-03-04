@@ -86,10 +86,6 @@ class TestMatrix(unittest.TestCase):
         )
 
     def test_rotation(self):
-        converted = quaternion.from_matrix(
-            quaternion.to_matrix(
-                input1))
-
         quat_rotated = quaternion.rotate(
             input1,
             vector_inputs)
