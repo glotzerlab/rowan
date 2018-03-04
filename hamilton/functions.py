@@ -7,6 +7,7 @@ from __future__ import division, print_function, absolute_import
 import numpy as np
 import warnings
 
+
 def conjugate(q):
     R"""Conjugates an array of quaternions
 
@@ -190,7 +191,7 @@ def vector_vector_rotation(v1, v2):
     return about_axis(_vector_bisector(v1, v2), np.pi)
 
 
-def from_euler(angles, convention = 'zyx', axis_type = 'intrinsic'):
+def from_euler(angles, convention='zyx', axis_type='intrinsic'):
     R"""Convert Euler angles to quaternions
 
     Args:
@@ -221,19 +222,20 @@ def from_euler(angles, convention = 'zyx', axis_type = 'intrinsic'):
     """
     angles = np.asarray(angles)
     convention = convention.lower()
-    #TODO: USE THE CODE HERE AS A WAY TO DETERMINE WHERE BROADCASTING CAN BE MADE MORE EFFICIENT THROUGHOUT THE MODULE
+    # TODO: USE THE CODE HERE AS A WAY TO DETERMINE WHERE BROADCASTING CAN
+    # BE MADE MORE EFFICIENT THROUGHOUT THE MODULE
 
     basis_axes = {
-            'x': np.array([1, 0, 0]),
-            'y': np.array([0, 1, 0]),
-            'z': np.array([0, 0, 1]),
-            }
+        'x': np.array([1, 0, 0]),
+        'y': np.array([0, 1, 0]),
+        'z': np.array([0, 0, 1]),
+    }
     # Temporary method to ensure shapes conform
     for ax, vec in basis_axes.items():
         basis_axes[ax] = np.broadcast_to(
-                            vec,
-                            angles.shape[:-1] + (vec.shape[-1],)
-                            )
+            vec,
+            angles.shape[:-1] + (vec.shape[-1],)
+        )
 
     # Split by convention, the easiest
     rotations = []
@@ -249,34 +251,41 @@ def from_euler(angles, convention = 'zyx', axis_type = 'intrinsic'):
             # Rotate the bases as well
             for key, value in basis_axes.items():
                 basis_axes[key] = rotate(
-                        rotations[-1],
-                        value
-                        )
+                    rotations[-1],
+                    value
+                )
     else:
         raise ValueError("Only valid axis_types are intrinsic and extrinsic")
 
     # Compose the total rotation
     final_rotation = np.broadcast_to(
-            np.array([1, 0, 0, 0]),
-            rotations[0].shape
-            )
+        np.array([1, 0, 0, 0]),
+        rotations[0].shape
+    )
     for q in rotations:
         final_rotation = multiply(q, final_rotation)
 
     return final_rotation
 
 
-def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
+def to_euler(q, convention='zyx', axis_type='intrinsic'):
     R"""Convert quaternions to Euler angles
 
     Euler angles are returned in the sequence provided, so in, *e.g.*,
     the default case ('zyx'), the angles returned are for a rotation
     :math:`Z(\alpha) Y(\beta) X(\gamma)`.
 
+    .. note::
+
+        In all cases, the :math:`\alpha` and :math:`\gamma` angles are
+        between :math:`\pm \pi`. For proper Euler angles, :math:`\beta`
+        is between :math:`0` and :math:`pi` degrees. For Tait-Bryan
+        angles, :math:`\beta` lies between :math:`\pm\pi/2`.
+
     For simplicity, quaternions are converted to matrices, which are
     then converted to their Euler angle representations. All equations
-    for intrinsic rotations are derived by considering compositions
-    of three elemental rotations about the three Cartesian axes:
+    for rotations are derived by considering compositions of the three
+    elemental rotations about the three Cartesian axes:
 
     .. math::
         :nowrap:
@@ -299,27 +308,21 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
                          \end{array}\right)\\
         \end{eqnarray*}
 
-    For intrinsic rotations, the order of rotations matches the order
-    of matrices *i.e.* the z-y'-x'' convention (yaw, pitch, roll)
-    corresponds to the multiplication of matrices ZYX. For more
-    information, see the Wikipedia page for `Euler angles
-    <https://en.wikipedia.org/wiki/Euler_angles>`_ (specifically
-    the section on converting between representations).
-
-    Extrinsic rotations are then derived by considering the
-    composition of intrinsic rotations in the opposite order.
+    Extrinsic rotations are represented by matrix multiplications in
+    the proper order, so :math:`z-y-x` is represented by the
+    multiplication :math:`XYZ` so that the system is rotated first
+    about :math:`Z`, then about :math:`y`, then finally :math:`X`.
+    For intrinsic rotations, the order of rotations is reversed,
+    meaning that it matches the order in which the matrices actually
+    appear *i.e.* the :math:`z-y'-x''` convention (yaw, pitch, roll)
+    corresponds to the multiplication of matrices :math:`ZYX`.
     For proof of the relationship between intrinsic and extrinsic
     rotations, see the `Wikipedia page on Davenport chained rotations
     <https://en.wikipedia.org/wiki/Davenport_chained_rotations>`_.
 
-    It may be more natural to think of extrinsic rotations as
-    applying matrix rotations in the proper order, *i.e.* for standard
-    right-handed coordinate systems and the application of rotations
-    viewed as pre-multiplication of column vectors, an extrinic
-    rotation about x-y-z is the multiplication of the rotation matrices
-    ZYX since X is applied first, then Y, then Z. This order is
-    reversed for intrinsic rotations, so the matrix order is identical
-    to the order in the name (x-y'-z'' rotation represents XYZ).
+    For more information, see the Wikipedia page for
+    `Euler angles <https://en.wikipedia.org/wiki/Euler_angles>`_
+    (specifically the section on converting between representations).
 
     Args:
         q ((...,4) np.array): Quaternions to transform
@@ -458,7 +461,7 @@ def to_euler(q, convention = 'zyx', axis_type = 'intrinsic'):
     else:
         raise ValueError("The axis type must be either extrinsic or intrinsic")
 
-    return np.stack((alpha, beta, gamma), axis = -1)
+    return np.stack((alpha, beta, gamma), axis=-1)
 
 
 def from_matrix(mat, require_orthogonal=True):
@@ -536,7 +539,7 @@ def to_matrix(q, require_unit=True):
         if not np.allclose(s, 1.0):
             if require_unit:
                 raise RuntimeError(
-                "Not all quaternions in q are unit quaternions. \
+                    "Not all quaternions in q are unit quaternions. \
 If this was intentional, please set require_unit to False when \
 calling this function.")
         m = np.empty(q.shape[:-1] + (3, 3))
@@ -580,8 +583,8 @@ def from_axis_angle(axes, angles):
     if not angles.shape[-1] == 1:
         angles = angles[..., np.newaxis]
     return np.concatenate(
-            (np.cos(angles/2), axes*np.sin(angles/2)),
-            axis = -1)
+        (np.cos(angles/2), axes*np.sin(angles/2)),
+        axis=-1)
 
 
 def to_axis_angle(q):
@@ -602,7 +605,7 @@ def to_axis_angle(q):
     # Avoid divide by zero issues; these values will not be used
     sines[sines == 0] = 1
     axes = np.where(angles != 0,
-            q[..., 1:]/sines,
-            0)
+                    q[..., 1:]/sines,
+                    0)
 
     return axes, angles

@@ -19,6 +19,7 @@
 #
 import os
 import sys
+import pkg_resources  # part of setuptools
 sys.path.insert(0, os.path.abspath('..'))
 
 
@@ -63,7 +64,6 @@ author = 'Vyas Ramasubramani'
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-import pkg_resources  # part of setuptools
 release = pkg_resources.require("hamilton")[0].version
 
 # The short X.Y version.
@@ -104,7 +104,7 @@ html_theme = 'sphinx_rtd_theme'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-#html_static_path = ['_static']
+# html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -174,6 +174,3 @@ texinfo_documents = [
      author, 'hamilton', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-

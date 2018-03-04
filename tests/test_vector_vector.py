@@ -13,4 +13,5 @@ class TestVectorVector(unittest.TestCase):
         vec1 = np.array([0, 0, 1])
         vec2 = np.array([1, 0, 0])
         quat = quaternion.vector_vector_rotation(vec1, vec2)
-        self.assertTrue(np.allclose(quat, np.array([[0, np.sqrt(2)/2, 0, np.sqrt(2)/2]])))
+        self.assertTrue(np.allclose(quat, np.array(
+            [[0, np.sqrt(2)/2, 0, np.sqrt(2)/2]])))

@@ -17,22 +17,22 @@ class TestAxisAngle(unittest.TestCase):
     def test_from_axis_angle(self):
         self.assertTrue(
             np.allclose(quaternion.from_axis_angle(
-                    np.array([1, 0, 0]),
-                    0),
-                    np.array((1, 0, 0, 0))
-                    )
+                np.array([1, 0, 0]),
+                0),
+                np.array((1, 0, 0, 0))
             )
+        )
 
         self.assertTrue(
             np.allclose(quaternion.from_axis_angle(
-                    np.array([1, 0, 0]),
-                    np.pi/2),
-                    np.array((np.sqrt(2)/2, np.sqrt(2)/2, 0, 0))
-                    )
+                np.array([1, 0, 0]),
+                np.pi/2),
+                np.array((np.sqrt(2)/2, np.sqrt(2)/2, 0, 0))
             )
+        )
 
     def test_to_axis_angle(self):
         axes, angles = quaternion.to_axis_angle(
-                np.array((np.sqrt(2)/2, np.sqrt(2)/2, 0, 0)))
+            np.array((np.sqrt(2)/2, np.sqrt(2)/2, 0, 0)))
         self.assertTrue(np.allclose(axes, np.array([1, 0, 0])))
         self.assertTrue(np.allclose(angles, np.pi/2))

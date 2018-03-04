@@ -1,4 +1,4 @@
-"""Test the basic functions of the quaternion package that can be tested easily"""
+"""Test the simple unary operator of the quaternion package"""
 from __future__ import division, print_function, absolute_import
 
 import unittest
