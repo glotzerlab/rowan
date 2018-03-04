@@ -51,11 +51,13 @@ references:
 
             pip install --user numpy==1.14.1
             python -m unittest discover tests
-            # Get coverage with the final version
+            # Run additional tests in final case
             pip install --user coverage
+            pip install --user flake8
             # Path issues resolved by specifying full path
             ~/.local/bin/coverage run -m unittest discover tests
             ~/.local/bin/coverage report
+            python -m flake8 --show-source hamilton
             pip uninstall -y numpy
 
       - save_cache:
