@@ -11,7 +11,7 @@ from ._functions import *
 import os
 
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-    '_version.py')) as f:
+                       '_version.py')) as f:
     exec(f.read())
 
 __all__ = ['conjugate',
@@ -25,4 +25,3 @@ __all__ = ['conjugate',
            'to_euler',
            'from_matrix',
            'to_matrix']
-

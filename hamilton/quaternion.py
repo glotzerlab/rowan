@@ -13,12 +13,12 @@ class quaternion:
     def __init__(self, array):
         if array.shape != (1, 4):
             raise ValueError(
-            "Currently the quaternion class only supports construction using \
+                "Currently the quaternion class only supports construction using \
                     arrays of 4 elements")
         self.array = array
 
     def __repr__(self):
-        return "quaternion(" + self.array.__repr__()  + ")"
+        return "quaternion(" + self.array.__repr__() + ")"
 
     def __str__(self, other):
         return self.array.__str__()
@@ -30,7 +30,8 @@ class quaternion:
         try:
             return self.__class__(self.array + other.array)
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -38,7 +39,8 @@ class quaternion:
         try:
             return self.__class__(self.array - other.array)
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -46,7 +48,8 @@ class quaternion:
         try:
             return self.__class__(funs.multiply(self.array, other.array))
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -54,7 +57,8 @@ class quaternion:
         try:
             return self.__class__(funs.multiply(self.array, other.conj))
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -65,7 +69,8 @@ class quaternion:
         try:
             return self.__class__(other.array - self.array)
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -73,7 +78,8 @@ class quaternion:
         try:
             return self.__class__(funs.multiply(other.array, self.array))
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -81,7 +87,8 @@ class quaternion:
         try:
             return self.__class__(funs.multiply(other.array, self.conj))
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -89,7 +96,8 @@ class quaternion:
         try:
             self.array += other.array
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -97,7 +105,8 @@ class quaternion:
         try:
             self.array -= other.array
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -105,7 +114,8 @@ class quaternion:
         try:
             self.array = funs.multiply(self.array, other.array)
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -113,7 +123,8 @@ class quaternion:
         try:
             self.array = funs.multiply(self.array, other.conj)
         except TypeError:
-            raise TypeError("Quaternions arithmetic only operates on two quaternions")
+            raise TypeError(
+                "Quaternions arithmetic only operates on two quaternions")
         else:
             raise
 
@@ -142,6 +153,6 @@ class quaternion:
         vectors = np.asarray(vectors)
         """use np.broadcast_to"""
         quats = np.broadcast_to(self.array,
-                (*vectors.shape[:-1],
-                    self.array.shape[-1]))
+                                (*vectors.shape[:-1],
+                                 self.array.shape[-1]))
         return rotate(quats, vectors)
