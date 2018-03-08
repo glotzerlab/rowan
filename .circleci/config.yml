@@ -1,21 +1,9 @@
 version: 2
 references:
-  im27: &im27
-    docker:
-      - image: circleci/python:2.7.14
-
-  im34: &im34
-    docker:
-      - image: circleci/python:3.4.8
-
-  im35: &im35
-    docker:
-      - image: circleci/python:3.5.5
-
   im36: &im36
     docker:
-      - image: circleci/python:3.6.1
-   
+      - image: themattrix/tox   
+
   wd: &wd
     working_directory: ~/repo
 
@@ -32,33 +20,20 @@ references:
       - run:
           name: run tests
           command: |
-            # Test various numpy versions here
-            pip install --user numpy==1.10.4
-            python -m unittest discover tests
-            pip uninstall -y numpy
+            # Faster to just test one env first
+            pip3.6 install --user flake8
+            pip3.6 install --user numpy
+            python3.6 -m flake8 --show-source hamilton
+            python3.6 -m unittest discover tests -v
 
-            pip install --user numpy==1.11.3
-            python -m unittest discover tests
-            pip uninstall -y numpy
+            # Test python-dependency matrix with tox
+            pip3.6 install --user tox
+            tox
 
-            pip install --user numpy==1.12.1
-            python -m unittest discover tests
-            pip uninstall -y numpy
-
-            pip install --user numpy==1.13.3
-            python -m unittest discover tests
-            pip uninstall -y numpy
-
-            pip install --user numpy==1.14.1
-            python -m unittest discover tests
-            # Run additional tests in final case
-            pip install --user coverage
-            pip install --user flake8
-            # Path issues resolved by specifying full path
+            # Run with coverage
+            pip3.6 install --user coverage
             ~/.local/bin/coverage run -m unittest discover tests
             ~/.local/bin/coverage report
-            python -m flake8 --show-source hamilton
-            pip uninstall -y numpy
 
       - save_cache:
           paths:
@@ -66,22 +41,7 @@ references:
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
 jobs:
-  py27:
-    <<: *im27
-    <<: *wd
-    <<: *runall_tests
-
-  py34:
-    <<: *im34
-    <<: *wd
-    <<: *runall_tests
-
-  py35:
-    <<: *im35
-    <<: *wd
-    <<: *runall_tests
-
-  py36:
+  build:
     <<: *im36
     <<: *wd
     <<: *runall_tests
@@ -90,7 +50,4 @@ workflows:
     version: 2
     all:
       jobs:
-        - py27
-        - py34
-        - py35
-        - py36
+        - build

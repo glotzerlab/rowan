@@ -15,14 +15,18 @@ setup(name='hamilton',
       zip_safe=True,
 
       install_requires=[
-          'numpy>=1.13'
+          'numpy>=1.10'
       ],
 
       classifiers=[
           'Development Status :: 3 - Alpha',
           'License :: OSI Approved :: BSD License',
           'Programming Language :: Python :: 2.7',
+          'Programming Language :: Python :: 3.3',
           'Programming Language :: Python :: 3.4',
+          'Programming Language :: Python :: 3.5',
+          'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7',
           'Topic :: Scientific/Engineering :: Mathematics',
       ],
       )
