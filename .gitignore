@@ -4,5 +4,6 @@ test
 *.egg-info
 *.swp
 .coverage
+.tox/
 build/
 dist/
