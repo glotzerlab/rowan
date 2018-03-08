@@ -1,4 +1,5 @@
 """Test the multiplication of quaternions for various array sizes"""
+from __future__ import division, print_function, absolute_import
 
 import unittest
 import numpy as np
@@ -60,17 +61,17 @@ class TestMultiply(unittest.TestCase):
         ones = np.reshape(
             np.repeat(one[np.newaxis, :], num_reps, axis=0), expanded_shape)
         expected_product_zeros = np.reshape(
-                np.repeat(
-                    np.array([0, 0, 0, 0])[np.newaxis, :],
-                    num_reps,
-                    axis=0),
-                expanded_shape)
+            np.repeat(
+                np.array([0, 0, 0, 0])[np.newaxis, :],
+                num_reps,
+                axis=0),
+            expanded_shape)
         expected_product_ones = np.reshape(
-                np.repeat(
-                    np.array([1, 0, 0, 0])[np.newaxis, :],
-                    num_reps,
-                    axis=0),
-                expanded_shape)
+            np.repeat(
+                np.array([1, 0, 0, 0])[np.newaxis, :],
+                num_reps,
+                axis=0),
+            expanded_shape)
 
         # Zeros
         product = quaternion.multiply(zeros, zeros)

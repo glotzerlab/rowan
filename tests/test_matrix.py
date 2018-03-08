@@ -1,4 +1,5 @@
 """Test converting quaternions to and from rotation matrices"""
+from __future__ import division, print_function, absolute_import
 
 import unittest
 import numpy as np
@@ -17,6 +18,7 @@ TESTDATA_FILENAME = os.path.join(
 with np.load(TESTDATA_FILENAME) as data:
     input1 = data['input1']
     vector_inputs = data['vector_inputs']
+
 
 class TestMatrix(unittest.TestCase):
     """Test rotation matrix conversions"""
@@ -72,32 +74,27 @@ class TestMatrix(unittest.TestCase):
     def test_to_from_matrix(self):
         # The equality is only guaranteed up to a sign
         converted = quaternion.from_matrix(
-                        quaternion.to_matrix(
-                        input1))
+            quaternion.to_matrix(
+                input1))
         self.assertTrue(
-                np.all(
-                    np.logical_or(
-                        np.isclose(input1 - converted, 0),
-                        np.isclose(input1 + converted, 0),
-                        )
-                    )
+            np.all(
+                np.logical_or(
+                    np.isclose(input1 - converted, 0),
+                    np.isclose(input1 + converted, 0),
                 )
-
+            )
+        )
 
     def test_rotation(self):
-        converted = quaternion.from_matrix(
-                        quaternion.to_matrix(
-                        input1))
-
         quat_rotated = quaternion.rotate(
-                input1,
-                vector_inputs)
+            input1,
+            vector_inputs)
 
         matrices = quaternion.to_matrix(
-                input1)
+            input1)
         matrix_rotated = np.einsum(
-                'ijk,ki->ij',
-                matrices,
-                vector_inputs.T
-                )
+            'ijk,ki->ij',
+            matrices,
+            vector_inputs.T
+        )
         self.assertTrue(np.allclose(matrix_rotated, quat_rotated))

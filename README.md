@@ -27,17 +27,21 @@ To install from source, execute:
 
 ### Requirements
 
-* Python = 3.6
-* Numpy >= 1.7
+* Python = 2.7, >= 3.4
+* Numpy >= 1.10
 
 ## Testing
 
-The package is currently tested for python version 3.6 on Unix.
-Continuous integration testing is performed using CircleCI.
+The package is currently tested for python versions 2.7, 3.4, 3.5, and 3.6 on Unix.
+Continuous integrated testing is performed using CircleCI on these python versions with numpy versions 1.10 and above.
 
 To run the packaged unit tests, execute:
 
     python -m unittest discover tests
+
+To check test coverage, make sure the coverage module is installed and run the packaged unit tests:
+
+    coverage run -m unittest discover tests
 
 ## Quickstart
 This library can be used to work with quaternions by simply instantiating the appropriate numpy arrays and passing them to the required functions.

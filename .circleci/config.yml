@@ -1,20 +1,16 @@
-# Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
 version: 2
-jobs:
-  build:
+references:
+  im36: &im36
     docker:
-      # Minimal image required
-      - image: circleci/python:3.6.1
-      
+      - image: themattrix/tox   
+
+  wd: &wd
     working_directory: ~/repo
 
+  runall_tests: &runall_tests
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "requirements.txt" }}
@@ -22,24 +18,36 @@ jobs:
           - v1-dependencies-
 
       - run:
-          name: install dependencies
+          name: run tests
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
+            # Faster to just test one env first
+            pip3.6 install --user flake8
+            pip3.6 install --user numpy
+            python3.6 -m flake8 --show-source hamilton
+            python3.6 -m unittest discover tests -v
+
+            # Test python-dependency matrix with tox
+            pip3.6 install --user tox
+            tox
+
+            # Run with coverage
+            pip3.6 install --user coverage
+            ~/.local/bin/coverage run -m unittest discover tests
+            ~/.local/bin/coverage report
 
       - save_cache:
           paths:
-            - ./venv
+            - ~/.local
           key: v1-dependencies-{{ checksum "requirements.txt" }}
-        
-      # run tests!
-      - run:
-          name: run tests
-          command: |
-            . venv/bin/activate
-            python -m unittest discover tests
 
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
+jobs:
+  build:
+    <<: *im36
+    <<: *wd
+    <<: *runall_tests
+
+workflows:
+    version: 2
+    all:
+      jobs:
+        - build
