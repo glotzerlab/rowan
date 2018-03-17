@@ -137,9 +137,13 @@ def _vector_bisector(v1, v2):
     # Check that the vectors are reasonable
     if len(v1.shape) == 1:
         v1 = v1[np.newaxis, :]
-    if len(v2.shape) == 2:
+    if len(v2.shape) == 1:
         v2 = v2[np.newaxis, :]
-    return normalize(normalize(v1) + normalize(v2))
+
+    def normalize_vec(v):
+        """Helper function to normalize vectors"""
+        return v/np.linalg.norm(v, axis=-1)
+    return normalize_vec(normalize_vec(v1) + normalize_vec(v2))
 
 
 def about_axis(v, theta):
