@@ -229,6 +229,9 @@ def from_euler(angles, convention='zyx', axis_type='intrinsic'):
     # TODO: USE THE CODE HERE AS A WAY TO DETERMINE WHERE BROADCASTING CAN
     # BE MADE MORE EFFICIENT THROUGHOUT THE MODULE
 
+    if len(convention) > 3 or (set(convention) - set('xyz')):
+        raise ValueError("All acceptable conventions must be 3 character strings composed only of x, y, and z")
+
     basis_axes = {
         'x': np.array([1, 0, 0]),
         'y': np.array([0, 1, 0]),
