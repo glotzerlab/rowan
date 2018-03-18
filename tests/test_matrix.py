@@ -29,6 +29,13 @@ class TestMatrix(unittest.TestCase):
             quaternion.from_matrix(np.eye(3)) == one
         ))
 
+        with self.assertRaises(ValueError):
+            self.assertTrue(np.allclose(
+                quaternion.from_matrix(
+                    2*np.eye(3)
+                    )
+            ))
+
         mat = np.array([[0, 0, 1],
                         [1, 0, 0],
                         [0, 1, 0]])
@@ -48,6 +55,10 @@ class TestMatrix(unittest.TestCase):
     def test_to_matrix(self):
         v = np.copy(zero)
         with self.assertRaises(ZeroDivisionError):
+            quaternion.to_matrix(v)
+
+        v = 2*np.ones(4)
+        with self.assertRaises(ValueError):
             quaternion.to_matrix(v)
 
         v = np.copy(one)
