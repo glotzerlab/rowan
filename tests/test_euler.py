@@ -81,6 +81,13 @@ class TestEuler(unittest.TestCase):
         with self.assertRaises(ValueError):
             quaternion.to_euler(euler_quaternions, 'zyz', 'bar')
 
+        with self.assertRaises(ValueError):
+            quaternion.to_euler(2*one)
+
+        with self.assertRaises(ZeroDivisionError):
+            quaternion.to_euler(zero)
+
+
     def test_from_to_euler(self):
         np.random.seed(0)
         quats = quaternion.normalize(np.random.rand(25, 4))
