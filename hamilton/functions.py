@@ -229,7 +229,8 @@ def from_euler(angles, convention='zyx', axis_type='intrinsic'):
     # BE MADE MORE EFFICIENT THROUGHOUT THE MODULE
 
     if len(convention) > 3 or (set(convention) - set('xyz')):
-        raise ValueError("All acceptable conventions must be 3 character strings composed only of x, y, and z")
+        raise ValueError("All acceptable conventions must be 3 \
+character strings composed only of x, y, and z")
 
     basis_axes = {
         'x': np.array([1, 0, 0]),
@@ -355,7 +356,7 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
     except ValueError:
         raise ValueError(
             "Not all quaternions in q are unit quaternions.")
-    except:
+    except: # noqa E722
         raise
 
     if axis_type == 'intrinsic':
