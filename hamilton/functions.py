@@ -121,27 +121,9 @@ def rotate(q, v):
     return multiply(q, multiply(quat_v, conjugate(q)))[..., 1:]
 
 
-def _vector_bisector(v1, v2):
-    R"""Find the vector bisecting two vectors
-
-    Args:
-        v1 ((...,3) np.array): First vector
-        v2 ((...,3) np.array): Second vector
-
-    Returns:
-        The vector that bisects the angle between v1 and v2
-    """
-
-    # Check that the vectors are reasonable
-    if len(v1.shape) == 1:
-        v1 = v1[np.newaxis, :]
-    if len(v2.shape) == 1:
-        v2 = v2[np.newaxis, :]
-
-    def normalize_vec(v):
-        """Helper function to normalize vectors"""
-        return v/np.linalg.norm(v, axis=-1)
-    return normalize_vec(normalize_vec(v1) + normalize_vec(v2))
+def _normalize_vec(v):
+    """Helper function to normalize vectors"""
+    return v/np.linalg.norm(v, axis=-1)[..., np.newaxis]
 
 
 def about_axis(v, theta):
@@ -165,17 +147,40 @@ def about_axis(v, theta):
     v = np.asarray(v)
 
     # First reshape theta and compute the half angle
-    theta = np.broadcast_to(theta, v.shape[:-1])[..., np.newaxis]
+    bc = np.broadcast(theta, v[..., 0])
+    theta = np.broadcast_to(theta, bc.shape)[..., np.newaxis]
+    v = np.broadcast_to(v, bc.shape + (3,))
+    #theta = np.broadcast_to(theta, v.shape[:-1])[..., np.newaxis]
     ha = theta / 2.0
 
     # Normalize the vector
-    u = normalize(v)
+    u = _normalize_vec(v)
 
     # Compute the components of the quaternions
     scalar_comp = np.cos(ha)
     vec_comp = np.sin(ha) * u
 
     return np.concatenate((scalar_comp, vec_comp), axis=-1)
+
+
+def _vector_bisector(v1, v2):
+    R"""Find the vector bisecting two vectors
+
+    Args:
+        v1 ((...,3) np.array): First vector
+        v2 ((...,3) np.array): Second vector
+
+    Returns:
+        The vector that bisects the angle between v1 and v2
+    """
+
+    # Check that the vectors are reasonable
+    if len(v1.shape) == 1:
+        v1 = v1[np.newaxis, :]
+    if len(v2.shape) == 1:
+        v2 = v2[np.newaxis, :]
+
+    return _normalize_vec(_normalize_vec(v1) + _normalize_vec(v2))
 
 
 def vector_vector_rotation(v1, v2):

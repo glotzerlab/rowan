@@ -8,16 +8,16 @@ import hamilton as quaternion
 
 
 class TestAboutAxis(unittest.TestCase):
-    def test_about_axis(self):
+    def test_single(self):
         """Test rotation about an axis"""
-        # One vector, one angle
         v = np.array([1, 0, 0])
         theta = np.pi
         quats = quaternion.about_axis(v, theta)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, np.array([0, 1, 0, 0])))
 
-        # Multiple vectors, one angle
+    def test_multiple_vectors(self):
+        """Test multiple vectors against an angle"""
         v = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
         theta = np.pi
         quats = quaternion.about_axis(v, theta)
@@ -28,7 +28,8 @@ class TestAboutAxis(unittest.TestCase):
                                               [0, 0, 0, 1]]))
                         )
 
-        # Multiple vectors, multiple angles, matching dimension
+    def test_multiple(self):
+        """Test multiple vectors against multiple angles"""
         v = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
         theta = np.array([np.pi, np.pi / 2, np.pi / 3])
         quats = quaternion.about_axis(v, theta)
@@ -36,13 +37,16 @@ class TestAboutAxis(unittest.TestCase):
         self.assertTrue(np.allclose(quats, np.array([[0, 1, 0, 0], [np.sqrt(
             2) / 2, 0, np.sqrt(2) / 2, 0], [np.sqrt(3) / 2, 0, 0, 1 / 2]])))
 
-        # Higher dimensions, matching dimension
+    def test_complex(self):
+        """Test higher dimensions and broadcasting"""
+        # Various ways of producing the same output
         expected_output = np.array([[0, 1, 0, 0],
                                     [np.sqrt(2) / 2, 0, np.sqrt(2) / 2, 0],
                                     [np.sqrt(3) / 2, 0, 0, 1 / 2]])[
             np.newaxis, np.newaxis, ...].repeat(
             2, axis=0).repeat(2, axis=1)
 
+        # Matching array shapes (no broadcasing at all)
         v = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])[
             np.newaxis, np.newaxis, ...].repeat(
             2, axis=0).repeat(
@@ -56,13 +60,21 @@ class TestAboutAxis(unittest.TestCase):
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, expected_output))
 
-        # Higher dimensions, requires broadcasting
-        v = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])[
-            np.newaxis, np.newaxis, ...].repeat(
-            2, axis=0).repeat(
-            2, axis=1)
-        theta = np.array([np.pi, np.pi / 2, np.pi / 3])
+        # Broadcasting in theta
+        theta_reduced = theta[0, :, ...]
+        quats = quaternion.about_axis(v, theta_reduced)
+        self.assertTrue(quats.shape[:-1] == v.shape[:-1])
+        self.assertTrue(np.allclose(quats, expected_output))
 
-        quats = quaternion.about_axis(v, theta)
+        # Broadcasting in v
+        v_reduced = v[:, 0, ...]
+        quats = quaternion.about_axis(v_reduced, theta)
+        self.assertTrue(quats.shape[:-1] == v.shape[:-1])
+        self.assertTrue(np.allclose(quats, expected_output))
+
+        # Broadcasting in both
+        quats = quaternion.about_axis(
+                v_reduced[:, np.newaxis, ...],
+                theta_reduced[np.newaxis, :, ...])
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, expected_output))
