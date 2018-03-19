@@ -115,6 +115,7 @@ def rotate(q, v):
     """
     q = np.asarray(q)
     v = np.asarray(v)
+
     # Convert vector to quaternion representation
     quat_v = np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
     return multiply(q, multiply(quat_v, conjugate(q)))[..., 1:]
