@@ -6,7 +6,7 @@ with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
     exec(f.read())
 
 setup(name='hamilton',
-      version=__version__,
+      version=__version__, # noqa F821
       description='Perform quaternion operations using numpy arrays',
       url='http://github.com/vramasub/quaternion',
       author='Vyas Ramasubramani',

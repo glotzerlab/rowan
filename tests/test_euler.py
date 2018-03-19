@@ -42,6 +42,16 @@ class TestEuler(unittest.TestCase):
                 euler_quaternions
             ))
 
+        # Ensure proper errors are raised
+        with self.assertRaises(ValueError):
+            quaternion.from_euler(euler_angles, 'foo', 'intrinsic')
+
+        with self.assertRaises(ValueError):
+            quaternion.from_euler(euler_angles, 'foo', 'extrinsic')
+
+        with self.assertRaises(ValueError):
+            quaternion.from_euler(euler_angles, 'zyz', 'bar')
+
     def test_to_euler(self):
         v = one
         self.assertTrue(np.all(
@@ -60,6 +70,22 @@ class TestEuler(unittest.TestCase):
                 quaternion.to_euler(euler_quaternions, 'zyz', 'intrinsic'),
                 euler_angles
             ))
+
+        # Ensure proper errors are raised
+        with self.assertRaises(ValueError):
+            quaternion.to_euler(euler_quaternions, 'foo', 'intrinsic')
+
+        with self.assertRaises(ValueError):
+            quaternion.to_euler(euler_quaternions, 'foo', 'extrinsic')
+
+        with self.assertRaises(ValueError):
+            quaternion.to_euler(euler_quaternions, 'zyz', 'bar')
+
+        with self.assertRaises(ValueError):
+            quaternion.to_euler(2*one)
+
+        with self.assertRaises(ZeroDivisionError):
+            quaternion.to_euler(zero)
 
     def test_from_to_euler(self):
         np.random.seed(0)
