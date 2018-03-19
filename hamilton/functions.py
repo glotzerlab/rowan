@@ -48,10 +48,8 @@ def multiply(qi, qj):
     """
     qi = np.asarray(qi)
     qj = np.asarray(qj)
-    if not qi.shape == qj.shape:
-        raise ValueError("The two arrays must be the same size!")
 
-    output = np.empty(qi.shape)
+    output = np.empty(np.broadcast(qi, qj).shape)
 
     output[..., 0] = qi[..., 0] * qj[..., 0] - \
         np.sum(qi[..., 1:] * qj[..., 1:], axis=-1)

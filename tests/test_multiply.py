@@ -94,3 +94,36 @@ class TestMultiply(unittest.TestCase):
                 np.reshape(
                     stored_product,
                     expanded_shape)))
+
+    def test_broadcast(self):
+        """Ensure broadcasting works"""
+        # Multiply zeros, simple shape check
+        shape = (45, 3, 13, 4)
+        many_zeros = np.zeros(shape)
+        product = quaternion.multiply(many_zeros, zero)
+        self.assertTrue(product.shape == shape)
+
+        # Two nonconforming array sizes
+        with self.assertRaises(ValueError):
+            quaternion.multiply(
+                    many_zeros,
+                    np.repeat(zero[np.newaxis, :], 2, axis = 0)
+                    )
+
+        # Require broadcasting in multiple dimensions
+        zeros_A = np.zeros((1, 1, 3, 8, 1, 4))
+        zeros_B = np.zeros((3, 5, 1, 1, 9, 4))
+        shape = (3, 5, 3, 8, 9, 4)
+        product = quaternion.multiply(zeros_A, zeros_B)
+        self.assertTrue(product.shape == shape)
+
+        # Test some actual products
+        num_first = 2
+        num_second = 5
+        i1 = input1[:num_first, np.newaxis, :]
+        i2 = input1[np.newaxis, :num_second, :]
+        product = quaternion.multiply(i1, i2)
+        for i in range(num_first):
+            for j in range(num_second):
+                single_prod = quaternion.multiply(i1[i, 0, :], i2[0, j, :])
+                self.assertTrue(np.all(product[i, j, :] == single_prod))
