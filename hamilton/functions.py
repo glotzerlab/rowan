@@ -174,12 +174,6 @@ def _vector_bisector(v1, v2):
         The vector that bisects the angle between v1 and v2
     """
 
-    # Check that the vectors are reasonable
-    if len(v1.shape) == 1:
-        v1 = v1[np.newaxis, :]
-    if len(v2.shape) == 1:
-        v2 = v2[np.newaxis, :]
-
     return _normalize_vec(_normalize_vec(v1) + _normalize_vec(v2))
 
 
@@ -191,7 +185,7 @@ def vector_vector_rotation(v1, v2):
         v2 ((...,3) np.array): Desired vector
 
     Returns:
-        The quaternion that rotates v1 onto v2.
+        Array (..., 4) of quaternions that rotate v1 onto v2.
     """
     v1 = np.asarray(v1)
     v2 = np.asarray(v2)
