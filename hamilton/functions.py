@@ -192,12 +192,20 @@ def vector_vector_rotation(v1, v2):
     return about_axis(_vector_bisector(v1, v2), np.pi)
 
 
-def from_euler(angles, convention='zyx', axis_type='intrinsic'):
+def from_euler(alpha, beta, gamma, convention='zyx',
+               axis_type='intrinsic'):
     R"""Convert Euler angles to quaternions
 
+    For generality, the rotations are computed by composing a sequence of
+    quaternions corresponding to axis-angle rotations. While more efficient
+    implementations are possible, this method was chosen to prioritize
+    flexibility since it works for essentially arbitrary Euler angles as
+    long as intrinsic and extrinsic rotations are not intermixed.
+
     Args:
-        angles ((...,3) np.array): Array whose last dimension
-            (of size 3) contains :math:`(\alpha, \beta, \gamma)`
+        alpha ((...) np.array): Array of :math:`\alpha` values
+        beta ((...) np.array): Array of :math:`\beta` values
+        gamma ((...) np.array): Array of :math:`\gamma` values
         convention (str): One of the 12 valid conventions xzx, xyx,
             yxy, yzy, zyz, zxz, xzy, xyz, yxz, yzx, zyx, zxy
         axes (str): Whether to use extrinsic or intrinsic rotations
@@ -205,26 +213,15 @@ def from_euler(angles, convention='zyx', axis_type='intrinsic'):
     Returns:
         An array containing the converted quaternions
 
-    For generality, the rotations are computed by composing a sequence
-    of quaternions corresponding to axis-angle rotations.
-
-    .. note::
-
-        While more efficient implementations are possible, this method
-        is more flexible since it works for essentially arbitrary Euler
-        angles as long as intrinsic and extrinsic rotations are not
-        intermixed.
-
     Example::
 
         rands = np.random.rand(100, 3)
         alpha, beta, gamma = rands.T
         ql.from_euler(alpha, beta, gamma)
     """
-    angles = np.asarray(angles)
+    angles = np.broadcast_arrays(alpha, beta, gamma)
+
     convention = convention.lower()
-    # TODO: USE THE CODE HERE AS A WAY TO DETERMINE WHERE BROADCASTING CAN
-    # BE MADE MORE EFFICIENT THROUGHOUT THE MODULE
 
     if len(convention) > 3 or (set(convention) - set('xyz')):
         raise ValueError("All acceptable conventions must be 3 \
@@ -239,7 +236,7 @@ character strings composed only of x, y, and z")
     for ax, vec in basis_axes.items():
         basis_axes[ax] = np.broadcast_to(
             vec,
-            angles.shape[:-1] + (vec.shape[-1],)
+            angles[0].shape + (vec.shape[-1],)
         )
 
     # Split by convention, the easiest
@@ -248,11 +245,11 @@ character strings composed only of x, y, and z")
         # Loop over the axes and add each rotation
         for i, char in enumerate(convention):
             ax = basis_axes[char]
-            rotations.append(from_axis_angle(ax, angles[..., i]))
+            rotations.append(from_axis_angle(ax, angles[i]))
     elif axis_type == 'intrinsic':
         for i, char in enumerate(convention):
             ax = basis_axes[char]
-            rotations.append(from_axis_angle(ax, angles[..., i]))
+            rotations.append(from_axis_angle(ax, angles[i]))
             # Rotate the bases as well
             for key, value in basis_axes.items():
                 basis_axes[key] = rotate(

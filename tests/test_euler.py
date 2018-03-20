@@ -22,37 +22,56 @@ class TestEuler(unittest.TestCase):
     """Test Euler angle conversions"""
 
     def test_from_euler(self):
-        angles = np.array([0, 0, 0])
+        """Convert Euler angles to quaternions"""
+        alpha, beta, gamma = [0, 0, 0]
         self.assertTrue(np.all(
-            quaternion.from_euler(angles) ==
+            quaternion.from_euler(alpha, beta, gamma) ==
             np.array([1, 0, 0, 0])
         ))
 
-        angles = np.array([np.pi / 2, np.pi / 2, 0])
+        alpha, beta, gamma = [np.pi / 2, np.pi / 2, 0]
         self.assertTrue(np.allclose(
-            quaternion.from_euler(angles, 'zyx', 'intrinsic'),
+            quaternion.from_euler(alpha, beta, gamma,
+                                  'zyx', 'intrinsic'),
             np.array([0.5, -0.5, 0.5, 0.5])
         ))
 
-        # More complicated test, checks 2d arrays
-        # and more complex angles
+        # Confirm broadcasting works from different Euler angles
+        alpha, beta, gamma = [[0, np.pi / 2], [0, np.pi / 2], 0]
+        self.assertTrue(np.allclose(
+            quaternion.from_euler(alpha, beta, gamma),
+            np.array([[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]])
+        ))
+
+        alpha, beta, gamma = [[[0, np.pi / 2], [0, np.pi / 2]], [0, np.pi / 2], 0]
+        self.assertTrue(np.allclose(
+            quaternion.from_euler(alpha, beta, gamma),
+            np.array([[[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]],
+                     [[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]]])
+        ))
+
+        # More complicated test, checks 2d arrays and more complex angles
+        alpha = euler_angles[:, 0]
+        beta = euler_angles[:, 1]
+        gamma = euler_angles[:, 2]
         self.assertTrue(
             np.allclose(
-                quaternion.from_euler(euler_angles, 'zyz', 'intrinsic'),
+                quaternion.from_euler(alpha, beta, gamma, 'zyz', 'intrinsic'),
                 euler_quaternions
             ))
 
         # Ensure proper errors are raised
         with self.assertRaises(ValueError):
-            quaternion.from_euler(euler_angles, 'foo', 'intrinsic')
+            quaternion.from_euler(alpha, beta, gamma, 'foo', 'intrinsic')
 
         with self.assertRaises(ValueError):
-            quaternion.from_euler(euler_angles, 'foo', 'extrinsic')
+            quaternion.from_euler(alpha, beta, gamma, 'foo', 'extrinsic')
 
         with self.assertRaises(ValueError):
-            quaternion.from_euler(euler_angles, 'zyz', 'bar')
+            quaternion.from_euler(alpha, beta, gamma, 'zyz', 'bar')
 
     def test_to_euler(self):
+        """Test conversion to Euler angles"""
         v = one
         self.assertTrue(np.all(
             quaternion.to_euler(v) == np.array([0, 0, 0])
@@ -88,6 +107,7 @@ class TestEuler(unittest.TestCase):
             quaternion.to_euler(zero)
 
     def test_from_to_euler(self):
+        """2-way conversion starting from Euler angles"""
         np.random.seed(0)
         quats = quaternion.normalize(np.random.rand(25, 4))
         conventions = ['xzx', 'xyx', 'yxy', 'yzy', 'zyz', 'zxz',
@@ -96,9 +116,10 @@ class TestEuler(unittest.TestCase):
 
         for convention in conventions:
             for axis_type in axis_types:
+                euler = quaternion.to_euler(quats, convention, axis_type)
                 out = quaternion.from_euler(
-                    quaternion.to_euler(quats, convention, axis_type),
-                    convention, axis_type
+                        euler[..., 0], euler[..., 1], euler[..., 2],
+                        convention, axis_type
                 )
                 self.assertTrue(
                     np.all(
@@ -111,12 +132,13 @@ class TestEuler(unittest.TestCase):
                         convention, axis_type))
 
     def test_to_from_euler(self):
+        """2-way conversion starting from quaternions"""
         np.random.seed(0)
         angles_euler = np.pi*np.random.rand(100, 3)
         conventions_euler = ['xzx', 'xyx', 'yxy', 'yzy', 'zyz', 'zxz']
 
-        angles_tb = np.pi*np.random.rand(100, 3)
         # For Tait-Bryan angles the second angle must be between -pi/2 and pi/2
+        angles_tb = angles_euler.copy()
         angles_tb[:, 1] -= np.pi/2
         conventions_tb = ['xzy', 'xyz', 'yxz', 'yzx', 'zyx', 'zxy']
 
@@ -125,7 +147,9 @@ class TestEuler(unittest.TestCase):
         for convention in conventions_euler:
             for axis_type in axis_types:
                 out = quaternion.to_euler(
-                    quaternion.from_euler(angles_euler, convention, axis_type),
+                    quaternion.from_euler(
+                        angles_euler[..., 0], angles_euler[..., 1],
+                        angles_euler[..., 2], convention, axis_type),
                     convention, axis_type
                 )
                 self.assertTrue(
@@ -141,7 +165,9 @@ class TestEuler(unittest.TestCase):
         for convention in conventions_tb:
             for axis_type in axis_types:
                 out = quaternion.to_euler(
-                    quaternion.from_euler(angles_tb, convention, axis_type),
+                    quaternion.from_euler(
+                        angles_tb[..., 0], angles_tb[..., 1],
+                        angles_tb[..., 2], convention, axis_type),
                     convention, axis_type
                 )
                 self.assertTrue(
