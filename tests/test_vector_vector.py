@@ -17,15 +17,13 @@ class TestVectorVector(unittest.TestCase):
         self.assertTrue(
                 np.allclose(
                     quat,
-                    np.array([[0, np.sqrt(2)/2, np.sqrt(2)/2, 0]]
-                        )
+                    np.array([[0, np.sqrt(2)/2, np.sqrt(2)/2, 0]])
                     ))
         quat = quaternion.vector_vector_rotation(vec1, vec3)
         self.assertTrue(
                 np.allclose(
                     quat,
-                    np.array([[0, np.sqrt(2)/2, 0, np.sqrt(2)/2]]
-                        )
+                    np.array([[0, np.sqrt(2)/2, 0, np.sqrt(2)/2]])
                     ))
 
     def test_broadcast(self):
@@ -34,7 +32,7 @@ class TestVectorVector(unittest.TestCase):
         vec2 = np.array([0, 1, 0])
         vec3 = np.array([0, 0, 1])
 
-        arr1 = np.stack((vec2, vec3), axis = 0)
+        arr1 = np.stack((vec2, vec3), axis=0)
 
         output = np.array(
                     [[0, np.sqrt(2)/2, np.sqrt(2)/2, 0],
@@ -57,7 +55,7 @@ class TestVectorVector(unittest.TestCase):
                     ))
 
         # Matching sizes
-        arr2 = np.stack((vec1, vec1), axis = 0)
+        arr2 = np.stack((vec1, vec1), axis=0)
         quat = quaternion.vector_vector_rotation(arr1, arr2)
         self.assertTrue(
                 np.allclose(
@@ -66,9 +64,9 @@ class TestVectorVector(unittest.TestCase):
                     ))
 
         # Proper broadcasting
-        arr1 = np.stack((vec2, vec3), axis = 0)[:, np.newaxis, ...]
-        arr2 = np.stack((vec1, vec1), axis = 0)[np.newaxis, ...]
-        bcast_output = output[:, np.newaxis, ...].repeat(2, axis = 1)
+        arr1 = np.stack((vec2, vec3), axis=0)[:, np.newaxis, ...]
+        arr2 = np.stack((vec1, vec1), axis=0)[np.newaxis, ...]
+        bcast_output = output[:, np.newaxis, ...].repeat(2, axis=1)
 
         quat = quaternion.vector_vector_rotation(arr1, arr2)
         self.assertTrue(

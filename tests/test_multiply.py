@@ -107,7 +107,7 @@ class TestMultiply(unittest.TestCase):
         with self.assertRaises(ValueError):
             quaternion.multiply(
                     many_zeros,
-                    np.repeat(zero[np.newaxis, :], 2, axis = 0)
+                    np.repeat(zero[np.newaxis, :], 2, axis=0)
                     )
 
         # Require broadcasting in multiple dimensions

@@ -122,7 +122,7 @@ class TestRotate(unittest.TestCase):
         with self.assertRaises(ValueError):
             quaternion.rotate(
                     many_zeros,
-                    np.repeat(zero_vector[np.newaxis, :], 2, axis = 0)
+                    np.repeat(zero_vector[np.newaxis, :], 2, axis=0)
                     )
 
         # Require broadcasting in multiple dimensions

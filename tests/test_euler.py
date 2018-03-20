@@ -43,7 +43,9 @@ class TestEuler(unittest.TestCase):
             np.array([[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]])
         ))
 
-        alpha, beta, gamma = [[[0, np.pi / 2], [0, np.pi / 2]], [0, np.pi / 2], 0]
+        alpha = [[0, np.pi / 2], [0, np.pi / 2]]
+        beta = [0, np.pi / 2]
+        gamma = 0
         self.assertTrue(np.allclose(
             quaternion.from_euler(alpha, beta, gamma),
             np.array([[[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]],

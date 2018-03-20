@@ -81,6 +81,7 @@ class TestFromAxisAngle(unittest.TestCase):
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, expected_output))
 
+
 class TestToAxisAngle(unittest.TestCase):
     """Test converting to axis angle representation"""
 
