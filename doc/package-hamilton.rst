@@ -11,7 +11,6 @@ hamilton
     hamilton.norm
     hamilton.normalize
     hamilton.rotate
-    hamilton.about_axis
     hamilton.vector_vector_rotation
     hamilton.from_euler
     hamilton.to_euler
