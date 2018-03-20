@@ -5,10 +5,9 @@
 
 from __future__ import division, print_function, absolute_import
 
-from .functions import (conjugate, multiply, norm, normalize,
-                        rotate, about_axis, vector_vector_rotation,
-                        from_euler, to_euler, from_matrix, to_matrix,
-                        from_axis_angle, to_axis_angle)
+from .functions import (conjugate, multiply, norm, normalize, rotate,
+                        vector_vector_rotation, from_euler, to_euler,
+                        from_matrix, to_matrix, from_axis_angle, to_axis_angle)
 
 # Get the version
 import os
@@ -22,7 +21,6 @@ __all__ = ['conjugate',
            'norm',
            'normalize',
            'rotate',
-           'about_axis',
            'vector_vector_rotation',
            'from_euler',
            'to_euler',

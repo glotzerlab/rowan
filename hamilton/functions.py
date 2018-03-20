@@ -47,10 +47,8 @@ def multiply(qi, qj):
     """
     qi = np.asarray(qi)
     qj = np.asarray(qj)
-    if not qi.shape == qj.shape:
-        raise ValueError("The two arrays must be the same size!")
 
-    output = np.empty(qi.shape)
+    output = np.empty(np.broadcast(qi, qj).shape)
 
     output[..., 0] = qi[..., 0] * qj[..., 0] - \
         np.sum(qi[..., 1:] * qj[..., 1:], axis=-1)
@@ -117,9 +115,15 @@ def rotate(q, v):
     """
     q = np.asarray(q)
     v = np.asarray(v)
+
     # Convert vector to quaternion representation
     quat_v = np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
     return multiply(q, multiply(quat_v, conjugate(q)))[..., 1:]
+
+
+def _normalize_vec(v):
+    """Helper function to normalize vectors"""
+    return v/np.linalg.norm(v, axis=-1)[..., np.newaxis]
 
 
 def _vector_bisector(v1, v2):
@@ -133,50 +137,7 @@ def _vector_bisector(v1, v2):
         The vector that bisects the angle between v1 and v2
     """
 
-    # Check that the vectors are reasonable
-    if len(v1.shape) == 1:
-        v1 = v1[np.newaxis, :]
-    if len(v2.shape) == 1:
-        v2 = v2[np.newaxis, :]
-
-    def normalize_vec(v):
-        """Helper function to normalize vectors"""
-        return v/np.linalg.norm(v, axis=-1)
-    return normalize_vec(normalize_vec(v1) + normalize_vec(v2))
-
-
-def about_axis(v, theta):
-    R"""Find quaternions to rotate a specified angle about a specified axis
-
-    Args:
-        v ((...,3) np.array): Axes to rotate about
-        theta (float or (...) np.array): Angle (in radians).
-            Will be broadcast to match shape of v as needed
-
-    Returns:
-        An array of the desired rotation quaternions
-
-    Example::
-
-        import numpy as np
-        axis = np.array([[1, 0, 0]])
-        ang = np.pi/3
-        quat = about_axis(axis, ang)
-    """
-    v = np.asarray(v)
-
-    # First reshape theta and compute the half angle
-    theta = np.broadcast_to(theta, v.shape[:-1])[..., np.newaxis]
-    ha = theta / 2.0
-
-    # Normalize the vector
-    u = normalize(v)
-
-    # Compute the components of the quaternions
-    scalar_comp = np.cos(ha)
-    vec_comp = np.sin(ha) * u
-
-    return np.concatenate((scalar_comp, vec_comp), axis=-1)
+    return _normalize_vec(_normalize_vec(v1) + _normalize_vec(v2))
 
 
 def vector_vector_rotation(v1, v2):
@@ -187,19 +148,27 @@ def vector_vector_rotation(v1, v2):
         v2 ((...,3) np.array): Desired vector
 
     Returns:
-        The quaternion that rotates v1 onto v2.
+        Array (..., 4) of quaternions that rotate v1 onto v2.
     """
     v1 = np.asarray(v1)
     v2 = np.asarray(v2)
-    return about_axis(_vector_bisector(v1, v2), np.pi)
+    return from_axis_angle(_vector_bisector(v1, v2), np.pi)
 
 
-def from_euler(angles, convention='zyx', axis_type='intrinsic'):
+def from_euler(alpha, beta, gamma, convention='zyx',
+               axis_type='intrinsic'):
     R"""Convert Euler angles to quaternions
 
+    For generality, the rotations are computed by composing a sequence of
+    quaternions corresponding to axis-angle rotations. While more efficient
+    implementations are possible, this method was chosen to prioritize
+    flexibility since it works for essentially arbitrary Euler angles as
+    long as intrinsic and extrinsic rotations are not intermixed.
+
     Args:
-        angles ((...,3) np.array): Array whose last dimension
-            (of size 3) contains :math:`(\alpha, \beta, \gamma)`
+        alpha ((...) np.array): Array of :math:`\alpha` values
+        beta ((...) np.array): Array of :math:`\beta` values
+        gamma ((...) np.array): Array of :math:`\gamma` values
         convention (str): One of the 12 valid conventions xzx, xyx,
             yxy, yzy, zyz, zxz, xzy, xyz, yxz, yzx, zyx, zxy
         axes (str): Whether to use extrinsic or intrinsic rotations
@@ -207,26 +176,15 @@ def from_euler(angles, convention='zyx', axis_type='intrinsic'):
     Returns:
         An array containing the converted quaternions
 
-    For generality, the rotations are computed by composing a sequence
-    of quaternions corresponding to axis-angle rotations.
-
-    .. note::
-
-        While more efficient implementations are possible, this method
-        is more flexible since it works for essentially arbitrary Euler
-        angles as long as intrinsic and extrinsic rotations are not
-        intermixed.
-
     Example::
 
         rands = np.random.rand(100, 3)
         alpha, beta, gamma = rands.T
         ql.from_euler(alpha, beta, gamma)
     """
-    angles = np.asarray(angles)
+    angles = np.broadcast_arrays(alpha, beta, gamma)
+
     convention = convention.lower()
-    # TODO: USE THE CODE HERE AS A WAY TO DETERMINE WHERE BROADCASTING CAN
-    # BE MADE MORE EFFICIENT THROUGHOUT THE MODULE
 
     if len(convention) > 3 or (set(convention) - set('xyz')):
         raise ValueError("All acceptable conventions must be 3 \
@@ -241,7 +199,7 @@ character strings composed only of x, y, and z")
     for ax, vec in basis_axes.items():
         basis_axes[ax] = np.broadcast_to(
             vec,
-            angles.shape[:-1] + (vec.shape[-1],)
+            angles[0].shape + (vec.shape[-1],)
         )
 
     # Split by convention, the easiest
@@ -250,11 +208,11 @@ character strings composed only of x, y, and z")
         # Loop over the axes and add each rotation
         for i, char in enumerate(convention):
             ax = basis_axes[char]
-            rotations.append(from_axis_angle(ax, angles[..., i]))
+            rotations.append(from_axis_angle(ax, angles[i]))
     elif axis_type == 'intrinsic':
         for i, char in enumerate(convention):
             ax = basis_axes[char]
-            rotations.append(from_axis_angle(ax, angles[..., i]))
+            rotations.append(from_axis_angle(ax, angles[i]))
             # Rotate the bases as well
             for key, value in basis_axes.items():
                 basis_axes[key] = rotate(
@@ -567,34 +525,39 @@ calling this function.")
 
 
 def from_axis_angle(axes, angles):
-    R"""Generate quaternions from axes and angles element-wise
+    R"""Find quaternions to rotate a specified angle about a specified axis
 
     Args:
         axes ((...,3) np.array): An array of vectors (the axes)
-        angles ((...,1) np.array): An array of angles in radians.
-            If the last dimension is not singular one will be appended
-            to conform to the axes array.
+        angles (float or (...,1) np.array): An array of angles in radians.
+            Will be broadcast to match shape of v as needed
 
     Returns:
-        The array containing the quaternions equivalent
-        to rotating angles about axes
+        An array of the desired rotation quaternions
+
+    Example::
+
+        import numpy as np
+        axis = np.array([[1, 0, 0]])
+        ang = np.pi/3
+        quat = about_axis(axis, ang)
     """
     axes = np.asarray(axes)
 
-    # Ensure appropriate shape for angles array
-    angles = np.atleast_1d(np.asarray(angles))
-    if not angles.shape[-1] == 1:
-        angles = angles[..., np.newaxis]
+    # First reshape angles and compute the half angle
+    bc = np.broadcast(angles, axes[..., 0])
+    angles = np.broadcast_to(angles, bc.shape)[..., np.newaxis]
+    axes = np.broadcast_to(axes, bc.shape + (3,))
+    ha = angles / 2.0
 
-    if axes.shape[:-1] != angles.shape[:-1]:
-        raise ValueError("The input arrays must conform in dimension")
+    # Normalize the vector
+    u = _normalize_vec(axes)
 
-    # Ensure conforming shapes
-    if not angles.shape[-1] == 1:
-        angles = angles[..., np.newaxis]
-    return np.concatenate(
-        (np.cos(angles/2), axes*np.sin(angles/2)),
-        axis=-1)
+    # Compute the components of the quaternions
+    scalar_comp = np.cos(ha)
+    vec_comp = np.sin(ha) * u
+
+    return np.concatenate((scalar_comp, vec_comp), axis=-1)
 
 
 def to_axis_angle(q):
