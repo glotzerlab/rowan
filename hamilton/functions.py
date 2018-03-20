@@ -126,43 +126,6 @@ def _normalize_vec(v):
     return v/np.linalg.norm(v, axis=-1)[..., np.newaxis]
 
 
-def about_axis(v, theta):
-    R"""Find quaternions to rotate a specified angle about a specified axis
-
-    Args:
-        v ((...,3) np.array): Axes to rotate about
-        theta (float or (...) np.array): Angle (in radians).
-            Will be broadcast to match shape of v as needed
-
-    Returns:
-        An array of the desired rotation quaternions
-
-    Example::
-
-        import numpy as np
-        axis = np.array([[1, 0, 0]])
-        ang = np.pi/3
-        quat = about_axis(axis, ang)
-    """
-    v = np.asarray(v)
-
-    # First reshape theta and compute the half angle
-    bc = np.broadcast(theta, v[..., 0])
-    theta = np.broadcast_to(theta, bc.shape)[..., np.newaxis]
-    v = np.broadcast_to(v, bc.shape + (3,))
-    #theta = np.broadcast_to(theta, v.shape[:-1])[..., np.newaxis]
-    ha = theta / 2.0
-
-    # Normalize the vector
-    u = _normalize_vec(v)
-
-    # Compute the components of the quaternions
-    scalar_comp = np.cos(ha)
-    vec_comp = np.sin(ha) * u
-
-    return np.concatenate((scalar_comp, vec_comp), axis=-1)
-
-
 def _vector_bisector(v1, v2):
     R"""Find the vector bisecting two vectors
 
@@ -189,7 +152,7 @@ def vector_vector_rotation(v1, v2):
     """
     v1 = np.asarray(v1)
     v2 = np.asarray(v2)
-    return about_axis(_vector_bisector(v1, v2), np.pi)
+    return from_axis_angle(_vector_bisector(v1, v2), np.pi)
 
 
 def from_euler(alpha, beta, gamma, convention='zyx',
@@ -562,34 +525,39 @@ calling this function.")
 
 
 def from_axis_angle(axes, angles):
-    R"""Generate quaternions from axes and angles element-wise
+    R"""Find quaternions to rotate a specified angle about a specified axis
 
     Args:
         axes ((...,3) np.array): An array of vectors (the axes)
-        angles ((...,1) np.array): An array of angles in radians.
-            If the last dimension is not singular one will be appended
-            to conform to the axes array.
+        angles (float or (...,1) np.array): An array of angles in radians.
+            Will be broadcast to match shape of v as needed
 
     Returns:
-        The array containing the quaternions equivalent
-        to rotating angles about axes
+        An array of the desired rotation quaternions
+
+    Example::
+
+        import numpy as np
+        axis = np.array([[1, 0, 0]])
+        ang = np.pi/3
+        quat = about_axis(axis, ang)
     """
     axes = np.asarray(axes)
 
-    # Ensure appropriate shape for angles array
-    angles = np.atleast_1d(np.asarray(angles))
-    if not angles.shape[-1] == 1:
-        angles = angles[..., np.newaxis]
+    # First reshape angles and compute the half angle
+    bc = np.broadcast(angles, axes[..., 0])
+    angles = np.broadcast_to(angles, bc.shape)[..., np.newaxis]
+    axes = np.broadcast_to(axes, bc.shape + (3,))
+    ha = angles / 2.0
 
-    if axes.shape[:-1] != angles.shape[:-1]:
-        raise ValueError("The input arrays must conform in dimension")
+    # Normalize the vector
+    u = _normalize_vec(axes)
 
-    # Ensure conforming shapes
-    if not angles.shape[-1] == 1:
-        angles = angles[..., np.newaxis]
-    return np.concatenate(
-        (np.cos(angles/2), axes*np.sin(angles/2)),
-        axis=-1)
+    # Compute the components of the quaternions
+    scalar_comp = np.cos(ha)
+    vec_comp = np.sin(ha) * u
+
+    return np.concatenate((scalar_comp, vec_comp), axis=-1)
 
 
 def to_axis_angle(q):
