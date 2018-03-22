@@ -12,11 +12,11 @@ TODO: Try implementing randomness using this paper or one of the ones it cites:
 """
 
 import numpy as np
-from ..functions import normalize
 
 __all__ = ['rand',
            'random_sample'
            ]
+
 
 def rand(*args):
     """Generate random rotations uniformly
@@ -36,6 +36,7 @@ def rand(*args):
     else:
         return random_sample(args)
 
+
 def random_sample(size=None):
     """Generate random rotations unifo
 
@@ -45,14 +46,15 @@ def random_sample(size=None):
     to the appropriate measure. The algorithm used here is detailed in the paper
     below.
 
-    .. [Shoe79] Shoemake, K.: Uniform random rotations. In: D. Kirk, editor, Graphics Gems III, pages 124-132. Academic, New York, 1992.
-
+    .. [Shoe79] Shoemake, K.: Uniform random rotations. In: D. Kirk, editor,
+        Graphics Gems III, pages 124-132. Academic, New York, 1992.
 
     Args:
         size (tuple): The shape of the array to generate
 
     Return:
-        Random quaternions of the shape provided with an additional axis of length 4
+        Random quaternions of the shape provided with an additional axis of
+        length 4
     """
     if size is None:
         size = (3,)
