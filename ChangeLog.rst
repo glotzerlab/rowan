@@ -9,6 +9,8 @@ Added
 +++++
 
 * Broadcasting works for all methods
+* Quaternion reflections
+* Random quaternion generation
 
 Changed
 +++++++
