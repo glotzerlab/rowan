@@ -14,6 +14,7 @@ x_quat = np.array([0, 1, 0, 0])
 y_quat = np.array([0, 0, 1, 0])
 z_quat = np.array([0, 0, 0, 1])
 
+
 class TestReflect(unittest.TestCase):
     """Test the core reflection operation"""
 
