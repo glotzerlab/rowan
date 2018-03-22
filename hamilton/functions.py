@@ -95,10 +95,64 @@ def normalize(q):
     return q / norms[..., np.newaxis]
 
 
+def from_mirror_plane(x, y, z):
+    R"""Generate quaternions from mirror plane equations.
+
+    Reflection quaternions can be constructed of the from
+    :math:`(0, x, y, z)`, *i.e.* with zero real component. The vector
+    :math:`(x, y, z)` is the normal to the mirror plane.
+
+    Args:
+        x ((...) np.array): First planar component
+        y ((...) np.array): Second planar component
+        z ((...) np.array): Third planar component
+
+    Returns:
+        An array of quaternions corresponding to the provided reflections.
+
+    Example::
+
+        plane = (1, 2, 3)
+        quat_ref = from_mirror_plane(*plane)
+    """
+    x, y, z = np.broadcast_arrays(x, y, z)
+    q = np.empty(x.shape + (4,))
+    q[..., 0] = 0
+    q[..., 1] = x
+    q[..., 2] = y
+    q[..., 3] = z
+
+    return q
+
+
+def reflect(q, v):
+    R"""Reflect a list of vectors by a corresponding set of quaternions
+
+    For help constructing a mirror plane, see :py:func:`from_mirror_plane`.
+
+    Args:
+        q ((...,4) np.array): First set of quaternions
+        v ((...,3) np.array): First set of quaternions
+
+    Returns:
+        An array of the vectors in v rotated by q
+
+    Example::
+
+        q = np.random.rand(1, 4)
+        v = np.random.rand(1, 3)
+        v_rot = rotate(q, v)
+    """
+    q = np.asarray(q)
+    v = np.asarray(v)
+
+    # Convert vector to quaternion representation
+    quat_v = np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
+    return multiply(q, multiply(quat_v, q))[..., 1:]
+
+
 def rotate(q, v):
     R"""Rotate a list of vectors by a corresponding set of quaternions
-
-    The shapes of the two arrays must conform up to the last dimension.
 
     Args:
         q ((...,4) np.array): First set of quaternions
