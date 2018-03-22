@@ -1,4 +1,4 @@
-"""Test the rotation of quaternions for various array sizes"""
+"""Test the reflection of quaternions for various array sizes"""
 from __future__ import division, print_function, absolute_import
 
 import unittest
