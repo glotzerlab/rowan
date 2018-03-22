@@ -72,4 +72,4 @@ def random_sample(size=None):
     r2 = np.sqrt(u[..., 0])
 
     quats = np.stack((s1*r1, c1*r1, s2*r2, c2*r2), axis=-1)
-    return quats, normalize(quats)
+    return quats
