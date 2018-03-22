@@ -5,7 +5,6 @@
 from __future__ import division, print_function, absolute_import
 
 import numpy as np
-import warnings
 
 
 def conjugate(q):
@@ -137,9 +136,13 @@ def _vector_bisector(v1, v2):
     # Check that the vectors are reasonable
     if len(v1.shape) == 1:
         v1 = v1[np.newaxis, :]
-    if len(v2.shape) == 2:
+    if len(v2.shape) == 1:
         v2 = v2[np.newaxis, :]
-    return normalize(normalize(v1) + normalize(v2))
+
+    def normalize_vec(v):
+        """Helper function to normalize vectors"""
+        return v/np.linalg.norm(v, axis=-1)
+    return normalize_vec(normalize_vec(v1) + normalize_vec(v2))
 
 
 def about_axis(v, theta):
@@ -224,6 +227,10 @@ def from_euler(angles, convention='zyx', axis_type='intrinsic'):
     convention = convention.lower()
     # TODO: USE THE CODE HERE AS A WAY TO DETERMINE WHERE BROADCASTING CAN
     # BE MADE MORE EFFICIENT THROUGHOUT THE MODULE
+
+    if len(convention) > 3 or (set(convention) - set('xyz')):
+        raise ValueError("All acceptable conventions must be 3 \
+character strings composed only of x, y, and z")
 
     basis_axes = {
         'x': np.array([1, 0, 0]),
@@ -344,7 +351,13 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
     """
     q = np.asarray(q)
 
-    mats = to_matrix(q)
+    try:
+        mats = to_matrix(q)
+    except ValueError:
+        raise ValueError(
+            "Not all quaternions in q are unit quaternions.")
+    except: # noqa E722
+        raise
 
     if axis_type == 'intrinsic':
         # Have to hardcode the different possibilites.
@@ -482,13 +495,12 @@ def from_matrix(mat, require_orthogonal=True):
         of the elements of mat (i.e. the same elements of SO(3))
     """
     mat = np.asarray(mat)
-    if not np.allclose(np.linalg.det(mat), 1) and require_orthogonal:
-        warnings.warn(
+    if require_orthogonal and not np.allclose(np.linalg.det(mat), 1):
+        raise ValueError(
             "Not all of your matrices are orthogonal. \
 Please ensure that there are no improper rotations. \
-If this was intentional, please set require_orthogonal \
-to False when calling this function.",
-            UserWarning)
+If this was intentional, set require_orthogonal to \
+False when calling this function.")
 
     K = np.zeros(mat.shape[:-2] + (4, 4))
     K[..., 0, 0] = mat[..., 0, 0] - mat[..., 1, 1] - mat[..., 2, 2]
@@ -535,25 +547,23 @@ def to_matrix(q, require_unit=True):
     if np.any(s == 0.0):
         raise ZeroDivisionError(
             "At least one element of q has approximately zero norm")
-    else:
-        if not np.allclose(s, 1.0):
-            if require_unit:
-                raise RuntimeError(
-                    "Not all quaternions in q are unit quaternions. \
+    elif require_unit and not np.allclose(s, 1.0):
+        raise ValueError(
+            "Not all quaternions in q are unit quaternions. \
 If this was intentional, please set require_unit to False when \
 calling this function.")
-        m = np.empty(q.shape[:-1] + (3, 3))
-        s **= -1.0  # For consistency with Wikipedia notation
-        m[..., 0, 0] = 1.0 - 2 * s * (q[..., 2]**2 + q[..., 3]**2)
-        m[..., 0, 1] = 2 * (q[..., 1] * q[..., 2] - q[..., 3] * q[..., 0])
-        m[..., 0, 2] = 2 * (q[..., 1] * q[..., 3] + q[..., 2] * q[..., 0])
-        m[..., 1, 0] = 2 * (q[..., 1] * q[..., 2] + q[..., 3] * q[..., 0])
-        m[..., 1, 1] = 1.0 - 2 * (q[..., 1]**2 + q[..., 3]**2)
-        m[..., 1, 2] = 2 * (q[..., 2] * q[..., 3] - q[..., 1] * q[..., 0])
-        m[..., 2, 0] = 2 * (q[..., 1] * q[..., 3] - q[..., 2] * q[..., 0])
-        m[..., 2, 1] = 2 * (q[..., 2] * q[..., 3] + q[..., 1] * q[..., 0])
-        m[..., 2, 2] = 1.0 - 2 * (q[..., 1]**2 + q[..., 2]**2)
-        return m
+    m = np.empty(q.shape[:-1] + (3, 3))
+    s **= -1.0  # For consistency with Wikipedia notation
+    m[..., 0, 0] = 1.0 - 2 * s * (q[..., 2]**2 + q[..., 3]**2)
+    m[..., 0, 1] = 2 * (q[..., 1] * q[..., 2] - q[..., 3] * q[..., 0])
+    m[..., 0, 2] = 2 * (q[..., 1] * q[..., 3] + q[..., 2] * q[..., 0])
+    m[..., 1, 0] = 2 * (q[..., 1] * q[..., 2] + q[..., 3] * q[..., 0])
+    m[..., 1, 1] = 1.0 - 2 * (q[..., 1]**2 + q[..., 3]**2)
+    m[..., 1, 2] = 2 * (q[..., 2] * q[..., 3] - q[..., 1] * q[..., 0])
+    m[..., 2, 0] = 2 * (q[..., 1] * q[..., 3] - q[..., 2] * q[..., 0])
+    m[..., 2, 1] = 2 * (q[..., 2] * q[..., 3] + q[..., 1] * q[..., 0])
+    m[..., 2, 2] = 1.0 - 2 * (q[..., 1]**2 + q[..., 2]**2)
+    return m
 
 
 def from_axis_angle(axes, angles):
