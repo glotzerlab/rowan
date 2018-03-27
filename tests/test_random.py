@@ -32,4 +32,3 @@ class TestRandom(unittest.TestCase):
 
         q = random.random_sample()
         self.assertTrue(q.shape == (4,))
-

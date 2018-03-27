@@ -7,7 +7,6 @@ import os
 
 import hamilton as quaternion
 
-zero = np.array([0, 0, 0, 0])
 one = np.array([1, 0, 0, 0])
 
 zero_vector = np.array([0, 0, 0])
@@ -40,9 +39,7 @@ class TestRotate(unittest.TestCase):
 
     def test_2d_array(self):
         """Rotating sets of vectors by sets of quaternions"""
-        zeros = np.repeat(zero[np.newaxis, :], 10, axis=0)
         ones = np.repeat(one[np.newaxis, :], 10, axis=0)
-        zero_vectors = np.repeat(zero_vector[np.newaxis, :], 10, axis=0)
         one_vectors = np.repeat(one_vector[np.newaxis, :], 10, axis=0)
 
         # Simple tests
@@ -95,7 +92,7 @@ class TestRotate(unittest.TestCase):
 
     def test_broadcast(self):
         """Ensure broadcasting works"""
-        # Rotate zero by zero, simple shape check
+        # Rotate zero by one, simple shape check
         shape = (45, 3, 13, 4)
         shape_out = (45, 3, 13, 3)
         many_ones = np.zeros(shape)
