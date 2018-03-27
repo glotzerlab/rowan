@@ -146,6 +146,9 @@ def reflect(q, v):
     q = np.asarray(q)
     v = np.asarray(v)
 
+    if not np.allclose(norm(q), 1):
+        raise ValueError("Reflection quaternions must have unit norm")
+
     # Convert vector to quaternion representation
     quat_v = np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
     return multiply(q, multiply(quat_v, q))[..., 1:]
@@ -170,6 +173,9 @@ def rotate(q, v):
     q = np.asarray(q)
     v = np.asarray(v)
 
+    if not np.allclose(norm(q), 1):
+        raise ValueError("Rotation quaternions must have unit norm")
+
     # Convert vector to quaternion representation
     quat_v = np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
     return multiply(q, multiply(quat_v, conjugate(q)))[..., 1:]
@@ -177,7 +183,9 @@ def rotate(q, v):
 
 def _normalize_vec(v):
     """Helper function to normalize vectors"""
-    return v/np.linalg.norm(v, axis=-1)[..., np.newaxis]
+    v = np.asarray(v)
+    norms = np.linalg.norm(v, axis=-1)
+    return v / norms[..., np.newaxis]
 
 
 def _vector_bisector(v1, v2):

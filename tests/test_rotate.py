@@ -32,13 +32,11 @@ class TestRotate(unittest.TestCase):
         self.assertTrue(
             np.all(
                 quaternion.rotate(
-                    zero,
-                    one_vector) == zero_vector))
-        self.assertTrue(
-            np.all(
-                quaternion.rotate(
                     one,
                     one_vector) == one_vector))
+
+        with self.assertRaises(ValueError):
+            quaternion.rotate(2*one, one_vector)
 
     def test_2d_array(self):
         """Rotating sets of vectors by sets of quaternions"""
@@ -48,11 +46,6 @@ class TestRotate(unittest.TestCase):
         one_vectors = np.repeat(one_vector[np.newaxis, :], 10, axis=0)
 
         # Simple tests
-        self.assertTrue(
-            np.all(
-                quaternion.rotate(
-                    zeros,
-                    one_vectors) == zero_vectors))
         self.assertTrue(
             np.all(
                 quaternion.rotate(
@@ -73,21 +66,12 @@ class TestRotate(unittest.TestCase):
         num_reps = 20
         expanded_shape = (num_reps // 5, 5, 4)
         expanded_shape_vec = (num_reps // 5, 5, 3)
-        zeros = np.reshape(
-            np.repeat(zero[np.newaxis, :], num_reps, axis=0), expanded_shape)
         ones = np.reshape(
             np.repeat(one[np.newaxis, :], num_reps, axis=0), expanded_shape)
-        zero_vectors = np.reshape(np.repeat(
-            zero_vector[np.newaxis, :], num_reps, axis=0), expanded_shape_vec)
         one_vectors = np.reshape(np.repeat(
             one_vector[np.newaxis, :], num_reps, axis=0), expanded_shape_vec)
 
         # Simple tests
-        self.assertTrue(
-            np.all(
-                quaternion.rotate(
-                    zeros,
-                    one_vectors) == zero_vectors))
         self.assertTrue(
             np.all(
                 quaternion.rotate(
@@ -114,22 +98,24 @@ class TestRotate(unittest.TestCase):
         # Rotate zero by zero, simple shape check
         shape = (45, 3, 13, 4)
         shape_out = (45, 3, 13, 3)
-        many_zeros = np.zeros(shape)
-        output = quaternion.rotate(many_zeros, zero_vector)
+        many_ones = np.zeros(shape)
+        many_ones[..., 0] = 1
+        output = quaternion.rotate(many_ones, zero_vector)
         self.assertTrue(output.shape == shape_out)
 
         # Two nonconforming array sizes
         with self.assertRaises(ValueError):
             quaternion.rotate(
-                    many_zeros,
+                    many_ones,
                     np.repeat(zero_vector[np.newaxis, :], 2, axis=0)
                     )
 
         # Require broadcasting in multiple dimensions
-        zeros_quat = np.zeros((1, 1, 3, 8, 1, 4))
+        ones_quat = np.zeros((1, 1, 3, 8, 1, 4))
+        ones_quat[..., 0] = 1
         zeros_vec = np.zeros((3, 5, 1, 1, 9, 3))
         shape = (3, 5, 3, 8, 9, 3)
-        product = quaternion.rotate(zeros_quat, zeros_vec)
+        product = quaternion.rotate(ones_quat, zeros_vec)
         self.assertTrue(product.shape == shape)
 
         # Test complex rotations
