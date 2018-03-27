@@ -19,6 +19,9 @@ class TestRandom(unittest.TestCase):
         self.assertTrue(q.shape == s + (4,))
         self.assertTrue(np.allclose(norm(q), 1))
 
+        q = random.rand()
+        self.assertTrue(q.shape == (4,))
+
     def test_random_sample(self):
         """Generation with tuple"""
         s = (3, 4)
@@ -26,3 +29,7 @@ class TestRandom(unittest.TestCase):
         q = random.random_sample(s)
         self.assertTrue(q.shape == s + (4,))
         self.assertTrue(np.allclose(norm(q), 1))
+
+        q = random.random_sample()
+        self.assertTrue(q.shape == (4,))
+
