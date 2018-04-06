@@ -36,13 +36,14 @@ def exp(q):
     """
     q = np.asarray(q)
     expo = np.empty(q.shape)
-    norms = np.linalg.norm(q[..., 1:], axis = -1)
+    norms = np.linalg.norm(q[..., 1:], axis=-1)
     e = np.exp(q[..., 0])
     expo[..., 0] = e * np.cos(norms)
     norm_zero = np.isclose(norms, 0)
     not_zero = np.logical_not(norm_zero)
     expo[np.logical_not(norm_zero), 1:] = e[not_zero, np.newaxis] * (
-            q[not_zero, 1:]/norms[not_zero, np.newaxis]) * np.sin(norms)[not_zero, np.newaxis]
+            q[not_zero, 1:]/norms[not_zero, np.newaxis]
+            ) * np.sin(norms)[not_zero, np.newaxis]
     expo[norm_zero, 1:] = 0
     return expo
 
