@@ -7,11 +7,51 @@ from __future__ import division, print_function, absolute_import
 import numpy as np
 
 
+def exp(q):
+    R"""Computes the exponential function :math:`e^q`.
+
+    The exponential of a quaternion in terms of its scalar and vector parts
+    :math:`q = a + \boldsymbol{v}` is defined by exponential power series:
+    formula :math:`e^x = \sum_{k=0}^{\infty} \frac{x^k}{k!}` as follows:
+
+    .. math::
+        \begin{align}
+            e^q &= e^{a+v} \\
+                &= e^a \left(\sum_{k=0}^{\infty} \frac{v^k}{k!} \right) \\
+                &= e^a \left(\cos \lvert \lvert \boldsymbol{v} \rvert \rvert +
+                    \frac{\boldsymbol{v}}{\lvert \lvert \boldsymbol{v} \rvert
+                    \rvert} \sin \lvert \lvert \boldsymbol{v} \rvert \rvert
+                    \right)
+        \end{align}
+
+    Args:
+        q ((...,4) np.array): Quaternions
+
+    Returns:
+        Array of shape (...) exponentials of q
+
+    Example::
+
+        q_star = conjugate(q)
+    """
+    q = np.asarray(q)
+    expo = np.empty(q.shape)
+    norms = np.linalg.norm(q[..., 1:], axis = -1)
+    e = np.exp(q[..., 0])
+    expo[..., 0] = e * np.cos(norms)
+    norm_zero = np.isclose(norms, 0)
+    not_zero = np.logical_not(norm_zero)
+    expo[np.logical_not(norm_zero), 1:] = e[not_zero, np.newaxis] * (
+            q[not_zero, 1:]/norms[not_zero, np.newaxis]) * np.sin(norms)[not_zero, np.newaxis]
+    expo[norm_zero, 1:] = 0
+    return expo
+
+
 def conjugate(q):
     R"""Conjugates an array of quaternions
 
     Args:
-        q ((...,4) np.array): First set of quaternions
+        q ((...,4) np.array): Array of quaternions
 
     Returns:
         An array containing the conjugates of q
