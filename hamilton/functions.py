@@ -49,10 +49,14 @@ def exp(q):
     expo[..., 0] = e * np.cos(norms)
     norm_zero = np.isclose(norms, 0)
     not_zero = np.logical_not(norm_zero)
-    expo[not_zero, 1:] = e[not_zero, np.newaxis] * (
-            q[not_zero, 1:]/norms[not_zero, np.newaxis]
-            ) * np.sin(norms)[not_zero, np.newaxis]
-    expo[norm_zero, 1:] = 0
+    if np.any(not_zero):
+        expo[not_zero, 1:] = e[not_zero, np.newaxis] * (
+                q[not_zero, 1:]/norms[not_zero, np.newaxis]
+                ) * np.sin(norms)[not_zero, np.newaxis]
+        if np.any(norm_zero):
+            expo[norm_zero, 1:] = 0
+    else:
+        expo[..., 1:] = 0
 
     if flat:
         return expo.squeeze()
@@ -96,8 +100,12 @@ def log(q):
     v_norm_zero = np.isclose(v_norms, 0)
     v_not_zero = np.logical_not(v_norm_zero)
 
-    log[q_norm_zero, 0] = -np.inf
-    log[q_not_zero, 0] = np.log(q_norms[q_not_zero])
+    if np.any(q_not_zero):
+        if np.any(q_norm_zero):
+            log[q_norm_zero, 0] = -np.inf
+        log[q_not_zero, 0] = np.log(q_norms[q_not_zero])
+    else:
+        log[..., 0] = -np.inf
 
     if np.any(v_not_zero):
         prefactor = np.empty(q[v_not_zero, 1:].shape)
@@ -107,7 +115,8 @@ def log(q):
         inv_cos = np.empty(v_norms[v_not_zero].shape)
         inv_cos = np.arccos(q[v_not_zero, 0]/q_norms[v_not_zero])
 
-        log[v_norm_zero, 1:] = 0
+        if np.any(v_norm_zero):
+            log[v_norm_zero, 1:] = 0
         log[v_not_zero, 1:] = prefactor * inv_cos[..., np.newaxis]
     else:
         log[..., 1:] = 0
