@@ -7,6 +7,8 @@ hamilton
     :nosignatures:
 
     hamilton.conjugate
+    hamilton.exp
+    hamilton.log
     hamilton.multiply
     hamilton.norm
     hamilton.normalize
@@ -16,6 +18,10 @@ hamilton
     hamilton.to_euler
     hamilton.from_matrix
     hamilton.to_matrix
+    hamilton.from_axis_angle
+    hamilton.to_axis_angle
+    hamilton.from_mirror_plane
+    hamilton.reflect
  
 .. rubric:: Details
 

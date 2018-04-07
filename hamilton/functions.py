@@ -7,11 +7,210 @@ from __future__ import division, print_function, absolute_import
 import numpy as np
 
 
+def exp(q):
+    R"""Computes the exponential function :math:`e^q`.
+
+    The exponential of a quaternion in terms of its scalar and vector parts
+    :math:`q = a + \boldsymbol{v}` is defined by exponential power series:
+    formula :math:`e^x = \sum_{k=0}^{\infty} \frac{x^k}{k!}` as follows:
+
+    .. math::
+        \begin{align}
+            e^q &= e^{a+v} \\
+                &= e^a \left(\sum_{k=0}^{\infty} \frac{v^k}{k!} \right) \\
+                &= e^a \left(\cos \lvert \lvert \boldsymbol{v} \rvert \rvert +
+                    \frac{\boldsymbol{v}}{\lvert \lvert \boldsymbol{v} \rvert
+                    \rvert} \sin \lvert \lvert \boldsymbol{v} \rvert \rvert
+                    \right)
+        \end{align}
+
+    Args:
+        q ((...,4) np.array): Quaternions
+
+    Returns:
+        Array of shape (...) containing exponentials of q
+
+    Example::
+
+        q_exp = exp(q)
+    """
+    # Ensure compatibility for numpy < 1.13; older numpy fail with
+    # the fancy indexing used below when array is 1d
+    q = np.asarray(q)
+    if len(q.shape) == 1:
+        flat = True
+        q = np.atleast_2d(q)
+    else:
+        flat = False
+
+    expo = np.empty(q.shape)
+    norms = np.linalg.norm(q[..., 1:], axis=-1)
+    e = np.exp(q[..., 0])
+    expo[..., 0] = e * np.cos(norms)
+    norm_zero = np.isclose(norms, 0)
+    not_zero = np.logical_not(norm_zero)
+    if np.any(not_zero):
+        expo[not_zero, 1:] = e[not_zero, np.newaxis] * (
+                q[not_zero, 1:]/norms[not_zero, np.newaxis]
+                ) * np.sin(norms)[not_zero, np.newaxis]
+        if np.any(norm_zero):
+            expo[norm_zero, 1:] = 0
+    else:
+        expo[..., 1:] = 0
+
+    if flat:
+        return expo.squeeze()
+    else:
+        return expo
+
+
+def log(q):
+    R"""Computes the quaternion natural logarithm.
+
+    The natural of a quaternion in terms of its scalar and vector parts
+    :math:`q = a + \boldsymbol{v}` is defined by inverting the exponential
+    formula (see :py:func:`exp`), and is defined by the formula
+    :math:` \frac{x^k}{k!}` as follows:
+
+    .. math::
+        \begin{equation}
+            \ln(q) = \ln\lvert\lvert q \rvert\rvert +
+                    \frac{\boldsymbol{v}}{\lvert\lvert \boldsymbol{v}
+                    \rvert\rvert} \arccos\left(\frac{a}{q}\right)
+        \end{equation}
+
+    Args:
+        q ((...,4) np.array): Quaternions
+
+    Returns:
+        Array of shape (...) containing logarithms of q
+
+    Example::
+
+        ln_q = log(q)
+    """
+    # Ensure compatibility for numpy < 1.13; older numpy fail with
+    # the fancy indexing used below when array is 1d
+    q = np.asarray(q)
+    if len(q.shape) == 1:
+        flat = True
+        q = np.atleast_2d(q)
+    else:
+        flat = False
+
+    log = np.empty(q.shape)
+
+    # We need all the norms to avoid divide by zeros later.
+    # Can also use these to minimize the amount of work done.
+    q_norms = norm(q)
+    q_norm_zero = np.isclose(q_norms, 0)
+    q_not_zero = np.logical_not(q_norm_zero)
+    v_norms = np.linalg.norm(q[..., 1:], axis=-1)
+    v_norm_zero = np.isclose(v_norms, 0)
+    v_not_zero = np.logical_not(v_norm_zero)
+
+    if np.any(q_not_zero):
+        if np.any(q_norm_zero):
+            log[q_norm_zero, 0] = -np.inf
+        log[q_not_zero, 0] = np.log(q_norms[q_not_zero])
+    else:
+        log[..., 0] = -np.inf
+
+    if np.any(v_not_zero):
+        prefactor = np.empty(q[v_not_zero, 1:].shape)
+        prefactor = q[v_not_zero, 1:]/v_norms[
+                v_not_zero, np.newaxis]
+
+        inv_cos = np.empty(v_norms[v_not_zero].shape)
+        inv_cos = np.arccos(q[v_not_zero, 0]/q_norms[v_not_zero])
+
+        if np.any(v_norm_zero):
+            log[v_norm_zero, 1:] = 0
+        log[v_not_zero, 1:] = prefactor * inv_cos[..., np.newaxis]
+    else:
+        log[..., 1:] = 0
+
+    if flat:
+        return log.squeeze()
+    else:
+        return log
+
+
+def logn(q, n):
+    R"""Computes the quaternion logarithm to some base n.
+
+    The quaternion logarithm for arbitrary bases is defined using the
+    standard change of basis formula relative to the natural logarithm.
+
+    Args:
+        q ((...,4) np.array): Quaternions
+        n ((...) np.array): Scalars to use as log bases
+
+    Returns:
+        Array of shape (...) containing logarithms of q
+
+    Example::
+
+        log_q = log(q, 2)
+    """
+    q = np.asarray(q)
+    return log(q)/np.log(n)
+
+
+def log10(q):
+    R"""Computes the quaternion logarithm base 10.
+
+    See :py:func:`logn`
+    The quaternion logarithm for arbitrary bases is defined using the
+    standard change of basis formula relative to the natural logarithm.
+
+    Args:
+        q ((...,4) np.array): Quaternions
+
+    Returns:
+        Array of shape (...) containing logarithms of q
+
+    Example::
+
+        log_q = log(q, 2)
+    """
+    q = np.asarray(q)
+    return logn(q, 10)
+
+
+def power(q, n):
+    # TODO: Write polar decomposition function #noqa
+    R"""Computes the power of a quaternion :math:`q^n`.
+
+    Quaternions raised to a scalar power are defined according to the polar
+    decomposition :math:`q^n = \lvert\lvert q \rvert\rvert^n \left
+    \cos(n*\theta) + \hat{u} \sin(n\theta)`. However, this can be computed
+    more efficiently by noting that :math:`q^n = \exp(n \ln(q))`.
+
+    Args:
+        q ((...,4) np.array): Quaternions.
+        n ((...) np.arrray): Scalars to exponentiate quaternions with.
+
+    Returns:
+        Array of shape (...) containing  of q
+
+    Example::
+
+        q_n = pow(q^n)
+    """
+    q = np.asarray(q)
+    # Note that we follow the convention that 0^0 = 1
+    if n == 0:
+        return np.broadcast_to(np.array([1, 0, 0, 0]), q.shape)
+    else:
+        return exp(n*log(q))
+
+
 def conjugate(q):
     R"""Conjugates an array of quaternions
 
     Args:
-        q ((...,4) np.array): First set of quaternions
+        q ((...,4) np.array): Array of quaternions
 
     Returns:
         An array containing the conjugates of q
@@ -125,17 +324,22 @@ def from_mirror_plane(x, y, z):
     return q
 
 
+def _promote_vec(v):
+    """Helper function to promote vectors to their quaternion representation"""
+    return np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
+
+
 def reflect(q, v):
     R"""Reflect a list of vectors by a corresponding set of quaternions
 
     For help constructing a mirror plane, see :py:func:`from_mirror_plane`.
 
     Args:
-        q ((...,4) np.array): First set of quaternions
-        v ((...,3) np.array): First set of quaternions
+        q ((...,4) np.array): Quaternions to use for reflection
+        v ((...,3) np.array): Vectors to reflect.
 
     Returns:
-        An array of the vectors in v rotated by q
+        An array of the vectors in v reflected by q
 
     Example::
 
@@ -150,7 +354,7 @@ def reflect(q, v):
         raise ValueError("Reflection quaternions must have unit norm")
 
     # Convert vector to quaternion representation
-    quat_v = np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
+    quat_v = _promote_vec(v)
     return multiply(q, multiply(quat_v, q))[..., 1:]
 
 
@@ -158,8 +362,8 @@ def rotate(q, v):
     R"""Rotate a list of vectors by a corresponding set of quaternions
 
     Args:
-        q ((...,4) np.array): First set of quaternions
-        v ((...,3) np.array): First set of quaternions
+        q ((...,4) np.array): Quaternions to rotate by.
+        v ((...,3) np.array): Vectors to rotate.
 
     Returns:
         An array of the vectors in v rotated by q
@@ -177,7 +381,7 @@ def rotate(q, v):
         raise ValueError("Rotation quaternions must have unit norm")
 
     # Convert vector to quaternion representation
-    quat_v = np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
+    quat_v = _promote_vec(v)
     return multiply(q, multiply(quat_v, conjugate(q)))[..., 1:]
 
 
