@@ -848,3 +848,111 @@ def to_axis_angle(q):
                     0)
 
     return axes, angles
+
+
+def equal(p, q):
+    R"""Check whether two sets of quaternions are equal.
+
+    This function is a simple wrapper that checks array
+    equality and then aggregates along the quaternion axis.
+
+    Args:
+        p ((...,4) np.array): First set of quaternions
+        q ((...,4) np.array): First set of quaternions
+
+    Returns:
+        A boolean array of shape (...) indicating equality.
+    """
+    return np.all(p == q, axis = -1)
+
+
+def not_equal(p, q):
+    R"""Check whether two sets of quaternions are not equal.
+
+    This function is a simple wrapper that checks array
+    equality and then aggregates along the quaternion axis.
+
+    Args:
+        p ((...,4) np.array): First set of quaternions
+        q ((...,4) np.array): First set of quaternions
+
+    Returns:
+        A boolean array of shape (...) indicating inequality.
+    """
+    return np.any(p != q, axis = -1)
+
+
+def isnan(q):
+    R"""Test element-wise for NaN quaternions.
+
+    A quaternion is defined as NaN if any elements are NaN.
+
+    Args:
+        q ((...,4) np.array): Quaternions to check
+
+    Returns:
+        A boolean array of shape (...) indicating NaN.
+    """
+    return np.any(np.isnan(q), axis = -1)
+
+
+def isinf(q):
+    R"""Test element-wise for infinite quaternions.
+
+    A quaternion is defined as infinite if any elements are infinite.
+
+    Args:
+        q ((...,4) np.array): Quaternions to check
+
+    Returns:
+        A boolean array of shape (...) indicating infinite quaternions.
+    """
+    return np.any(np.isinf(q), axis = -1)
+
+
+def isfinite(q):
+    R"""Test element-wise for NaN quaternions.
+
+    A quaternion is defined as finite if all elements are finite.
+
+    Args:
+        q ((...,4) np.array): Quaternions to check
+
+    Returns:
+        A boolean array of shape (...) indicating finite quaternions.
+    """
+    return np.all(np.isfinite(q), axis = -1)
+
+
+def allclose(p, q, **kwargs):
+    R"""Check whether two sets of quaternions are all close.
+
+    This is a direct wrapper of the corresponding numpy function.
+
+    Args:
+        p ((...,4) np.array): First set of quaternions
+        q ((...,4) np.array): First set of quaternions
+        **kwargs: Keyword arguments to pass to np.allclose
+
+    Returns:
+        Whether or not all quaternions are close
+    """
+    return np.allclose(p, q, **kwargs)
+
+
+def isclose(p, q, **kwargs):
+    R"""Element-wise check of whether two sets of quaternions close.
+
+    This function is a simple wrapper that checks using the
+    corresponding numpy function and then aggregates along
+    the quaternion axis.
+
+    Args:
+        p ((...,4) np.array): First set of quaternions
+        q ((...,4) np.array): First set of quaternions
+        **kwargs: Keyword arguments to pass to np.allclose
+
+    Returns:
+        A boolean array of shape (...)
+    """
+    return np.all(np.isclose(p, q, **kwargs), axis = -1)
