@@ -2,14 +2,9 @@
 
 ## About
 
-The hamilton package provides a simple and consistent interface for using quaternions in code in the Glotzer Group University of Michigan, Ann Arbor.
-The package is built entirely on top of numpy and represents quaternions using numpy arrays of dimension `...x4`, meaning that all functions support arbitrarily high-dimensional arrays of quaternions.
-
-Quaternions are encoded as numpy arrays of length 4 with the convention that an array `(a, b, c, d)` represents the quaternion `a + bi + cj + dk`.
-Almost all functions use entirely standard; the sole exception are the matrix-quaternion interconversions, which are more involved.
-Matrices are converted to quaternions via the algorithm described by [Bar-Itzhack et al.](https://doi.org/10.2514/2.4654).
-Quaternions are converted to matrices using the standard mathematical formula given on [Wikipedia's page on Quaternions and spatial rotation](https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix).
-Euler angle conversions are derived using standard rotation matrix representations.
+The hamilton package provides a simple and consistent interface for using quaternions.
+The package is built entirely on top of numpy and represents quaternions using numpy arrays, meaning that all functions support arbitrarily high-dimensional arrays of quaternions.
+Quaternions are encoded as arrays of shape `(...,4)`, with the convention that the final dimension of an array `(a, b, c, d)` represents the quaternion `a + bi + cj + dk`.
 
 ## Authors
 
@@ -39,7 +34,11 @@ To run the packaged unit tests, execute:
 
     python -m unittest discover tests
 
-To check test coverage, make sure the coverage module is installed and run the packaged unit tests:
+To check test coverage, make sure the coverage module is installed:
+
+    pip install coverage
+    
+and then run the packaged unit tests:
 
     coverage run -m unittest discover tests
 
@@ -63,3 +62,16 @@ For example:
     >>> alpha, beta, gamma = hamilton.to_euler(quat_rotate)
     >>> quat_rotate_returned = hamilton.from_euler(alpha, beta, gamma)
     >>> identity = hamilton.to_matrix(quat_rotate_returned)
+
+## Documentation
+Documentation for hamilton is written in [reStructuredText](http://docutils.sourceforge.net/rst.html) and compiled using [Sphinx](http://www.sphinx-doc.org/en/master/).
+To build the documentation, first install Sphinx:
+
+    pip install sphinx
+
+You can then use sphinx to create the actual documentation in either pdf or HTML form by running the following commands in the hamilton root directory:
+
+    cd doc
+    make html # For html output
+    make latexpdf # For a LaTeX compiled PDF file
+    open build/html/index.html
