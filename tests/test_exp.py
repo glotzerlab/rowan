@@ -75,11 +75,12 @@ class TestExp(unittest.TestCase):
                 np.allclose(
                     quaternion.log(np.stack((x, zero))),
                     np.stack((
-                        np.array([0.54930614, 0.90689968, 0.90689968, 0.90689968]),
+                        np.array(
+                            [0.54930614, 0.90689968, 0.90689968, 0.90689968]
+                            ),
                         np.array([-np.inf, 0, 0, 0])))
                     )
                 )
-
 
         np.random.seed(0)
         shapes = [(4,), (1, 4), (3, 4, 4), (12, 7, 3, 4)]
