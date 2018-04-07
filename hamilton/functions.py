@@ -179,13 +179,13 @@ def log10(q):
 
 
 def power(q, n):
-    #TODO: Write polar decomposition function
+    # TODO: Write polar decomposition function #noqa
     R"""Computes the power of a quaternion :math:`q^n`.
 
     Quaternions raised to a scalar power are defined according to the polar
-    decomposition :math:`q^n = \lvert\lvert q \rvert\rvert^n \left \cos(n*\theta)
-    + \hat{u} \sin(n\theta)`. However, this can be computed more efficiently
-    by noting that :math:`q^n = \exp(n \ln(q))`.
+    decomposition :math:`q^n = \lvert\lvert q \rvert\rvert^n \left
+    \cos(n*\theta) + \hat{u} \sin(n\theta)`. However, this can be computed
+    more efficiently by noting that :math:`q^n = \exp(n \ln(q))`.
 
     Args:
         q ((...,4) np.array): Quaternions.

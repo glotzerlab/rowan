@@ -8,7 +8,8 @@ from __future__ import division, print_function, absolute_import
 from .functions import (conjugate, multiply, norm, normalize, rotate,
                         vector_vector_rotation, from_euler, to_euler,
                         from_matrix, to_matrix, from_axis_angle, to_axis_angle,
-                        from_mirror_plane, reflect, exp, log, log10, logn, power)
+                        from_mirror_plane, reflect, exp, log, log10, logn,
+                        power)
 
 # Get the version
 import os
