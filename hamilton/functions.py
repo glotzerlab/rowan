@@ -324,17 +324,22 @@ def from_mirror_plane(x, y, z):
     return q
 
 
+def _promote_vec(v):
+    """Helper function to promote vectors to their quaternion representation"""
+    return np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
+
+
 def reflect(q, v):
     R"""Reflect a list of vectors by a corresponding set of quaternions
 
     For help constructing a mirror plane, see :py:func:`from_mirror_plane`.
 
     Args:
-        q ((...,4) np.array): First set of quaternions
-        v ((...,3) np.array): First set of quaternions
+        q ((...,4) np.array): Quaternions to use for reflection
+        v ((...,3) np.array): Vectors to reflect.
 
     Returns:
-        An array of the vectors in v rotated by q
+        An array of the vectors in v reflected by q
 
     Example::
 
@@ -349,7 +354,7 @@ def reflect(q, v):
         raise ValueError("Reflection quaternions must have unit norm")
 
     # Convert vector to quaternion representation
-    quat_v = np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
+    quat_v = _promote_vec(v)
     return multiply(q, multiply(quat_v, q))[..., 1:]
 
 
@@ -357,8 +362,8 @@ def rotate(q, v):
     R"""Rotate a list of vectors by a corresponding set of quaternions
 
     Args:
-        q ((...,4) np.array): First set of quaternions
-        v ((...,3) np.array): First set of quaternions
+        q ((...,4) np.array): Quaternions to rotate by.
+        v ((...,3) np.array): Vectors to rotate.
 
     Returns:
         An array of the vectors in v rotated by q
@@ -376,7 +381,7 @@ def rotate(q, v):
         raise ValueError("Rotation quaternions must have unit norm")
 
     # Convert vector to quaternion representation
-    quat_v = np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
+    quat_v = _promote_vec(v)
     return multiply(q, multiply(quat_v, conjugate(q)))[..., 1:]
 
 
