@@ -34,7 +34,15 @@ def exp(q):
 
         q_star = conjugate(q)
     """
+    # Ensure compatibility for numpy < 1.13; older numpy fail with
+    # the fancy indexing used below when array is 1d
     q = np.asarray(q)
+    if len(q.shape) == 1:
+        flat = True
+        q = np.atleast_2d(q)
+    else:
+        flat = False
+
     expo = np.empty(q.shape)
     norms = np.linalg.norm(q[..., 1:], axis=-1)
     e = np.exp(q[..., 0])
@@ -45,7 +53,11 @@ def exp(q):
             q[not_zero, 1:]/norms[not_zero, np.newaxis]
             ) * np.sin(norms)[not_zero, np.newaxis]
     expo[norm_zero, 1:] = 0
-    return expo
+
+    if flat:
+        return expo.squeeze()
+    else:
+        return expo
 
 
 def conjugate(q):
