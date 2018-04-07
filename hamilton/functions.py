@@ -136,6 +136,76 @@ def log(q):
         return log
 
 
+def logn(q, n):
+    R"""Computes the quaternion logarithm to some base n.
+
+    The quaternion logarithm for arbitrary bases is defined using the
+    standard change of basis formula relative to the natural logarithm.
+
+    Args:
+        q ((...,4) np.array): Quaternions
+        n ((...) np.array): Scalars to use as log bases
+
+    Returns:
+        Array of shape (...) containing logarithms of q
+
+    Example::
+
+        log_q = log(q, 2)
+    """
+    q = np.asarray(q)
+    return log(q)/np.log(n)
+
+
+def log10(q):
+    R"""Computes the quaternion logarithm base 10.
+
+    See :py:func:`logn`
+    The quaternion logarithm for arbitrary bases is defined using the
+    standard change of basis formula relative to the natural logarithm.
+
+    Args:
+        q ((...,4) np.array): Quaternions
+
+    Returns:
+        Array of shape (...) containing logarithms of q
+
+    Example::
+
+        log_q = log(q, 2)
+    """
+    q = np.asarray(q)
+    return logn(q, 10)
+
+
+def power(q, n):
+    #TODO: Write polar decomposition function
+    R"""Computes the power of a quaternion :math:`q^n`.
+
+    Quaternions raised to a scalar power are defined according to the polar
+    decomposition :math:`q^n = \lvert\lvert q \rvert\rvert^n \left \cos(n*\theta)
+    + \hat{u} \sin(n\theta)`. However, this can be computed more efficiently
+    by noting that :math:`q^n = \exp(n \ln(q))`.
+
+    Args:
+        q ((...,4) np.array): Quaternions.
+        n ((...) np.arrray): Scalars to exponentiate quaternions with.
+
+    Returns:
+        Array of shape (...) containing  of q
+
+    Example::
+
+        q_n = pow(q^n)
+    """
+    q = np.asarray(q)
+    # Note that we follow the convention that 0^0 = 1
+    if n == 0:
+        return np.broadcast_to(np.array([1, 0, 0, 0]), q.shape)
+    else:
+        return exp(n*log(q))
+
+
 def conjugate(q):
     R"""Conjugates an array of quaternions
 
