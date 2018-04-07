@@ -28,11 +28,11 @@ def exp(q):
         q ((...,4) np.array): Quaternions
 
     Returns:
-        Array of shape (...) exponentials of q
+        Array of shape (...) containing exponentials of q
 
     Example::
 
-        q_star = conjugate(q)
+        q_exp = exp(q)
     """
     # Ensure compatibility for numpy < 1.13; older numpy fail with
     # the fancy indexing used below when array is 1d
@@ -49,7 +49,7 @@ def exp(q):
     expo[..., 0] = e * np.cos(norms)
     norm_zero = np.isclose(norms, 0)
     not_zero = np.logical_not(norm_zero)
-    expo[np.logical_not(norm_zero), 1:] = e[not_zero, np.newaxis] * (
+    expo[not_zero, 1:] = e[not_zero, np.newaxis] * (
             q[not_zero, 1:]/norms[not_zero, np.newaxis]
             ) * np.sin(norms)[not_zero, np.newaxis]
     expo[norm_zero, 1:] = 0
@@ -58,6 +58,61 @@ def exp(q):
         return expo.squeeze()
     else:
         return expo
+
+
+def log(q):
+    R"""Computes the quaternion natural logarithm.
+
+    The natural of a quaternion in terms of its scalar and vector parts
+    :math:`q = a + \boldsymbol{v}` is defined by inverting the exponential
+    formula (see :py:func:`exp`), and is defined by the formula
+    :math:` \frac{x^k}{k!}` as follows:
+
+    .. math::
+        \begin{equation}
+            \ln(q) = \ln\lvert\lvert q \rvert\rvert +
+                    \frac{\boldsymbol{v}}{\lvert\lvert \boldsymbol{v}
+                    \rvert\rvert} \arccos\left(\frac{a}{q}\right)
+        \end{equation}
+
+    Args:
+        q ((...,4) np.array): Quaternions
+
+    Returns:
+        Array of shape (...) containing logarithms of q
+
+    Example::
+
+        ln_q = log(q)
+    """
+    log = np.empty(q.shape)
+
+    # We need all the norms to avoid divide by zeros later.
+    # Can also use these to minimize the amount of work done.
+    q_norms = norm(q)
+    q_norm_zero = np.isclose(q_norms, 0)
+    q_not_zero = np.logical_not(q_norm_zero)
+    v_norms = np.linalg.norm(q[..., 1:], axis=-1)
+    v_norm_zero = np.isclose(v_norms, 0)
+    v_not_zero = np.logical_not(v_norm_zero)
+
+    log[q_norm_zero, 0] = -np.inf
+    log[q_not_zero, 0] = np.log(q_norms[q_not_zero])
+
+    if np.any(v_not_zero):
+        prefactor = np.empty(q[v_not_zero, 1:].shape)
+        prefactor = q[v_not_zero, 1:]/v_norms[
+                v_not_zero, np.newaxis]
+
+        inv_cos = np.empty(v_norms[v_not_zero].shape)
+        inv_cos = np.arccos(q[v_not_zero, 0]/q_norms[v_not_zero])
+
+        log[v_norm_zero, 1:] = 0
+        log[v_not_zero, 1:] = prefactor * inv_cos[..., np.newaxis]
+    else:
+        log[..., 1:] = 0
+
+    return log
 
 
 def conjugate(q):
