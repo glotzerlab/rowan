@@ -89,6 +89,15 @@ def log(q):
 
         ln_q = log(q)
     """
+    # Ensure compatibility for numpy < 1.13; older numpy fail with
+    # the fancy indexing used below when array is 1d
+    q = np.asarray(q)
+    if len(q.shape) == 1:
+        flat = True
+        q = np.atleast_2d(q)
+    else:
+        flat = False
+
     log = np.empty(q.shape)
 
     # We need all the norms to avoid divide by zeros later.
@@ -121,7 +130,10 @@ def log(q):
     else:
         log[..., 1:] = 0
 
-    return log
+    if flat:
+        return log.squeeze()
+    else:
+        return log
 
 
 def conjugate(q):
