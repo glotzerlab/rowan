@@ -20,6 +20,17 @@ class TestSimple(unittest.TestCase):
             quats_conj[..., 1:] *= -1
             self.assertTrue(np.all(quaternion.conjugate(quats) == quats_conj))
 
+    def test_inverse(self):
+        """Test quaternion inverse"""
+        np.random.seed(0)
+        shapes = [(4, ), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
+        for shape in shapes:
+            quats = np.random.random_sample(shape)
+            quats_conj = quats.copy()
+            quats_conj[..., 1:] *= -1
+            quats_conj /= quaternion.norm(quats)[..., np.newaxis]**2
+            self.assertTrue(np.allclose(quaternion.inverse(quats), quats_conj))
+
     def test_norm(self):
         """Test quaternion norm"""
         np.random.seed(0)

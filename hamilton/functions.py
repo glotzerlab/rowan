@@ -225,6 +225,27 @@ def conjugate(q):
     return conjugate
 
 
+def inverse(q):
+    R"""Computes the inverse of an array of quaternions
+
+    Args:
+        q ((...,4) np.array): Array of quaternions
+
+    Returns:
+        An array containing the inverses of q
+
+    Example::
+
+        q_inv = inverse(q)
+    """
+    # Don't use asarray to avoid modifying in place    
+    inverses = np.array(q)
+    normsq = norm(q)**2
+    inverses[..., 1:] *= -1
+    inverses[normsq > 0] /= normsq[normsq > 0, np.newaxis]
+    return inverses
+
+
 def multiply(qi, qj):
     R"""Multiplies two arrays of quaternions
 
