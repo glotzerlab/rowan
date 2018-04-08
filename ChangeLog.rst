@@ -9,6 +9,7 @@ Added
 +++++
 
 * Add functions relating to exponentiation: exp, log, logn, log10, power
+* Add core comparison functions for equality, closeness, finiteness
 
 v0.3 - 2018-03-31
 -----------------

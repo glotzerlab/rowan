@@ -8,7 +8,7 @@ import numpy as np
 
 
 def exp(q):
-    R"""Computes the exponential function :math:`e^q`.
+    R"""Computes the natural exponential function :math:`e^q`.
 
     The exponential of a quaternion in terms of its scalar and vector parts
     :math:`q = a + \boldsymbol{v}` is defined by exponential power series:
@@ -62,6 +62,55 @@ def exp(q):
         return expo.squeeze()
     else:
         return expo
+
+
+def expb(q, b):
+    R"""Computes the exponential function :math:`b^q`.
+
+    We define the exponential of a quaternion to an arbitrary base relative
+    to the exponential function :math:`e^q` using the change of base
+    formula as follows:
+
+    .. math::
+        \begin{align}
+            b^q &= y \\
+            q &= \log_b y  = \frac{\ln y}{\ln b}\\
+            y &= e^{\frac{q}{\ln b}}
+        \end{align}
+
+    Args:
+        q ((...,4) np.array): Quaternions
+
+    Returns:
+        Array of shape (...) containing exponentials of q
+
+    Example::
+
+        q_exp = exp(q, 2)
+    """
+    return exp(q/np.log(b))
+
+
+def exp10(q):
+    R"""Computes the exponential function :math:`10^q`.
+
+    We define the exponential of a quaternion to an arbitrary base relative
+    to the exponential function :math:`e^q` using the change of base
+    formula as follows:
+
+    Wrapper around:py:func:`expb`
+
+    Args:
+        q ((...,4) np.array): Quaternions
+
+    Returns:
+        Array of shape (...) containing exponentials of q
+
+    Example::
+
+        q_exp = exp(q, 2)
+    """
+    return expb(q, 10)
 
 
 def log(q):
@@ -136,11 +185,19 @@ def log(q):
         return log
 
 
-def logn(q, n):
-    R"""Computes the quaternion logarithm to some base n.
+def logb(q, b):
+    R"""Computes the quaternion logarithm to some base b.
 
     The quaternion logarithm for arbitrary bases is defined using the
     standard change of basis formula relative to the natural logarithm.
+
+    .. math::
+        \begin{align}
+            \log_b q &= y \\
+            q &= b^y \\
+            \ln q &= y \ln b \\
+            y &= \log_b q = \frac{\ln q}{\ln b}
+        \end{align}
 
     Args:
         q ((...,4) np.array): Quaternions
@@ -154,15 +211,13 @@ def logn(q, n):
         log_q = log(q, 2)
     """
     q = np.asarray(q)
-    return log(q)/np.log(n)
+    return log(q)/np.log(b)
 
 
 def log10(q):
     R"""Computes the quaternion logarithm base 10.
 
-    See :py:func:`logn`
-    The quaternion logarithm for arbitrary bases is defined using the
-    standard change of basis formula relative to the natural logarithm.
+    Wrapper around:py:func:`logb`
 
     Args:
         q ((...,4) np.array): Quaternions
@@ -175,7 +230,7 @@ def log10(q):
         log_q = log(q, 2)
     """
     q = np.asarray(q)
-    return logn(q, 10)
+    return logb(q, 10)
 
 
 def power(q, n):
@@ -225,6 +280,36 @@ def conjugate(q):
     return conjugate
 
 
+def inverse(q):
+    R"""Computes the inverse of an array of quaternions
+
+    Args:
+        q ((...,4) np.array): Array of quaternions
+
+    Returns:
+        An array containing the inverses of q
+
+    Example::
+
+        q_inv = inverse(q)
+    """
+    if len(q.shape) == 1:
+        flat = True
+        inverses = np.array(np.atleast_2d(q))
+    else:
+        flat = False
+        inverses = np.array(q)
+
+    normsq = norm(inverses)**2
+    inverses[..., 1:] *= -1
+    inverses[normsq > 0] /= normsq[normsq > 0, np.newaxis]
+
+    if flat:
+        return inverses.squeeze()
+    else:
+        return inverses
+
+
 def multiply(qi, qj):
     R"""Multiplies two arrays of quaternions
 
@@ -255,6 +340,29 @@ def multiply(qi, qj):
                        qj[..., 0, np.newaxis] * qi[..., 1:] +
                        np.cross(qi[..., 1:], qj[..., 1:]))
     return output
+
+
+def divide(qi, qj):
+    R"""Divides two arrays of quaternions
+
+    Division is non-commutative; this function returns
+    :math:`q_i q_j^{-1}`.
+
+    Args:
+        qi ((...,4) np.array): Dividend quaternion
+        qj ((...,4) np.array): Divisors quaternions
+
+    Returns:
+        An array containing the quotients of row i of qi
+        with column j of qj
+
+    Example::
+
+        qi = np.array([[1, 0, 0, 0]])
+        qj = np.array([[1, 0, 0, 0]])
+        prod = divide(qi, qj)
+    """
+    return multiply(qi, inverse(qj))
 
 
 def norm(q):
@@ -848,3 +956,111 @@ def to_axis_angle(q):
                     0)
 
     return axes, angles
+
+
+def equal(p, q):
+    R"""Check whether two sets of quaternions are equal.
+
+    This function is a simple wrapper that checks array
+    equality and then aggregates along the quaternion axis.
+
+    Args:
+        p ((...,4) np.array): First set of quaternions
+        q ((...,4) np.array): First set of quaternions
+
+    Returns:
+        A boolean array of shape (...) indicating equality.
+    """
+    return np.all(p == q, axis=-1)
+
+
+def not_equal(p, q):
+    R"""Check whether two sets of quaternions are not equal.
+
+    This function is a simple wrapper that checks array
+    equality and then aggregates along the quaternion axis.
+
+    Args:
+        p ((...,4) np.array): First set of quaternions
+        q ((...,4) np.array): First set of quaternions
+
+    Returns:
+        A boolean array of shape (...) indicating inequality.
+    """
+    return np.any(p != q, axis=-1)
+
+
+def isnan(q):
+    R"""Test element-wise for NaN quaternions.
+
+    A quaternion is defined as NaN if any elements are NaN.
+
+    Args:
+        q ((...,4) np.array): Quaternions to check
+
+    Returns:
+        A boolean array of shape (...) indicating NaN.
+    """
+    return np.any(np.isnan(q), axis=-1)
+
+
+def isinf(q):
+    R"""Test element-wise for infinite quaternions.
+
+    A quaternion is defined as infinite if any elements are infinite.
+
+    Args:
+        q ((...,4) np.array): Quaternions to check
+
+    Returns:
+        A boolean array of shape (...) indicating infinite quaternions.
+    """
+    return np.any(np.isinf(q), axis=-1)
+
+
+def isfinite(q):
+    R"""Test element-wise for NaN quaternions.
+
+    A quaternion is defined as finite if all elements are finite.
+
+    Args:
+        q ((...,4) np.array): Quaternions to check
+
+    Returns:
+        A boolean array of shape (...) indicating finite quaternions.
+    """
+    return np.all(np.isfinite(q), axis=-1)
+
+
+def allclose(p, q, **kwargs):
+    R"""Check whether two sets of quaternions are all close.
+
+    This is a direct wrapper of the corresponding numpy function.
+
+    Args:
+        p ((...,4) np.array): First set of quaternions
+        q ((...,4) np.array): First set of quaternions
+        **kwargs: Keyword arguments to pass to np.allclose
+
+    Returns:
+        Whether or not all quaternions are close
+    """
+    return np.allclose(p, q, **kwargs)
+
+
+def isclose(p, q, **kwargs):
+    R"""Element-wise check of whether two sets of quaternions close.
+
+    This function is a simple wrapper that checks using the
+    corresponding numpy function and then aggregates along
+    the quaternion axis.
+
+    Args:
+        p ((...,4) np.array): First set of quaternions
+        q ((...,4) np.array): First set of quaternions
+        **kwargs: Keyword arguments to pass to np.allclose
+
+    Returns:
+        A boolean array of shape (...)
+    """
+    return np.all(np.isclose(p, q, **kwargs), axis=-1)

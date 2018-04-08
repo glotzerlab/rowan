@@ -42,6 +42,21 @@ class TestExp(unittest.TestCase):
                     )
                 )
 
+        self.assertTrue(
+                np.allclose(
+                    quaternion.exp10(one),
+                    quaternion.exp(one/np.log(10))
+                    )
+                )
+
+        base = 2
+        self.assertTrue(
+                np.allclose(
+                    quaternion.expb(one, base),
+                    quaternion.exp(one/np.log(base))
+                    )
+                )
+
         np.random.seed(0)
         shapes = [(4,), (1, 4), (3, 4, 4), (12, 7, 3, 4)]
         answers = np.load(os.path.join(
@@ -95,13 +110,13 @@ class TestExp(unittest.TestCase):
                         ),
                     msg="Failed for shape {}".format(shape))
 
-    def test_logn(self):
+    def test_logb(self):
         """Ensure that quaternion logarithm behaves correctly"""
         base_test = 3
-        self.assertTrue(np.all(quaternion.logn(one, base_test) == zero))
+        self.assertTrue(np.all(quaternion.logb(one, base_test) == zero))
         self.assertTrue(
                 np.all(
-                    quaternion.logn(zero, base_test) ==
+                    quaternion.logb(zero, base_test) ==
                     np.array([-np.inf, 0, 0, 0])
                     )
                 )
@@ -115,7 +130,7 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             self.assertTrue(
                     np.allclose(
-                        quaternion.logn(x, base_test),
+                        quaternion.logb(x, base_test),
                         answers[str(shape)]/np.log(base_test)
                         ),
                     msg="Failed for shape {}".format(shape))
