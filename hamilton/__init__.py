@@ -40,7 +40,7 @@ __all__ = ['conjugate',
            'to_axis_angle',
            'isnan',
            'isinf',
-           'isfinite'
+           'isfinite',
            'equal',
            'not_equal',
            'allclose',

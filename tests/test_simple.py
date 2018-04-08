@@ -8,6 +8,7 @@ import hamilton as quaternion
 
 zero = np.array([0, 0, 0, 0])
 
+
 class TestSimple(unittest.TestCase):
     def test_conjugate(self):
         """Test quaternion conjugation"""

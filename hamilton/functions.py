@@ -863,7 +863,7 @@ def equal(p, q):
     Returns:
         A boolean array of shape (...) indicating equality.
     """
-    return np.all(p == q, axis = -1)
+    return np.all(p == q, axis=-1)
 
 
 def not_equal(p, q):
@@ -879,7 +879,7 @@ def not_equal(p, q):
     Returns:
         A boolean array of shape (...) indicating inequality.
     """
-    return np.any(p != q, axis = -1)
+    return np.any(p != q, axis=-1)
 
 
 def isnan(q):
@@ -893,7 +893,7 @@ def isnan(q):
     Returns:
         A boolean array of shape (...) indicating NaN.
     """
-    return np.any(np.isnan(q), axis = -1)
+    return np.any(np.isnan(q), axis=-1)
 
 
 def isinf(q):
@@ -907,7 +907,7 @@ def isinf(q):
     Returns:
         A boolean array of shape (...) indicating infinite quaternions.
     """
-    return np.any(np.isinf(q), axis = -1)
+    return np.any(np.isinf(q), axis=-1)
 
 
 def isfinite(q):
@@ -921,7 +921,7 @@ def isfinite(q):
     Returns:
         A boolean array of shape (...) indicating finite quaternions.
     """
-    return np.all(np.isfinite(q), axis = -1)
+    return np.all(np.isfinite(q), axis=-1)
 
 
 def allclose(p, q, **kwargs):
@@ -955,4 +955,4 @@ def isclose(p, q, **kwargs):
     Returns:
         A boolean array of shape (...)
     """
-    return np.all(np.isclose(p, q, **kwargs), axis = -1)
+    return np.all(np.isclose(p, q, **kwargs), axis=-1)
