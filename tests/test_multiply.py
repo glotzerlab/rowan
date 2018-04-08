@@ -127,3 +127,18 @@ class TestMultiply(unittest.TestCase):
             for j in range(num_second):
                 single_prod = quaternion.multiply(i1[i, 0, :], i2[0, j, :])
                 self.assertTrue(np.all(product[i, j, :] == single_prod))
+
+    def test_divide(self):
+        """Ensure division works"""
+        shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
+        np.random.seed(0)
+        for shape_i in shapes:
+            x = np.random.random_sample(shape_i)
+            for shape_j in shapes:
+                y = np.random.random_sample(shape_j)
+                self.assertTrue(
+                        np.allclose(
+                            quaternion.divide(x, y),
+                            quaternion.multiply(x, quaternion.inverse(y))
+                            )
+                        )

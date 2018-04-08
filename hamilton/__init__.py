@@ -10,7 +10,7 @@ from .functions import (conjugate, multiply, norm, normalize, rotate,
                         from_matrix, to_matrix, from_axis_angle, to_axis_angle,
                         from_mirror_plane, reflect, exp, log, log10, logn,
                         power, isnan, isinf, isfinite, equal, not_equal,
-                        allclose, isclose, inverse)
+                        allclose, isclose, inverse, divide)
 
 # Get the version
 import os
@@ -45,5 +45,6 @@ __all__ = ['conjugate',
            'not_equal',
            'allclose',
            'isclose',
-           'inverse'
+           'inverse',
+           'divide'
            ]

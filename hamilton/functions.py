@@ -278,6 +278,29 @@ def multiply(qi, qj):
     return output
 
 
+def divide(qi, qj):
+    R"""Divides two arrays of quaternions
+
+    Division is non-commutative; this function returns
+    :math:`q_i q_j^{-1}`.
+
+    Args:
+        qi ((...,4) np.array): Dividend quaternion
+        qj ((...,4) np.array): Divisors quaternions
+
+    Returns:
+        An array containing the quotients of row i of qi
+        with column j of qj
+
+    Example::
+
+        qi = np.array([[1, 0, 0, 0]])
+        qj = np.array([[1, 0, 0, 0]])
+        prod = divide(qi, qj)
+    """
+    return multiply(qi, inverse(qj))
+
+
 def norm(q):
     R"""Compute the quaternion norm
 
