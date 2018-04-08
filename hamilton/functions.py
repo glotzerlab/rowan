@@ -238,12 +238,21 @@ def inverse(q):
 
         q_inv = inverse(q)
     """
-    # Don't use asarray to avoid modifying in place
-    inverses = np.array(q)
-    normsq = norm(q)**2
+    if len(q.shape) == 1:
+        flat = True
+        inverses = np.array(np.atleast_2d(q))
+    else:
+        flat = False
+        inverses = np.array(q)
+
+    subset = np.atleast_1d(norm(q)**2 > 0)
     inverses[..., 1:] *= -1
-    inverses[normsq > 0] /= normsq[normsq > 0, np.newaxis]
-    return inverses
+    inverses[subset] /= subset[subset, np.newaxis]
+
+    if flat:
+        return inverses.squeeze()
+    else:
+        return inverses
 
 
 def multiply(qi, qj):
