@@ -245,9 +245,9 @@ def inverse(q):
         flat = False
         inverses = np.array(q)
 
-    subset = np.atleast_1d(norm(q)**2 > 0)
+    normsq = norm(inverses)**2
     inverses[..., 1:] *= -1
-    inverses[subset] /= subset[subset, np.newaxis]
+    inverses[normsq > 0] /= normsq[normsq > 0, np.newaxis]
 
     if flat:
         return inverses.squeeze()
