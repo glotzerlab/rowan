@@ -8,7 +8,7 @@ import numpy as np
 
 
 def exp(q):
-    R"""Computes the exponential function :math:`e^q`.
+    R"""Computes the natural exponential function :math:`e^q`.
 
     The exponential of a quaternion in terms of its scalar and vector parts
     :math:`q = a + \boldsymbol{v}` is defined by exponential power series:
@@ -62,6 +62,55 @@ def exp(q):
         return expo.squeeze()
     else:
         return expo
+
+
+def expb(q, b):
+    R"""Computes the exponential function :math:`b^q`.
+
+    We define the exponential of a quaternion to an arbitrary base relative
+    to the exponential function :math:`e^q` using the change of base
+    formula as follows:
+
+    .. math::
+        \begin{align}
+            b^q &= y \\
+            q &= \log_b y  = \frac{\ln y}{\ln b}\\
+            y &= e^{\frac{q}{\ln b}}
+        \end{align}
+
+    Args:
+        q ((...,4) np.array): Quaternions
+
+    Returns:
+        Array of shape (...) containing exponentials of q
+
+    Example::
+
+        q_exp = exp(q, 2)
+    """
+    return exp(q/np.log(b))
+
+
+def exp10(q):
+    R"""Computes the exponential function :math:`10^q`.
+
+    We define the exponential of a quaternion to an arbitrary base relative
+    to the exponential function :math:`e^q` using the change of base
+    formula as follows:
+
+    Wrapper around:py:func:`expb`
+
+    Args:
+        q ((...,4) np.array): Quaternions
+
+    Returns:
+        Array of shape (...) containing exponentials of q
+
+    Example::
+
+        q_exp = exp(q, 2)
+    """
+    return expb(q, 10)
 
 
 def log(q):
@@ -142,6 +191,14 @@ def logb(q, b):
     The quaternion logarithm for arbitrary bases is defined using the
     standard change of basis formula relative to the natural logarithm.
 
+    .. math::
+        \begin{align}
+            \log_b q &= y \\
+            q &= b^y \\
+            \ln q &= y \ln b \\
+            y &= \log_b q = \frac{\ln q}{\ln b}
+        \end{align}
+
     Args:
         q ((...,4) np.array): Quaternions
         n ((...) np.array): Scalars to use as log bases
@@ -160,9 +217,7 @@ def logb(q, b):
 def log10(q):
     R"""Computes the quaternion logarithm base 10.
 
-    See :py:func:`logn`
-    The quaternion logarithm for arbitrary bases is defined using the
-    standard change of basis formula relative to the natural logarithm.
+    Wrapper around:py:func:`logb`
 
     Args:
         q ((...,4) np.array): Quaternions

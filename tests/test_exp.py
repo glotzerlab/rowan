@@ -42,6 +42,21 @@ class TestExp(unittest.TestCase):
                     )
                 )
 
+        self.assertTrue(
+                np.allclose(
+                    quaternion.exp10(one),
+                    quaternion.exp(one/np.log(10))
+                    )
+                )
+
+        base = 2
+        self.assertTrue(
+                np.allclose(
+                    quaternion.expb(one, base),
+                    quaternion.exp(one/np.log(base))
+                    )
+                )
+
         np.random.seed(0)
         shapes = [(4,), (1, 4), (3, 4, 4), (12, 7, 3, 4)]
         answers = np.load(os.path.join(
