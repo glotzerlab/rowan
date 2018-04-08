@@ -136,8 +136,8 @@ def log(q):
         return log
 
 
-def logn(q, n):
-    R"""Computes the quaternion logarithm to some base n.
+def logb(q, b):
+    R"""Computes the quaternion logarithm to some base b.
 
     The quaternion logarithm for arbitrary bases is defined using the
     standard change of basis formula relative to the natural logarithm.
@@ -154,7 +154,7 @@ def logn(q, n):
         log_q = log(q, 2)
     """
     q = np.asarray(q)
-    return log(q)/np.log(n)
+    return log(q)/np.log(b)
 
 
 def log10(q):
@@ -175,7 +175,7 @@ def log10(q):
         log_q = log(q, 2)
     """
     q = np.asarray(q)
-    return logn(q, 10)
+    return logb(q, 10)
 
 
 def power(q, n):

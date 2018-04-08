@@ -95,13 +95,13 @@ class TestExp(unittest.TestCase):
                         ),
                     msg="Failed for shape {}".format(shape))
 
-    def test_logn(self):
+    def test_logb(self):
         """Ensure that quaternion logarithm behaves correctly"""
         base_test = 3
-        self.assertTrue(np.all(quaternion.logn(one, base_test) == zero))
+        self.assertTrue(np.all(quaternion.logb(one, base_test) == zero))
         self.assertTrue(
                 np.all(
-                    quaternion.logn(zero, base_test) ==
+                    quaternion.logb(zero, base_test) ==
                     np.array([-np.inf, 0, 0, 0])
                     )
                 )
@@ -115,7 +115,7 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             self.assertTrue(
                     np.allclose(
-                        quaternion.logn(x, base_test),
+                        quaternion.logb(x, base_test),
                         answers[str(shape)]/np.log(base_test)
                         ),
                     msg="Failed for shape {}".format(shape))

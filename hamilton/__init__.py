@@ -8,7 +8,7 @@ from __future__ import division, print_function, absolute_import
 from .functions import (conjugate, multiply, norm, normalize, rotate,
                         vector_vector_rotation, from_euler, to_euler,
                         from_matrix, to_matrix, from_axis_angle, to_axis_angle,
-                        from_mirror_plane, reflect, exp, log, log10, logn,
+                        from_mirror_plane, reflect, exp, log, log10, logb,
                         power, isnan, isinf, isfinite, equal, not_equal,
                         allclose, isclose, inverse, divide)
 
@@ -22,7 +22,7 @@ with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 __all__ = ['conjugate',
            'exp',
            'log',
-           'logn',
+           'logb',
            'log10',
            'power',
            'multiply',
