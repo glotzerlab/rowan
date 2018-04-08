@@ -238,7 +238,7 @@ def inverse(q):
 
         q_inv = inverse(q)
     """
-    # Don't use asarray to avoid modifying in place    
+    # Don't use asarray to avoid modifying in place
     inverses = np.array(q)
     normsq = norm(q)**2
     inverses[..., 1:] *= -1
