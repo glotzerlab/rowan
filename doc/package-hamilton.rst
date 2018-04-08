@@ -7,9 +7,15 @@ hamilton
     :nosignatures:
 
     hamilton.conjugate
+    hamilton.inverse
     hamilton.exp
+    hamilton.expb
+    hamilton.exp10
     hamilton.log
+    hamilton.logb
+    hamilton.log10
     hamilton.multiply
+    hamilton.divide
     hamilton.norm
     hamilton.normalize
     hamilton.rotate
@@ -22,6 +28,11 @@ hamilton
     hamilton.to_axis_angle
     hamilton.from_mirror_plane
     hamilton.reflect
+    hamilton.equal
+    hamilton.not_equal
+    hamilton.isfinite
+    hamilton.isinf
+    hamilton.isnan
  
 .. rubric:: Details
 
