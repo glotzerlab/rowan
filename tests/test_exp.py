@@ -45,7 +45,7 @@ class TestExp(unittest.TestCase):
         self.assertTrue(
                 np.allclose(
                     quaternion.exp10(one),
-                    quaternion.exp(one/np.log(10))
+                    quaternion.exp(one*np.log(10))
                     )
                 )
 
@@ -53,7 +53,7 @@ class TestExp(unittest.TestCase):
         self.assertTrue(
                 np.allclose(
                     quaternion.expb(one, base),
-                    quaternion.exp(one/np.log(base))
+                    quaternion.exp(one*np.log(base))
                     )
                 )
 

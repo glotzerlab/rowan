@@ -75,7 +75,7 @@ def expb(q, b):
         \begin{align}
             b^q &= y \\
             q &= \log_b y  = \frac{\ln y}{\ln b}\\
-            y &= e^{\frac{q}{\ln b}}
+            y &= e^{q\ln b}
         \end{align}
 
     Args:
@@ -88,7 +88,7 @@ def expb(q, b):
 
         q_exp = exp(q, 2)
     """
-    return exp(q/np.log(b))
+    return exp(q*np.log(b))
 
 
 def exp10(q):
