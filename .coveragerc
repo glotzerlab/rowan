@@ -4,10 +4,10 @@ branch = True
 source = hamilton
 omit =
     # The quaternion object isn't ready
-    quaternion.py
-    map.py
-    geometry.py
-    _version.py
+    hamilton/quaternion.py
+    hamilton/map.py
+    hamilton/geometry.py
+    hamilton/_version.py
 
 [report]
 ignore_errors = True
