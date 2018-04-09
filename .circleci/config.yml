@@ -27,13 +27,15 @@ references:
             python3.6 -m unittest discover tests -v
 
             # Test python-dependency matrix with tox
-            pip3.6 install --user tox
-            tox
+            #            pip3.6 install --user tox
+            #            tox
 
             # Run with coverage
             pip3.6 install --user coverage
+            pip3.6 install --user codecov
             ~/.local/bin/coverage run -m unittest discover tests
             ~/.local/bin/coverage report
+            ~/.local/bin/codecov
 
       - save_cache:
           paths:
