@@ -5,6 +5,9 @@ source = hamilton
 omit =
     # The quaternion object isn't ready
     quaternion.py
+    map.py
+    geometry.py
+    _version.py
 
 [report]
 ignore_errors = True
