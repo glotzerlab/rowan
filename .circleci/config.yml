@@ -32,12 +32,11 @@ references:
 
             # Run with coverage
             pip3.6 install --user coverage
-            pip3.6 install --user codecov
+            #pip3.6 install --user codecov
             ~/.local/bin/coverage run -m unittest discover tests
             ~/.local/bin/coverage report
-            ~/.local/bin/coverage combine
-            ~/.local/bin/coverage xml
-            ~/.local/bin/codecov
+            #~/.local/bin/codecov
+            bash <(curl -s https://codecov.io/bash)
 
       - save_cache:
           paths:
