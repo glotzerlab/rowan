@@ -37,6 +37,7 @@ references:
             coverage report
             apt-get -yq update
             apt-get -yq install curl
+            export CODECOV_TOKEN=4a47a1e5-a227-4cb5-a322-ed63b49d9523
             bash <(curl -s https://codecov.io/bash)
 
       - save_cache:
