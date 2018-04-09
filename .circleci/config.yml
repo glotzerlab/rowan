@@ -7,7 +7,7 @@ references:
   wd: &wd
     working_directory: ~/repo
 
-  runall_tests: &runall_tests
+  runall: &runall
     steps:
       - checkout
 
@@ -27,14 +27,13 @@ references:
             python3.6 -m unittest discover tests -v
 
             # Test python-dependency matrix with tox
-            #            pip3.6 install --user tox
-            #            tox
+            pip3.6 install --user tox
+            tox
 
             # Run with coverage
             pip3.6 install --user coverage
             export PATH=~/.local/bin:${PATH}
             coverage run -m unittest discover tests
-            coverage report
             apt-get -yq update
             apt-get -yq install curl
             export CODECOV_TOKEN=4a47a1e5-a227-4cb5-a322-ed63b49d9523
@@ -45,14 +44,53 @@ references:
             - ~/.local
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
+  run_tests_only: &run_tests_only
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: run tests
+          command: |
+            # Faster to just test one env first
+            pip3.6 install --user flake8
+            pip3.6 install --user numpy
+            python3.6 -m flake8 --show-source .
+            python3.6 -m unittest discover tests -v
+
+      - save_cache:
+          paths:
+            - ~/.local
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
 jobs:
-  build:
+  complete:
     <<: *im36
     <<: *wd
-    <<: *runall_tests
+    <<: *runall
+  test_only:
+    <<: *im36
+    <<: *wd
+    <<: *run_tests_only
 
 workflows:
     version: 2
     all:
       jobs:
-        - build
+        - complete:
+            filters:
+              branches:
+                only:
+                  - master
+                  - develop
+        - test_only:
+            filters:
+              branches:
+                ignore:
+                  - master
+                  - develop
