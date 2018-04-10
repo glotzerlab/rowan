@@ -17,10 +17,11 @@ Quaternions are encoded as arrays of shape `(...,4)`, with the convention that t
 ### Installation from source
 
 To install from source, execute:
-
-	git clone https://bitbucket.org/vramasub/hamilton.git
-	cd hamilton
-	python setup.py install --user
+```bash
+git clone https://bitbucket.org/vramasub/hamilton.git
+cd hamilton
+python setup.py install --user
+```
 
 ### Requirements
 
@@ -34,20 +35,27 @@ Continuous integrated testing is performed using CircleCI on these python versio
 
 To run the packaged unit tests, execute:
 
+```bash
     python -m unittest discover tests
+```
 
 To check test coverage, make sure the coverage module is installed:
 
+```bash
     pip install coverage
+```
     
 and then run the packaged unit tests:
 
+```bash
     coverage run -m unittest discover tests
+```
 
 ## Quickstart
 This library can be used to work with quaternions by simply instantiating the appropriate numpy arrays and passing them to the required functions.
 For example:
 
+```python
     >>> import hamilton
     >>> one = np.array([10, 0, 0, 0])
     >>> one_unit = hamilton.normalize(one)
@@ -64,16 +72,21 @@ For example:
     >>> alpha, beta, gamma = hamilton.to_euler(quat_rotate)
     >>> quat_rotate_returned = hamilton.from_euler(alpha, beta, gamma)
     >>> identity = hamilton.to_matrix(quat_rotate_returned)
+```
 
 ## Documentation
 Documentation for hamilton is written in [reStructuredText](http://docutils.sourceforge.net/rst.html) and compiled using [Sphinx](http://www.sphinx-doc.org/en/master/).
 To build the documentation, first install Sphinx:
 
+```bash
     pip install sphinx
+```
 
 You can then use sphinx to create the actual documentation in either pdf or HTML form by running the following commands in the hamilton root directory:
 
+```bash
     cd doc
     make html # For html output
     make latexpdf # For a LaTeX compiled PDF file
     open build/html/index.html
+```
