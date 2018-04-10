@@ -5,7 +5,8 @@
 Various functions for generating random sets of quaternions
 """
 
-#TODO: Try implementing randomness using this paper or one of the ones it cites:
+# TODO: Try implementing randomness using this paper or one of the ones it
+# cites:
 #    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2896220/
 #
 #    other alternatives:
