@@ -3,11 +3,11 @@
 hamilton
 ========
 
-Welcome to the documentation for hamilton!
-The hamilton package addresses the need for a unified framework for working with the various rotation formalisms in 3D.
-According to `Euler's rotation theorem <https://en.wikipedia.org/wiki/Euler%27s_rotation_theorem>`_, all rotations and orientations can be represented by three numbers.
-In practice, however, there are numerous ways to represent these three degrees of freedom, including rotation matrices, Euler angles, Euler axis-angles, and quaternions.
-Named for William Rowan Hamilton, who invented quaternions and popularized their use, hamilton focuses on quaternions, but it also provides utilities for interconverting between quaternions and the other common rotation representations as well.
+Welcome to the documentation for hamilton, a package for working with quaternions!
+Quaternions form a number system with various interesting properties, and they have a number of uses.
+This package provides tools for standard algebraic operations on quaternions as well as a number of additional tools for *e.g.* measuring distances between quaternions, interpolating between them, and performing basic point-cloud mapping.
+A particular focus of the hamilton package is working with unit quaternions, which are a popular means of representing rotations in 3D.
+In order to provide a unified framework for working with the various rotation formalisms in 3D, hamilton allows easy interconversion between these formalisms.
 
 To install hamilton, first clone the repository `from source <https://bitbucket.org/glotzer/hamilton>`_.
 Once installed, the package can be installed using setuptools::
@@ -19,6 +19,7 @@ Once installed, the package can be installed using setuptools::
     :caption: Contents:
 
     package-hamilton
+    package-random
     development
 
 .. toctree::
