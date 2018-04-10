@@ -47,19 +47,19 @@ To run the packaged unit tests, execute:
 
 .. code:: bash
 
-        python -m unittest discover tests
+    python -m unittest discover tests
 
 To check test coverage, make sure the coverage module is installed:
 
 .. code:: bash
 
-        pip install coverage
+    pip install coverage
 
 and then run the packaged unit tests:
 
 .. code:: bash
 
-        coverage run -m unittest discover tests
+    coverage run -m unittest discover tests
 
 Quickstart
 ----------
@@ -70,22 +70,22 @@ required functions. For example:
 
 .. code:: python
 
-        >>> import hamilton
-        >>> one = np.array([10, 0, 0, 0])
-        >>> one_unit = hamilton.normalize(one)
-        >>> assert(one_unit == np.array([1, 0, 0, 0]))
-        >>> if not one_unit == hamilton.quat_multiply(one_unit, one_unit):
-        >>>     raise RuntimeError("Multiplication failed!")
-        >>>
-        >>> one_vec = np.array([1, 0, 0])
-        >>> rotated_vector = hamilton.rotate(one_unit, one_vec)
-        >>>
-        >>> import numpy as np
-        >>> mat = np.eye(3)
-        >>> quat_rotate = hamilton.from_matrix(mat)
-        >>> alpha, beta, gamma = hamilton.to_euler(quat_rotate)
-        >>> quat_rotate_returned = hamilton.from_euler(alpha, beta, gamma)
-        >>> identity = hamilton.to_matrix(quat_rotate_returned)
+    >>> import hamilton
+    >>> one = np.array([10, 0, 0, 0])
+    >>> one_unit = hamilton.normalize(one)
+    >>> assert(one_unit == np.array([1, 0, 0, 0]))
+    >>> if not one_unit == hamilton.quat_multiply(one_unit, one_unit):
+    >>>     raise RuntimeError("Multiplication failed!")
+    >>>
+    >>> one_vec = np.array([1, 0, 0])
+    >>> rotated_vector = hamilton.rotate(one_unit, one_vec)
+    >>>
+    >>> import numpy as np
+    >>> mat = np.eye(3)
+    >>> quat_rotate = hamilton.from_matrix(mat)
+    >>> alpha, beta, gamma = hamilton.to_euler(quat_rotate)
+    >>> quat_rotate_returned = hamilton.from_euler(alpha, beta, gamma)
+    >>> identity = hamilton.to_matrix(quat_rotate_returned)
 
 Documentation
 -------------
@@ -97,7 +97,7 @@ build the documentation, first install Sphinx:
 
 .. code:: bash
 
-        pip install sphinx
+    pip install sphinx
 
 You can then use sphinx to create the actual documentation in either pdf
 or HTML form by running the following commands in the hamilton root
@@ -105,10 +105,10 @@ directory:
 
 .. code:: bash
 
-        cd doc
-        make html # For html output
-        make latexpdf # For a LaTeX compiled PDF file
-        open build/html/index.html
+    cd doc
+    make html # For html output
+    make latexpdf # For a LaTeX compiled PDF file
+    open build/html/index.html
 
 .. |ReadTheDocs Status| image:: https://readthedocs.org/projects/hamilton/badge/?version=latest
    :target: http://hamilton.readthedocs.io/en/latest/?badge=latest
