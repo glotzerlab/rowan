@@ -1,13 +1,26 @@
 from setuptools import setup, find_packages
 
 import os
+
+# Gets the version version
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                        'hamilton', '_version.py')) as f:
     exec(f.read())
 
+# Read README for PyPI, fallback if it fails.
+desc = 'Perform quaternion operations using numpy arrays'
+try:
+    readme_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+            'README.md')
+    with open(readme_file) as f:
+        readme = f.read()
+except ImportError:
+    readme = desc
+
 setup(name='hamilton',
       version=__version__, # noqa F821
-      description='Perform quaternion operations using numpy arrays',
+      description=desc,
+      long_description=readme,
       url='http://github.com/vramasub/quaternion',
       author='Vyas Ramasubramani',
       author_email='vramasub@umich.com',
