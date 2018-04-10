@@ -1,7 +1,7 @@
 # Copyright (c) 2018 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-"""Various functions for generating random sets of quaternions
+R"""Various functions for generating random sets of quaternions
 
 TODO: Try implementing randomness using this paper or one of the ones it cites:
     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2896220/
@@ -19,7 +19,7 @@ __all__ = ['rand',
 
 
 def rand(*args):
-    """Generate random rotations uniformly
+    R"""Generate random rotations uniformly
 
     This is a convenience function a la np.random.rand. If you want a function
     that takes a tuple as input, use :py:func:`random.uniform_sample` instead.
@@ -38,7 +38,7 @@ def rand(*args):
 
 
 def random_sample(size=None):
-    """Generate random rotations unifo
+    R"""Generate random rotations unifo
 
     In general, sampling from the space of all quaternions will not generate
     uniform rotations. What we want is a distribution that accounts for the

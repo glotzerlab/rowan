@@ -1,7 +1,7 @@
 # Copyright (c) 2018 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-"""Submodule containing all standard functions"""
+R"""Submodule containing all standard functions"""
 from __future__ import division, print_function, absolute_import
 
 import numpy as np
@@ -433,7 +433,7 @@ def from_mirror_plane(x, y, z):
 
 
 def _promote_vec(v):
-    """Helper function to promote vectors to their quaternion representation"""
+    R"""Helper function to promote vectors to their quaternion representation"""
     return np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
 
 
@@ -494,7 +494,7 @@ def rotate(q, v):
 
 
 def _normalize_vec(v):
-    """Helper function to normalize vectors"""
+    R"""Helper function to normalize vectors"""
     v = np.asarray(v)
     norms = np.linalg.norm(v, axis=-1)
     return v / norms[..., np.newaxis]

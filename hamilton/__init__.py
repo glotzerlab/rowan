@@ -1,7 +1,7 @@
 # Copyright (c) 2018 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-"""A library for quaternion operations"""
+R"""A library for quaternion operations"""
 
 from __future__ import division, print_function, absolute_import
 
