@@ -24,7 +24,7 @@ Installation from source
 
 To install from source, execute:
 
-::
+.. code-block:: bash
 
     git clone https://bitbucket.org/vramasub/hamilton.git
     cd hamilton
@@ -45,19 +45,19 @@ on these python versions with numpy versions 1.10 and above.
 
 To run the packaged unit tests, execute:
 
-::
+.. code-block:: bash
 
     python -m unittest discover tests
 
 To check test coverage, make sure the coverage module is installed:
 
-::
+.. code-block:: bash
 
     pip install coverage
 
 and then run the packaged unit tests:
 
-::
+.. code-block:: bash
 
     coverage run -m unittest discover tests
 
@@ -95,7 +95,7 @@ Documentation for hamilton is written in
 compiled using `Sphinx <http://www.sphinx-doc.org/en/master/>`__. To
 build the documentation, first install Sphinx:
 
-::
+.. code-block:: bash
 
     pip install sphinx
 
@@ -103,7 +103,7 @@ You can then use sphinx to create the actual documentation in either pdf
 or HTML form by running the following commands in the hamilton root
 directory:
 
-::
+.. code-block:: bash
 
     cd doc
     make html # For html output
