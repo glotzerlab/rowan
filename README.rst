@@ -68,7 +68,7 @@ This library can be used to work with quaternions by simply
 instantiating the appropriate numpy arrays and passing them to the
 required functions. For example:
 
-::
+.. code-block:: python
 
     >>> import hamilton
     >>> one = np.array([10, 0, 0, 0])
