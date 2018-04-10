@@ -1,7 +1,7 @@
 # Copyright (c) 2018 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-"""This subpackage provides various tools for working with the geometric
+R"""This subpackage provides various tools for working with the geometric
 representation of quaternions. A particular focus is computing the distance
 between quaternions. These distance computations can be complicated,
 particularly good metrics for distance on the Riemannian manifold representing
@@ -18,7 +18,7 @@ __all__ = []
 
 
 def distance(p, q):
-    """Determine the distance between quaternions p and q.
+    R"""Determine the distance between quaternions p and q.
 
     This is the most basic distance that can be defined on
     the space of quaternions; it is the metric induced by
@@ -43,7 +43,7 @@ def distance(p, q):
 
 
 def sym_distance(p, q):
-    """Determine the distance between quaternions p and q.
+    R"""Determine the distance between quaternions p and q.
 
     This is a symmetrized version of :py:func:`distance` that
     accounts for the fact that :math:`p` and :math:`-p` represent
@@ -68,7 +68,7 @@ def sym_distance(p, q):
 
 
 def riemann_exp_map(p, v):
-    """Compute the exponential map on the Riemannian manifold
+    R"""Compute the exponential map on the Riemannian manifold
     :math:`\mathbb{H}^*` of nonzero quaterions.
 
     The nonzero quaternions form a Lie algebra :math:`\mathbb{H}^*` that
@@ -86,7 +86,9 @@ def riemann_exp_map(p, v):
     As a result, we can define the exponential map as
 
     .. math::
-        \textnormal{Exp}_p(v) = p*\xp(v)
+        \begin{equation}
+            \textnormal{Exp}_p(v) = p*\xp(v)
+        \end{equation}
 
     Args:
         p ((...,4) np.array): Points on the manifold of quaternions
@@ -96,12 +98,12 @@ def riemann_exp_map(p, v):
         The endpoint of the geodesic that starts from p and travels
         a distance :math:`\lvert\lvert v\rvert\rvert` in the direction
         of :math:`v`.
-    """
+        """
     return multiply(p, exp(v))
 
 
 def riemann_log_map(p, q):
-    """Compute the log map on the Riemannian manifold :math:`\mathbb{H}^*` of
+    R"""Compute the log map on the Riemannian manifold :math:`\mathbb{H}^*` of
     nonzero quaterions.
 
     This function inverts :py:func:`riemann_exp_map`. See that function for more
@@ -122,7 +124,7 @@ def riemann_log_map(p, q):
 
 
 def intrinsic_distance(p, q):
-    """Compute the intrinsic distance between quaternions on the manifold of
+    R"""Compute the intrinsic distance between quaternions on the manifold of
     quaternions.
 
     The quaternion distance is determined as the length of the quaternion
@@ -139,7 +141,7 @@ def intrinsic_distance(p, q):
 
 
 def sym_intrinsic_distance(p, q):
-    """Compute the intrinsic distance between quaternions on the manifold of
+    R"""Compute the intrinsic distance between quaternions on the manifold of
     quaternions.
 
     This is a symmetrized version of :py:func:`intrinsic_distance` that
@@ -160,7 +162,7 @@ def sym_intrinsic_distance(p, q):
 
 
 def angle(p):
-    """Compute the angle of rotation of a quaternion.
+    R"""Compute the angle of rotation of a quaternion.
 
     Note that this is identical to
     ``intrinsic_distance(p, np.array([1, 0, 0, 0]))``.
