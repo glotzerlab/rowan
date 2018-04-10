@@ -157,3 +157,21 @@ def sym_intrinsic_distance(p, q):
                     norm(riemann_log_map(p, q)),
                     norm(riemann_log_map(p, -q))
                     )
+
+
+def angle(p):
+    """Compute the angle of rotation of a quaternion.
+
+    Note that this is identical to
+    ``intrinsic_distance(p, np.array([1, 0, 0, 0]))``.
+
+    Args:
+        p ((...,4) np.array): Quaternions.
+
+    Returns:
+        The element-wise angles traced out by these rotations.
+    """
+
+    # TODO: Make sure all the quaternions are rotations
+    # where they need to be.
+    norm(log(p))
