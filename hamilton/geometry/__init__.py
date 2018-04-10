@@ -128,7 +128,19 @@ def intrinsic_distance(p, q):
     quaternions.
 
     The quaternion distance is determined as the length of the quaternion
-    joining the two quaternions (see :py:func:`riemann_log_map`).
+    joining the two quaternions (see :py:func:`riemann_log_map`). Rather
+    than computing this directly, however, as shown in [Huynh09]_ we can
+    compute this distance using the following equivalence:
+
+    ..math::
+        \begin{equation}
+            \lvert\lvert \log(p q^{-1}) \rvert\rvert =
+            2*np.cos(\lvert\langle p, q \rangle\rvert)
+        \end{equation}
+
+
+    .. [Huynh09] Huynh DQ (2009) Metrics for 3D rotations: comparison and
+        analysis. J Math Imaging Vis 35(2):155–164
 
     Args:
         p ((...,4) np.array): First set of quaternions.
@@ -137,7 +149,11 @@ def intrinsic_distance(p, q):
     Returns:
         The element-wise intrinsic distance between p and q.
     """
-    return norm(riemann_log_map(p, q))
+    #return norm(riemann_log_map(p, q))
+    if not np.allclose(2*np.arccos(np.linalg.norm(np.inner(p, q))),
+            norm(riemann_log_map(p, q))):
+        raise ValueError("Huh?")
+    return 2*np.arccos(np.linalg.norm(np.inner(p, q))),
 
 
 def sym_intrinsic_distance(p, q):

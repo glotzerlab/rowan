@@ -45,9 +45,9 @@ def random_sample(size=None):
     uniform rotations. What we want is a distribution that accounts for the
     density of rotations, *i.e.*, a distribution that is uniform with respect
     to the appropriate measure. The algorithm used here is detailed in
-    [Shoe79]_.
+    [Shoe92]_.
 
-    .. [Shoe79] Shoemake, K.: Uniform random rotations. In: D. Kirk, editor,
+    .. [Shoe92] Shoemake, K.: Uniform random rotations. In: D. Kirk, editor,
         Graphics Gems III, pages 124-132. Academic, New York, 1992.
 
     Args:
