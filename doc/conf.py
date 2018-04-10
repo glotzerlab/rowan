@@ -19,7 +19,6 @@
 #
 import os
 import sys
-import pkg_resources  # part of setuptools
 sys.path.insert(0, os.path.abspath('..'))
 
 
@@ -64,7 +63,11 @@ author = 'Vyas Ramasubramani'
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-release = pkg_resources.require("hamilton")[0].version
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                       '../hamilton/_version.py')) as f:
+    exec(f.read())
+
+release = __version__ # noqa F821
 
 # The short X.Y version.
 version = release[:3]

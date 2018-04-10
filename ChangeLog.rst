@@ -1,12 +1,20 @@
-The format is based on `Keep a Changelog <http://keepachangelog.com/en/1.0.0/>`_
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on `Keep a Changelog <http://keepachangelog.com/en/1.0.0/>`_.
+This project adheres to `Semantic Versioning` <http://semver.org/spec/v2.0.0.html>`_.
 
 
 Unreleased
 ----------
 
+v0.4.3 - 2018-04-10
+-------------------
+
+Fixed
++++++
+
+* Typos in documentation.
+
 v0.4.2 - 2018-04-09
------------------
+-------------------
 
 Added
 +++++
@@ -17,7 +25,7 @@ Added
 * Properly update this document.
 
 v0.4.1 - 2018-04-08
------------------
+-------------------
 
 Fixed
 +++++
@@ -25,7 +33,7 @@ Fixed
 * Exponential for bases other than e are calculated correctly.
 
 v0.4.0 - 2018-04-08
------------------
+-------------------
 
 Added
 +++++
@@ -34,7 +42,7 @@ Added
 * Add core comparison functions for equality, closeness, finiteness.
 
 v0.3.0 - 2018-03-31
------------------
+-------------------
 
 Added
 +++++
@@ -50,7 +58,7 @@ Changed
 * Ensure more complete coverage.
 
 v0.2.0 - 2018-03-08
------------------
+-------------------
 
 Added
 +++++
@@ -67,7 +75,7 @@ Changed
 * Ensure pep8 compliance.
 
 v0.1.0 - 2018-02-26
------------------
+-------------------
 
 Added
 +++++
