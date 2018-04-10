@@ -94,11 +94,7 @@ def expb(q, b):
 def exp10(q):
     R"""Computes the exponential function :math:`10^q`.
 
-    We define the exponential of a quaternion to an arbitrary base relative
-    to the exponential function :math:`e^q` using the change of base
-    formula as follows:
-
-    Wrapper around:py:func:`expb`
+    Wrapper around :py:func:`expb`.
 
     Args:
         q ((...,4) np.array): Quaternions
@@ -217,7 +213,7 @@ def logb(q, b):
 def log10(q):
     R"""Computes the quaternion logarithm base 10.
 
-    Wrapper around:py:func:`logb`
+    Wrapper around :py:func:`logb`.
 
     Args:
         q ((...,4) np.array): Quaternions
@@ -238,7 +234,9 @@ def power(q, n):
     R"""Computes the power of a quaternion :math:`q^n`.
 
     Quaternions raised to a scalar power are defined according to the polar
-    decomposition :math:`q^n = \lvert\lvert q \rvert\rvert^n \left
+    decomposition :math:`q^n = \lvert\lvert q \rvert\rvert`
+    
+    :math:`q^n = \lvert\lvert q \rvert\rvert^n \left
     \cos(n*\theta) + \hat{u} \sin(n\theta)`. However, this can be computed
     more efficiently by noting that :math:`q^n = \exp(n \ln(q))`.
 
