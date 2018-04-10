@@ -64,7 +64,11 @@ author = 'Vyas Ramasubramani'
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-release = pkg_resources.require("hamilton")[0].version
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                       '../hamilton/_version.py')) as f:
+    exec(f.read())
+
+release = __version__
 
 # The short X.Y version.
 version = release[:3]
