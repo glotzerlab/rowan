@@ -21,16 +21,16 @@ setup(name='hamilton',
       version=__version__, # noqa F821
       description=desc,
       long_description=readme,
+      long_description_content_type='text/markdown',
       url='http://github.com/vramasub/quaternion',
       author='Vyas Ramasubramani',
-      author_email='vramasub@umich.com',
+      author_email='vramasub@umich.edu',
       packages=find_packages(exclude=["tests"]),
       zip_safe=True,
-
       install_requires=[
           'numpy>=1.10'
       ],
-
+      python_requires='=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
       classifiers=[
           'Development Status :: 3 - Alpha',
           'License :: OSI Approved :: BSD License',
