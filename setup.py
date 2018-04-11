@@ -11,7 +11,7 @@ with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 desc = 'Perform quaternion operations using numpy arrays'
 try:
     readme_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-            'README.md')
+                               'README.md')
     with open(readme_file) as f:
         readme = f.read()
 except ImportError:
