@@ -17,10 +17,11 @@ Quaternions are encoded as arrays of shape `(...,4)`, with the convention that t
 ### Installation from source
 
 To install from source, execute:
-
-	git clone https://bitbucket.org/vramasub/hamilton.git
-	cd hamilton
-	python setup.py install --user
+```bash
+git clone https://bitbucket.org/vramasub/hamilton.git
+cd hamilton
+python setup.py install --user
+```
 
 ### Requirements
 
@@ -34,46 +35,58 @@ Continuous integrated testing is performed using CircleCI on these python versio
 
 To run the packaged unit tests, execute:
 
-    python -m unittest discover tests
+```bash
+python -m unittest discover tests
+```
 
 To check test coverage, make sure the coverage module is installed:
 
-    pip install coverage
+```bash
+pip install coverage
+```
     
 and then run the packaged unit tests:
 
-    coverage run -m unittest discover tests
+```bash
+coverage run -m unittest discover tests
+```
 
 ## Quickstart
 This library can be used to work with quaternions by simply instantiating the appropriate numpy arrays and passing them to the required functions.
 For example:
 
-    >>> import hamilton
-    >>> one = np.array([10, 0, 0, 0])
-    >>> one_unit = hamilton.normalize(one)
-    >>> assert(one_unit == np.array([1, 0, 0, 0]))
-    >>> if not one_unit == hamilton.quat_multiply(one_unit, one_unit):
-    >>>     raise RuntimeError("Multiplication failed!")
-    >>>
-    >>> one_vec = np.array([1, 0, 0])
-    >>> rotated_vector = hamilton.rotate(one_unit, one_vec)
-    >>>
-    >>> import numpy as np
-    >>> mat = np.eye(3)
-    >>> quat_rotate = hamilton.from_matrix(mat)
-    >>> alpha, beta, gamma = hamilton.to_euler(quat_rotate)
-    >>> quat_rotate_returned = hamilton.from_euler(alpha, beta, gamma)
-    >>> identity = hamilton.to_matrix(quat_rotate_returned)
+```python
+>>> import hamilton
+>>> one = np.array([10, 0, 0, 0])
+>>> one_unit = hamilton.normalize(one)
+>>> assert(one_unit == np.array([1, 0, 0, 0]))
+>>> if not one_unit == hamilton.quat_multiply(one_unit, one_unit):
+>>>     raise RuntimeError("Multiplication failed!")
+>>>
+>>> one_vec = np.array([1, 0, 0])
+>>> rotated_vector = hamilton.rotate(one_unit, one_vec)
+>>>
+>>> import numpy as np
+>>> mat = np.eye(3)
+>>> quat_rotate = hamilton.from_matrix(mat)
+>>> alpha, beta, gamma = hamilton.to_euler(quat_rotate)
+>>> quat_rotate_returned = hamilton.from_euler(alpha, beta, gamma)
+>>> identity = hamilton.to_matrix(quat_rotate_returned)
+```
 
 ## Documentation
 Documentation for hamilton is written in [reStructuredText](http://docutils.sourceforge.net/rst.html) and compiled using [Sphinx](http://www.sphinx-doc.org/en/master/).
 To build the documentation, first install Sphinx:
 
-    pip install sphinx
+```bash
+pip install sphinx
+```
 
 You can then use sphinx to create the actual documentation in either pdf or HTML form by running the following commands in the hamilton root directory:
 
-    cd doc
-    make html # For html output
-    make latexpdf # For a LaTeX compiled PDF file
-    open build/html/index.html
+```bash
+cd doc
+make html # For html output
+make latexpdf # For a LaTeX compiled PDF file
+open build/html/index.html
+```
