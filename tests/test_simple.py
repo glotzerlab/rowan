@@ -4,7 +4,7 @@ from __future__ import division, print_function, absolute_import
 import unittest
 import numpy as np
 
-import hamilton as quaternion
+import rowan as quaternion
 
 zero = np.array([0, 0, 0, 0])
 

@@ -4,7 +4,7 @@ import os
 
 # Gets the version version
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                       'hamilton', '_version.py')) as f:
+                       'rowan', '_version.py')) as f:
     exec(f.read())
 
 # Read README for PyPI, fallback if it fails.
@@ -17,7 +17,7 @@ try:
 except ImportError:
     readme = desc
 
-setup(name='hamilton',
+setup(name='rowan',
       version=__version__, # noqa F821
       description=desc,
       long_description=readme,
