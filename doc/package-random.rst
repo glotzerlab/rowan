@@ -6,11 +6,11 @@ random
 .. autosummary::
     :nosignatures:
 
-    hamilton.random.rand
-    hamilton.random.random_sample
+    rowan.random.rand
+    rowan.random.random_sample
  
 .. rubric:: Details
 
-.. automodule:: hamilton.random
+.. automodule:: rowan.random
     :synopsis: Generate random quaternions
     :members:

@@ -1,13 +1,13 @@
 # .coveragerc to control coverage.py
 [run]
 branch = True
-source = hamilton
+source = rowan
 omit =
     # The quaternion object isn't ready
-    hamilton/quaternion.py
-    hamilton/map.py
-    hamilton/geometry.py
-    hamilton/_version.py
+    rowan/quaternion.py
+    rowan/map.py
+    rowan/geometry.py
+    rowan/_version.py
 
 [report]
 ignore_errors = True
