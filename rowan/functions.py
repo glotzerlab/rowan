@@ -234,10 +234,9 @@ def power(q, n):
     R"""Computes the power of a quaternion :math:`q^n`.
 
     Quaternions raised to a scalar power are defined according to the polar
-    decomposition :math:`q^n = \lvert\lvert q \rvert\rvert`
-
-    :math:`q^n = \lvert\lvert q \rvert\rvert^n \left
-    \cos(n*\theta) + \hat{u} \sin(n\theta)`. However, this can be computed
+    decomposition angle :math:`\theta` and vector :math:`\hat{u}`:
+    :math:`q^n = \lvert\lvert q \rvert\rvert^n \left( \cos(n\theta) + \hat{u}
+    \sin(n\theta)\right)`. However, this can be computed
     more efficiently by noting that :math:`q^n = \exp(n \ln(q))`.
 
     Args:
@@ -810,12 +809,16 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
 def from_matrix(mat, require_orthogonal=True):
     R"""Convert the rotation matrices mat to quaternions
 
-    Uses the algorithm described Bar-Itzhack described in this `paper
-    <https://doi.org/10.2514/2.4654>`_. The idea is to construct a
-    matrix K whose largest eigenvalue corresponds to the desired
-    quaternion. One of the strengths of the algorithm is that for
-    nonorthogonal matrices it gives the closest quaternion
-    representation rather than failing outright.
+    Thhis method uses the algorithm described by Bar-Itzhack in [Itzhack00]_.
+    The idea is to construct a matrix K whose largest eigenvalue corresponds
+    to the desired quaternion. One of the strengths of the algorithm is that
+    for nonorthogonal matrices it gives the closest quaternion representation
+    rather than failing outright.
+
+    .. [Itzhack00] Itzhack Y. Bar-Itzhack.  "New Method for Extracting the
+        Quaternion from a Rotation Matrix", Journal of Guidance, Control, and
+        Dynamics, Vol. 23, No. 6 (2000), pp. 1085-1087
+        https://doi.org/10.2514/2.4654
 
     Args:
         mat ((...,3,3) np.array): An array of rotation matrices
@@ -1017,7 +1020,7 @@ def isinf(q):
 
 
 def isfinite(q):
-    R"""Test element-wise for NaN quaternions.
+    R"""Test element-wise for finite quaternions.
 
     A quaternion is defined as finite if all elements are finite.
 
@@ -1056,7 +1059,7 @@ def isclose(p, q, **kwargs):
     Args:
         p ((...,4) np.array): First set of quaternions
         q ((...,4) np.array): First set of quaternions
-        **kwargs: Keyword arguments to pass to np.allclose
+        **kwargs: Keyword arguments to pass to np.isclose
 
     Returns:
         A boolean array of shape (...)
