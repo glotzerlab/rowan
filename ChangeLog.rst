@@ -5,6 +5,14 @@ This project adheres to `Semantic Versioning` <http://semver.org/spec/v2.0.0.htm
 Unreleased
 ----------
 
+v0.4.4 - 2018-04-10
+-------------------
+
+Added
++++++
+
+* Rewrote internals for upload to PyPI.
+
 v0.4.3 - 2018-04-10
 -------------------
 
