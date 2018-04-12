@@ -4,8 +4,8 @@ from __future__ import division, print_function, absolute_import
 import unittest
 import numpy as np
 
-from hamilton import random as random
-from hamilton import norm
+from rowan import random as random
+from rowan import norm
 
 
 class TestRandom(unittest.TestCase):

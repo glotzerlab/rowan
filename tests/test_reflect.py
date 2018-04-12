@@ -4,7 +4,7 @@ from __future__ import division, print_function, absolute_import
 import unittest
 import numpy as np
 
-import hamilton as quaternion
+import rowan
 
 x = np.array([1, 0, 0])
 y = np.array([0, 1, 0])
@@ -20,31 +20,31 @@ class TestReflect(unittest.TestCase):
 
     def from_mirror_plane_single(self):
         """Simple test of reflect about axes"""
-        x_plane = quaternion.from_mirror_plane(x[0], x[1], x[2])
-        y_plane = quaternion.from_mirror_plane(y[0], y[1], y[2])
-        z_plane = quaternion.from_mirror_plane(z[0], z[1], z[2])
+        x_plane = rowan.from_mirror_plane(x[0], x[1], x[2])
+        y_plane = rowan.from_mirror_plane(y[0], y[1], y[2])
+        z_plane = rowan.from_mirror_plane(z[0], z[1], z[2])
         self.assertTrue(np.all(x_plane == x_quat))
         self.assertTrue(np.all(y_plane == y_quat))
         self.assertTrue(np.all(z_plane == z_quat))
 
     def test_single_quaternion(self):
         """Testing trivial reflections about planes"""
-        x_reflect = quaternion.reflect(x_quat, x)
-        y_reflect = quaternion.reflect(y_quat, y)
-        z_reflect = quaternion.reflect(z_quat, z)
+        x_reflect = rowan.reflect(x_quat, x)
+        y_reflect = rowan.reflect(y_quat, y)
+        z_reflect = rowan.reflect(z_quat, z)
 
         self.assertTrue(np.all(x_reflect == -x))
         self.assertTrue(np.all(y_reflect == -y))
         self.assertTrue(np.all(z_reflect == -z))
 
         with self.assertRaises(ValueError):
-            quaternion.reflect(2*x_quat, x)
+            rowan.reflect(2*x_quat, x)
 
     def test_broadcast(self):
         """Ensure broadcasting works"""
-        x_plane = quaternion.from_mirror_plane([x[0], x[0]], x[1], x[2])
+        x_plane = rowan.from_mirror_plane([x[0], x[0]], x[1], x[2])
         self.assertTrue(np.all(x_plane == x_quat[np.newaxis, :].repeat(
             2, axis=0)))
-        x_reflect = quaternion.reflect(x_plane, x)
+        x_reflect = rowan.reflect(x_plane, x)
         self.assertTrue(np.all(x_reflect == -x[np.newaxis, :].repeat(
             2, axis=0)))

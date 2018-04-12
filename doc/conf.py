@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# hamilton documentation build configuration file, created by
+# rowan documentation build configuration file, created by
 # sphinx-quickstart on Mon Feb 26 21:45:57 2018.
 #
 # This file is execfile()d with the current directory set to its
@@ -19,7 +19,6 @@
 #
 import os
 import sys
-import pkg_resources  # part of setuptools
 sys.path.insert(0, os.path.abspath('..'))
 
 
@@ -55,7 +54,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'hamilton'
+project = 'rowan'
 copyright = '2018, Vyas Ramasubramani'
 author = 'Vyas Ramasubramani'
 
@@ -64,7 +63,11 @@ author = 'Vyas Ramasubramani'
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-release = pkg_resources.require("hamilton")[0].version
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                       '../rowan/_version.py')) as f:
+    exec(f.read())
+
+release = __version__ # noqa F821
 
 # The short X.Y version.
 version = release[:3]
@@ -122,7 +125,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'hamiltondoc'
+htmlhelp_basename = 'rowandoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -149,7 +152,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'hamilton.tex', 'hamilton Documentation',
+    (master_doc, 'rowan.tex', 'rowan Documentation',
      'Vyas Ramasubramani', 'manual'),
 ]
 
@@ -159,7 +162,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'hamilton', 'hamilton Documentation',
+    (master_doc, 'rowan', 'rowan Documentation',
      [author], 1)
 ]
 
@@ -170,7 +173,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'hamilton', 'hamilton Documentation',
-     author, 'hamilton', 'One line description of project.',
+    (master_doc, 'rowan', 'rowan Documentation',
+     author, 'rowan', 'One line description of project.',
      'Miscellaneous'),
 ]

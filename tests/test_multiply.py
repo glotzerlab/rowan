@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 import os
 
-import hamilton as quaternion
+import rowan
 
 zero = np.array([0, 0, 0, 0])
 one = np.array([1, 0, 0, 0])
@@ -26,11 +26,11 @@ class TestMultiply(unittest.TestCase):
     def test_single_quaternion(self):
         """Simplest case of quaternion multiplication"""
         # Multiply zeros
-        product = quaternion.multiply(zero, zero)
+        product = rowan.multiply(zero, zero)
         self.assertTrue(np.all(product == np.array([0, 0, 0, 0])))
 
         # Multiply ones
-        product = quaternion.multiply(one, one)
+        product = rowan.multiply(one, one)
         self.assertTrue(np.all(product == np.array([1, 0, 0, 0])))
 
     def test_2d_array(self):
@@ -39,17 +39,17 @@ class TestMultiply(unittest.TestCase):
         ones = np.repeat(one[np.newaxis, :], 10, axis=0)
 
         # Multiply zeros
-        product = quaternion.multiply(zeros, zeros)
+        product = rowan.multiply(zeros, zeros)
         self.assertTrue(np.all(product == np.repeat(
             np.array([0, 0, 0, 0])[np.newaxis, :], 10, axis=0)))
 
         # Multiply ones
-        product = quaternion.multiply(ones, ones)
+        product = rowan.multiply(ones, ones)
         self.assertTrue(np.all(product == np.repeat(
             np.array([1, 0, 0, 0])[np.newaxis, :], 10, axis=0)))
 
         # Complex random array
-        product = quaternion.multiply(input1, input2)
+        product = rowan.multiply(input1, input2)
         self.assertTrue(np.allclose(product, stored_product))
 
     def test_3d_array(self):
@@ -74,17 +74,17 @@ class TestMultiply(unittest.TestCase):
             expanded_shape)
 
         # Zeros
-        product = quaternion.multiply(zeros, zeros)
+        product = rowan.multiply(zeros, zeros)
         self.assertTrue(np.all(product == expected_product_zeros))
 
         # Ones
-        product = quaternion.multiply(ones, ones)
+        product = rowan.multiply(ones, ones)
         self.assertTrue(np.all(product == expected_product_ones))
 
         # Complex random array
         num_reps = input1.shape[0]
         expanded_shape = (int(num_reps / 5), 5, 4)
-        product = quaternion.multiply(
+        product = rowan.multiply(
             np.reshape(
                 input1, expanded_shape), np.reshape(
                 input2, expanded_shape))
@@ -100,12 +100,12 @@ class TestMultiply(unittest.TestCase):
         # Multiply zeros, simple shape check
         shape = (45, 3, 13, 4)
         many_zeros = np.zeros(shape)
-        product = quaternion.multiply(many_zeros, zero)
+        product = rowan.multiply(many_zeros, zero)
         self.assertTrue(product.shape == shape)
 
         # Two nonconforming array sizes
         with self.assertRaises(ValueError):
-            quaternion.multiply(
+            rowan.multiply(
                     many_zeros,
                     np.repeat(zero[np.newaxis, :], 2, axis=0)
                     )
@@ -114,7 +114,7 @@ class TestMultiply(unittest.TestCase):
         zeros_A = np.zeros((1, 1, 3, 8, 1, 4))
         zeros_B = np.zeros((3, 5, 1, 1, 9, 4))
         shape = (3, 5, 3, 8, 9, 4)
-        product = quaternion.multiply(zeros_A, zeros_B)
+        product = rowan.multiply(zeros_A, zeros_B)
         self.assertTrue(product.shape == shape)
 
         # Test some actual products
@@ -122,10 +122,10 @@ class TestMultiply(unittest.TestCase):
         num_second = 5
         i1 = input1[:num_first, np.newaxis, :]
         i2 = input1[np.newaxis, :num_second, :]
-        product = quaternion.multiply(i1, i2)
+        product = rowan.multiply(i1, i2)
         for i in range(num_first):
             for j in range(num_second):
-                single_prod = quaternion.multiply(i1[i, 0, :], i2[0, j, :])
+                single_prod = rowan.multiply(i1[i, 0, :], i2[0, j, :])
                 self.assertTrue(np.all(product[i, j, :] == single_prod))
 
     def test_divide(self):
@@ -138,7 +138,7 @@ class TestMultiply(unittest.TestCase):
                 y = np.random.random_sample(shape_j)
                 self.assertTrue(
                         np.allclose(
-                            quaternion.divide(x, y),
-                            quaternion.multiply(x, quaternion.inverse(y))
+                            rowan.divide(x, y),
+                            rowan.multiply(x, rowan.inverse(y))
                             )
                         )

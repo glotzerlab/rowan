@@ -1,4 +1,4 @@
-The following people contributed to the :py:mod:`hamilton` package.
+The following people contributed to the :py:mod:`rowan` package.
 
 Vyas Ramasubramani, University of Michigan - **Lead developer**.
 

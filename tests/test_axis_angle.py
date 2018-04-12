@@ -4,7 +4,7 @@ from __future__ import division, print_function, absolute_import
 import unittest
 import numpy as np
 
-import hamilton as quaternion
+import rowan
 
 
 class TestFromAxisAngle(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestFromAxisAngle(unittest.TestCase):
         """Test rotation about an axis"""
         v = np.array([1, 0, 0])
         theta = np.pi
-        quats = quaternion.from_axis_angle(v, theta)
+        quats = rowan.from_axis_angle(v, theta)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, np.array([0, 1, 0, 0])))
 
@@ -22,7 +22,7 @@ class TestFromAxisAngle(unittest.TestCase):
         """Test multiple vectors against an angle"""
         v = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
         theta = np.pi
-        quats = quaternion.from_axis_angle(v, theta)
+        quats = rowan.from_axis_angle(v, theta)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats,
                                     np.array([[0, 1, 0, 0],
@@ -34,7 +34,7 @@ class TestFromAxisAngle(unittest.TestCase):
         """Test multiple vectors against multiple angles"""
         v = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
         theta = np.array([np.pi, np.pi / 2, np.pi / 3])
-        quats = quaternion.from_axis_angle(v, theta)
+        quats = rowan.from_axis_angle(v, theta)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, np.array([[0, 1, 0, 0], [np.sqrt(
             2) / 2, 0, np.sqrt(2) / 2, 0], [np.sqrt(3) / 2, 0, 0, 1 / 2]])))
@@ -58,24 +58,24 @@ class TestFromAxisAngle(unittest.TestCase):
             2, axis=0).repeat(
             2, axis=1)
 
-        quats = quaternion.from_axis_angle(v, theta)
+        quats = rowan.from_axis_angle(v, theta)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, expected_output))
 
         # Broadcasting in theta
         theta_reduced = theta[0, :, ...]
-        quats = quaternion.from_axis_angle(v, theta_reduced)
+        quats = rowan.from_axis_angle(v, theta_reduced)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, expected_output))
 
         # Broadcasting in v
         v_reduced = v[:, 0, ...]
-        quats = quaternion.from_axis_angle(v_reduced, theta)
+        quats = rowan.from_axis_angle(v_reduced, theta)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, expected_output))
 
         # Broadcasting in both
-        quats = quaternion.from_axis_angle(
+        quats = rowan.from_axis_angle(
                 v_reduced[:, np.newaxis, ...],
                 theta_reduced[np.newaxis, :, ...])
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
@@ -86,7 +86,7 @@ class TestToAxisAngle(unittest.TestCase):
     """Test converting to axis angle representation"""
 
     def test_to_axis_angle(self):
-        axes, angles = quaternion.to_axis_angle(
+        axes, angles = rowan.to_axis_angle(
             np.array((np.sqrt(2)/2, np.sqrt(2)/2, 0, 0)))
         self.assertTrue(np.allclose(axes, np.array([1, 0, 0])))
         self.assertTrue(np.allclose(angles, np.pi/2))
