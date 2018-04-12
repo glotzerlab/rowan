@@ -5,6 +5,18 @@ This project adheres to `Semantic Versioning` <http://semver.org/spec/v2.0.0.htm
 Unreleased
 ----------
 
+Added
++++++
+
+* Various distance metrics on quaternion space.
+* Quaternion interpolation.
+
+Fixed
++++++
+
+* Update empty __all__ variable in geometry to export functions.
+
+
 v0.4.4 - 2018-04-10
 -------------------
 
