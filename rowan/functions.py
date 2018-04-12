@@ -251,7 +251,6 @@ def power(q, n):
         q_n = pow(q^n)
     """
     # Need matching shapes
-    n = np.asarray(n)[..., np.newaxis]
     newshape = np.broadcast(q[..., 0], n).shape
     q = np.broadcast_to(q, newshape + (4,))
     n = np.broadcast_to(n, newshape)
