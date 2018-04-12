@@ -6,9 +6,7 @@ The rowan package provides a simple interface to slerp, the standard method
 of quaternion interpolation for two quaternions.
 """
 
-import numpy as np
-
-from ..functions import power, multiply, conjugate, _validate_unit
+from ..functions import power, multiply, conjugate, _validate_unit, log
 
 __all__ = []
 
@@ -37,6 +35,7 @@ def slerp(q0, q1, t):
     _validate_unit(q0)
     _validate_unit(q1)
     return multiply(q0, power(multiply(conjugate(q0), q1), t))
+
 
 def slerp_prime(q0, q1, t):
     R"""Compute the derivative of slerp.

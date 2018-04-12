@@ -6,6 +6,7 @@ from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
+
 def exp(q):
     R"""Computes the natural exponential function :math:`e^q`.
 
@@ -407,10 +408,12 @@ def is_unit(q):
     """Check if all input quaternions have unit norm"""
     return np.allclose(norm(q), 1)
 
-def _validate_unit(q, msg="Arguments to this function must be unit quaternions"):
+
+def _validate_unit(q, msg="Arguments must be unit quaternions"):
     """Simple helper function to ensure that all quaternions in q are unit"""
     if not is_unit(q):
         raise ValueError(msg)
+
 
 def from_mirror_plane(x, y, z):
     R"""Generate quaternions from mirror plane equations.

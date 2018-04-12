@@ -12,7 +12,7 @@ between rotations. An overview of distance measurements can be found in
 
 import numpy as np
 
-from ..functions import norm, exp, multiply, inverse, log, _validate_unit 
+from ..functions import norm, exp, multiply, inverse, log, _validate_unit
 
 __all__ = []
 
