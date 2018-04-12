@@ -5,6 +5,7 @@ R"""
 The rowan package provides a simple interface to slerp, the standard method
 of quaternion interpolation for two quaternions.
 """
+import numpy as np
 
 from ..functions import power, multiply, conjugate, _validate_unit, log, norm
 
@@ -25,6 +26,12 @@ def slerp(q0, q1, t, ensure_shortest=True):
         ensure_shortest (bool): Flip quaternions to ensure we traverse the
             geodesic in the shorter (:math:`<180\degree`) direction
 
+    .. note::
+
+        Given inputs such that :math:`t\notin [0, 1]`, the values outside the
+        range are simply assumed to be 0 or 1 (depending on which side of the
+        interval they fall on).
+
     Returns:
         An array containing the element-wise interpolations between p and q.
 
@@ -36,21 +43,22 @@ def slerp(q0, q1, t, ensure_shortest=True):
     """
     _validate_unit(q0)
     _validate_unit(q1)
-    t = np.clip(t)
+    t = np.clip(t, 0, 1)
 
     q0 = np.asarray(q0)
     q1 = np.array(q1)
 
     # Ensure that we turn the short way around
     if ensure_shortest:
-        cos_theta = np.dot(q0, q1)
+        cos_theta = np.inner(q0, q1)
+        cos_theta = np.sum(q0*q1, axis=-1)
         flip = cos_theta < 0
         q1[flip] *= -1
 
     return multiply(q0, power(multiply(conjugate(q0), q1), t))
 
 
-def slerp_prime(q0, q1, t, ensure_shortest):
+def slerp_prime(q0, q1, t, ensure_shortest=True):
     R"""Compute the derivative of slerp.
 
     Args:
@@ -72,7 +80,7 @@ def slerp_prime(q0, q1, t, ensure_shortest):
     """
     _validate_unit(q0)
     _validate_unit(q1)
-    t = np.clip(t)
+    t = np.clip(t, 0, 1)
 
     q0 = np.asarray(q0)
     q1 = np.array(q1)
@@ -85,11 +93,11 @@ def slerp_prime(q0, q1, t, ensure_shortest):
 
     return multiply(
             multiply(q0, power(multiply(conjugate(q0), q1), t)),
-            log(conjugate(q0), q1)
+            log(multiply(conjugate(q0), q1))
             )
 
 
-def squad(p, a, b, q, t)
+def squad(p, a, b, q, t):
     R"""Cubically interpolate between p and q.
 
     The SQUAD formula is just a repeated application of Slerp between multiple
@@ -120,7 +128,7 @@ def squad(p, a, b, q, t)
     _validate_unit(a)
     _validate_unit(b)
     _validate_unit(q)
-    t = np.clip(t)
+    t = np.clip(t, 0, 1)
 
     return slerp(slerp(p, q, t, ensure_shortest=False),
                  slerp(a, b, t, ensure_shortest=False),
