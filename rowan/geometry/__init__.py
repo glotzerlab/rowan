@@ -12,7 +12,7 @@ between rotations. An overview of distance measurements can be found in
 
 import numpy as np
 
-from ..functions import norm, exp, multiply, inverse, log
+from ..functions import norm, exp, multiply, inverse, log, _validate_unit 
 
 __all__ = []
 
@@ -200,7 +200,5 @@ def angle(p):
     # TODO: Make sure all the quaternions are rotations
     # where they need to be.
 
-    if np.any(np.logical_not(np.isclose(norm(p), 1))):
-        raise ValueError("Cannot call the angle function for non-unit "
-                         "quaternions")
+    _validate_unit(p)
     return norm(log(p))

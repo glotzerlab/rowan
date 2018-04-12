@@ -6,7 +6,6 @@ from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
-
 def exp(q):
     R"""Computes the natural exponential function :math:`e^q`.
 
@@ -404,6 +403,15 @@ def normalize(q):
     return q / norms[..., np.newaxis]
 
 
+def is_unit(q):
+    """Check if all input quaternions have unit norm"""
+    return np.allclose(norm(q), 1)
+
+def _validate_unit(q, msg="Arguments to this function must be unit quaternions"):
+    """Simple helper function to ensure that all quaternions in q are unit"""
+    if not is_unit(q):
+        raise ValueError(msg)
+
 def from_mirror_plane(x, y, z):
     R"""Generate quaternions from mirror plane equations.
 
@@ -458,6 +466,7 @@ def reflect(q, v):
         v_rot = rotate(q, v)
     """
     q = np.asarray(q)
+    _validate_unit(q)
     v = np.asarray(v)
 
     if not np.allclose(norm(q), 1):
@@ -485,6 +494,7 @@ def rotate(q, v):
         v_rot = rotate(q, v)
     """
     q = np.asarray(q)
+    _validate_unit(q)
     v = np.asarray(v)
 
     if not np.allclose(norm(q), 1):
@@ -542,9 +552,9 @@ def from_euler(alpha, beta, gamma, convention='zyx',
     long as intrinsic and extrinsic rotations are not intermixed.
 
     Args:
-        alpha ((...) np.array): Array of :math:`\alpha` values
-        beta ((...) np.array): Array of :math:`\beta` values
-        gamma ((...) np.array): Array of :math:`\gamma` values
+        alpha ((...) np.array): Array of :math:`\alpha` values in radians.
+        beta ((...) np.array): Array of :math:`\beta` values in radians.
+        gamma ((...) np.array): Array of :math:`\gamma` values in radians.
         convention (str): One of the 12 valid conventions xzx, xyx,
             yxy, yzy, zyz, zxz, xzy, xyz, yxz, yzx, zyx, zxy
         axes (str): Whether to use extrinsic or intrinsic rotations
@@ -684,6 +694,7 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
 
     """
     q = np.asarray(q)
+    _validate_unit(q)
 
     try:
         mats = to_matrix(q)
@@ -952,6 +963,7 @@ def to_axis_angle(q):
         angles are in radians
     """
     q = np.asarray(q)
+    _validate_unit(q)
 
     angles = 2*np.atleast_1d(np.arccos(q[..., 0]))
     sines = np.sin(angles/2)

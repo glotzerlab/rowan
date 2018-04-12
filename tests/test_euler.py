@@ -105,7 +105,7 @@ class TestEuler(unittest.TestCase):
         with self.assertRaises(ValueError):
             rowan.to_euler(2*one)
 
-        with self.assertRaises(ZeroDivisionError):
+        with self.assertRaises(ValueError):
             rowan.to_euler(zero)
 
     def test_from_to_euler(self):
