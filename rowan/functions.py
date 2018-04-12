@@ -250,13 +250,24 @@ def power(q, n):
 
         q_n = pow(q^n)
     """
-    q = np.asarray(q)
-    # Note that we follow the convention that 0^0 = 1
-    if n == 0:
-        return np.broadcast_to(np.array([1, 0, 0, 0]), q.shape)
-    else:
-        return exp(n*log(q))
+    # Need matching shapes
+    n = np.asarray(n)[..., np.newaxis]
+    newshape = np.broadcast(q[..., 0], n).shape
+    q = np.broadcast_to(q, newshape + (4,))
+    n = np.broadcast_to(n, newshape)
 
+    # Note that we follow the convention that 0^0 = 1
+    check = (n == 0)
+    if np.any(check):
+        powers = np.empty(newshape + (4,))
+        powers[check] = np.array([1, 0, 0, 0])
+        not_check = np.logical_not(check)
+        if np.any(not_check):
+            powers[not_check] = exp(n[not_check, np.newaxis]*log(q[not_check, :]))
+    else:
+        powers = exp(n[..., np.newaxis]*log(q))
+
+    return powers
 
 def conjugate(q):
     R"""Conjugates an array of quaternions

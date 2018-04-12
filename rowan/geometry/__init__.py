@@ -14,7 +14,13 @@ import numpy as np
 
 from ..functions import norm, exp, multiply, inverse, log, _validate_unit
 
-__all__ = []
+__all__ = ['distance',
+           'sym_distance',
+           'riemann_exp_map',
+           'riemann_log_map'
+           'intrinsic_distance'
+           'sym_intrinsic_distance',
+           'angle']
 
 
 def distance(p, q):
@@ -144,6 +150,8 @@ def intrinsic_distance(p, q):
             2*np.cos(\lvert\langle p, q \rangle\rvert)
         \end{equation}
 
+    When applied to unit quaternions, this function produces
+    values in the range :math:`[0, \pi]`.
 
     .. [Huynh09] Huynh DQ (2009) Metrics for 3D rotations: comparison and
         analysis. J Math Imaging Vis 35(2):155-164
@@ -170,6 +178,9 @@ def sym_intrinsic_distance(p, q):
     This is a symmetrized version of :py:func:`intrinsic_distance` that
     accounts for the double cover SU(2)->SO(3), making it a more useful
     metric for rotation similarity.
+
+    When applied to unit quaternions, this function produces
+    values in the range :math:`[0, \frac{\pi}{2}]`.
 
     Args:
         p ((...,4) np.array): First set of quaternions.
