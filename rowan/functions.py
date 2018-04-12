@@ -303,7 +303,8 @@ def inverse(q):
     if np.any(normsq):
         inverses[..., 1:] *= -1
         # Would like to do this in place, but can't guarantee type safety
-        inverses[normsq > 0] = inverses[normsq > 0]/normsq[normsq > 0, np.newaxis]
+        inverses[normsq > 0] = inverses[normsq > 0]/normsq[
+                normsq > 0, np.newaxis]
 
     if flat:
         return inverses.squeeze()

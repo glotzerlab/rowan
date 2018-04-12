@@ -202,5 +202,5 @@ def angle(p):
 
     if np.any(np.logical_not(np.isclose(norm(p), 1))):
         raise ValueError("Cannot call the angle function for non-unit "
-                          "quaternions")
+                         "quaternions")
     return norm(log(p))

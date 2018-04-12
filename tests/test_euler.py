@@ -32,7 +32,7 @@ class TestEuler(unittest.TestCase):
         alpha, beta, gamma = [np.pi / 2, np.pi / 2, 0]
         self.assertTrue(np.allclose(
             rowan.from_euler(alpha, beta, gamma,
-                                  'zyx', 'intrinsic'),
+                             'zyx', 'intrinsic'),
             np.array([0.5, -0.5, 0.5, 0.5])
         ))
 
