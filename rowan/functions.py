@@ -1,7 +1,7 @@
 # Copyright (c) 2018 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-"""Submodule containing all standard functions"""
+R"""Submodule containing all standard functions"""
 from __future__ import division, print_function, absolute_import
 
 import numpy as np
@@ -290,6 +290,8 @@ def inverse(q):
 
         q_inv = inverse(q)
     """
+    q = np.asarray(q)
+
     if len(q.shape) == 1:
         flat = True
         inverses = np.array(np.atleast_2d(q))
@@ -298,8 +300,11 @@ def inverse(q):
         inverses = np.array(q)
 
     normsq = norm(inverses)**2
-    inverses[..., 1:] *= -1
-    inverses[normsq > 0] /= normsq[normsq > 0, np.newaxis]
+    if np.any(normsq):
+        inverses[..., 1:] *= -1
+        # Would like to do this in place, but can't guarantee type safety
+        inverses[normsq > 0] = inverses[normsq > 0]/normsq[
+                normsq > 0, np.newaxis]
 
     if flat:
         return inverses.squeeze()
@@ -430,7 +435,7 @@ def from_mirror_plane(x, y, z):
 
 
 def _promote_vec(v):
-    """Helper function to promote vectors to their quaternion representation"""
+    R"""Helper function to promote vectors to their quaternion representation"""
     return np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
 
 
@@ -491,7 +496,7 @@ def rotate(q, v):
 
 
 def _normalize_vec(v):
-    """Helper function to normalize vectors"""
+    R"""Helper function to normalize vectors"""
     v = np.asarray(v)
     norms = np.linalg.norm(v, axis=-1)
     return v / norms[..., np.newaxis]

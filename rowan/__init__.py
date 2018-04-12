@@ -1,7 +1,7 @@
 # Copyright (c) 2018 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-"""
+R"""
 The core :py:mod:`rowan` package contains functions for operating on
 quaternions. The core package is focused on robust implementations of key
 functions like multiplication, exponentiation, norms, and others. Simple

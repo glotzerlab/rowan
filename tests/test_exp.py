@@ -1,11 +1,12 @@
 """Test exponential, log, and powers of quaternions"""
 from __future__ import division, print_function, absolute_import
 
-import numpy as np
+import unittest
 import os
 
-import rowan as quaternion
-import unittest
+import numpy as np
+
+import rowan
 
 one = np.array([1, 0, 0, 0])
 zero = np.array([0, 0, 0, 0])
@@ -16,23 +17,23 @@ class TestExp(unittest.TestCase):
 
     def test_exp(self):
         """Ensure that quaternion exponential behaves correctly"""
-        self.assertTrue(np.all(quaternion.exp(zero) == one))
+        self.assertTrue(np.all(rowan.exp(zero) == one))
         self.assertTrue(
-                np.all(quaternion.exp(one) ==
+                np.all(rowan.exp(one) ==
                        np.array([np.exp(1), 0, 0, 0])
                        )
                 )
         x = np.array([0, 1, 1, 1])
         self.assertTrue(
                 np.allclose(
-                    quaternion.exp(x),
+                    rowan.exp(x),
                     np.array([-0.16055654, 0.5698601, 0.5698601, 0.5698601])
                     )
                 )
 
         self.assertTrue(
                 np.allclose(
-                    quaternion.exp(np.stack((x, one))),
+                    rowan.exp(np.stack((x, one))),
                     np.stack((
                         np.array(
                             [-0.16055654, 0.5698601, 0.5698601, 0.5698601]
@@ -44,16 +45,16 @@ class TestExp(unittest.TestCase):
 
         self.assertTrue(
                 np.allclose(
-                    quaternion.exp10(one),
-                    quaternion.exp(one*np.log(10))
+                    rowan.exp10(one),
+                    rowan.exp(one*np.log(10))
                     )
                 )
 
         base = 2
         self.assertTrue(
                 np.allclose(
-                    quaternion.expb(one, base),
-                    quaternion.exp(one*np.log(base))
+                    rowan.expb(one, base),
+                    rowan.exp(one*np.log(base))
                     )
                 )
 
@@ -66,29 +67,29 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             self.assertTrue(
                     np.allclose(
-                        quaternion.exp(x), answers[str(shape)]
+                        rowan.exp(x), answers[str(shape)]
                         ),
                     msg="Failed for shape {}".format(shape))
 
     def test_log(self):
         """Ensure that quaternion logarithm behaves correctly"""
-        self.assertTrue(np.all(quaternion.log(one) == zero))
+        self.assertTrue(np.all(rowan.log(one) == zero))
         self.assertTrue(
                 np.all(
-                    quaternion.log(zero) ==
+                    rowan.log(zero) ==
                     np.array([-np.inf, 0, 0, 0])
                     )
                 )
         self.assertTrue(
                 np.all(
-                    quaternion.log(np.stack((one, zero))) ==
+                    rowan.log(np.stack((one, zero))) ==
                     np.stack((zero, np.array([-np.inf, 0, 0, 0])))
                     )
                 )
         x = np.array([0, 1, 1, 1])
         self.assertTrue(
                 np.allclose(
-                    quaternion.log(np.stack((x, zero))),
+                    rowan.log(np.stack((x, zero))),
                     np.stack((
                         np.array(
                             [0.54930614, 0.90689968, 0.90689968, 0.90689968]
@@ -106,17 +107,17 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             self.assertTrue(
                     np.allclose(
-                        quaternion.log(x), answers[str(shape)]
+                        rowan.log(x), answers[str(shape)]
                         ),
                     msg="Failed for shape {}".format(shape))
 
     def test_logb(self):
         """Ensure that quaternion logarithm behaves correctly"""
         base_test = 3
-        self.assertTrue(np.all(quaternion.logb(one, base_test) == zero))
+        self.assertTrue(np.all(rowan.logb(one, base_test) == zero))
         self.assertTrue(
                 np.all(
-                    quaternion.logb(zero, base_test) ==
+                    rowan.logb(zero, base_test) ==
                     np.array([-np.inf, 0, 0, 0])
                     )
                 )
@@ -130,17 +131,17 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             self.assertTrue(
                     np.allclose(
-                        quaternion.logb(x, base_test),
+                        rowan.logb(x, base_test),
                         answers[str(shape)]/np.log(base_test)
                         ),
                     msg="Failed for shape {}".format(shape))
 
     def test_log10(self):
         """Ensure that quaternion logarithm behaves correctly"""
-        self.assertTrue(np.all(quaternion.log10(one) == zero))
+        self.assertTrue(np.all(rowan.log10(one) == zero))
         self.assertTrue(
                 np.all(
-                    quaternion.log10(zero) ==
+                    rowan.log10(zero) ==
                     np.array([-np.inf, 0, 0, 0])
                     )
                 )
@@ -154,19 +155,19 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             self.assertTrue(
                     np.allclose(
-                        quaternion.log10(x),
+                        rowan.log10(x),
                         answers[str(shape)]/np.log(10)
                         ),
                     msg="Failed for shape {}".format(shape))
 
     def test_power(self):
         """Ensure that quaternion power behaves correctly"""
-        self.assertTrue(np.all(quaternion.power(one, 0) == one))
-        self.assertTrue(np.all(quaternion.power(one, 1) == one))
-        self.assertTrue(np.all(quaternion.power(one, 10) == one))
-        self.assertTrue(np.all(quaternion.power(zero, 0) == one))
-        self.assertTrue(np.all(quaternion.power(zero, 1) == zero))
-        self.assertTrue(np.all(quaternion.power(zero, 10) == zero))
+        self.assertTrue(np.all(rowan.power(one, 0) == one))
+        self.assertTrue(np.all(rowan.power(one, 1) == one))
+        self.assertTrue(np.all(rowan.power(one, 10) == one))
+        self.assertTrue(np.all(rowan.power(zero, 0) == one))
+        self.assertTrue(np.all(rowan.power(zero, 1) == zero))
+        self.assertTrue(np.all(rowan.power(zero, 10) == zero))
 
         np.random.seed(0)
         shapes = [(4,), (1, 4), (3, 4, 4), (12, 7, 3, 4)]
@@ -177,8 +178,8 @@ class TestExp(unittest.TestCase):
             for i in range(1, max_power+1):
                 self.assertTrue(
                         np.allclose(
-                            quaternion.power(x, i),
+                            rowan.power(x, i),
                             cur_ans
                             ),
                         msg="Failed for shape {}".format(shape))
-                cur_ans = quaternion.multiply(cur_ans, x)
+                cur_ans = rowan.multiply(cur_ans, x)
