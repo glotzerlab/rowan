@@ -2,7 +2,10 @@
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 """
-Various functions for generating random sets of quaternions
+Various functions for generating random sets of rotation quaternions. Note
+that if you simply want random quaternions not restricted to :math:`SO(3)` you
+can just generate these directly using `numpy.random.rand(... 4)`. This
+subpackage is entirely focused on generating rotation quaternions.
 """
 
 # TODO: Try implementing randomness using this paper or one of the ones it
