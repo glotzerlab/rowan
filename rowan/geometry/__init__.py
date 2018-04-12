@@ -146,7 +146,7 @@ def intrinsic_distance(p, q):
 
 
     .. [Huynh09] Huynh DQ (2009) Metrics for 3D rotations: comparison and
-        analysis. J Math Imaging Vis 35(2):155–164
+        analysis. J Math Imaging Vis 35(2):155-164
 
     Args:
         p ((...,4) np.array): First set of quaternions.
