@@ -25,6 +25,9 @@ def distance(p, q):
     the norm on this vector space
     :math:`\rho(p, q) = \lvert\lvert p - q \rvert\rvert`.
 
+    When applied to unit quaternions, this function produces
+    values in the range :math:`[0, 2]`.
+
     Args:
         p ((...,4) np.array): First set of quaternions
         q ((...,4) np.array): Second set of quaternions
@@ -53,6 +56,9 @@ def sym_distance(p, q):
     Args:
         p ((...,4) np.array): First set of quaternions
         q ((...,4) np.array): Second set of quaternions
+
+    When applied to unit quaternions, this function produces
+    values in the range :math:`[0, \sqrt{2}]`.
 
     Returns:
         An array containing the element-wise distances between
@@ -149,11 +155,12 @@ def intrinsic_distance(p, q):
     Returns:
         The element-wise intrinsic distance between p and q.
     """
-    #return norm(riemann_log_map(p, q))
-    if not np.allclose(2*np.arccos(np.linalg.norm(np.inner(p, q))),
-            norm(riemann_log_map(p, q))):
-        raise ValueError("Huh?")
-    return 2*np.arccos(np.linalg.norm(np.inner(p, q))),
+    # TODO: Consider implementing the optimization
+#    if not np.allclose(2*np.arccos(np.linalg.norm(np.inner(p, q))),
+#            norm(riemann_log_map(p, q))):
+#        raise ValueError("Huh?")
+#    return 2*np.arccos(np.linalg.norm(np.inner(p, q))),
+    return norm(riemann_log_map(p, q))
 
 
 def sym_intrinsic_distance(p, q):
@@ -192,4 +199,8 @@ def angle(p):
 
     # TODO: Make sure all the quaternions are rotations
     # where they need to be.
-    norm(log(p))
+
+    if np.any(np.logical_not(np.isclose(norm(p), 1))):
+        raise ValueError("Cannot call the angle function for non-unit "
+                          "quaternions")
+    return norm(log(p))

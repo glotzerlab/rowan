@@ -290,6 +290,8 @@ def inverse(q):
 
         q_inv = inverse(q)
     """
+    q = np.asarray(q)
+
     if len(q.shape) == 1:
         flat = True
         inverses = np.array(np.atleast_2d(q))
@@ -298,8 +300,10 @@ def inverse(q):
         inverses = np.array(q)
 
     normsq = norm(inverses)**2
-    inverses[..., 1:] *= -1
-    inverses[normsq > 0] /= normsq[normsq > 0, np.newaxis]
+    if np.any(normsq):
+        inverses[..., 1:] *= -1
+        # Would like to do this in place, but can't guarantee type safety
+        inverses[normsq > 0] = inverses[normsq > 0]/normsq[normsq > 0, np.newaxis]
 
     if flat:
         return inverses.squeeze()
