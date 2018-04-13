@@ -251,6 +251,12 @@ def power(q, n):
         q_n = pow(q^n)
     """
     # Need matching shapes
+    if len(q.shape) == 1:
+        flat = True
+        q = np.atleast_2d(q)
+    else:
+        flat = False
+
     newshape = np.broadcast(q[..., 0], n).shape
     q = np.broadcast_to(q, newshape + (4,))
     n = np.broadcast_to(n, newshape)
@@ -267,7 +273,10 @@ def power(q, n):
     else:
         powers = exp(n[..., np.newaxis]*log(q))
 
-    return powers
+    if flat:
+        return powers.squeeze()
+    else:
+        return powers
 
 
 def conjugate(q):
