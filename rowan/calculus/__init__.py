@@ -7,7 +7,7 @@ integral of a quaternion.
 
 import numpy as np
 
-from ..functions import norm
+from ..functions import norm, _promote_vec, _validate_unit
 
 __all__ = ['derivative',
            'integrate']
@@ -23,7 +23,11 @@ def derivative(q, v):
     Returns:
         An array containing the element-wise derivatives.
     """
-    return norm(p - q)
+    q = np.asarray(q)
+    v = np.asarray(v)
+
+    _validate_unit(q)
+    return 0.5*multiply(q, _promote_vec(v))
 
 
 def integrate(q, v, dt):
@@ -38,4 +42,18 @@ def integrate(q, v, dt):
         An array containing the element-wise integral of the
         quaternions in q.
     """
-    return np.minimum(norm(p - q), norm(p + q))
+    q = np.asarray(q)
+    v = np.asarray(v)
+    dt = np.asarray(dt)
+
+    _validate_unit(q)
+    rotation_vector = v*dt
+    rotation_norm = np.linalg.norm(rotation_vector)
+    checks = rotation_norm > 0
+    if np.any(checks):
+        axes = rotation_vector[checks]/rotation_norm[checks, np.newaxis]
+        angles = rotation_norm[checks, np.newaxis]
+        q1 = from_axis_angle(axes, angles)
+        return normalize(multiply(q, q1)
+    else:
+        return q
