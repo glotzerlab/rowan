@@ -1,11 +1,11 @@
 """Test converting quaternions to and from Euler angles"""
 from __future__ import division, print_function, absolute_import
 
+import unittest
 import numpy as np
 import os
 
-import rowan as quaternion
-import unittest
+import rowan
 
 zero = np.array([0, 0, 0, 0])
 one = np.array([1, 0, 0, 0])
@@ -25,21 +25,21 @@ class TestEuler(unittest.TestCase):
         """Convert Euler angles to quaternions"""
         alpha, beta, gamma = [0, 0, 0]
         self.assertTrue(np.all(
-            quaternion.from_euler(alpha, beta, gamma) ==
+            rowan.from_euler(alpha, beta, gamma) ==
             np.array([1, 0, 0, 0])
         ))
 
         alpha, beta, gamma = [np.pi / 2, np.pi / 2, 0]
         self.assertTrue(np.allclose(
-            quaternion.from_euler(alpha, beta, gamma,
-                                  'zyx', 'intrinsic'),
+            rowan.from_euler(alpha, beta, gamma,
+                             'zyx', 'intrinsic'),
             np.array([0.5, -0.5, 0.5, 0.5])
         ))
 
         # Confirm broadcasting works from different Euler angles
         alpha, beta, gamma = [[0, np.pi / 2], [0, np.pi / 2], 0]
         self.assertTrue(np.allclose(
-            quaternion.from_euler(alpha, beta, gamma),
+            rowan.from_euler(alpha, beta, gamma),
             np.array([[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]])
         ))
 
@@ -47,7 +47,7 @@ class TestEuler(unittest.TestCase):
         beta = [0, np.pi / 2]
         gamma = 0
         self.assertTrue(np.allclose(
-            quaternion.from_euler(alpha, beta, gamma),
+            rowan.from_euler(alpha, beta, gamma),
             np.array([[[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]],
                      [[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]]])
         ))
@@ -58,68 +58,68 @@ class TestEuler(unittest.TestCase):
         gamma = euler_angles[:, 2]
         self.assertTrue(
             np.allclose(
-                quaternion.from_euler(alpha, beta, gamma, 'zyz', 'intrinsic'),
+                rowan.from_euler(alpha, beta, gamma, 'zyz', 'intrinsic'),
                 euler_quaternions
             ))
 
         # Ensure proper errors are raised
         with self.assertRaises(ValueError):
-            quaternion.from_euler(alpha, beta, gamma, 'foo', 'intrinsic')
+            rowan.from_euler(alpha, beta, gamma, 'foo', 'intrinsic')
 
         with self.assertRaises(ValueError):
-            quaternion.from_euler(alpha, beta, gamma, 'foo', 'extrinsic')
+            rowan.from_euler(alpha, beta, gamma, 'foo', 'extrinsic')
 
         with self.assertRaises(ValueError):
-            quaternion.from_euler(alpha, beta, gamma, 'zyz', 'bar')
+            rowan.from_euler(alpha, beta, gamma, 'zyz', 'bar')
 
     def test_to_euler(self):
         """Test conversion to Euler angles"""
         v = one
         self.assertTrue(np.all(
-            quaternion.to_euler(v) == np.array([0, 0, 0])
+            rowan.to_euler(v) == np.array([0, 0, 0])
         ))
 
         v = np.array([0.5, 0.5, 0.5, 0.5])
         self.assertTrue(np.all(
-            quaternion.to_euler(v) == np.array([np.pi / 2, 0, np.pi / 2])
+            rowan.to_euler(v) == np.array([np.pi / 2, 0, np.pi / 2])
         ))
 
         # More complicated test, checks 2d arrays
         # and more complex angles
         self.assertTrue(
             np.allclose(
-                quaternion.to_euler(euler_quaternions, 'zyz', 'intrinsic'),
+                rowan.to_euler(euler_quaternions, 'zyz', 'intrinsic'),
                 euler_angles
             ))
 
         # Ensure proper errors are raised
         with self.assertRaises(ValueError):
-            quaternion.to_euler(euler_quaternions, 'foo', 'intrinsic')
+            rowan.to_euler(euler_quaternions, 'foo', 'intrinsic')
 
         with self.assertRaises(ValueError):
-            quaternion.to_euler(euler_quaternions, 'foo', 'extrinsic')
+            rowan.to_euler(euler_quaternions, 'foo', 'extrinsic')
 
         with self.assertRaises(ValueError):
-            quaternion.to_euler(euler_quaternions, 'zyz', 'bar')
+            rowan.to_euler(euler_quaternions, 'zyz', 'bar')
 
         with self.assertRaises(ValueError):
-            quaternion.to_euler(2*one)
+            rowan.to_euler(2*one)
 
-        with self.assertRaises(ZeroDivisionError):
-            quaternion.to_euler(zero)
+        with self.assertRaises(ValueError):
+            rowan.to_euler(zero)
 
     def test_from_to_euler(self):
         """2-way conversion starting from Euler angles"""
         np.random.seed(0)
-        quats = quaternion.normalize(np.random.rand(25, 4))
+        quats = rowan.normalize(np.random.rand(25, 4))
         conventions = ['xzx', 'xyx', 'yxy', 'yzy', 'zyz', 'zxz',
                        'xzy', 'xyz', 'yxz', 'yzx', 'zyx', 'zxy']
         axis_types = ['extrinsic', 'intrinsic']
 
         for convention in conventions:
             for axis_type in axis_types:
-                euler = quaternion.to_euler(quats, convention, axis_type)
-                out = quaternion.from_euler(
+                euler = rowan.to_euler(quats, convention, axis_type)
+                out = rowan.from_euler(
                         euler[..., 0], euler[..., 1], euler[..., 2],
                         convention, axis_type
                 )
@@ -148,8 +148,8 @@ class TestEuler(unittest.TestCase):
 
         for convention in conventions_euler:
             for axis_type in axis_types:
-                out = quaternion.to_euler(
-                    quaternion.from_euler(
+                out = rowan.to_euler(
+                    rowan.from_euler(
                         angles_euler[..., 0], angles_euler[..., 1],
                         angles_euler[..., 2], convention, axis_type),
                     convention, axis_type
@@ -166,8 +166,8 @@ class TestEuler(unittest.TestCase):
 
         for convention in conventions_tb:
             for axis_type in axis_types:
-                out = quaternion.to_euler(
-                    quaternion.from_euler(
+                out = rowan.to_euler(
+                    rowan.from_euler(
                         angles_tb[..., 0], angles_tb[..., 1],
                         angles_tb[..., 2], convention, axis_type),
                     convention, axis_type

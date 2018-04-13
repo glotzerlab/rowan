@@ -1,7 +1,7 @@
 # Copyright (c) 2018 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-"""Submodule containing all standard functions"""
+R"""Submodule containing all standard functions"""
 from __future__ import division, print_function, absolute_import
 
 import numpy as np
@@ -250,12 +250,33 @@ def power(q, n):
 
         q_n = pow(q^n)
     """
-    q = np.asarray(q)
-    # Note that we follow the convention that 0^0 = 1
-    if n == 0:
-        return np.broadcast_to(np.array([1, 0, 0, 0]), q.shape)
+    # Need matching shapes
+    if len(q.shape) == 1:
+        flat = True
+        q = np.atleast_2d(q)
     else:
-        return exp(n*log(q))
+        flat = False
+
+    newshape = np.broadcast(q[..., 0], n).shape
+    q = np.broadcast_to(q, newshape + (4,))
+    n = np.broadcast_to(n, newshape)
+
+    # Note that we follow the convention that 0^0 = 1
+    check = (n == 0)
+    if np.any(check):
+        powers = np.empty(newshape + (4,))
+        powers[check] = np.array([1, 0, 0, 0])
+        not_check = np.logical_not(check)
+        if np.any(not_check):
+            powers[not_check] = exp(
+                    n[not_check, np.newaxis] * log(q[not_check, :]))
+    else:
+        powers = exp(n[..., np.newaxis]*log(q))
+
+    if flat:
+        return powers.squeeze()
+    else:
+        return powers
 
 
 def conjugate(q):
@@ -290,6 +311,8 @@ def inverse(q):
 
         q_inv = inverse(q)
     """
+    q = np.asarray(q)
+
     if len(q.shape) == 1:
         flat = True
         inverses = np.array(np.atleast_2d(q))
@@ -298,8 +321,11 @@ def inverse(q):
         inverses = np.array(q)
 
     normsq = norm(inverses)**2
-    inverses[..., 1:] *= -1
-    inverses[normsq > 0] /= normsq[normsq > 0, np.newaxis]
+    if np.any(normsq):
+        inverses[..., 1:] *= -1
+        # Would like to do this in place, but can't guarantee type safety
+        inverses[normsq > 0] = inverses[normsq > 0]/normsq[
+                normsq > 0, np.newaxis]
 
     if flat:
         return inverses.squeeze()
@@ -399,6 +425,17 @@ def normalize(q):
     return q / norms[..., np.newaxis]
 
 
+def is_unit(q):
+    """Check if all input quaternions have unit norm"""
+    return np.allclose(norm(q), 1)
+
+
+def _validate_unit(q, msg="Arguments must be unit quaternions"):
+    """Simple helper function to ensure that all quaternions in q are unit"""
+    if not is_unit(q):
+        raise ValueError(msg)
+
+
 def from_mirror_plane(x, y, z):
     R"""Generate quaternions from mirror plane equations.
 
@@ -430,7 +467,7 @@ def from_mirror_plane(x, y, z):
 
 
 def _promote_vec(v):
-    """Helper function to promote vectors to their quaternion representation"""
+    R"""Helper function to promote vectors to their quaternion representation"""
     return np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
 
 
@@ -453,6 +490,7 @@ def reflect(q, v):
         v_rot = rotate(q, v)
     """
     q = np.asarray(q)
+    _validate_unit(q)
     v = np.asarray(v)
 
     if not np.allclose(norm(q), 1):
@@ -480,6 +518,7 @@ def rotate(q, v):
         v_rot = rotate(q, v)
     """
     q = np.asarray(q)
+    _validate_unit(q)
     v = np.asarray(v)
 
     if not np.allclose(norm(q), 1):
@@ -491,7 +530,7 @@ def rotate(q, v):
 
 
 def _normalize_vec(v):
-    """Helper function to normalize vectors"""
+    R"""Helper function to normalize vectors"""
     v = np.asarray(v)
     norms = np.linalg.norm(v, axis=-1)
     return v / norms[..., np.newaxis]
@@ -537,9 +576,9 @@ def from_euler(alpha, beta, gamma, convention='zyx',
     long as intrinsic and extrinsic rotations are not intermixed.
 
     Args:
-        alpha ((...) np.array): Array of :math:`\alpha` values
-        beta ((...) np.array): Array of :math:`\beta` values
-        gamma ((...) np.array): Array of :math:`\gamma` values
+        alpha ((...) np.array): Array of :math:`\alpha` values in radians.
+        beta ((...) np.array): Array of :math:`\beta` values in radians.
+        gamma ((...) np.array): Array of :math:`\gamma` values in radians.
         convention (str): One of the 12 valid conventions xzx, xyx,
             yxy, yzy, zyz, zxz, xzy, xyz, yxz, yzx, zyx, zxy
         axes (str): Whether to use extrinsic or intrinsic rotations
@@ -679,6 +718,7 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
 
     """
     q = np.asarray(q)
+    _validate_unit(q)
 
     try:
         mats = to_matrix(q)
@@ -947,6 +987,7 @@ def to_axis_angle(q):
         angles are in radians
     """
     q = np.asarray(q)
+    _validate_unit(q)
 
     angles = 2*np.atleast_1d(np.arccos(q[..., 0]))
     sines = np.sin(angles/2)

@@ -3,6 +3,8 @@
 [![ReadTheDocs Status](https://readthedocs.org/projects/rowan/badge/?version=latest)](http://rowan.readthedocs.io/en/latest/?badge=latest)
 [![CircleCI](https://circleci.com/bb/glotzer/rowan.svg?style=svg)](https://circleci.com/bb/glotzer/rowan)
 [![Codecov](https://codecov.io/bb/glotzer/rowan/branch/master/graph/badge.svg)](https://codecov.io/bb/glotzer/rowan)
+[![PyPI](https://img.shields.io/pypi/v/rowan.svg)](https://pypi.org/project/rowan/)
+
 
 The rowan package provides a simple and consistent interface for using quaternions.
 The package is built entirely on top of numpy and represents quaternions using numpy arrays, meaning that all functions support arbitrarily high-dimensional arrays of quaternions.

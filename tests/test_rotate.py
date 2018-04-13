@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 import os
 
-import rowan as quaternion
+import rowan
 
 one = np.array([1, 0, 0, 0])
 
@@ -30,12 +30,12 @@ class TestRotate(unittest.TestCase):
         """Testing trivial rotations"""
         self.assertTrue(
             np.all(
-                quaternion.rotate(
+                rowan.rotate(
                     one,
                     one_vector) == one_vector))
 
         with self.assertRaises(ValueError):
-            quaternion.rotate(2*one, one_vector)
+            rowan.rotate(2*one, one_vector)
 
     def test_2d_array(self):
         """Rotating sets of vectors by sets of quaternions"""
@@ -45,14 +45,14 @@ class TestRotate(unittest.TestCase):
         # Simple tests
         self.assertTrue(
             np.all(
-                quaternion.rotate(
+                rowan.rotate(
                     ones,
                     one_vectors) == one_vectors))
 
         # Complex random array
         self.assertTrue(
             np.allclose(
-                quaternion.rotate(
+                rowan.rotate(
                     input1,
                     vector_inputs),
                 stored_rotation))
@@ -71,7 +71,7 @@ class TestRotate(unittest.TestCase):
         # Simple tests
         self.assertTrue(
             np.all(
-                quaternion.rotate(
+                rowan.rotate(
                     ones,
                     one_vectors) == one_vectors))
 
@@ -79,7 +79,7 @@ class TestRotate(unittest.TestCase):
         num_reps = input1.shape[0]
         expanded_shape = (num_reps // 5, 5, 4)
         expanded_shape_vec = (num_reps // 5, 5, 3)
-        rotation_result = quaternion.rotate(
+        rotation_result = rowan.rotate(
             np.reshape(
                 input1, expanded_shape), np.reshape(
                 vector_inputs, expanded_shape_vec))
@@ -97,12 +97,12 @@ class TestRotate(unittest.TestCase):
         shape_out = (45, 3, 13, 3)
         many_ones = np.zeros(shape)
         many_ones[..., 0] = 1
-        output = quaternion.rotate(many_ones, zero_vector)
+        output = rowan.rotate(many_ones, zero_vector)
         self.assertTrue(output.shape == shape_out)
 
         # Two nonconforming array sizes
         with self.assertRaises(ValueError):
-            quaternion.rotate(
+            rowan.rotate(
                     many_ones,
                     np.repeat(zero_vector[np.newaxis, :], 2, axis=0)
                     )
@@ -112,7 +112,7 @@ class TestRotate(unittest.TestCase):
         ones_quat[..., 0] = 1
         zeros_vec = np.zeros((3, 5, 1, 1, 9, 3))
         shape = (3, 5, 3, 8, 9, 3)
-        product = quaternion.rotate(ones_quat, zeros_vec)
+        product = rowan.rotate(ones_quat, zeros_vec)
         self.assertTrue(product.shape == shape)
 
         # Test complex rotations
@@ -120,8 +120,8 @@ class TestRotate(unittest.TestCase):
         num_second = 5
         i1 = input1[:num_first, np.newaxis, :]
         i2 = vector_inputs[np.newaxis, :num_second, :]
-        output = quaternion.rotate(i1, i2)
+        output = rowan.rotate(i1, i2)
         for i in range(num_first):
             for j in range(num_second):
-                single_rot = quaternion.rotate(i1[i, 0, :], i2[0, j, :])
+                single_rot = rowan.rotate(i1[i, 0, :], i2[0, j, :])
                 self.assertTrue(np.all(output[i, j, :] == single_rot))
