@@ -24,6 +24,10 @@ from .functions import (conjugate, multiply, norm, normalize, rotate,
                         from_mirror_plane, reflect, exp, log, log10, logb,
                         power, isnan, isinf, isfinite, equal, not_equal,
                         allclose, isclose, inverse, divide, expb, exp10)
+from . import geometry
+from . import calculus
+from . import interpolate
+from . import random
 
 # Get the version
 import os
