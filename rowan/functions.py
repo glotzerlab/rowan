@@ -250,12 +250,24 @@ def power(q, n):
 
         q_n = pow(q^n)
     """
-    q = np.asarray(q)
+    # Need matching shapes
+    newshape = np.broadcast(q[..., 0], n).shape
+    q = np.broadcast_to(q, newshape + (4,))
+    n = np.broadcast_to(n, newshape)
+
     # Note that we follow the convention that 0^0 = 1
-    if n == 0:
-        return np.broadcast_to(np.array([1, 0, 0, 0]), q.shape)
+    check = (n == 0)
+    if np.any(check):
+        powers = np.empty(newshape + (4,))
+        powers[check] = np.array([1, 0, 0, 0])
+        not_check = np.logical_not(check)
+        if np.any(not_check):
+            powers[not_check] = exp(
+                    n[not_check, np.newaxis] * log(q[not_check, :]))
     else:
-        return exp(n*log(q))
+        powers = exp(n[..., np.newaxis]*log(q))
+
+    return powers
 
 
 def conjugate(q):
@@ -404,6 +416,17 @@ def normalize(q):
     return q / norms[..., np.newaxis]
 
 
+def is_unit(q):
+    """Check if all input quaternions have unit norm"""
+    return np.allclose(norm(q), 1)
+
+
+def _validate_unit(q, msg="Arguments must be unit quaternions"):
+    """Simple helper function to ensure that all quaternions in q are unit"""
+    if not is_unit(q):
+        raise ValueError(msg)
+
+
 def from_mirror_plane(x, y, z):
     R"""Generate quaternions from mirror plane equations.
 
@@ -458,6 +481,7 @@ def reflect(q, v):
         v_rot = rotate(q, v)
     """
     q = np.asarray(q)
+    _validate_unit(q)
     v = np.asarray(v)
 
     if not np.allclose(norm(q), 1):
@@ -485,6 +509,7 @@ def rotate(q, v):
         v_rot = rotate(q, v)
     """
     q = np.asarray(q)
+    _validate_unit(q)
     v = np.asarray(v)
 
     if not np.allclose(norm(q), 1):
@@ -542,9 +567,9 @@ def from_euler(alpha, beta, gamma, convention='zyx',
     long as intrinsic and extrinsic rotations are not intermixed.
 
     Args:
-        alpha ((...) np.array): Array of :math:`\alpha` values
-        beta ((...) np.array): Array of :math:`\beta` values
-        gamma ((...) np.array): Array of :math:`\gamma` values
+        alpha ((...) np.array): Array of :math:`\alpha` values in radians.
+        beta ((...) np.array): Array of :math:`\beta` values in radians.
+        gamma ((...) np.array): Array of :math:`\gamma` values in radians.
         convention (str): One of the 12 valid conventions xzx, xyx,
             yxy, yzy, zyz, zxz, xzy, xyz, yxz, yzx, zyx, zxy
         axes (str): Whether to use extrinsic or intrinsic rotations
@@ -684,6 +709,7 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
 
     """
     q = np.asarray(q)
+    _validate_unit(q)
 
     try:
         mats = to_matrix(q)
@@ -952,6 +978,7 @@ def to_axis_angle(q):
         angles are in radians
     """
     q = np.asarray(q)
+    _validate_unit(q)
 
     angles = 2*np.atleast_1d(np.arccos(q[..., 0]))
     sines = np.sin(angles/2)
