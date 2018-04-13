@@ -47,12 +47,22 @@ def slerp(q0, q1, t, ensure_shortest=True):
     _validate_unit(q1)
     t = np.clip(t, 0, 1)
 
-    q0 = np.asarray(q0)
+    if len(q0.shape) == 1:
+        flat0 = True
+        q0 = np.atleast_2d(q0)
+    else:
+        flat0 = False
+        q0 = np.asarray(q0)
+
+    if len(q1.shape) == 1:
+        flat1 = True
+        q1 = np.atleast_2d(q1)
+    else:
+        flat1 = False
     q1 = np.array(q1)
 
     # Ensure that we turn the short way around
     if ensure_shortest:
-        cos_theta = np.inner(q0, q1)
         cos_theta = np.sum(q0*q1, axis=-1)
         flip = cos_theta < 0
         q1[flip] *= -1
@@ -84,12 +94,23 @@ def slerp_prime(q0, q1, t, ensure_shortest=True):
     _validate_unit(q1)
     t = np.clip(t, 0, 1)
 
-    q0 = np.asarray(q0)
+    if len(q0.shape) == 1:
+        flat0 = True
+        q0 = np.atleast_2d(q0)
+    else:
+        flat0 = False
+        q0 = np.asarray(q0)
+
+    if len(q1.shape) == 1:
+        flat1 = True
+        q1 = np.atleast_2d(q1)
+    else:
+        flat1 = False
     q1 = np.array(q1)
 
     # Ensure that we turn the short way around
     if ensure_shortest:
-        cos_theta = np.dot(q0, q1)
+        cos_theta = np.sum(q0*q1, axis=-1)
         flip = cos_theta < 0
         q1[flip] *= -1
 
