@@ -262,11 +262,13 @@ def power(q, n):
         powers[check] = np.array([1, 0, 0, 0])
         not_check = np.logical_not(check)
         if np.any(not_check):
-            powers[not_check] = exp(n[not_check, np.newaxis]*log(q[not_check, :]))
+            powers[not_check] = exp(
+                    n[not_check, np.newaxis] * log(q[not_check, :]))
     else:
         powers = exp(n[..., np.newaxis]*log(q))
 
     return powers
+
 
 def conjugate(q):
     R"""Conjugates an array of quaternions

@@ -7,7 +7,7 @@ of quaternion interpolation for two quaternions.
 """
 import numpy as np
 
-from ..functions import power, multiply, conjugate, _validate_unit, log, norm
+from ..functions import power, multiply, conjugate, _validate_unit, log
 
 __all__ = []
 
