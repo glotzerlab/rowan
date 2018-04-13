@@ -36,7 +36,11 @@ with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                        '_version.py')) as f:
     exec(f.read())
 
-__all__ = ['conjugate',
+__all__ = ['geometry',
+           'calculus',
+           'interpolate',
+           'random',
+           'conjugate',
            'exp',
            'expb',
            'exp10',

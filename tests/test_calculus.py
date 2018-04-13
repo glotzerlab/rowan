@@ -2,11 +2,10 @@
 from __future__ import division, print_function, absolute_import
 
 import unittest
-import os
 
 import numpy as np
 
-from rowan import calculus, normalize
+from rowan import calculus
 
 one = np.array([1, 0, 0, 0])
 zero_vec = np.array([0, 0, 0])
@@ -36,7 +35,6 @@ class TestCalculus(unittest.TestCase):
                     )
                 )
 
-
     def test_integrate(self):
         """Test integration"""
         self.assertTrue(np.all(calculus.integrate(one, zero_vec, 0) == one))
@@ -49,9 +47,9 @@ class TestCalculus(unittest.TestCase):
         x = np.array([np.sqrt(2)/2, np.sqrt(2)/2, 0, 0])
         v = np.array([0.1, 0.1, 0.1])
         ans = np.array([0.66914563,
-                     0.73976795,
-                     0.07062232,
-                     0])
+                        0.73976795,
+                        0.07062232,
+                        0])
 
         self.assertTrue(
                 np.allclose(
@@ -59,5 +57,3 @@ class TestCalculus(unittest.TestCase):
                     ans
                     )
                 )
-
-
