@@ -9,7 +9,9 @@ import numpy as np
 
 from ..functions import power, multiply, conjugate, _validate_unit, log
 
-__all__ = []
+__all__ = ['slerp',
+           'slerp_prime',
+           'squad']
 
 
 def slerp(q0, q1, t, ensure_shortest=True):
