@@ -7,18 +7,18 @@ integral of a quaternion.
 
 import numpy as np
 
-from ..functions import norm, _promote_vec, _validate_unit
+from ..functions import multiply, _promote_vec, _validate_unit, exp
 
 __all__ = ['derivative',
            'integrate']
 
 
 def derivative(q, v):
-    R"""Compute the instantaneous derivative of quaternions.
+    R"""Compute the instantaneous derivative of unit quaternions.
 
     Args:
         q ((...,4) np.array): Quaternions to integrate
-        v ((...,3) np.array): Integration rates
+        v ((...,3) np.array): Angular velocities
 
     Returns:
         An array containing the element-wise derivatives.
@@ -31,11 +31,11 @@ def derivative(q, v):
 
 
 def integrate(q, v, dt):
-    R"""Integrate quaternions by some velocity.
+    R"""Integrate unit quaternions by angular velocity.
 
     Args:
         q ((...,4) np.array): Quaternions to integrate
-        v ((...,3) np.array): Integration rates
+        v ((...,3) np.array): Angular velocities
         dt ((...) np.array): Timesteps
 
     Returns:
@@ -47,13 +47,5 @@ def integrate(q, v, dt):
     dt = np.asarray(dt)
 
     _validate_unit(q)
-    rotation_vector = v*dt
-    rotation_norm = np.linalg.norm(rotation_vector)
-    checks = rotation_norm > 0
-    if np.any(checks):
-        axes = rotation_vector[checks]/rotation_norm[checks, np.newaxis]
-        angles = rotation_norm[checks, np.newaxis]
-        q1 = from_axis_angle(axes, angles)
-        return normalize(multiply(q, q1)
-    else:
-        return q
+
+    return multiply(exp(_promote_vec(v*dt/2)), q)
