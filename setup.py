@@ -21,6 +21,7 @@ setup(name='rowan',
       version=__version__, # noqa F821
       description=desc,
       long_description=readme,
+      long_description_content_type='text/markdown',
       url='http://github.com/vramasub/quaternion',
       author='Vyas Ramasubramani',
       author_email='vramasub@umich.edu',
