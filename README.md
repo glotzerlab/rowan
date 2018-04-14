@@ -4,6 +4,8 @@
 [![CircleCI](https://circleci.com/bb/glotzer/rowan.svg?style=svg)](https://circleci.com/bb/glotzer/rowan)
 [![Codecov](https://codecov.io/bb/glotzer/rowan/branch/master/graph/badge.svg)](https://codecov.io/bb/glotzer/rowan)
 [![PyPI](https://img.shields.io/pypi/v/rowan.svg)](https://pypi.org/project/rowan/)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/44a7677f2d7341e68a8338d1513f71e9)](https://www.codacy.com/app/vramasub/rowan?utm_source=glotzer@bitbucket.org&amp;utm_medium=referral&amp;utm_content=glotzer/rowan&amp;utm_campaign=Badge_Grade)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/rowan.svg)](https://bitbucket.org/glotzer/rowan/)
 
 
 The rowan package provides a simple and consistent interface for using quaternions.
@@ -16,6 +18,15 @@ Quaternions are encoded as arrays of shape `(...,4)`, with the convention that t
 
 ## Setup
 
+The recommended method for installing signac is using **pip**
+
+### Installation via pip
+
+To install the package from PyPI, execute:
+```bash
+pip install rowan --user
+```
+
 ### Installation from source
 
 To install from source, execute:
@@ -27,12 +38,12 @@ python setup.py install --user
 
 ### Requirements
 
-* Python = 2.7, >= 3.4
+* Python = 2.7, >= 3.3
 * Numpy >= 1.10
 
 ## Testing
 
-The package is currently tested for python versions 2.7, 3.4, 3.5, and 3.6 on Unix.
+The package is currently tested for python versions 2.7, 3.3, 3.4, 3.5, 3.6, and 3.7 on Unix.
 Continuous integrated testing is performed using CircleCI on these python versions with numpy versions 1.10 and above.
 
 To run the packaged unit tests, execute:
