@@ -894,7 +894,7 @@ False when calling this function.")
     K[..., 3, 3] = mat[..., 0, 0] + mat[..., 1, 1] + mat[..., 2, 2]
     K = K / 3.0
 
-    w, v = np.linalg.eigh(K)
+    _, v = np.linalg.eigh(K)
     # The conventions in the paper are very confusing for quaternions in terms
     # of the order of the components
     return np.concatenate(

@@ -14,6 +14,7 @@ subpackage is entirely focused on generating rotation quaternions.
 #
 #    other alternatives:
 #    http://home.lu.lv/~sd20008/papers/essays/Random%20unitary%20[paper].pdf
+from __future__ import division, print_function, absolute_import
 
 import numpy as np
 

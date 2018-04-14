@@ -4,9 +4,7 @@ branch = True
 source = rowan
 omit =
     # The quaternion object isn't ready
-    rowan/quaternion.py
     rowan/map.py
-    rowan/geometry.py
     rowan/_version.py
 
 [report]

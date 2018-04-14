@@ -9,6 +9,7 @@ quaternions do not necessarily coincide with good metrics for similarities
 between rotations. An overview of distance measurements can be found in
  `this paper <https://link.springer.com/article/10.1007/s10851-009-0161-2>`_.
 """
+from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
@@ -17,8 +18,8 @@ from ..functions import norm, exp, multiply, inverse, log, _validate_unit
 __all__ = ['distance',
            'sym_distance',
            'riemann_exp_map',
-           'riemann_log_map'
-           'intrinsic_distance'
+           'riemann_log_map',
+           'intrinsic_distance',
            'sym_intrinsic_distance',
            'angle']
 

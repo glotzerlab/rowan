@@ -5,6 +5,8 @@ This project adheres to `Semantic Versioning` <http://semver.org/spec/v2.0.0.htm
 Unreleased
 ----------
 
+* Derivatives and integrals of quaternions.
+
 v0.5.1 - 2018-04-13
 -------------------
 
