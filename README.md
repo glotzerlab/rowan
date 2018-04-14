@@ -18,7 +18,7 @@ Quaternions are encoded as arrays of shape `(...,4)`, with the convention that t
 
 ## Setup
 
-The recommended method for installing signac is using **pip**
+The recommended method for installing signac is using **pip**.
 
 ### Installation via pip
 
