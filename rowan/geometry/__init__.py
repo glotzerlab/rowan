@@ -17,8 +17,8 @@ from ..functions import norm, exp, multiply, inverse, log, _validate_unit
 __all__ = ['distance',
            'sym_distance',
            'riemann_exp_map',
-           'riemann_log_map'
-           'intrinsic_distance'
+           'riemann_log_map',
+           'intrinsic_distance',
            'sym_intrinsic_distance',
            'angle']
 
