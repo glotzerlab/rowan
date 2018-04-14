@@ -5,6 +5,8 @@ R"""
 The rowan package provides a simple interface to slerp, the standard method
 of quaternion interpolation for two quaternions.
 """
+from __future__ import division, print_function, absolute_import
+
 import numpy as np
 
 from ..functions import power, multiply, conjugate, _validate_unit, log
