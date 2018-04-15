@@ -41,7 +41,7 @@ from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
-from ..functions import from_matrix
+from ..functions import from_matrix, rotate
 
 __all__ = ['kabsch']
 
@@ -87,3 +87,126 @@ def kabsch(p, q, require_rotation=True):
     t = -R.dot(centroid_p.T) + centroid_q.T
 
     return from_matrix(R), t
+
+
+def horn(p, q):
+    R"""Find the optimal rotation and translation to map between two sets of
+    points.
+
+    This function implements the quaternion-based method of `Horn
+    <https://www.osapublishing.org/josaa/abstract.cfm?id=2711>`_. For a simpler
+    explanation, see `here
+    <https://cnx.org/contents/HV-RsdwL@23/Molecular-Distance-Measures>`_.
+
+    Args:
+        p ((N, 3) np.array): First set of N points
+        q ((N, 3) np.array): Second set of N points
+
+    Returns:
+        A tuple (q, t) where q is the quaternion to rotate the points and t
+        is the tranlsation.
+    """
+    if p.shape != q.shape:
+        raise ValueError("Input arrays must be the same shape")
+    p = np.asarray(p)
+    q = np.asarray(q)
+
+    # The algorithm depends on removing the centroid of the points.
+    centroid_p = np.mean(p, axis=0)
+    centroid_q = np.mean(q, axis=0)
+    p_c = p - centroid_p
+    q_c = q - centroid_q
+
+    A = np.empty((p.shape[0], 4, 4))
+    A[:, 0, 0] = 0
+    A[:, 1, 1] = 0
+    A[:, 2, 2] = 0
+    A[:, 3, 3] = 0
+    A[:, [0, 3], [1, 2]] = -p_c[:, [0]]
+    A[:, [1, 2], [0, 3]] = p_c[:, [0]]
+    A[:, [0, 1], [2, 3]] = -p_c[:, [1]]
+    A[:, [2, 3], [0, 1]] = p_c[:, [1]]
+    A[:, [0, 2], [3, 1]] = -p_c[:, [2]]
+    A[:, [1, 3], [2, 0]] = p_c[:, [2]]
+
+    B = np.empty((q.shape[0], 4, 4))
+    B[:, 0, 0] = 0
+    B[:, 1, 1] = 0
+    B[:, 2, 2] = 0
+    B[:, 3, 3] = 0
+    B[:, [0, 2], [1, 3]] = -q_c[:, [0]]
+    B[:, [1, 3], [0, 2]] = q_c[:, [0]]
+    B[:, [0, 3], [2, 1]] = -q_c[:, [1]]
+    B[:, [2, 1], [0, 3]] = q_c[:, [1]]
+    B[:, [0, 1], [3, 2]] = -q_c[:, [2]]
+    B[:, [2, 3], [1, 0]] = q_c[:, [2]]
+
+    prods = np.matmul(A.transpose(0, 2, 1), B)
+    N = np.sum(prods, axis=0)
+
+    # Note that Horn advocates solving the characteristic polynomial
+    # explicitly to avoid computing an eigendecomposition; we do so
+    # for simplicity
+    w, v = np.linalg.eig(N)
+    q_R = v[:, np.argmax(w)]
+
+    t = -rotate(q_R, centroid_p) + centroid_q
+
+    return q_R, t
+
+
+def davenport(p, q):
+    R"""Find the optimal rotation and translation to map between two sets of
+    points.
+
+    This function implements the `Davenport q-method
+    <https://ntrs.nasa.gov/search.jsp?R=19670009376>`_, the most robust method and
+    basis of most modern solvers. It involves the construction of a particular
+    matrix, the Davenport K-matrix, which is then diagnolized to find the
+    appropriate eigenvalues. More modern algorithms aim to solve the
+    characteristic equation directly rather than diagonalizing, which can provide
+    speed benefits at the potential cost of robustness.
+
+    Args:
+        p ((N, 3) np.array): First set of N points
+        q ((N, 3) np.array): Second set of N points
+
+    Returns:
+        A tuple (q, t) where q is the quaternion to rotate the points and t
+        is the tranlsation.
+    """
+    if p.shape != q.shape:
+        raise ValueError("Input arrays must be the same shape")
+    p = np.asarray(p)
+    q = np.asarray(q)
+
+    # The algorithm depends on removing the centroid of the points.
+    centroid_p = np.mean(p, axis=0)
+    centroid_q = np.mean(q, axis=0)
+    p_c = p - centroid_p
+    q_c = q - centroid_q
+
+    B = p_c.T.dot(q_c)
+    tr_B = np.trace(B)
+    z = np.array([B[1, 2] - B[2, 1], B[2, 0] - B[0, 2], B[0, 1] - B[1, 0]]).T
+
+    # Note that the original Davenport q-matrix puts the solution to the vector
+    # part of the quaternion in the upper right block; this results in a
+    # quaternion with scalar part in the 4th entry. The q-matrix here is slightly
+    # modified to avoid this problem
+    K = np.empty((4, 4))
+    K[1:, 1:] = B + B.T - np.eye(3)*tr_B
+    K[0, 1:] = z.T
+    K[1:, 0] = z
+    K[0, 0] = tr_B
+#    K[:3, :3] = B + B.T - np.eye(3)*tr_B
+#    K[3, :3] = z.T
+#    K[:3, 3] = z
+#    K[3, 3] = tr_B
+
+    w, v = np.linalg.eig(K)
+    q_R = v[:, np.argmax(w)]
+
+    t = -rotate(q_R, centroid_p) + centroid_q
+
+    return q_R, t
