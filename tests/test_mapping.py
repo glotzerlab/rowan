@@ -4,12 +4,12 @@ from __future__ import division, print_function, absolute_import
 import unittest
 import numpy as np
 
-import rowan
-from rowan import mapping, random, norm
+from rowan import mapping, random, rotate
 
 zero = np.array([0, 0, 0, 0])
 one = np.array([1, 0, 0, 0])
 half = np.array([0.5, 0.5, 0.5, 0.5])
+
 
 class TestMapping(unittest.TestCase):
     """Test mapping functions"""
@@ -25,7 +25,7 @@ class TestMapping(unittest.TestCase):
             rotation = random.rand(1)
             translation = np.random.rand(1, 3)
 
-            transformed_points = rowan.rotate(rotation, points) + translation
+            transformed_points = rotate(rotation, points) + translation
 
             q, t = mapping.kabsch(points, transformed_points)
 
@@ -42,7 +42,7 @@ class TestMapping(unittest.TestCase):
             self.assertTrue(
                     np.allclose(
                         transformed_points,
-                        rowan.rotate(q, points) + t
+                        rotate(q, points) + t
                         )
                     )
 
@@ -57,7 +57,7 @@ class TestMapping(unittest.TestCase):
             rotation = random.rand(1)
             translation = np.random.rand(1, 3)
 
-            transformed_points = rowan.rotate(rotation, points) + translation
+            transformed_points = rotate(rotation, points) + translation
 
             q, t = mapping.horn(points, transformed_points)
 
@@ -77,14 +77,13 @@ class TestMapping(unittest.TestCase):
                     )
                 self.assertTrue(np.allclose(translation, t))
 #            print("Original points: ", transformed_points)
-#            print("New points: ", rowan.rotate(q, points) + t)
+#            print("New points: ", rotate(q, points) + t)
             self.assertTrue(
                     np.allclose(
                         transformed_points,
-                        rowan.rotate(q, points) + t
+                        rotate(q, points) + t
                         )
                     )
-
 
     def test_davenport(self):
         """Perform a rotation and ensure that we can recover it"""
@@ -97,7 +96,7 @@ class TestMapping(unittest.TestCase):
             rotation = random.rand(1)
             translation = np.random.rand(1, 3)
 
-            transformed_points = rowan.rotate(rotation, points) + translation
+            transformed_points = rotate(rotation, points) + translation
 #            print("points: \n", points)
 #            print("transformed points: \n", transformed_points)
 
@@ -121,11 +120,10 @@ class TestMapping(unittest.TestCase):
                     )
                 self.assertTrue(np.allclose(translation, t))
 #            print("Original points: ", transformed_points)
-#            print("New points: ", rowan.rotate(q, points) + t)
+#            print("New points: ", rotate(q, points) + t)
             self.assertTrue(
                     np.allclose(
                         transformed_points,
-                        rowan.rotate(q, points) + t
+                        rotate(q, points) + t
                         )
                     )
-
