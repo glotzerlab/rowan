@@ -57,21 +57,13 @@ from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
-try:
-    from sklearn.neighbors import NearestNeighbors
-except ImportError:
-    class NearestNeighbors(object):
-        """Provide erros"""
-        def __init__(self):
-            raise ImportError("This method requires scikit-learn. Please "
-                              "install sklearn and try again")
-
-from ..functions import from_matrix, rotate
+from ..functions import from_matrix, rotate, to_matrix
+from ..geometry import angle
 
 __all__ = ['kabsch', 'davenport', 'procrustes', 'icp']
 
 
-def kabsch(p, q, require_rotation=True):
+def kabsch(X, Y, require_rotation=True):
     R"""Find the optimal rotation and translation to map between two sets of
     points.
 
@@ -81,30 +73,30 @@ def kabsch(p, q, require_rotation=True):
     is that the SVD works in dimensions > 3.
 
     Args:
-        p ((N, m) np.array): First set of N points
-        q ((N, m) np.array): Second set of N points
+        X ((N, m) np.array): First set of N points
+        Y ((N, m) np.array): Second set of N points
         require_rotation (bool): If false, the returned quaternion
 
     Returns:
         A tuple (R, t) where R is the (mxm) rotation matrix to rotate the
         points and t is the translation.
     """
-    p = np.atleast_2d(p)
-    q = np.atleast_2d(q)
-    if p.shape != q.shape:
+    X = np.atleast_2d(X)
+    Y = np.atleast_2d(Y)
+    if X.shape != Y.shape:
         raise ValueError("Input arrays must be the same shape")
-    elif len(p.shape) != 2:
+    elif len(X.shape) != 2:
         raise ValueError("Input arrays must be (Nxm) arrays")
-    p = np.asarray(p)
-    q = np.asarray(q)
+    X = np.asarray(X)
+    Y = np.asarray(Y)
 
     # The algorithm depends on removing the centroid of the points.
-    centroid_p = np.mean(p, axis=0)
-    centroid_q = np.mean(q, axis=0)
-    p_c = p - centroid_p
-    q_c = q - centroid_q
+    centroid_X = np.mean(X, axis=0)
+    centroid_Y = np.mean(Y, axis=0)
+    X_c = X - centroid_X
+    Y_c = Y - centroid_Y
 
-    H = p_c.T.dot(q_c)
+    H = X_c.T.dot(Y_c)
 
     U, S, Vt = np.linalg.svd(H)
 
@@ -115,12 +107,12 @@ def kabsch(p, q, require_rotation=True):
         Vt[2, :] *= -1
         R = Vt.T.dot(U.T)
 
-    t = -R.dot(centroid_p.T) + centroid_q.T
+    t = -R.dot(centroid_X.T) + centroid_Y.T
 
     return R, t
 
 
-def horn(p, q):
+def horn(X, Y):
     R"""Find the optimal rotation and translation to map between two sets of
     points.
 
@@ -131,48 +123,48 @@ def horn(p, q):
 
     Args:
         p ((N, 3) np.array): First set of N points
-        q ((N, 3) np.array): Second set of N points
+        Y ((N, 3) np.array): Second set of N points
 
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
         is the translation.
     """
-    p = np.atleast_2d(p)
-    q = np.atleast_2d(q)
-    if p.shape != q.shape:
+    X = np.atleast_2d(X)
+    Y = np.atleast_2d(Y)
+    if X.shape != Y.shape:
         raise ValueError("Input arrays must be the same shape")
-    elif len(p.shape) != 2 or p.shape[1] != 3:
+    elif len(X.shape) != 2 or X.shape[1] != 3:
         raise ValueError("Input arrays must be (Nx3) arrays")
 
     # The algorithm depends on removing the centroid of the points.
-    centroid_p = np.mean(p, axis=0)
-    centroid_q = np.mean(q, axis=0)
-    p_c = p - centroid_p
-    q_c = q - centroid_q
+    centroid_X = np.mean(X, axis=0)
+    centroid_Y = np.mean(Y, axis=0)
+    X_c = X - centroid_X
+    Y_c = Y - centroid_Y
 
-    A = np.empty((p.shape[0], 4, 4))
+    A = np.empty((X.shape[0], 4, 4))
     A[:, 0, 0] = 0
     A[:, 1, 1] = 0
     A[:, 2, 2] = 0
     A[:, 3, 3] = 0
-    A[:, [0, 3], [1, 2]] = -p_c[:, [0]]
-    A[:, [1, 2], [0, 3]] = p_c[:, [0]]
-    A[:, [0, 1], [2, 3]] = -p_c[:, [1]]
-    A[:, [2, 3], [0, 1]] = p_c[:, [1]]
-    A[:, [0, 2], [3, 1]] = -p_c[:, [2]]
-    A[:, [1, 3], [2, 0]] = p_c[:, [2]]
+    A[:, [0, 3], [1, 2]] = -X_c[:, [0]]
+    A[:, [1, 2], [0, 3]] = X_c[:, [0]]
+    A[:, [0, 1], [2, 3]] = -X_c[:, [1]]
+    A[:, [2, 3], [0, 1]] = X_c[:, [1]]
+    A[:, [0, 2], [3, 1]] = -X_c[:, [2]]
+    A[:, [1, 3], [2, 0]] = X_c[:, [2]]
 
-    B = np.empty((q.shape[0], 4, 4))
+    B = np.empty((Y.shape[0], 4, 4))
     B[:, 0, 0] = 0
     B[:, 1, 1] = 0
     B[:, 2, 2] = 0
     B[:, 3, 3] = 0
-    B[:, [0, 2], [1, 3]] = -q_c[:, [0]]
-    B[:, [1, 3], [0, 2]] = q_c[:, [0]]
-    B[:, [0, 3], [2, 1]] = -q_c[:, [1]]
-    B[:, [2, 1], [0, 3]] = q_c[:, [1]]
-    B[:, [0, 1], [3, 2]] = -q_c[:, [2]]
-    B[:, [2, 3], [1, 0]] = q_c[:, [2]]
+    B[:, [0, 2], [1, 3]] = -Y_c[:, [0]]
+    B[:, [1, 3], [0, 2]] = Y_c[:, [0]]
+    B[:, [0, 3], [2, 1]] = -Y_c[:, [1]]
+    B[:, [2, 1], [0, 3]] = Y_c[:, [1]]
+    B[:, [0, 1], [3, 2]] = -Y_c[:, [2]]
+    B[:, [2, 3], [1, 0]] = Y_c[:, [2]]
 
     prods = np.matmul(A.transpose(0, 2, 1), B)
     N = np.sum(prods, axis=0)
@@ -181,14 +173,14 @@ def horn(p, q):
     # explicitly to avoid computing an eigendecomposition; we do so
     # for simplicity
     w, v = np.linalg.eig(N)
-    q_R = v[:, np.argmax(w)]
+    q = v[:, np.argmax(w)]
 
-    t = -rotate(q_R, centroid_p) + centroid_q
+    t = -rotate(q, centroid_X) + centroid_Y
 
-    return q_R, t
+    return q, t
 
 
-def davenport(p, q):
+def davenport(X, Y):
     R"""Find the optimal rotation and translation to map between two sets of
     points.
 
@@ -201,27 +193,27 @@ def davenport(p, q):
     provide speed benefits at the potential cost of robustness.
 
     Args:
-        p ((N, 3) np.array): First set of N points
-        q ((N, 3) np.array): Second set of N points
+        X ((N, 3) np.array): First set of N points
+        Y ((N, 3) np.array): Second set of N points
 
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
         is the translation.
     """
-    p = np.atleast_2d(p)
-    q = np.atleast_2d(q)
-    if p.shape != q.shape:
+    X = np.atleast_2d(X)
+    Y = np.atleast_2d(Y)
+    if X.shape != Y.shape:
         raise ValueError("Input arrays must be the same shape")
-    elif len(p.shape) != 2 or p.shape[1] != 3:
+    elif len(X.shape) != 2 or X.shape[1] != 3:
         raise ValueError("Input arrays must be (Nx3) arrays")
 
     # The algorithm depends on removing the centroid of the points.
-    centroid_p = np.mean(p, axis=0)
-    centroid_q = np.mean(q, axis=0)
-    p_c = p - centroid_p
-    q_c = q - centroid_q
+    centroid_X = np.mean(X, axis=0)
+    centroid_Y = np.mean(Y, axis=0)
+    X_c = X - centroid_X
+    Y_c = Y - centroid_Y
 
-    B = p_c.T.dot(q_c)
+    B = X_c.T.dot(Y_c)
     tr_B = np.trace(B)
     z = np.array([B[1, 2] - B[2, 1], B[2, 0] - B[0, 2], B[0, 1] - B[1, 0]]).T
 
@@ -240,25 +232,29 @@ def davenport(p, q):
 #    K[3, 3] = tr_B
 
     w, v = np.linalg.eig(K)
-    q_R = v[:, np.argmax(w)]
+    q = v[:, np.argmax(w)]
 
-    t = -rotate(q_R, centroid_p) + centroid_q
+    t = -rotate(q, centroid_X) + centroid_Y
 
-    return q_R, t
+    return q, t
 
 
-# TODO: Allow specification of equivalent orientations
-def procrustes(p, q, method='best'):
+def procrustes(X, Y, method='best', equivalent_quaternions=None):
     R"""Solve the orthogonal Procrustes problem.
 
     This function provides an interface to multiple algorithms to
     solve the orthogonal Procrustes problem.
 
     Args:
-        p ((N, m) np.array): First set of N points
-        q ((N, m) np.array): Second set of N points
+        X ((N, m) np.array): First set of N points
+        Y ((N, m) np.array): Second set of N points
         method (str): A method to use. Options are 'kabsch', 'davenport'
             and 'horn'. The default is to select the best option ('best')
+        equivalent_quaternions (array-like): If the precise correspondence is
+            not known, but the points are known to be part of e.g. a rigid body
+            with specific symmetries, the set of quaternions generating symmetry
+            equivalent configurations can be provided and tested with.
+        ways to generate symmetry equivalent objects.
 
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
@@ -273,25 +269,44 @@ def procrustes(p, q, method='best'):
         except KeyError:
             raise ValueError("The input method is not known")
     else:
-        p = np.atleast_2d(p)
-        q = np.atleast_2d(q)
-        if p.shape != q.shape:
+        X = np.atleast_2d(X)
+        Y = np.atleast_2d(Y)
+        if X.shape != Y.shape:
             raise ValueError("Input arrays must be the same shape")
-        elif len(p.shape) != 2:
+        elif len(X.shape) != 2:
             raise ValueError("Input arrays must be 2d arrays")
-        if p.shape[1] != 3:
+        if X.shape[1] != 3:
             method = getattr(thismodule, 'kabsch')
         else:
             method = getattr(thismodule, 'davenport')
-    return method(p, q)
+    if equivalent_quaternions:
+        qs = []
+        ts = []
+        for eq in equivalent_quaternions:
+            q, t = method(X, rotate(eq, Y))
+            if method == 'kabsch':
+                qs.append(from_matrix(q))
+            else:
+                qs.append(q)
+            qs.append(q)
+            ts.append(t)
+        index = np.argmin([angle(q) for q in qs])
+        return qs[index], ts[index]
+    else:
+        q, t = method(X, Y)
+        if method == 'kabsch':
+            return from_matrix(q), t
+        else:
+            return q, t
 
 
-def icp(A, B, method='best', unique_match=True, max_iterations=20, tolerance=0.001):
+def icp(X, Y, method='best', unique_match=True, max_iterations=20,
+        tolerance=0.001):
     '''
     Apply the Iterative Closest Point algorithm to find the optimal mapping.
     Args:
-        A ((N, m) np.array): First set of N points
-        B ((N, m) np.array): Second set of N points
+        X ((N, m) np.array): First set of N points
+        Y ((N, m) np.array): Second set of N points
         method (str): A method to use for each alignment. Options are 'kabsch',
             'davenport' and 'horn'. The default is to select the best option
             ('best').
@@ -313,20 +328,20 @@ def icp(A, B, method='best', unique_match=True, max_iterations=20, tolerance=0.0
         except KeyError:
             raise ValueError("The input method is not known")
     else:
-        A = np.atleast_2d(A)
-        B = np.atleast_2d(B)
-        if A.shape != B.shape:
+        X = np.atleast_2d(X)
+        Y = np.atleast_2d(Y)
+        if X.shape != Y.shape:
             raise ValueError("Input arrays must be the same shape")
-        elif len(A.shape) != 2:
+        elif len(X.shape) != 2:
             raise ValueError("Input arrays must be (Nx3) arrays")
-        if A.shape[1] != 3:
+        if X.shape[1] != 3:
             method = getattr(thismodule, 'kabsch')
         else:
             method = getattr(thismodule, 'davenport')
 
     # make points homogeneous, copy them to maintain the originals
-    src = np.copy(A)
-    dst = np.copy(B)
+    src = np.copy(X)
+    dst = np.copy(Y)
 
     prev_error = 0
 
@@ -378,7 +393,7 @@ def icp(A, B, method='best', unique_match=True, max_iterations=20, tolerance=0.0
         prev_error = mean_error
 
     # calculate final transformation
-    q, t = method(A, src)
+    q, t = method(X, src)
 
     if q.shape[-1] == 4:
         R = to_matrix(q)

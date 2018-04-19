@@ -172,6 +172,7 @@ class TestMapping(unittest.TestCase):
             transformed_points = rotate(rotation, points) + translation
 
             q, t = mapping.icp(points, transformed_points)
+            q = from_matrix(q)
 
             # In the case of just two points, the mapping is not unique,
             # so we don't check the mapping itself, just the result.
@@ -210,6 +211,7 @@ class TestMapping(unittest.TestCase):
             shuffled_points = points[indices]
 
             q, t = mapping.icp(shuffled_points, transformed_points)
+            q = from_matrix(q)
 
             deltas = transformed_points - (rotate(q, shuffled_points) + t)
             norms = np.linalg.norm(deltas, axis=-1)
