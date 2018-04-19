@@ -279,7 +279,7 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
             method = getattr(thismodule, 'kabsch')
         else:
             method = getattr(thismodule, 'davenport')
-    if equivalent_quaternions:
+    if equivalent_quaternions is not None:
         qs = []
         ts = []
         for eq in equivalent_quaternions:

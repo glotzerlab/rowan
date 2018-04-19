@@ -124,17 +124,8 @@ class TestMapping(unittest.TestCase):
             translation = np.random.rand(1, 3)
 
             transformed_points = rotate(rotation, points) + translation
-#            print("points: \n", points)
-#            print("transformed points: \n", transformed_points)
 
             q, t = mapping.procrustes(points, transformed_points)
-
-#            print("Applied translation = ", translation)
-#            print("Translation: ", t)
-#            print("Found rotation: ", q)
-#            print("Original rotation: ", rotation)
-#            print("Original rotation: ", rowan.to_matrix(rotation))
-#            assert 0
 
             # In the case of just two points, the mapping is not unique,
             # so we don't check the mapping itself, just the result.
@@ -146,14 +137,43 @@ class TestMapping(unittest.TestCase):
                         )
                     )
                 self.assertTrue(np.allclose(translation, t))
-#            print("Original points: ", transformed_points)
-#            print("New points: ", rotate(q, points) + t)
             self.assertTrue(
                     np.allclose(
                         transformed_points,
                         rotate(q, points) + t
                         )
                     )
+
+    def test_equivalent(self):
+        """Perform a rotation and ensure that we can recover it"""
+        # Test on an octahedron
+        points = [[1, 0, 0],
+                  [-1, 0, 0],
+                  [0, 1, 0],
+                  [0, -1, 0],
+                  [0, 0, 1],
+                  [0, 0, -1]]
+
+        # This is just a selected subset
+        equivalent_orientations = [
+                from_axis_angle([0, 0, 1], a) for a in
+                [0, 2*np.pi/3, 4*np.pi/3]]
+
+        np.random.seed(0)
+        rotation = random.rand(1)
+        translation = np.random.rand(1, 3)
+
+        transformed_points = rotate(rotation, points) + translation
+
+        q, t = mapping.procrustes(points, transformed_points,
+                equivalent_quaternions=equivalent_orientations)
+
+        self.assertTrue(
+                np.allclose(
+                    transformed_points,
+                    rotate(q, points) + t
+                    )
+                )
 
     def test_icp_exact(self):
         """Ensure that ICP is exact for corresponding inputs"""
@@ -190,7 +210,6 @@ class TestMapping(unittest.TestCase):
                         rotate(q, points) + t
                         )
                     )
-
 
     def test_icp_mismatched(self):
         """See how ICP works for non-corresponding inputs. Have set some
