@@ -4,7 +4,7 @@ from __future__ import division, print_function, absolute_import
 import unittest
 import numpy as np
 
-from rowan import mapping, random, rotate
+from rowan import mapping, random, rotate, from_matrix, from_axis_angle
 
 zero = np.array([0, 0, 0, 0])
 one = np.array([1, 0, 0, 0])
@@ -27,7 +27,8 @@ class TestMapping(unittest.TestCase):
 
             transformed_points = rotate(rotation, points) + translation
 
-            q, t = mapping.kabsch(points, transformed_points)
+            R, t = mapping.kabsch(points, transformed_points)
+            q = from_matrix(R)
 
             # In the case of just two points, the mapping is not unique,
             # so we don't check the mapping itself, just the result.
@@ -61,11 +62,6 @@ class TestMapping(unittest.TestCase):
 
             q, t = mapping.horn(points, transformed_points)
 
-#            print("Applied translation = ", translation)
-#            print("Translation: ", t)
-#            print("Found rotation: ", q)
-#            print("Original rotation: ", rotation)
-
             # In the case of just two points, the mapping is not unique,
             # so we don't check the mapping itself, just the result.
             if i > 1:
@@ -76,8 +72,7 @@ class TestMapping(unittest.TestCase):
                         )
                     )
                 self.assertTrue(np.allclose(translation, t))
-#            print("Original points: ", transformed_points)
-#            print("New points: ", rotate(q, points) + t)
+
             self.assertTrue(
                     np.allclose(
                         transformed_points,
@@ -97,10 +92,42 @@ class TestMapping(unittest.TestCase):
             translation = np.random.rand(1, 3)
 
             transformed_points = rotate(rotation, points) + translation
+
+            q, t = mapping.davenport(points, transformed_points)
+
+            # In the case of just two points, the mapping is not unique,
+            # so we don't check the mapping itself, just the result.
+            if i > 1:
+                self.assertTrue(
+                    np.logical_or(
+                        np.allclose(rotation, q),
+                        np.allclose(rotation, -q),
+                        )
+                    )
+                self.assertTrue(np.allclose(translation, t))
+            self.assertTrue(
+                    np.allclose(
+                        transformed_points,
+                        rotate(q, points) + t
+                        )
+                    )
+
+    def test_procrustes(self):
+        """Perform a rotation and ensure that we can recover it"""
+        np.random.seed(0)
+
+        for i in range(1, 12):
+            num_points = 2**i
+
+            points = np.random.rand(num_points, 3)
+            rotation = random.rand(1)
+            translation = np.random.rand(1, 3)
+
+            transformed_points = rotate(rotation, points) + translation
 #            print("points: \n", points)
 #            print("transformed points: \n", transformed_points)
 
-            q, t = mapping.davenport(points, transformed_points)
+            q, t = mapping.procrustes(points, transformed_points)
 
 #            print("Applied translation = ", translation)
 #            print("Translation: ", t)
@@ -127,3 +154,64 @@ class TestMapping(unittest.TestCase):
                         rotate(q, points) + t
                         )
                     )
+
+    def test_icp_exact(self):
+        """Ensure that ICP is exact for corresponding inputs"""
+        # Note that we do not bother to test the non-unique matching since we
+        # know it provides very poor results.
+        np.random.seed(0)
+
+        # First test using unique matching, which should work
+        for i in range(2, 6):
+            num_points = 2**i
+
+            points = np.random.rand(num_points, 3)
+            rotation = from_axis_angle([0.3, 0.3, 0.3], 0.3)
+            translation = np.random.rand(1, 3)
+
+            transformed_points = rotate(rotation, points) + translation
+
+            q, t = mapping.icp(points, transformed_points)
+
+            # In the case of just two points, the mapping is not unique,
+            # so we don't check the mapping itself, just the result.
+            if i > 1:
+                self.assertTrue(
+                    np.logical_or(
+                        np.allclose(rotation, q),
+                        np.allclose(rotation, -q),
+                        )
+                    )
+                self.assertTrue(np.allclose(translation, t))
+            self.assertTrue(
+                    np.allclose(
+                        transformed_points,
+                        rotate(q, points) + t
+                        )
+                    )
+
+
+    def test_icp_mismatched(self):
+        """See how ICP works for non-corresponding inputs. Have set some
+        reasonable threshold for testing purposes."""
+        np.random.seed(0)
+
+        # First test using unique matching, which should work
+        for i in range(2, 6):
+            num_points = 2**i
+
+            points = np.random.rand(num_points, 3)
+            rotation = from_axis_angle([0.3, 0.3, 0.3], 0.3)
+            translation = np.random.rand(1, 3)
+
+            transformed_points = rotate(rotation, points) + translation
+            indices = np.arange(num_points)
+            np.random.shuffle(indices)
+            shuffled_points = points[indices]
+
+            q, t = mapping.icp(shuffled_points, transformed_points)
+
+            deltas = transformed_points - (rotate(q, shuffled_points) + t)
+            norms = np.linalg.norm(deltas, axis=-1)
+            # This is purely a heuristic, since we can't guarantee exact matches
+            self.assertTrue(np.mean(norms) < 1)

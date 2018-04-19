@@ -12,14 +12,11 @@ the first step in the field of `Procrustes analysis
 <https://en.wikipedia.org/wiki/Procrustes_analysis#Shape_comparison>`_, which
 performs the superposition in order to compare two (or more) shapes.
 
-There are numerous methods for solving this problem, most of which involve
-first centering both point sets on their centroids and then searching for the
-orthogonal transformation mapping between them. The determination of this
-transformation is known as the `orthogonal Procrustes problem
-<https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem>`_, and numerous
-algorithms have been developed to solve it.
-
-Mathematically, the orthogonal Procrustes problem can be formulated as
+If points in the two sets have a known correspondence, the problem is much
+simpler. Various precise formulations exist that admit analytical formulations,
+such as the `orthogonal Procrustes problem
+<https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem>`_ searching for an
+orthogonal transformation
 
 .. math::
     \begin{equation}
@@ -27,10 +24,7 @@ Mathematically, the orthogonal Procrustes problem can be formulated as
         \Omega^T\Omega = \mathbb{I}
     \begin{equation}
 
-Note that the relevant norm here is the Frobenius matrix norm.
-
-A closely related problem in attitude determination and aeronautics is Wahba's
-problem
+or, if a pure rotation is desired, Wahba's problem
 
 .. math::
     \begin{equation}
@@ -38,56 +32,43 @@ problem
         \lvert \boldsymbol{w}_k - \boldsymbol{R} \boldsymbol{v}_k \rvert\rvert^2
     \begin{equation}
 
-This problem can be seen as an alternative formulation of the orthogonal
-Procrustes problem by multiplying the weights :math:`a_k` into the vectors in
-the inner product and then considering the vectors as columns of matrices with
-:math:`N` entries. This formulation imposes the additional restriction that the
-mapping be a pure rotation (without reflection).
+Numerous algorithms to solve this problem exist, particularly in the field of
+aerospace engineering and robotics where this problem must be solved on embedded
+systems with limited processing. Since that constraint does not apply here, this
+package simply implements some of the most stable known methods irrespective of
+cost. In particular, this package contains the `Kabsch algorithm
+<http://scripts.iucr.org/cgi-bin/paper?S0567739476001873>`_, which solves
+Wahba's problem using an SVD in the vein of `Peter Schonemann's original
+solution <https://link.springer.com/article/10.1007/BF02289451>_` to
+the orthogonal Procrustes problem. Additionally this package contains the
+`Davenport q method <https://ntrs.nasa.gov/search.jsp?R=19670009376>`_, which
+works directly with quaternions. The most popular algorithms for Wahba's problem
+are variants of the q method that are faster at the cost of some stability; we
+omit these here.
 
-Many papers have been written reviewing the various solutions to the orthogonal
-Procrustes problem, most of which have been independently rediscovered by
-multiple authors in different fields. Of particular note are `Green's solution
-for full rank matrices <https://link.springer.com/article/10.1007/BF02288918>`_
-and `Peter Schonemann's solution
-<https://link.springer.com/article/10.1007/BF02289451>_` to the orthogonal
-Procrustes problem (the first widely known solution, although alternatives were
-discovered earlier by von Neumann and `Fan and Hoffman
-<http://www.ams.org/journals/proc/1955-006-01/S0002-9939-1955-0067841-7/S0002-9939-1955-0067841-7.pdf>`).
-`This paper
-<https://ia800502.us.archive.org/16/items/nasa_techdoc_20000034107/20000034107.pdf>_`
-and `this document
-<https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19990104598.pdf>`_, both
-by Markley, provide overviews of numerous subsequent methods developed for
-solving Wahba's problem largely independent of the Procrustes solutions.
-
-In the field of crystallography, a solution for the equivalent problem of
-minimizing the RMSD between two molecules is the `Kabsch algorithm
-<http://scripts.iucr.org/cgi-bin/paper?S0567739476001873>`_, which is commonly
-used in molecular modeling (and was also rediscovered by `Markley
-<https://www.researchgate.net/publication/243753921_Attitude_Determination_Using_Vector_Observations_and_the_Singular_Value_Decomposition>`_.
-The most popular and stable algorithms for solving Wahba's problem in other
-fields are variants on the `Davenport q-method
-<https://ntrs.nasa.gov/search.jsp?R=19670009376>`_, which is quaternion-based
-and involves computing eigenvalues of a particular 4x4 matrix constructed from
-the data.
-
-This subpackage focuses specifically on providing algorithms to solve Wahba's
-problem. Since :py:module:`rowan` is a quaternion focused packaged, preference
-is given to implementing quaternion-based methods, although the Kabsch algorithm
-is included for completeness.
-
-
-.. note:
-    By nature of the problem being solved, this subpackage does not support
-    any form of array broadcasting.
+In addition, :py:module:`rowan.mapping` also includes some functionality for
+more general point set registration. If a point cloud has a set of known
+symmetries, these can be tested explicitly by :py:module:`rowan.mapping` to
+find the smallest rotation required for optimal mapping. If no such
+correspondence is knowna at all, then the iterative closest point algorithm can
+be used to approximate the mapping.
 """
 from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
+try:
+    from sklearn.neighbors import NearestNeighbors
+except ImportError:
+    class NearestNeighbors(object):
+        """Provide erros"""
+        def __init__(self):
+            raise ImportError("This method requires scikit-learn. Please "
+                              "install sklearn and try again")
+
 from ..functions import from_matrix, rotate
 
-__all__ = ['kabsch']
+__all__ = ['kabsch', 'davenport', 'procrustes', 'icp']
 
 
 def kabsch(p, q, require_rotation=True):
@@ -96,19 +77,24 @@ def kabsch(p, q, require_rotation=True):
 
     This function implements the
     `Kabsch algorithm <https://en.wikipedia.org/wiki/Kabsch_algorithm>`, which
-    minimizes the RMSD between two sets of points.
+    minimizes the RMSD between two sets of points. One benefit of this approach
+    is that the SVD works in dimensions > 3.
 
     Args:
-        p ((N, 3) np.array): First set of N points
-        q ((N, 3) np.array): Second set of N points
+        p ((N, m) np.array): First set of N points
+        q ((N, m) np.array): Second set of N points
         require_rotation (bool): If false, the returned quaternion
 
     Returns:
-        A tuple (q, t) where q is the quaternion to rotate the points and t
-        is the tranlsation.
+        A tuple (R, t) where R is the (mxm) rotation matrix to rotate the
+        points and t is the translation.
     """
+    p = np.atleast_2d(p)
+    q = np.atleast_2d(q)
     if p.shape != q.shape:
         raise ValueError("Input arrays must be the same shape")
+    elif len(p.shape) != 2:
+        raise ValueError("Input arrays must be (Nxm) arrays")
     p = np.asarray(p)
     q = np.asarray(q)
 
@@ -131,7 +117,7 @@ def kabsch(p, q, require_rotation=True):
 
     t = -R.dot(centroid_p.T) + centroid_q.T
 
-    return from_matrix(R), t
+    return R, t
 
 
 def horn(p, q):
@@ -149,12 +135,14 @@ def horn(p, q):
 
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
-        is the tranlsation.
+        is the translation.
     """
+    p = np.atleast_2d(p)
+    q = np.atleast_2d(q)
     if p.shape != q.shape:
         raise ValueError("Input arrays must be the same shape")
-    p = np.asarray(p)
-    q = np.asarray(q)
+    elif len(p.shape) != 2 or p.shape[1] != 3:
+        raise ValueError("Input arrays must be (Nx3) arrays")
 
     # The algorithm depends on removing the centroid of the points.
     centroid_p = np.mean(p, axis=0)
@@ -218,12 +206,14 @@ def davenport(p, q):
 
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
-        is the tranlsation.
+        is the translation.
     """
+    p = np.atleast_2d(p)
+    q = np.atleast_2d(q)
     if p.shape != q.shape:
         raise ValueError("Input arrays must be the same shape")
-    p = np.asarray(p)
-    q = np.asarray(q)
+    elif len(p.shape) != 2 or p.shape[1] != 3:
+        raise ValueError("Input arrays must be (Nx3) arrays")
 
     # The algorithm depends on removing the centroid of the points.
     centroid_p = np.mean(p, axis=0)
@@ -255,3 +245,142 @@ def davenport(p, q):
     t = -rotate(q_R, centroid_p) + centroid_q
 
     return q_R, t
+
+
+# TODO: Allow specification of equivalent orientations
+def procrustes(p, q, method='best'):
+    R"""Solve the orthogonal Procrustes problem.
+
+    This function provides an interface to multiple algorithms to
+    solve the orthogonal Procrustes problem.
+
+    Args:
+        p ((N, m) np.array): First set of N points
+        q ((N, m) np.array): Second set of N points
+        method (str): A method to use. Options are 'kabsch', 'davenport'
+            and 'horn'. The default is to select the best option ('best')
+
+    Returns:
+        A tuple (q, t) where q is the quaternion to rotate the points and t
+        is the translation.
+    """
+    import sys
+    thismodule = sys.modules[__name__]
+
+    if method != 'best':
+        try:
+            method = getattr(thismodule, method)
+        except KeyError:
+            raise ValueError("The input method is not known")
+    else:
+        p = np.atleast_2d(p)
+        q = np.atleast_2d(q)
+        if p.shape != q.shape:
+            raise ValueError("Input arrays must be the same shape")
+        elif len(p.shape) != 2:
+            raise ValueError("Input arrays must be 2d arrays")
+        if p.shape[1] != 3:
+            method = getattr(thismodule, 'kabsch')
+        else:
+            method = getattr(thismodule, 'davenport')
+    return method(p, q)
+
+
+def icp(A, B, method='best', unique_match=True, max_iterations=20, tolerance=0.001):
+    '''
+    Apply the Iterative Closest Point algorithm to find the optimal mapping.
+    Args:
+        A ((N, m) np.array): First set of N points
+        B ((N, m) np.array): Second set of N points
+        method (str): A method to use for each alignment. Options are 'kabsch',
+            'davenport' and 'horn'. The default is to select the best option
+            ('best').
+        unique_match (bool): Whether to require nearest neighbors to be unique.
+        max_iterations (int): Number of iterations to attempt.
+        tolerance (float): Indicates convergence
+
+    Returns:
+        A tuple (R, t) where q is the quaternion to rotate the points and t
+        is the translation.
+    '''
+
+    import sys
+    thismodule = sys.modules[__name__]
+
+    if method != 'best':
+        try:
+            method = getattr(thismodule, method)
+        except KeyError:
+            raise ValueError("The input method is not known")
+    else:
+        A = np.atleast_2d(A)
+        B = np.atleast_2d(B)
+        if A.shape != B.shape:
+            raise ValueError("Input arrays must be the same shape")
+        elif len(A.shape) != 2:
+            raise ValueError("Input arrays must be (Nx3) arrays")
+        if A.shape[1] != 3:
+            method = getattr(thismodule, 'kabsch')
+        else:
+            method = getattr(thismodule, 'davenport')
+
+    # make points homogeneous, copy them to maintain the originals
+    src = np.copy(A)
+    dst = np.copy(B)
+
+    prev_error = 0
+
+    if unique_match:
+        try:
+            from scipy import spatial, optimize
+        except ImportError:
+            raise ImportError("Running with unique_match requires "
+                              " scipy. Please install sklearn and try "
+                              " again.")
+    else:
+        try:
+            from sklearn import neighbors
+            nn = NearestNeighbors(n_neighbors=1)
+            nn.fit(dst)
+        except ImportError:
+            raise ImportError("Running without unique_match requires "
+                              "scikit-learn. Please install sklearn and try "
+                              "again.")
+
+    for i in range(max_iterations):
+        # Rather than a coarse nearest neighbors, we apply the Hungarian
+        # algorithm to ensure that we do not have duplicates. Unfortunately,
+        # this precludes acceleration of the spatial search but is worthwhile
+        # for the improved accuracy
+        if unique_match:
+            pair_distances = spatial.distance.cdist(src, dst)
+            row_ind, indices = optimize.linear_sum_assignment(pair_distances)
+            distances = pair_distances[row_ind, indices]
+        else:
+            distances, indices = nn.kneighbors(src, return_distance=True)
+            distances = distances.ravel()
+            indices = indices.ravel()
+
+        # compute the transformation between the current source and nearest destination points
+        q, t = method(src, dst[indices, :])
+
+        # update the current source
+        if q.shape[-1] != 4:
+            # Returned a matrix instead of a quaternion
+            src = np.dot(src, q.T) + t
+        else:
+            src = rotate(q, src) + t
+
+        # check error
+        mean_error = np.mean(distances)
+        if np.abs(prev_error - mean_error) < tolerance:
+            break
+        prev_error = mean_error
+
+    # calculate final transformation
+    q, t = method(A, src)
+
+    if q.shape[-1] == 4:
+        R = to_matrix(q)
+
+    return R, t
