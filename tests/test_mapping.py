@@ -155,9 +155,8 @@ class TestMapping(unittest.TestCase):
                   [0, 0, -1]]
 
         # This is just a selected subset
-        equivalent_orientations = [
-                from_axis_angle([0, 0, 1], a) for a in
-                [0, 2*np.pi/3, 4*np.pi/3]]
+        eq = [from_axis_angle([0, 0, 1], a) for a in
+              [0, 2*np.pi/3, 4*np.pi/3]]
 
         np.random.seed(0)
         rotation = random.rand(1)
@@ -166,7 +165,7 @@ class TestMapping(unittest.TestCase):
         transformed_points = rotate(rotation, points) + translation
 
         q, t = mapping.procrustes(points, transformed_points,
-                equivalent_quaternions=equivalent_orientations)
+                                  equivalent_quaternions=eq)
 
         self.assertTrue(
                 np.allclose(

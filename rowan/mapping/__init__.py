@@ -339,12 +339,6 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         else:
             method = getattr(thismodule, 'davenport')
 
-    # make points homogeneous, copy them to maintain the originals
-    src = np.copy(X)
-    dst = np.copy(Y)
-
-    prev_error = 0
-
     if unique_match:
         try:
             from scipy import spatial, optimize
@@ -355,45 +349,48 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
     else:
         try:
             from sklearn import neighbors
-            nn = NearestNeighbors(n_neighbors=1)
-            nn.fit(dst)
+            nn = neighbors.NearestNeighbors(n_neighbors=1)
+            nn.fit(Y)
         except ImportError:
             raise ImportError("Running without unique_match requires "
                               "scikit-learn. Please install sklearn and try "
                               "again.")
 
+    # Copy points so we have originals available.
+    cur_points = np.copy(X)
+    err_old = 0
     for i in range(max_iterations):
         # Rather than a coarse nearest neighbors, we apply the Hungarian
         # algorithm to ensure that we do not have duplicates. Unfortunately,
         # this precludes acceleration of the spatial search but is worthwhile
         # for the improved accuracy
         if unique_match:
-            pair_distances = spatial.distance.cdist(src, dst)
+            pair_distances = spatial.distance.cdist(cur_points, Y)
             row_ind, indices = optimize.linear_sum_assignment(pair_distances)
             distances = pair_distances[row_ind, indices]
         else:
-            distances, indices = nn.kneighbors(src, return_distance=True)
+            distances, indices = nn.kneighbors(cur_points, return_distance=True)
             distances = distances.ravel()
             indices = indices.ravel()
 
-        # compute the transformation between the current source and nearest destination points
-        q, t = method(src, dst[indices, :])
+        # Compute current best transformation
+        q, t = method(cur_points, Y[indices, :])
 
-        # update the current source
+        # Update the current source
         if q.shape[-1] != 4:
             # Returned a matrix instead of a quaternion
-            src = np.dot(src, q.T) + t
+            cur_points = np.dot(cur_points, q.T) + t
         else:
-            src = rotate(q, src) + t
+            cur_points = rotate(q, cur_points) + t
 
-        # check error
-        mean_error = np.mean(distances)
-        if np.abs(prev_error - mean_error) < tolerance:
+        # Tolerance check
+        err = np.mean(distances)
+        if np.abs(err_old - err) < tolerance:
             break
-        prev_error = mean_error
+        err_old = err
 
     # calculate final transformation
-    q, t = method(X, src)
+    q, t = method(X, cur_points)
 
     if q.shape[-1] == 4:
         R = to_matrix(q)
