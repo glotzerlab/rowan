@@ -46,9 +46,9 @@ works directly with quaternions. The most popular algorithms for Wahba's problem
 are variants of the q method that are faster at the cost of some stability; we
 omit these here.
 
-In addition, :py:module:`rowan.mapping` also includes some functionality for
+In addition, :py:mod:`rowan.mapping` also includes some functionality for
 more general point set registration. If a point cloud has a set of known
-symmetries, these can be tested explicitly by :py:module:`rowan.mapping` to
+symmetries, these can be tested explicitly by :py:mod:`rowan.mapping` to
 find the smallest rotation required for optimal mapping. If no such
 correspondence is knowna at all, then the iterative closest point algorithm can
 be used to approximate the mapping.
@@ -302,8 +302,8 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
 
 def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         tolerance=0.001):
-    '''
-    Apply the Iterative Closest Point algorithm to find the optimal mapping.
+    R''' Find best mapping using the Iterative Closest Point algorithm
+
     Args:
         X ((N, m) np.array): First set of N points
         Y ((N, m) np.array): Second set of N points

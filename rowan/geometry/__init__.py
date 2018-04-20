@@ -7,7 +7,7 @@ between quaternions. These distance computations can be complicated,
 particularly good metrics for distance on the Riemannian manifold representing
 quaternions do not necessarily coincide with good metrics for similarities
 between rotations. An overview of distance measurements can be found in
- `this paper <https://link.springer.com/article/10.1007/s10851-009-0161-2>`_.
+`this paper <https://link.springer.com/article/10.1007/s10851-009-0161-2>`_.
 """
 from __future__ import division, print_function, absolute_import
 
@@ -145,7 +145,7 @@ def intrinsic_distance(p, q):
     than computing this directly, however, as shown in [Huynh09]_ we can
     compute this distance using the following equivalence:
 
-    ..math::
+    .. math::
         \begin{equation}
             \lvert\lvert \log(p q^{-1}) \rvert\rvert =
             2*np.cos(\lvert\langle p, q \rangle\rvert)
