@@ -78,12 +78,33 @@ Unit Tests
 All code should include a set of unit tests which test for correct behavior.
 All tests should be placed in the ``tests`` folder at the root of the project.
 These tests should be as simple as possible, testing a single function each, and they should be kept as short as possible.
-Tests should also be entirely deterministic: if you are using a random set of objects for testing, they should either be generated once and then stored in the ``tests/files`` folder, or the random number generator in use should be seeded explicitly (*e.g*, `numpy.random.seed` or `random.seed`).
+Tests should also be entirely deterministic: if you are using a random set of objects for testing, they should either be generated once and then stored in the ``tests/files`` folder, or the random number generator in use should be seeded explicitly (*e.g*, ``numpy.random.seed`` or ``random.seed``).
 Tests should be written in the style of the standard Python `unittest <https://docs.python.org/3/library/unittest.html>`_ framework.
-At all times, tests should be executable by simply running `python -m unittest discover tests` from the root of the project.
+At all times, tests should be executable by simply running ``python -m unittest discover tests`` from the root of the project.
 
 
 General Notes
 =============
+
  * For consistency, NumPy should **always** be imported as ``np`` in code: ``import numpy as np``.
  * Avoid external dependencies where possible, and avoid introducing **any** hard dependencies. Dependencies other than NumPy should always be soft, enabling the rest of the package to function as is.
+
+Release Guide
+=============
+
+To make a new release of rowan, follow the following steps:
+
+#. Make a new branch off of develop based on the expected new version, *e.g.*
+   release-2.3.1.
+#. Ensure all tests are passing as expected on the new branch. Make any final
+   changes as desired on this branch.
+#. Once the branch is completely finalized, run bumpversion with the appropriate
+   type (patch, minor, major) so that the version now matches the version number
+   in the branch name.
+#. Once all tests pass on the release branch, merge the branch back into
+   develop.
+#. Merge develop into master.
+#. Generate new source and binary distributions as described in the Python guide
+   for `Packaging and distributing projects
+   <https://packaging.python.org/tutorials/distributing-packages/#packaging-your-project>`_.
+#. Update the conda recipe.
