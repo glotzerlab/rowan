@@ -90,9 +90,11 @@ workflows:
                 only:
                   - master
                   - develop
+                  - /release-*/
         - test_only:
             filters:
               branches:
                 ignore:
                   - master
                   - develop
+                  - /release-*/
