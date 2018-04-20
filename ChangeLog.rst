@@ -1,11 +1,18 @@
 The format is based on `Keep a Changelog <http://keepachangelog.com/en/1.0.0/>`_.
-This project adheres to `Semantic Versioning` <http://semver.org/spec/v2.0.0.html>`_.
+This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html>`_.
 
 
 Unreleased
 ----------
 
+v0.5.2 - 2018-04-20
+-------------------
+
+Added
++++++
+
 * Derivatives and integrals of quaternions.
+* Point set registration methods and Procrustes analysis.
 
 v0.5.1 - 2018-04-13
 -------------------
