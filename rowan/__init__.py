@@ -24,7 +24,7 @@ from . import interpolate
 from . import mapping
 from . import random
 
-from .functions import (allclose, conjugate, divide exp, expb, exp10, equal,
+from .functions import (allclose, conjugate, divide, exp, expb, exp10, equal,
         from_axis_angle, from_euler, from_matrix, from_mirror_plane, inverse,
         isclose, isinf, isfinite, isnan, is_unit, log, logb, log10, multiply,
         norm, normalize, not_equal, power, reflect, rotate, to_axis_angle,
@@ -34,11 +34,11 @@ from .functions import (allclose, conjugate, divide exp, expb, exp10, equal,
 import os
 
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                       '_version.py')) as f:
-    exec(f.read())
+                       'VERSION.txt')) as f:
+    __version__ = f.readline().strip()
 
 __all__ = ['calculus', 'geometry', 'interpolate', 'mapping', 'random',
-           'allclose', 'conjugate', 'divide' 'exp', 'expb', 'exp10', 'equal',
+           'allclose', 'conjugate', 'divide', 'exp', 'expb', 'exp10', 'equal',
            'from_axis_angle', 'from_euler', 'from_matrix', 'from_mirror_plane',
            'inverse', 'isclose', 'isinf', 'isfinite', 'isnan', 'is_unit', 'log',
            'logb', 'log10', 'multiply', 'norm', 'normalize', 'not_equal',

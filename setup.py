@@ -4,8 +4,8 @@ import os
 
 # Gets the version version
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                       'rowan', '_version.py')) as f:
-    exec(f.read())
+                       'rowan', 'VERSION.txt')) as f:
+    version = f.readline().strip()
 
 # Read README for PyPI, fallback if it fails.
 desc = 'Perform quaternion operations using numpy arrays'
@@ -18,7 +18,7 @@ except ImportError:
     readme = desc
 
 setup(name='rowan',
-      version=__version__, # noqa F821
+      version=version,
       description=desc,
       long_description=readme,
       long_description_content_type='text/markdown',

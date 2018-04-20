@@ -64,10 +64,8 @@ author = 'Vyas Ramasubramani'
 #
 # The full version, including alpha/beta/rc tags.
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                       '../rowan/_version.py')) as f:
-    exec(f.read())
-
-release = __version__ # noqa F821
+                       '../rowan/VERSION.txt')) as f:
+    release = f.readline().strip()
 
 # The short X.Y version.
 version = release[:3]
