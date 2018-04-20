@@ -20,9 +20,9 @@ orthogonal transformation
 
 .. math::
     \begin{equation}
-        R = \argmin_\Omega \lvert\lvert\Omega A - B\rvert\rvert_F,\,\,
-        \Omega^T\Omega = \mathbb{I}
-    \begin{equation}
+        R = \textrm{argmin}_\Omega \lvert\lvert\Omega A - B\rvert\rvert_F,\,\,
+        \Omega^T\Omega = \mathbb{1}
+    \end{equation}
 
 or, if a pure rotation is desired, Wahba's problem
 
@@ -30,16 +30,15 @@ or, if a pure rotation is desired, Wahba's problem
     \begin{equation}
         \min_{\boldsymbol{R} \in SO(3)} \frac{1}{2} \sum_{k=1}^N a_k \lvert
         \lvert \boldsymbol{w}_k - \boldsymbol{R} \boldsymbol{v}_k \rvert\rvert^2
-    \begin{equation}
+    \end{equation}
 
 Numerous algorithms to solve this problem exist, particularly in the field of
 aerospace engineering and robotics where this problem must be solved on embedded
 systems with limited processing. Since that constraint does not apply here, this
 package simply implements some of the most stable known methods irrespective of
-cost. In particular, this package contains the `Kabsch algorithm
-<http://scripts.iucr.org/cgi-bin/paper?S0567739476001873>`_, which solves
+cost. In particular, this package contains the Kabsch algorithm, which solves
 Wahba's problem using an SVD in the vein of `Peter Schonemann's original
-solution <https://link.springer.com/article/10.1007/BF02289451>_` to
+solution <https://link.springer.com/article/10.1007/BF02289451>`_ to
 the orthogonal Procrustes problem. Additionally this package contains the
 `Davenport q method <https://ntrs.nasa.gov/search.jsp?R=19670009376>`_, which
 works directly with quaternions. The most popular algorithms for Wahba's problem
@@ -68,7 +67,7 @@ def kabsch(X, Y, require_rotation=True):
     points.
 
     This function implements the
-    `Kabsch algorithm <https://en.wikipedia.org/wiki/Kabsch_algorithm>`, which
+    `Kabsch algorithm <https://en.wikipedia.org/wiki/Kabsch_algorithm>`_, which
     minimizes the RMSD between two sets of points. One benefit of this approach
     is that the SVD works in dimensions > 3.
 
@@ -187,7 +186,7 @@ def davenport(X, Y):
     This function implements the `Davenport q-method
     <https://ntrs.nasa.gov/search.jsp?R=19670009376>`_, the most robust method
     and basis of most modern solvers. It involves the construction of a
-    particular matrix, the Davenport K-matrix, which is then diagnolized to find
+    particular matrix, the Davenport K-matrix, which is then diagonalized to find
     the appropriate eigenvalues. More modern algorithms aim to solve the
     characteristic equation directly rather than diagonalizing, which can
     provide speed benefits at the potential cost of robustness.
@@ -240,10 +239,7 @@ def davenport(X, Y):
 
 
 def procrustes(X, Y, method='best', equivalent_quaternions=None):
-    R"""Solve the orthogonal Procrustes problem.
-
-    This function provides an interface to multiple algorithms to
-    solve the orthogonal Procrustes problem.
+    R"""Solve the orthogonal Procrustes problem with algorithmic options.
 
     Args:
         X ((N, m) np.array): First set of N points
@@ -315,7 +311,7 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         tolerance (float): Indicates convergence
 
     Returns:
-        A tuple (R, t) where q is the quaternion to rotate the points and t
+        A tuple (R, t) where R is the matrix to rotate the points and t
         is the translation.
     '''
 

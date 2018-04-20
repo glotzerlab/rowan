@@ -89,18 +89,14 @@ def riemann_exp_map(p, v):
     Riemannian manifold :math:`\mathcal{M}` and an element of the tangent
     space at p :math:`v \in T_p\mathcal{M}`, the Riemannian exponential
     map is defined by the geodesic starting at :math:`p` and tracing out
-    an arc of length :math:`v` in the direction of :math:`v`. The tangent
-    space of the Riemannian manifold of nonzero quaternions is just the
-    set of all quaternions. Since the quaternions are a Lie group, we can
-    use the Lie exponential map to define the mapping from the Lie algebra
-    of quaternions onto the Lie group of nonzero quaternions, providing a
-    way to quantify the length of the path in quaternion space.
+    an arc of length :math:`v` in the direction of :math:`v`. This function
+    computes the endpoint of that path (which is itself a quaternion).
 
-    As a result, we can define the exponential map as
+    Explicitly, we define the exponential map as
 
     .. math::
         \begin{equation}
-            \textnormal{Exp}_p(v) = p*\xp(v)
+            \textrm{Exp}_p(v) = p\exp(v)
         \end{equation}
 
     Args:
@@ -148,7 +144,7 @@ def intrinsic_distance(p, q):
     .. math::
         \begin{equation}
             \lvert\lvert \log(p q^{-1}) \rvert\rvert =
-            2*np.cos(\lvert\langle p, q \rangle\rvert)
+            2\cos(\lvert\langle p, q \rangle\rvert)
         \end{equation}
 
     When applied to unit quaternions, this function produces
@@ -177,8 +173,8 @@ def sym_intrinsic_distance(p, q):
     quaternions.
 
     This is a symmetrized version of :py:func:`intrinsic_distance` that
-    accounts for the double cover SU(2)->SO(3), making it a more useful
-    metric for rotation similarity.
+    accounts for the double cover :math:`SU(2)\rightarrow SO(3)`, making it a
+    more useful metric for rotation similarity.
 
     When applied to unit quaternions, this function produces
     values in the range :math:`[0, \frac{\pi}{2}]`.

@@ -115,7 +115,7 @@ def log(q):
     The natural of a quaternion in terms of its scalar and vector parts
     :math:`q = a + \boldsymbol{v}` is defined by inverting the exponential
     formula (see :py:func:`exp`), and is defined by the formula
-    :math:` \frac{x^k}{k!}` as follows:
+    :math:`\frac{x^k}{k!}` as follows:
 
     .. math::
         \begin{equation}
@@ -912,7 +912,7 @@ def to_matrix(q, require_unit=True):
 
     Returns:
         The array containing the matrix representations
-        of the elements of q (i.e. the same elements of SO(3))
+        of the elements of q (i.e. the same elements of :math:`SO(3))`
     """
     q = np.asarray(q)
 

@@ -4,7 +4,7 @@
 """
 Various functions for generating random sets of rotation quaternions. Note
 that if you simply want random quaternions not restricted to :math:`SO(3)` you
-can just generate these directly using `numpy.random.rand(... 4)`. This
+can just generate these directly using ``np.random.rand(... 4)``. This
 subpackage is entirely focused on generating rotation quaternions.
 """
 
@@ -26,7 +26,7 @@ __all__ = ['rand',
 def rand(*args):
     R"""Generate random rotations uniformly
 
-    This is a convenience function *a la* np.random.rand. If you want a function
+    This is a convenience function *a la* ``np.random.rand``. If you want a function
     that takes a tuple as input, use :py:func:`random_sample` instead.
 
     Args:

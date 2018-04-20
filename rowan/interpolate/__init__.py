@@ -28,7 +28,7 @@ def slerp(q0, q1, t, ensure_shortest=True):
         q1 ((...,4) np.array): Second set of quaternions
         t ((...) np.array): Interpolation parameter :math:`\in [0, 1]`
         ensure_shortest (bool): Flip quaternions to ensure we traverse the
-            geodesic in the shorter (:math:`<180\degree`) direction
+            geodesic in the shorter (:math:`<180^{\circ}`) direction
 
     .. note::
 
@@ -69,7 +69,7 @@ def slerp_prime(q0, q1, t, ensure_shortest=True):
         q1 ((...,4) np.array): Second set of quaternions
         t ((...) np.array): Interpolation parameter :math:`\in [0, 1]`
         ensure_shortest (bool): Flip quaternions to ensure we traverse the
-            geodesic in the shorter (:math:`<180\degree`) direction
+            geodesic in the shorter (:math:`<180^{\circ}`) direction
 
     Returns:
         An array containing the element-wise derivatives of interpolations
@@ -108,8 +108,8 @@ def squad(p, a, b, q, t):
 
     .. math::
         \begin{equation}
-            \textnormal{squad}(p, a, b, q, t) = \textnormal{slerp}(p, q, t)
-            \left(\textnormal{slerp}(p, q, t)^{-1}\textnormal{slerp}(a, b, t)
+            \textrm{squad}(p, a, b, q, t) = \textrm{slerp}(p, q, t)
+            \left(\textrm{slerp}(p, q, t)^{-1}\textrm{slerp}(a, b, t)
             \right)^{2t(1-t)}
         \end{equation}
 
