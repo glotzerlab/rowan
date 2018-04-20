@@ -36,7 +36,8 @@ with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                        '_version.py')) as f:
     exec(f.read())
 
-__all__ = ['geometry',
+__all__ = ['mapping',
+           'geometry',
            'calculus',
            'interpolate',
            'random',
