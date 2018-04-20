@@ -186,8 +186,8 @@ def davenport(X, Y):
     This function implements the `Davenport q-method
     <https://ntrs.nasa.gov/search.jsp?R=19670009376>`_, the most robust method
     and basis of most modern solvers. It involves the construction of a
-    particular matrix, the Davenport K-matrix, which is then diagonalized to find
-    the appropriate eigenvalues. More modern algorithms aim to solve the
+    particular matrix, the Davenport K-matrix, which is then diagonalized to
+    find the appropriate eigenvalues. More modern algorithms aim to solve the
     characteristic equation directly rather than diagonalizing, which can
     provide speed benefits at the potential cost of robustness.
 

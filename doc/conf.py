@@ -139,7 +139,7 @@ latex_elements = {
 
     # Additional stuff for the LaTeX preamble.
     #
-     'preamble': r'''
+    'preamble': r'''
 \usepackage{bbold}
 \usepackage{amsmath}
 ''',

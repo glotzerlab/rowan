@@ -26,8 +26,8 @@ __all__ = ['rand',
 def rand(*args):
     R"""Generate random rotations uniformly
 
-    This is a convenience function *a la* ``np.random.rand``. If you want a function
-    that takes a tuple as input, use :py:func:`random_sample` instead.
+    This is a convenience function *a la* ``np.random.rand``. If you want a
+    function that takes a tuple as input, use :py:func:`random_sample` instead.
 
     Args:
         shape (tuple): The shape of the array to generate.

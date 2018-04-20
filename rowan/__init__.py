@@ -25,10 +25,12 @@ from . import mapping
 from . import random
 
 from .functions import (allclose, conjugate, divide, exp, expb, exp10, equal,
-        from_axis_angle, from_euler, from_matrix, from_mirror_plane, inverse,
-        isclose, isinf, isfinite, isnan, is_unit, log, logb, log10, multiply,
-        norm, normalize, not_equal, power, reflect, rotate, to_axis_angle,
-        to_euler, to_matrix, vector_vector_rotation)
+                        from_axis_angle, from_euler, from_matrix,
+                        from_mirror_plane, inverse, isclose, isinf, isfinite,
+                        isnan, is_unit, log, logb, log10, multiply, norm,
+                        normalize, not_equal, power, reflect, rotate,
+                        to_axis_angle, to_euler, to_matrix,
+                        vector_vector_rotation)
 
 # Get the version
 import os
