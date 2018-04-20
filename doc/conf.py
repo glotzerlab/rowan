@@ -63,9 +63,8 @@ author = 'Vyas Ramasubramani'
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                       '../rowan/VERSION.txt')) as f:
-    release = f.readline().strip()
+
+release = 0.6.0
 
 # The short X.Y version.
 version = release[:3]

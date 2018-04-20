@@ -35,9 +35,7 @@ from .functions import (allclose, conjugate, divide, exp, expb, exp10, equal,
 # Get the version
 import os
 
-with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                       'VERSION.txt')) as f:
-    __version__ = f.readline().strip()
+__version__ = 0.6.0
 
 __all__ = ['calculus', 'geometry', 'interpolate', 'mapping', 'random',
            'allclose', 'conjugate', 'divide', 'exp', 'expb', 'exp10', 'equal',

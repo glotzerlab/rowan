@@ -2,10 +2,8 @@ from setuptools import setup, find_packages
 
 import os
 
-# Gets the version version
-with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                       'rowan', 'VERSION.txt')) as f:
-    version = f.readline().strip()
+# Gets the version
+version = 0.6.0
 
 # Read README for PyPI, fallback if it fails.
 desc = 'Perform quaternion operations using numpy arrays'
