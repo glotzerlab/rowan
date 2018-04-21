@@ -19,7 +19,7 @@ The package covers all basic quaternion algebraic and calculus operations, and a
 
 ## Setup
 
-The recommended method for installing signac is using **pip**.
+The recommended method for installing rowan is using **pip**.
 
 ### Installation via pip
 
