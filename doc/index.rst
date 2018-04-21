@@ -19,10 +19,26 @@ Core features of rowan include (but are not limited to):
   and the Iterative Closest Point algorithm.
 * Quaternion interpolation (slerp, squad).
 
-To install rowan, first clone the repository `from source <https://bitbucket.org/glotzer/rowan>`_.
-Once installed, the package can be installed using setuptools::
+To install rowan, you have a few options.
+The package can either be installed through PyPI:
 
+.. code-block:: bash
+    $ pip install rowan --user
+
+using conda
+
+.. code-block:: bash
+    $ conda install rowan
+
+or by cloning the repository `from source <https://bitbucket.org/glotzer/rowan>`_
+and running setuptools
+
+.. code-block:: bash
+    $ git clone https://bitbucket.org/glotzer/rowan.git
     $ python setup.py install --user
+
+Note that the conda installation requires that you first add the **conda-forge**
+channel.
 
 .. toctree::
     :maxdepth: 2

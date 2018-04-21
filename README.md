@@ -19,13 +19,26 @@ The package covers all basic quaternion algebraic and calculus operations, and a
 
 ## Setup
 
-The recommended method for installing signac is using **pip**.
+The recommended methods for installing rowan are using **pip** or **conda**.
 
 ### Installation via pip
 
 To install the package from PyPI, execute:
 ```bash
 pip install rowan --user
+```
+
+### Installation via conda
+
+To install the package from conda, first add the **conda-forge** channel:
+```bash
+conda config --add channels conda-forge
+```
+
+After the **conda-forge** channel has been added, you can install rowan by
+executing
+```bash
+conda install rowan
 ```
 
 ### Installation from source
