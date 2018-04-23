@@ -9,11 +9,11 @@ Philosophy
 ==========
 
 The goal of rowan is to provide a flexible, easy-to-use, and scalable approach to dealing with rotation representations.
-To ensure maximum flexibility, rowan operates entirely on numpy arrays, which serve as the *de facto* standard for efficient multi-dimensional arrays in Python.
-To be available for a wide variety of applications, rowan aims to work for arbitrarily shaped numpy arrays, mimicking `numpy broadcasting <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_ to the extent possible.
+To ensure maximum flexibility, rowan operates entirely on NumPy arrays, which serve as the *de facto* standard for efficient multi-dimensional arrays in Python.
+To be available for a wide variety of applications, rowan aims to work for arbitrarily shaped NumPy arrays, mimicking `NumPy broadcasting <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_ to the extent possible.
 Functions for which this broadcasting is not available should be documented as such.
 
-Since rowan is designed to work everywhere, all hard dependencies aside from numpy are avoided, although soft dependencies for specific functions are allowed.
+Since rowan is designed to work everywhere, all hard dependencies aside from NumPy are avoided, although soft dependencies for specific functions are allowed.
 To avoid any dependencies on compilers or other software, all rowan code is written in **pure Python**.
 This means that while rowan is intended to provide good performance, it may not be the correct choice in cases where performance is critical.
 The package was written principally for use-cases where quaternion operations are not the primary bottleneck, so it prioritizes portability, maintainability, and flexibility over optimization.
@@ -87,7 +87,7 @@ General Notes
 =============
 
  * For consistency, NumPy should **always** be imported as ``np`` in code: ``import numpy as np``.
- * Avoid external dependencies where possible, and avoid introducing **any** hard dependencies. Dependencies other than NumPy should always be soft, enabling the rest of the package to function as is.
+ * Avoid external dependencies where possible, and avoid introducing **any** hard dependencies. Dependencies other than NumPy should always be soft, enabling the rest of the package to function as-is.
 
 Release Guide
 =============

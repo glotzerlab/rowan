@@ -77,7 +77,7 @@ def kabsch(X, Y, require_rotation=True):
         require_rotation (bool): If false, the returned quaternion
 
     Returns:
-        A tuple (R, t) where R is the (mxm) rotation matrix to rotate the
+        A tuple (R, t) where R is the (m x m) rotation matrix to rotate the
         points and t is the translation.
     """
     X = np.atleast_2d(X)
@@ -121,7 +121,7 @@ def horn(X, Y):
     <https://cnx.org/contents/HV-RsdwL@23/Molecular-Distance-Measures>`_.
 
     Args:
-        p ((N, 3) np.array): First set of N points
+        X ((N, 3) np.array): First set of N points
         Y ((N, 3) np.array): Second set of N points
 
     Returns:
@@ -247,10 +247,11 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
         method (str): A method to use. Options are 'kabsch', 'davenport'
             and 'horn'. The default is to select the best option ('best')
         equivalent_quaternions (array-like): If the precise correspondence is
-            not known, but the points are known to be part of e.g. a rigid body
-            with specific symmetries, the set of quaternions generating symmetry
-            equivalent configurations can be provided and tested with.
-        ways to generate symmetry equivalent objects.
+            not known, but the points are known to be part of a body with
+            specific symmetries, the set of quaternions generating
+            symmetry-equivalent configurations can be provided. These
+            quaternions will be tested exhaustively to find the smallest
+            symmetry-equivalent rotation.
 
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
@@ -270,7 +271,7 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
         if X.shape != Y.shape:
             raise ValueError("Input arrays must be the same shape")
         elif len(X.shape) != 2:
-            raise ValueError("Input arrays must be 2d arrays")
+            raise ValueError("Input arrays must be 2D arrays")
         if X.shape[1] != 3:
             method = getattr(thismodule, 'kabsch')
         else:
@@ -298,7 +299,7 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
 
 def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         tolerance=0.001):
-    R''' Find best mapping using the Iterative Closest Point algorithm
+    R"""Find best mapping using the Iterative Closest Point algorithm
 
     Args:
         X ((N, m) np.array): First set of N points
@@ -313,7 +314,7 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
     Returns:
         A tuple (R, t) where R is the matrix to rotate the points and t
         is the translation.
-    '''
+    """
 
     import sys
     thismodule = sys.modules[__name__]
@@ -339,9 +340,8 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         try:
             from scipy import spatial, optimize
         except ImportError:
-            raise ImportError("Running with unique_match requires "
-                              " scipy. Please install sklearn and try "
-                              " again.")
+            raise ImportError("Running with unique_match requires scipy. "
+                              "Please install scipy and try again.")
     else:
         try:
             from sklearn import neighbors

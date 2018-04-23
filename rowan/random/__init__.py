@@ -43,7 +43,7 @@ def rand(*args):
 
 
 def random_sample(size=None):
-    R"""Generate random rotations unifo
+    R"""Generate random rotations uniformly
 
     In general, sampling from the space of all quaternions will not generate
     uniform rotations. What we want is a distribution that accounts for the

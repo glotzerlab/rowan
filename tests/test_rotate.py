@@ -59,7 +59,7 @@ class TestRotate(unittest.TestCase):
 
     def test_3d_array(self):
         """Rotating higher dimensional arrays of vectors
-            by arrays of quaternions"""
+        by arrays of quaternions"""
         num_reps = 20
         expanded_shape = (num_reps // 5, 5, 4)
         expanded_shape_vec = (num_reps // 5, 5, 3)

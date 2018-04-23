@@ -42,6 +42,11 @@ def integrate(q, v, dt):
     Returns:
         An array containing the element-wise integral of the
         quaternions in q.
+
+    Example::
+        q = np.array([1, 0, 0, 0])
+        v = np.array([0, 0, 1e-2])
+        v_next = integrate(q, v, 1)
     """
     q = np.asarray(q)
     v = np.asarray(v)

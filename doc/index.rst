@@ -1,5 +1,3 @@
-.. rowan documentation master file, created by sphinx-quickstart on Mon Feb 26 21:45:57 2018.
-
 rowan
 =====
 

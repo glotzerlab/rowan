@@ -17,7 +17,7 @@ __all__ = ['slerp',
 
 
 def slerp(q0, q1, t, ensure_shortest=True):
-    R"""Linearly interpolate between p and q.
+    R"""Spherical linear interpolation between p and q.
 
     The `slerp formula <https://en.wikipedia.org/wiki/Slerp#Quaternion_Slerp>`_
     can be easily expressed in terms of the quaternion exponential (see
@@ -115,8 +115,10 @@ def squad(p, a, b, q, t):
 
     Args:
         p ((...,4) np.array): First endpoint of interpolation
+        a ((...,4) np.array): First control point of interpolation
+        b ((...,4) np.array): Second control point of interpolation
         q ((...,4) np.array): Second endpoint of interpolation
-        t ((...) np.array): Interpolation parameter :math:`\in [0, 1]`
+        t ((...) np.array): Interpolation parameter :math:`t \in [0, 1]`
 
     Returns:
         An array containing the element-wise interpolations between p and q.
@@ -125,7 +127,9 @@ def squad(p, a, b, q, t):
 
         q0 = np.array([[1, 0, 0, 0]])
         q1 = np.array([[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]])
-        interpolate.squad(q0, q1, 0.5)
+        q2 = np.array([[0, np.sqrt(2)/2, np.sqrt(2)/2, 0]])
+        q3 = np.array([[0, 0, np.sqrt(2)/2, np.sqrt(2)/2]])
+        interpolate.squad(q0, q1, q2, q3, 0.5)
     """
     _validate_unit(p)
     _validate_unit(a)
