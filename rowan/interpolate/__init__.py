@@ -43,7 +43,7 @@ def slerp(q0, q1, t, ensure_shortest=True):
 
         q0 = np.array([[1, 0, 0, 0]])
         q1 = np.array([[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]])
-        interpolate.slerp(q0, q1, 0.5)
+        slerp(q0, q1, 0.5)
     """
     _validate_unit(q0)
     _validate_unit(q1)
@@ -79,7 +79,7 @@ def slerp_prime(q0, q1, t, ensure_shortest=True):
 
         q0 = np.array([[1, 0, 0, 0]])
         q1 = np.array([[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]])
-        interpolate.slerp_prime(q0, q1, 0.5)
+        slerp_prime(q0, q1, 0.5)
     """
     _validate_unit(q0)
     _validate_unit(q1)
@@ -132,7 +132,7 @@ def squad(p, a, b, q, t):
         q1 = np.array([[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]])
         q2 = np.array([[0, np.sqrt(2)/2, np.sqrt(2)/2, 0]])
         q3 = np.array([[0, 0, np.sqrt(2)/2, np.sqrt(2)/2]])
-        interpolate.squad(q0, q1, q2, q3, 0.5)
+        squad(q0, q1, q2, q3, 0.5)
     """
     _validate_unit(p)
     _validate_unit(a)
