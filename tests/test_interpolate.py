@@ -72,7 +72,7 @@ class TestInterpolate(unittest.TestCase):
                 )
 
     def test_slerp_prime(self):
-        """Test spherical linear interpolation"""
+        """Test spherical linear interpolation derivative"""
         self.assertTrue(np.all(interpolate.slerp_prime(one, one, 0) == zero))
         self.assertTrue(np.all(interpolate.slerp_prime(one, one, 1) == zero))
         self.assertTrue(np.all(interpolate.slerp_prime(one, one, 0.5) == zero))
@@ -92,7 +92,7 @@ class TestInterpolate(unittest.TestCase):
                 )
 
     def test_squad(self):
-        """Test spherical quadrilateral interpolation"""
+        """Test spherical quadratic interpolation"""
         self.assertTrue(np.all(interpolate.squad(one, one, one, one, 0) == one))
         self.assertTrue(
                 np.allclose(

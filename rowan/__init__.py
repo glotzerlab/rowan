@@ -5,15 +5,15 @@ R"""
 The core :py:mod:`rowan` package contains functions for operating on
 quaternions. The core package is focused on robust implementations of key
 functions like multiplication, exponentiation, norms, and others. Simple
-functionality such as addition is inherited directly from numpy due to
-the representation of quaternions as numpy arrays. Many core numpy functions
+functionality such as addition is inherited directly from NumPy due to
+the representation of quaternions as NumPy arrays. Many core NumPy functions
 implemented for normal arrays are reimplemented to work on quaternions (
-such as :py:func:`allclose` and :py:func:`isfinite`). Additionally, `numpy
+such as :py:func:`allclose` and :py:func:`isfinite`). Additionally, `NumPy
 broadcasting
 <https://docs.scipy.org/doc/numpy-1.14.0/user/basics.broadcasting.html#>`_
 is enabled throughout rowan unless otherwise specified. This means that
 any function of 2 (or more) quaternions can take arrays of shapes that do
-not match and return results according to numpy's broadcasting rules.
+not match and return results according to NumPy's broadcasting rules.
 """
 
 from __future__ import division, print_function, absolute_import

@@ -6,7 +6,7 @@ import os
 version = '0.6.1'
 
 # Read README for PyPI, fallback if it fails.
-desc = 'Perform quaternion operations using numpy arrays'
+desc = 'Perform quaternion operations using NumPy arrays'
 try:
     readme_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                'README.md')
@@ -20,7 +20,7 @@ setup(name='rowan',
       description=desc,
       long_description=readme,
       long_description_content_type='text/markdown',
-      url='http://github.com/vramasub/quaternion',
+      url='http://bitbucket.org/glotzer/rowan',
       author='Vyas Ramasubramani',
       author_email='vramasub@umich.edu',
       packages=find_packages(exclude=["tests"]),

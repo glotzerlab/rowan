@@ -47,7 +47,7 @@ def distance(p, q):
 
         p = np.array([[1, 0, 0, 0]])
         q = np.array([[1, 0, 0, 0]])
-        distance.distance(p, q)
+        distance(p, q)
     """
     return norm(p - q)
 
@@ -75,7 +75,7 @@ def sym_distance(p, q):
 
         p = np.array([[1, 0, 0, 0]])
         q = np.array([[-1, 0, 0, 0]])
-        distance.sym_distance(p, q) # 0
+        sym_distance(p, q) # 0
     """
     return np.minimum(norm(p - q), norm(p + q))
 
@@ -85,9 +85,9 @@ def riemann_exp_map(p, v):
     :math:`\mathbb{H}^*` of nonzero quaterions.
 
     The nonzero quaternions form a Lie algebra :math:`\mathbb{H}^*` that
-    is also a Riemannian manifold. In general, given a point p on a
+    is also a Riemannian manifold. In general, given a point :math:`p` on a
     Riemannian manifold :math:`\mathcal{M}` and an element of the tangent
-    space at p :math:`v \in T_p\mathcal{M}`, the Riemannian exponential
+    space at :math:`p`, :math:`v \in T_p\mathcal{M}`, the Riemannian exponential
     map is defined by the geodesic starting at :math:`p` and tracing out
     an arc of length :math:`v` in the direction of :math:`v`. This function
     computes the endpoint of that path (which is itself a quaternion).

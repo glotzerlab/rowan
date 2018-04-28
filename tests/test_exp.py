@@ -112,7 +112,7 @@ class TestExp(unittest.TestCase):
                     msg="Failed for shape {}".format(shape))
 
     def test_logb(self):
-        """Ensure that quaternion logarithm behaves correctly"""
+        """Ensure that quaternion logarithm for any base behaves correctly"""
         base_test = 3
         self.assertTrue(np.all(rowan.logb(one, base_test) == zero))
         self.assertTrue(
@@ -137,7 +137,7 @@ class TestExp(unittest.TestCase):
                     msg="Failed for shape {}".format(shape))
 
     def test_log10(self):
-        """Ensure that quaternion logarithm behaves correctly"""
+        """Ensure that quaternion base 10 logarithm behaves correctly"""
         self.assertTrue(np.all(rowan.log10(one) == zero))
         self.assertTrue(
                 np.all(
