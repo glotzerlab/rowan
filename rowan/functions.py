@@ -485,7 +485,8 @@ def reflect(q, v):
 
     Example::
 
-        q = normalize(np.random.rand(1, 4))
+        from rowan import random
+        q = random.rand(1, 4)
         v = np.random.rand(1, 3)
         v_reflected = reflect(q, v)
     """
@@ -513,7 +514,8 @@ def rotate(q, v):
 
     Example::
 
-        q = normalize(np.random.rand(1, 4))
+        from rowan import random
+        q = random.rand(1, 4)
         v = np.random.rand(1, 3)
         v_rot = rotate(q, v)
     """
@@ -715,7 +717,10 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         rands = np.random.rand(100, 3)
         alpha, beta, gamma = rands.T
         ql = from_euler(alpha, beta, gamma)
-        alpha_return, beta_return, gamma_return = ql.to_euler(full)
+        alpha_return, beta_return, gamma_return = to_euler(ql)
+        assert(np.all(alpha_return == alpha))
+        assert(np.all(beta_return == beta))
+        assert(np.all(gamma_return == gamma))
     """
     q = np.asarray(q)
     _validate_unit(q)
@@ -951,7 +956,6 @@ def from_axis_angle(axes, angles):
 
     Example::
 
-        import numpy as np
         axis = np.array([[1, 0, 0]])
         ang = np.pi/3
         quat = from_axis_angle(axis, ang)
