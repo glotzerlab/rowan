@@ -467,7 +467,8 @@ def from_mirror_plane(x, y, z):
 
 
 def _promote_vec(v):
-    R"""Helper function to promote vectors to their quaternion representation."""
+    R"""Helper function to promote vectors to their quaternion representation.
+    """
     return np.concatenate((np.zeros(v.shape[:-1] + (1,)), v), axis=-1)
 
 

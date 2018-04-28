@@ -37,7 +37,8 @@ def slerp(q0, q1, t, ensure_shortest=True):
         interval they fall on).
 
     Returns:
-        Array of shape (..., 4) containing the element-wise interpolations between p and q.
+        Array of shape (..., 4) containing the element-wise interpolations
+        between p and q.
 
     Example::
 
