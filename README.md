@@ -74,8 +74,8 @@ import rowan
 import numpy as np
 one = np.array([10, 0, 0, 0])
 one_unit = rowan.normalize(one)
-assert(one_unit == np.array([1, 0, 0, 0]))
-if not one_unit == rowan.quat_multiply(one_unit, one_unit):
+assert(np.all(one_unit == np.array([1, 0, 0, 0])))
+if not np.all(one_unit == rowan.multiply(one_unit, one_unit)):
     raise RuntimeError("Multiplication failed!")
 
 one_vec = np.array([1, 0, 0])

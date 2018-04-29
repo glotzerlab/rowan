@@ -5,7 +5,21 @@ This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html
 Unreleased
 ----------
 
-v0.5.2 - 2018-04-20
+Fixed
++++++
+
+* Numerous style fixes
+* Fix version numbering in the Changelog
+
+v0.6.1 - 2018-04-20
+-------------------
+
+Fixed
++++++
+
+* Use of bumpversion and consistent versioning across the package.
+
+v0.6.0 - 2018-04-20
 -------------------
 
 Added

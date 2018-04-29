@@ -24,11 +24,11 @@ def slerp(q0, q1, t, ensure_shortest=True):
     :py:func:`rowan.exp`).
 
     Args:
-        q0 ((...,4) np.array): First set of quaternions
-        q1 ((...,4) np.array): Second set of quaternions
+        q0 ((...,4) np.array): First array of quaternions.
+        q1 ((...,4) np.array): Second array of quaternions.
         t ((...) np.array): Interpolation parameter :math:`\in [0, 1]`
         ensure_shortest (bool): Flip quaternions to ensure we traverse the
-            geodesic in the shorter (:math:`<180^{\circ}`) direction
+            geodesic in the shorter (:math:`<180^{\circ}`) direction.
 
     .. note::
 
@@ -37,13 +37,14 @@ def slerp(q0, q1, t, ensure_shortest=True):
         interval they fall on).
 
     Returns:
-        An array containing the element-wise interpolations between p and q.
+        Array of shape (..., 4) containing the element-wise interpolations
+        between p and q.
 
     Example::
 
         q0 = np.array([[1, 0, 0, 0]])
         q1 = np.array([[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]])
-        interpolate.slerp(q0, q1, 0.5)
+        slerp(q0, q1, 0.5)
     """
     _validate_unit(q0)
     _validate_unit(q1)
@@ -65,21 +66,21 @@ def slerp_prime(q0, q1, t, ensure_shortest=True):
     R"""Compute the derivative of slerp.
 
     Args:
-        q0 ((...,4) np.array): First set of quaternions
-        q1 ((...,4) np.array): Second set of quaternions
+        q0 ((...,4) np.array): First set of quaternions.
+        q1 ((...,4) np.array): Second set of quaternions.
         t ((...) np.array): Interpolation parameter :math:`\in [0, 1]`
         ensure_shortest (bool): Flip quaternions to ensure we traverse the
             geodesic in the shorter (:math:`<180^{\circ}`) direction
 
     Returns:
-        An array containing the element-wise derivatives of interpolations
-        between p and q.
+        An array of shape (..., 4) containing the element-wise derivatives of
+        interpolations between p and q.
 
     Example::
 
         q0 = np.array([[1, 0, 0, 0]])
         q1 = np.array([[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]])
-        interpolate.slerp_prime(q0, q1, 0.5)
+        slerp_prime(q0, q1, 0.5)
     """
     _validate_unit(q0)
     _validate_unit(q1)
@@ -104,7 +105,7 @@ def squad(p, a, b, q, t):
     R"""Cubically interpolate between p and q.
 
     The SQUAD formula is just a repeated application of Slerp between multiple
-    quaternions:
+    quaternions as originally derived in [Shoemake85]:
 
     .. math::
         \begin{equation}
@@ -113,12 +114,15 @@ def squad(p, a, b, q, t):
             \right)^{2t(1-t)}
         \end{equation}
 
+    .. [Shoemake85] Ken Shoemake. Animating rotation with quaternion curves.
+        SIGGRAPH Comput. Graph., 19(3):245–254, July 1985.
+
     Args:
-        p ((...,4) np.array): First endpoint of interpolation
-        a ((...,4) np.array): First control point of interpolation
-        b ((...,4) np.array): Second control point of interpolation
-        q ((...,4) np.array): Second endpoint of interpolation
-        t ((...) np.array): Interpolation parameter :math:`t \in [0, 1]`
+        p ((...,4) np.array): First endpoint of interpolation.
+        a ((...,4) np.array): First control point of interpolation.
+        b ((...,4) np.array): Second control point of interpolation.
+        q ((...,4) np.array): Second endpoint of interpolation.
+        t ((...) np.array): Interpolation parameter :math:`t \in [0, 1]`.
 
     Returns:
         An array containing the element-wise interpolations between p and q.
@@ -129,7 +133,7 @@ def squad(p, a, b, q, t):
         q1 = np.array([[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]])
         q2 = np.array([[0, np.sqrt(2)/2, np.sqrt(2)/2, 0]])
         q3 = np.array([[0, 0, np.sqrt(2)/2, np.sqrt(2)/2]])
-        interpolate.squad(q0, q1, q2, q3, 0.5)
+        squad(q0, q1, q2, q3, 0.5)
     """
     _validate_unit(p)
     _validate_unit(a)
