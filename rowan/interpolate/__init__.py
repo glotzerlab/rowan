@@ -115,7 +115,7 @@ def squad(p, a, b, q, t):
         \end{equation}
 
     .. [Shoemake85] Ken Shoemake. Animating rotation with quaternion curves.
-        SIGGRAPH Comput. Graph., 19(3):245–254, July 1985.
+        SIGGRAPH Comput. Graph., 19(3):245-254, July 1985.
 
     Args:
         p ((...,4) np.array): First endpoint of interpolation.
