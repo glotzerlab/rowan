@@ -18,11 +18,11 @@ def derivative(q, v):
     R"""Compute the instantaneous derivative of unit quaternions.
 
     Args:
-        q ((...,4) np.array): Quaternions to integrate
-        v ((...,3) np.array): Angular velocities
+        q ((...,4) np.array): Array of quaternions.
+        v ((...,3) np.array): Array of angular velocities.
 
     Returns:
-        An array containing the element-wise derivatives.
+        Array of shape (..., 4) containing element-wise derivatives of q.
     """
     q = np.asarray(q)
     v = np.asarray(v)
@@ -35,13 +35,17 @@ def integrate(q, v, dt):
     R"""Integrate unit quaternions by angular velocity.
 
     Args:
-        q ((...,4) np.array): Quaternions to integrate
-        v ((...,3) np.array): Angular velocities
-        dt ((...) np.array): Timesteps
+        q ((...,4) np.array): Array of quaternions.
+        v ((...,3) np.array): Array of angular velocities.
+        dt ((...) np.array): Array of timesteps.
 
     Returns:
-        An array containing the element-wise integral of the
-        quaternions in q.
+        Array of shape (..., 4) containing element-wise integrals of q.
+
+    Example::
+        q = np.array([1, 0, 0, 0])
+        v = np.array([0, 0, 1e-2])
+        v_next = integrate(q, v, 1)
     """
     q = np.asarray(q)
     v = np.asarray(v)

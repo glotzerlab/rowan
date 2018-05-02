@@ -43,7 +43,7 @@ def rand(*args):
 
 
 def random_sample(size=None):
-    R"""Generate random rotations unifo
+    R"""Generate random rotations uniformly
 
     In general, sampling from the space of all quaternions will not generate
     uniform rotations. What we want is a distribution that accounts for the
@@ -55,11 +55,11 @@ def random_sample(size=None):
         Graphics Gems III, pages 124-132. Academic, New York, 1992.
 
     Args:
-        size (tuple): The shape of the array to generate
+        size (tuple): The shape of the array to generate.
 
     Return:
         Random quaternions of the shape provided with an additional axis of
-        length 4
+        length 4.
     """
     if size is None:
         size = (3,)

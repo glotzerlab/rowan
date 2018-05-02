@@ -36,18 +36,18 @@ def distance(p, q):
     values in the range :math:`[0, 2]`.
 
     Args:
-        p ((...,4) np.array): First set of quaternions
-        q ((...,4) np.array): Second set of quaternions
+        p ((...,4) np.array): First array of quaternions.
+        q ((...,4) np.array): Second array of quaternions.
 
     Returns:
-        An array containing the element-wise distances between
-        the two sets of quaternions.
+        Array of shape (...) containing the element-wise distances between the
+        two sets of quaternions.
 
     Example::
 
         p = np.array([[1, 0, 0, 0]])
         q = np.array([[1, 0, 0, 0]])
-        distance.distance(p, q)
+        distance(p, q)
     """
     return norm(p - q)
 
@@ -61,21 +61,21 @@ def sym_distance(p, q):
     similarity.
 
     Args:
-        p ((...,4) np.array): First set of quaternions
-        q ((...,4) np.array): Second set of quaternions
+        p ((...,4) np.array): First array of quaternions.
+        q ((...,4) np.array): Second array of quaternions.
 
     When applied to unit quaternions, this function produces
     values in the range :math:`[0, \sqrt{2}]`.
 
     Returns:
-        An array containing the element-wise distances between
-        the two sets of quaternions.
+        Array of shape (...) containing the element-wise symmetrized distances
+        between the two sets of quaternions.
 
     Example::
 
         p = np.array([[1, 0, 0, 0]])
         q = np.array([[-1, 0, 0, 0]])
-        distance.sym_distance(p, q) # 0
+        sym_distance(p, q) # 0
     """
     return np.minimum(norm(p - q), norm(p + q))
 
@@ -85,9 +85,9 @@ def riemann_exp_map(p, v):
     :math:`\mathbb{H}^*` of nonzero quaterions.
 
     The nonzero quaternions form a Lie algebra :math:`\mathbb{H}^*` that
-    is also a Riemannian manifold. In general, given a point p on a
+    is also a Riemannian manifold. In general, given a point :math:`p` on a
     Riemannian manifold :math:`\mathcal{M}` and an element of the tangent
-    space at p :math:`v \in T_p\mathcal{M}`, the Riemannian exponential
+    space at :math:`p`, :math:`v \in T_p\mathcal{M}`, the Riemannian exponential
     map is defined by the geodesic starting at :math:`p` and tracing out
     an arc of length :math:`v` in the direction of :math:`v`. This function
     computes the endpoint of that path (which is itself a quaternion).
@@ -100,13 +100,13 @@ def riemann_exp_map(p, v):
         \end{equation}
 
     Args:
-        p ((...,4) np.array): Points on the manifold of quaternions
-        v ((...,4) np.array): Tangent vectors to traverse
+        p ((...,4) np.array): Points on the manifold of quaternions.
+        v ((...,4) np.array): Tangent vectors to traverse.
 
     Returns:
-        The endpoint of the geodesic that starts from p and travels
-        a distance :math:`\lvert\lvert v\rvert\rvert` in the direction
-        of :math:`v`.
+        Array of shape (..., 4) containing the endpoints of the geodesic
+        starting from :math:`p` and traveling a distance :math:`\lvert\lvert
+        v\rvert\rvert` in the direction of :math:`v`.
         """
     return multiply(p, exp(v))
 
@@ -122,12 +122,13 @@ def riemann_log_map(p, q):
     quaternions.
 
     Args:
-        p ((...,4) np.array): Starting points (quaternions)
-        q ((...,4) np.array): Endpoints (quaternions)
+        p ((...,4) np.array): Starting points (quaternions).
+        q ((...,4) np.array): Endpoints (quaternions).
 
     Returns:
-        Quaternions pointing from p to q with magnitudes equal to the length of
-        the geodesics joining these quaternions.
+        Array of shape (..., 4) containing quaternions pointing from p to q with
+        magnitudes equal to the length of the geodesics joining these
+        quaternions.
     """
     return log(multiply(inverse(q), p))
 
@@ -154,11 +155,12 @@ def intrinsic_distance(p, q):
         analysis. J Math Imaging Vis 35(2):155-164
 
     Args:
-        p ((...,4) np.array): First set of quaternions.
-        q ((...,4) np.array): Second set of quaternions.
+        p ((...,4) np.array): First array of quaternions.
+        q ((...,4) np.array): Second array of quaternions.
 
     Returns:
-        The element-wise intrinsic distance between p and q.
+        Array of shape (...) containing the element-wise intrinsic distances
+        between the two sets of quaternions.
     """
     # TODO: Consider implementing the optimization
 #    if not np.allclose(2*np.arccos(np.linalg.norm(np.inner(p, q))),
@@ -180,11 +182,12 @@ def sym_intrinsic_distance(p, q):
     values in the range :math:`[0, \frac{\pi}{2}]`.
 
     Args:
-        p ((...,4) np.array): First set of quaternions.
-        q ((...,4) np.array): Second set of quaternions.
+        p ((...,4) np.array): First array of quaternions.
+        q ((...,4) np.array): Second array of quaternions.
 
     Returns:
-        The element-wise intrinsic distance between p and q.
+        Array of shape (...) containing the element-wise symmetrized intrinsic
+        distances between the two sets of quaternions.
     """
     return np.where(norm(p - q) < norm(p + q),
                     norm(riemann_log_map(p, q)),
@@ -199,10 +202,11 @@ def angle(p):
     ``intrinsic_distance(p, np.array([1, 0, 0, 0]))``.
 
     Args:
-        p ((...,4) np.array): Quaternions.
+        p ((...,4) np.array): Array of quaternions..
 
     Returns:
-        The element-wise angles traced out by these rotations.
+        Array of shape (...) containing the element-wise angles traced out by
+        these rotations.
     """
 
     # TODO: Make sure all the quaternions are rotations
