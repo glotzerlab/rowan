@@ -64,8 +64,8 @@ Support and Contribution
 This package is hosted on `Bitbucket <https://bitbucket.org/glotzer/rowan>`_.
 Please report any bugs or problems that you find on the `issue tracker <https://bitbucket.org/glotzer/rowan/issues>`_.
 
-All contributions to rowan are welcomed!
-Please see the :doc:`development guide <development>` for more information.
+All contributions to rowan are welcomed via pull requests!
+Please see the :doc:`development guide <development>` for more information on requirements for new code.
 
 Indices and tables
 ==================
