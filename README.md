@@ -8,7 +8,7 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/rowan.svg)](https://bitbucket.org/glotzer/rowan/)
 
 
-The rowan package provides a simple and consistent interface for using quaternions.
+Welcome to rowan, a python package for quaternions.
 The package is built entirely on top of NumPy and represents quaternions using NumPy arrays, meaning that all functions support arbitrarily high-dimensional arrays of quaternions.
 Quaternions are encoded as arrays of shape `(...,4)`, with the convention that the final dimension of an array `(a, b, c, d)` represents the quaternion `a + bi + cj + dk`.
 The package covers all basic quaternion algebraic and calculus operations, and also provides features for measuring distances, performing point cloud mapping, and interpolating.

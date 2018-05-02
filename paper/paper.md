@@ -26,51 +26,44 @@ bibliography: paper.bib
 
 # Summary
 
-From particle simulations to attitude determination, numerous tasks in science,
-engineering, and computer graphics require clear and efficient methods of
-defining spatial rotations. Of the many different formalisms used for this
-purpose, quaternions are one of the most popular because of their natural
-parameterization of rotation space and the efficiency with which
-quaternion-based rotations can be implemented. An efficient implementation of
-quaternion operations is therefore critical to developing performant
-code to solve these more domain-specific problems. Python implementations of
-quaternion operations do exist, but they suffer from poor performance [pyquat]
-or complex dependencies and installation protocols [numpy-quat] that make them
-unsuitable for direct incorporation into other code suites.
+Numerous fields in science and engineering require methods for working with
+spatial rotations. Of the many different formalisms for representing these
+rotations, quaternions are perhaps the most popular due to their natural
+parameterization of the space of rotations :math:`SO(3)` and the relative
+efficiency with which quaternion-based rotation operations can be computed. A
+simple, uniform, and efficient implementation of quaternion operations is
+therefore critical to developing code to solve domain-specific problems in areas
+such as particle simulation and attitude determination. Python implementations
+of quaternion operations do exist, but they suffer from performance drawbacks
+due to having no or limited support for broadcasting [@pyquat, @npquat].
+Additionally, some options have complex dependencies for accessing their full
+features or require conversion into some internal format, making them cumbersome
+to incorporate into existing code bases that need to operate on raw arrays.
 
-The *rowan* package, named for William Rowan Hamilton, is designed to address
-these issues. By operating directly on NumPy arrays, *rowan* enables efficient
-operations on large arrays of data with the same functions used to operate on
-single quaternions. The package is written in pure Python and its only hard
-dependency is NumPy, making it an unobtrusive dependency to introduce into other
-code bases. NumPy broadcasting has first-class support throughout the package,
-making it highly efficient for operating on the large number of arrays common in
-graphics or computer simulation applications. Although rotations are only
-represented by unit quaternions, *rowan* works equally well for all quaternions
-irrespective of the norm. In addition to providing core quaternion operations,
-*rowan* can also interconvert between various common rotation formalisms,
-perform quaternion interpolation and calculus, generate random rotation
-quaternions, compute distances on the quaternion manifold, and perform basic
-point set registration.
+The *rowan* package, named for William Rowan Hamilton, is a full-featured
+quaternion package that addresses these issues. By operating directly on NumPy
+arrays and offering first-class support for broadcasting throughout the package,
+*rowan* ensures high efficiency for operating on the large arrays common in
+computer graphics or simulation applications. The package avoids any hard
+dependencies other than NumPy itself, and it operates directly on NumPy arrays,
+making it an unobtrusive dependency that can be easily introduced into existing
+code bases with almost no changes. Aside from functions directly relating to
+rotations, all functions work with unnormalized as well as normalized
+quaternions, making it a suitable tool for applications involving quaternions
+more generally. For applications focused on rotations, *rowan* provides the
+ability to convert numerous between various common rotation formalisms. More
+generally, it provides various other features, including the ability to perform
+quaternion interpolation and calculus, generate random rotation quaternions,
+compute distances on the quaternion manifold, and perform basic point set
+registration.
 
-This package arose due to the proliferation of duplicated and fragmented
-quaternion code in numerous different packages developed by the Glotzer Group at
-the University of Michigan. Much of this code was also written to work with
-individual quaternions rather than arrays, making it highly inefficient for
-large sets of operations since it required looping in Python rather than using
-the appropriately broadcasted NumPy operation.  By providing a centralized and
-highly efficient solution, this package will result in a faster, more modular,
-and more easily maintained code base. In addition, *rowan* will be a major aid
-to individuals writing code for their individual research, a task that
-frequently involves rotating large data sets to generate specific configurations
-or compare different systems.
-
-
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
-
-Figures can be included like this: ![Example figure.](figure.png)
+This package arose due to the proliferation of fragmented quaternion code in
+disparate code-bases developed by the Glotzer Group at the University of
+Michigan. The package addresses the different sets of features and levels of
+generality provided by different versions of quaternion code by providing a
+unified, efficient solution. In addition to improving the maintainability of
+other packages by providing a modular solution for quaternion operations,
+*rowan* will aid individuals writing code for their own personal purposes.
 
 # Acknowledgements
 
