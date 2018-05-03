@@ -63,7 +63,7 @@ This package arose due to the proliferation of fragmented quaternion code in
 disparate code bases developed by the Glotzer Group at the University of
 Michigan. Each of these code bases requires different sets of features and
 levels of generality, so *rowan* attempts to address these needs by providing a
-unified, efficient solution. The package is currently used by the open source
+unified, efficient solution. The package was incorporated into the open source
 Plato [@plato] simulation visualization tool as well some internal packages that
 have not yet been open sourced. In addition to improving the maintainability of
 these other packages by providing a modular solution for quaternion operations,
