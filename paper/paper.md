@@ -37,39 +37,42 @@ particle simulation and attitude determination. Python implementations of
 quaternion operations do exist, but they suffer from performance drawbacks due
 to having limited or no support for broadcasting [@pyquat].
 Additionally, some options have complex dependencies for accessing their full
-features or require conversion into some internal format, making them
-cumbersome to incorporate into existing code bases that need to operate on raw
-arrays [@npquat].
+features or require conversion into some internal format, making them cumbersome
+to incorporate into existing code bases that need to operate on raw arrays
+[@npquat].
 
-The *rowan* package, named for William Rowan Hamilton, is a full-featured
-quaternion package that addresses these issues. By operating directly on NumPy
-arrays and offering first-class support for broadcasting throughout the
-package, *rowan* ensures high efficiency for operating on the large arrays
-common in computer graphics or simulation applications. The package avoids any
-hard dependencies other than NumPy itself, which, in conjunction with its use
-of NumPy arrays as a consistent language, makes it an unobtrusive dependency
-that can be easily introduced into existing code bases with almost no changes.
-Aside from functions directly relating to rotations, all functions work with
-non-normalized as well as normalized quaternions, making it a suitable tool for
-applications involving quaternions more generally. For applications focused on
-rotations, *rowan* provides the ability to convert between numerous common
-rotation formalisms. More generally, it provides various other features,
-including the ability to perform quaternion interpolation and calculus,
-generate random rotation quaternions, compute distances on the quaternion
-manifold, and perform basic point set registration.
+The *rowan* package, named for William Rowan Hamilton, is a quaternion package
+that addresses these issues. By operating directly on NumPy arrays and offering
+first-class support for broadcasting throughout the package, *rowan* ensures
+high efficiency for operating on the large arrays common in computer graphics or
+simulation applications. The package avoids any hard dependencies other than
+NumPy itself, which, in conjunction with its use of NumPy arrays as a consistent
+language, makes it an unobtrusive dependency with essentially zero barrier for
+introduction into existing code bases with almost no changes. A full-featured
+quaternion library, *rowan* includes extensive features in addition to basic
+quaternion arithmetic operations. These functions include solutions to the
+Procrustes problem and basic point set registration, quaternion calculus and
+interpolation, the ability to correctly sample random rotation quaternions from
+$SO(3)$, and various distance metrics on the quaternion manifold. For
+applications focused on rotations, *rowan* provides the ability to convert
+between numerous common rotation formalisms, including full support for
+all Euler angle conventions, which is not found in other Python quaternion code
+bases.
 
 This package arose due to the proliferation of fragmented quaternion code in
 disparate code bases developed by the Glotzer Group at the University of
-Michigan. The package addresses the different sets of features and levels of
-generality provided by different versions of quaternion code by providing a
-unified, efficient solution. In addition to improving the maintainability of
-other packages by providing a modular solution for quaternion operations,
+Michigan. Each of these code bases requires different sets of features and
+levels of generality, so *rowan* attempts to address these needs by providing a
+unified, efficient solution. The package is currently used by the open source
+Plato [@plato] simulation visualization tool as well some internal packages that
+have not yet been open sourced. In addition to improving the maintainability of
+these other packages by providing a modular solution for quaternion operations,
 *rowan* will aid individuals writing code for their own personal purposes.
 
 # Acknowledgements
 
-We would like to acknowledge Carl S. Adorf, Matthew P. Spellings, and Bradley
-D. Dice for helpful suggestions and discussions during the development of this
+We would like to acknowledge Carl S. Adorf, Matthew P. Spellings, and Bradley D.
+Dice for helpful suggestions and discussions during the development of this
 package.
 
 # References
