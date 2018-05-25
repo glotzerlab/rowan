@@ -34,11 +34,15 @@ quaternion-based rotation operations can be computed. A simple, uniform, and
 efficient implementation of quaternion operations is therefore critical to
 developing code to solve domain-specific problems in areas such as particle
 simulation and attitude determination. Python implementations of quaternion
-operations do exist, but they suffer from performance drawbacks due to having
-limited or no support for broadcasting [@pyquat].  Additionally, some options
-have complex dependencies for accessing their full features or require
-conversion into some internal format, making them cumbersome to incorporate
-into existing code bases that need to operate on raw arrays [@npquat].
+operations do exist, but they suffer from various drawbacks. Some tools are
+performance limited due to, *e.g.*, having limited or no support for NumPy
+style array broadcasting [@pyquat]. Since NumPy is a *de facto* standard in
+scientific computing applications, such support is both a prerequisite for a
+package to be easily incorporated into existing code bases and a Pythonic way
+to achieve a performant solution. Meanwhile, other options have complex
+dependencies for accessing their full features or require conversion into some
+internal format, making them cumbersome to incorporate into existing code bases
+that need to operate on raw arrays [@npquat].
 
 The *rowan* package, named for William Rowan Hamilton, is a quaternion package
 that addresses these issues. By operating directly on NumPy arrays and offering
@@ -68,15 +72,11 @@ internal packages that have not yet been open sourced. Going forward, *rowan*
 will simplify the maintenance of many of our existing code bases and simplify
 all code development involving quaternion operations in Python.
 
-
-
-**talk to Karen about funding**
-
-
 # Acknowledgements
 
-We would like to acknowledge Carl S. Adorf, Matthew P. Spellings, and Bradley D.
-Dice for helpful suggestions and discussions during the development of this
-package.
+This work was partially supported by a Simons Investigator award from the
+Simons Foundation to Sharon Glotzer. We would like to acknowledge Carl S.
+Adorf, Matthew P. Spellings, and Bradley D. Dice for helpful suggestions and
+discussions during the development of this package.
 
 # References
