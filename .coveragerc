@@ -2,10 +2,6 @@
 [run]
 branch = True
 source = rowan
-omit =
-    # The quaternion object isn't ready
-    rowan/map.py
-    rowan/_version.py
 
 [report]
 ignore_errors = True

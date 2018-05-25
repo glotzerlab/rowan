@@ -1,5 +1,7 @@
-rowan Open Source Software License Copyright 2010-2018 The Regents of
-the University of Michigan All rights reserved.
+rowan BSD-3 Clause Open Source Software License
+
+Copyright 2010-2018 The Regents of the University of Michigan
+All rights reserved.
 
 rowan may contain modifications ("Contributions") provided, and to which
 copyright is held, by various Contributors who have granted The Regents of the

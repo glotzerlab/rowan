@@ -8,10 +8,12 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/rowan.svg)](https://bitbucket.org/glotzer/rowan/)
 
 
-The rowan package provides a simple and consistent interface for using quaternions.
+Welcome to rowan, a python package for quaternions.
 The package is built entirely on top of NumPy and represents quaternions using NumPy arrays, meaning that all functions support arbitrarily high-dimensional arrays of quaternions.
 Quaternions are encoded as arrays of shape `(...,4)`, with the convention that the final dimension of an array `(a, b, c, d)` represents the quaternion `a + bi + cj + dk`.
 The package covers all basic quaternion algebraic and calculus operations, and also provides features for measuring distances, performing point cloud mapping, and interpolating.
+If you have any questions about how to work with rowan, please visit the
+[ReadTheDocs page](http://rowan.readthedocs.io/en/latest/).
 
 ## Authors
 
@@ -19,13 +21,26 @@ The package covers all basic quaternion algebraic and calculus operations, and a
 
 ## Setup
 
-The recommended method for installing rowan is using **pip**.
+The recommended methods for installing rowan are using **pip** or **conda**.
 
 ### Installation via pip
 
 To install the package from PyPI, execute:
 ```bash
 pip install rowan --user
+```
+
+### Installation via conda
+
+To install the package from conda, first add the **conda-forge** channel:
+```bash
+conda config --add channels conda-forge
+```
+
+After the **conda-forge** channel has been added, you can install rowan by
+executing
+```bash
+conda install rowan
 ```
 
 ### Installation from source
