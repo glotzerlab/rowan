@@ -39,10 +39,10 @@ performance limited due to, *e.g.*, having limited or no support for NumPy
 style array broadcasting [@pyquat]. Since NumPy is a *de facto* standard in
 scientific computing applications, such support is both a prerequisite for a
 package to be easily incorporated into existing code bases and a Pythonic way
-to achieve a performant solution. Meanwhile, other options have complex
-dependencies for accessing their full features or require conversion into some
-internal format, making them cumbersome to incorporate into existing code bases
-that need to operate on raw arrays [@npquat].
+to achieve a performant solution. Other packages that do support NumPy may have
+complex dependencies for accessing their full features or require conversion
+into some internal format, making them cumbersome to incorporate into existing
+code bases that need to operate on raw arrays [@npquat].
 
 The *rowan* package, named for William Rowan Hamilton, is a quaternion package
 that addresses these issues. By operating directly on NumPy arrays and offering
@@ -69,8 +69,9 @@ levels of generality. *rowan* addresses these needs by providing a unified,
 high-performance, easily utilized solution. The package was incorporated into
 the open source plato [@plato] simulation visualization tool as well some
 internal packages that have not yet been open sourced. Going forward, *rowan*
-will simplify the maintenance of many of our existing code bases and simplify
-all code development involving quaternion operations in Python.
+will not only simplify the maintenance of many of our existing code bases, it
+will also simplify code development involving quaternion operations going
+forward, both within and outside our group.
 
 # Acknowledgements
 
