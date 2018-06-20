@@ -86,8 +86,8 @@ operations going forward, both within and outside our group.
 # Acknowledgements
 
 This work was partially supported by a Simons Investigator award from the
-Simons Foundation to Sharon Glotzer. We would like to acknowledge Carl S.
-Adorf, Matthew P. Spellings, and Bradley D. Dice for helpful suggestions and
+Simons Foundation to Sharon Glotzer. We would like to acknowledge Bradley D.
+Dice, Carl S. Adorf, and Matthew P. Spellings for helpful suggestions and
 discussions during the development of this package.
 
 # References
