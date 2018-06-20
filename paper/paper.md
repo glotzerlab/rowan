@@ -48,11 +48,11 @@ The *rowan* package, named for William Rowan Hamilton, is a quaternion package
 that addresses these issues. By operating directly on NumPy arrays and offering
 first-class support for broadcasting throughout the package, *rowan* ensures
 high efficiency for operating on the large arrays common in computer graphics
-or simulation applications. The package avoids any hard dependencies other than
+or scientific applications. The package avoids any hard dependencies other than
 NumPy itself and uses NumPy arrays as a universal language, making *rowan* an
 unobtrusive dependency with essentially zero barrier for introduction into
-existing code bases. A full-featured quaternion library, *rowan* includes
-extensive features in addition to basic quaternion arithmetic operations. These
+existing code bases. A full-featured quaternion library, *rowan* has
+extensive capabilities in addition to basic quaternion arithmetic operations. These
 functions include: methods for point set registration, including some that are
 specialized for solving the Procrustes problem of superimposing corresponding
 sets of points; functions for quaternion calculus and interpolation; the
@@ -62,16 +62,26 @@ focused on rotations, *rowan* provides the ability to convert between numerous
 common rotation formalisms, including full support for all Euler angle
 conventions, which is not found in other Python quaternion packages.
 
-This package arose due to the proliferation of fragmented quaternion code in
-disparate code bases developed by the Glotzer Group at the University of
-Michigan. Each of these code bases requires different sets of features and
-levels of generality. *rowan* addresses these needs by providing a unified,
-high-performance, easily utilized solution. The package was incorporated into
-the open source plato [@plato] simulation visualization tool as well some
-internal packages that have not yet been open sourced. Going forward, *rowan*
-will not only simplify the maintenance of many of our existing code bases, it
-will also simplify code development involving quaternion operations going
-forward, both within and outside our group.
+This package arose due to the representation of anisotropic particle
+orientations in Monte Carlo simulations in the Glotzer Group at the University
+of Michigan. Unlike configurations of spherical particles, which can be
+described by their positions alone, configurations of anisotropic particles must
+also contain information on particle orientations and how they rotate over the
+course of the simulation. Our simulation software HOOMD-blue [@Anderson2008c,
+@Glaser2015f] uses quaternions to represent particle orientations, as do many of
+the packages we write for analyzing these simulations. Although some packages
+require C++ implementations, a large number are pure Python code bases, each
+containing independent implementations of quaternion operations with slightly
+different features and levels of generality. The resulting code fragmentation
+makes code maintenance much more challenging and fails to provide a standard
+implementation of quaternion operations for more ad hoc analysis tasks that
+arise in specific contexts. *rowan* addresses these needs by providing a
+unified, high-performance, easily utilized solution. The package was
+incorporated into the open-source plato [@plato] simulation visualization tool
+as well some internal packages that have not yet been open-sourced. Going
+forward, *rowan* will not only simplify the maintenance of many of our existing
+code bases, it will also facilitate code development involving quaternion
+operations going forward, both within and outside our group.
 
 # Acknowledgements
 
