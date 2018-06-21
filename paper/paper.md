@@ -26,20 +26,20 @@ bibliography: paper.bib
 
 # Summary
 
-Numerous fields in science and engineering require methods for rotating
-objects. Of the different formalisms for representing spatial rotations,
-quaternions are perhaps the most popular due to their natural parameterization
-of the space of rotations $SO(3)$ and the relative efficiency with which
-quaternion-based rotation operations can be computed. A simple, uniform, and
-efficient implementation of quaternion operations is therefore critical to
-developing code to solve domain-specific problems in areas such as particle
-simulation and attitude determination. Python implementations of quaternion
-operations do exist, but they suffer from various drawbacks. Some tools are
-performance limited due to, *e.g.*, having limited or no support for NumPy
-style array broadcasting [@pyquat]. Since NumPy is a *de facto* standard in
+Numerous fields in science and engineering require methods for rotating objects.
+Of the different formalisms for representing spatial rotations, quaternions are
+perhaps the most popular due to their natural parameterization of the space of
+rotations $SO(3)$ and the relative efficiency with which quaternion-based
+rotation operations can be computed. A simple, uniform, and efficient
+implementation of quaternion operations is therefore critical to developing code
+to solve domain-specific problems in areas such as particle simulation and
+attitude determination. Python implementations of quaternion operations do
+exist, but they suffer from various drawbacks. Some tools are performance
+limited due to, *e.g.*, having limited or no support for NumPy style array
+broadcasting [@pyquat, @transforms3d]. Since NumPy is a *de facto* standard in
 scientific computing applications, such support is both a prerequisite for a
-package to be easily incorporated into existing code bases and a Pythonic way
-to achieve a performant solution. Other packages that do support NumPy may have
+package to be easily incorporated into existing code bases and a Pythonic way to
+achieve a performant solution. Other packages that do support NumPy may have
 complex dependencies for accessing their full features or require conversion
 into some internal format, making them cumbersome to incorporate into existing
 code bases that need to operate on raw arrays [@npquat].
@@ -47,20 +47,20 @@ code bases that need to operate on raw arrays [@npquat].
 The *rowan* package, named for William Rowan Hamilton, is a quaternion package
 that addresses these issues. By operating directly on NumPy arrays and offering
 first-class support for broadcasting throughout the package, *rowan* ensures
-high efficiency for operating on the large arrays common in computer graphics
-or scientific applications. The package avoids any hard dependencies other than
+high efficiency for operating on the large arrays common in computer graphics or
+scientific applications. The package avoids any hard dependencies other than
 NumPy itself and uses NumPy arrays as a universal language, making *rowan* an
 unobtrusive dependency with essentially zero barrier for introduction into
-existing code bases. A full-featured quaternion library, *rowan* has
-extensive capabilities in addition to basic quaternion arithmetic operations. These
+existing code bases. A full-featured quaternion library, *rowan* has extensive
+capabilities in addition to basic quaternion arithmetic operations. These
 functions include: methods for point set registration, including some that are
 specialized for solving the Procrustes problem of superimposing corresponding
-sets of points; functions for quaternion calculus and interpolation; the
-ability to sample random rotation quaternions from $SO(3)$; and functions to
-compute various distance metrics on the quaternion manifold. For applications
-focused on rotations, *rowan* provides the ability to convert between numerous
-common rotation formalisms, including full support for all Euler angle
-conventions, which is not found in other Python quaternion packages.
+sets of points; functions for quaternion calculus and interpolation; the ability
+to sample random rotation quaternions from $SO(3)$; and functions to compute
+various distance metrics on the quaternion manifold. For applications focused on
+rotations, *rowan* provides the ability to convert between numerous common
+rotation formalisms, including full support for all Euler angle conventions,
+which is not found in other Python quaternion packages.
 
 This package arose due to the representation of anisotropic particle
 orientations in Monte Carlo simulations in the Glotzer Group at the University
