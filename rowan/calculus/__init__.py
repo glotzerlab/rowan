@@ -15,7 +15,17 @@ __all__ = ['derivative',
 
 
 def derivative(q, v):
-    R"""Compute the instantaneous derivative of unit quaternions.
+    R"""Compute the instantaneous derivative of unit quaternions, which is
+    defined as
+
+    .. math::
+        \dot{q} = \frac{1}{2} \boldsymbol{v} q
+
+    A derivation is provided `here <diff link>`_.
+    For a more thorough explanation, see `this page`_.
+
+    .. _diff_link: http://web.cs.iastate.edu/~cs577/handouts/quaternion.pdf
+    .. _this page: https://fgiesen.wordpress.com/2012/08/24/quaternion-differentiation/
 
     Args:
         q ((...,4) np.array): Array of quaternions.
@@ -32,7 +42,21 @@ def derivative(q, v):
 
 
 def integrate(q, v, dt):
-    R"""Integrate unit quaternions by angular velocity.
+    R"""Integrate unit quaternions by angular velocity using the following
+    equation:
+
+    .. math::
+        \dot{q} = \exp\left(\frac{1}{2} \boldsymbol{v} dt\right) q
+
+    Note that this formula uses the `quaternion exponential`_, so the argument to
+    the exponential (which appears to be a vector) is promoted to a quaternion
+    with scalar part 0 before the exponential is taken.
+    A concise derivation is provided in `this paper`_.
+    This `webpage`_ contains a more thorough explanation.
+
+    .. _quaternion exponential: https://en.wikipedia.org/wiki/Quaternion#Exponential,_logarithm,_and_power
+    .. _this paper: https://www.researchgate.net/publication/260466470_Geometric_Integration_of_Quaternions
+    .. _webpage: https://www.ashwinnarayan.com/post/how-to-integrate-quaternions/
 
     Args:
         q ((...,4) np.array): Array of quaternions.
@@ -43,6 +67,7 @@ def integrate(q, v, dt):
         Array of shape (..., 4) containing element-wise integrals of q.
 
     Example::
+
         q = np.array([1, 0, 0, 0])
         v = np.array([0, 0, 1e-2])
         v_next = integrate(q, v, 1)

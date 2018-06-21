@@ -105,7 +105,7 @@ def squad(p, a, b, q, t):
     R"""Cubically interpolate between p and q.
 
     The SQUAD formula is just a repeated application of Slerp between multiple
-    quaternions as originally derived in [Shoemake85]:
+    quaternions as originally derived in [Shoemake85]_:
 
     .. math::
         \begin{equation}
