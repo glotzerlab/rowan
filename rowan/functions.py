@@ -230,7 +230,6 @@ def log10(q):
 
 
 def power(q, n):
-    # TODO: Write polar decomposition function #noqa
     R"""Computes the power of a quaternion :math:`q^n`.
 
     Quaternions raised to a scalar power are defined according to the polar
@@ -250,6 +249,7 @@ def power(q, n):
 
         q_n = power(q, n)
     """
+    # TODO: Write polar decomposition function #noqa
     # Need matching shapes
     if len(q.shape) == 1:
         flat = True
@@ -549,6 +549,34 @@ def _vector_bisector(v1, v2):
     Returns:
         Array of shape (..., 3) containing vector bisectors.
     """
+    # Preallocate to efficiently address special cases
+#    if len(q.shape) == 1:
+#        flat = True
+#        q = np.atleast_2d(q)
+#    else:
+#        flat = False
+
+    result = np.empty(v1.shape)
+
+    # Parallel vectors are fine, only antiparallel vectors cause problems
+    v1_norm = _normalize_vec(v1)
+    v2_norm = _normalize_vec(v2)
+    ap = np.isclose(np.dot(v1_norm, v2_norm), -1)
+    not_ap = np.logical_not(ap)
+    result[not_ap] = _normalize_vec(_normalize_vec(v1[not_ap]) +
+                                    _normalize_vec(v2[not_ap]))
+
+    # To use cross products to find the normal, we need to choose a unit vector
+    # that is also not (anti)parallel to the original
+    default_cross = np.broadcast_to(np.array([1, 0, 0]), v1_norm[ap].shape)
+    use_diff = np.isclose(np.abs(np.dot(v1_norm[ap], default_cross)), 1)
+
+    result[antiparallels] = 
+
+#    if flat:
+#        return powers.squeeze()
+#    else:
+#        return powers
 
     return _normalize_vec(_normalize_vec(v1) + _normalize_vec(v2))
 
