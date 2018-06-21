@@ -21,11 +21,12 @@ def derivative(q, v):
     .. math::
         \dot{q} = \frac{1}{2} \boldsymbol{v} q
 
-    A derivation is provided `here <diff link>`_.
+    A derivation is provided `here`_.
     For a more thorough explanation, see `this page`_.
 
-    .. _diff_link: http://web.cs.iastate.edu/~cs577/handouts/quaternion.pdf
-    .. _this page: https://fgiesen.wordpress.com/2012/08/24/quaternion-differentiation/
+    .. _here: http://web.cs.iastate.edu/~cs577/handouts/quaternion.pdf
+    .. _this page: https://fgiesen.wordpress.com/
+                   2012/08/24/quaternion-differentiation/
 
     Args:
         q ((...,4) np.array): Array of quaternions.
@@ -48,15 +49,18 @@ def integrate(q, v, dt):
     .. math::
         \dot{q} = \exp\left(\frac{1}{2} \boldsymbol{v} dt\right) q
 
-    Note that this formula uses the `quaternion exponential`_, so the argument to
-    the exponential (which appears to be a vector) is promoted to a quaternion
-    with scalar part 0 before the exponential is taken.
+    Note that this formula uses the `quaternion exponential`_, so the argument
+    to the exponential (which appears to be a vector) is promoted to a
+    quaternion with scalar part 0 before the exponential is taken.
     A concise derivation is provided in `this paper`_.
     This `webpage`_ contains a more thorough explanation.
 
-    .. _quaternion exponential: https://en.wikipedia.org/wiki/Quaternion#Exponential,_logarithm,_and_power
-    .. _this paper: https://www.researchgate.net/publication/260466470_Geometric_Integration_of_Quaternions
-    .. _webpage: https://www.ashwinnarayan.com/post/how-to-integrate-quaternions/
+    .. _quaternion exponential: https://en.wikipedia.org/wiki/
+                                Quaternion#Exponential,_logarithm,_and_power
+    .. _this paper: https://www.researchgate.net/publication/
+                    260466470_Geometric_Integration_of_Quaternions
+    .. _webpage: https://www.ashwinnarayan.com/post/
+                 how-to-integrate-quaternions/
 
     Args:
         q ((...,4) np.array): Array of quaternions.
