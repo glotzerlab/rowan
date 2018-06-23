@@ -46,18 +46,27 @@ code bases that need to operate on raw arrays [@npquat].
 
 The *rowan* package, named for William Rowan Hamilton, is a quaternion package
 that addresses these issues. By operating directly on NumPy arrays and offering
-first-class support for broadcasting throughout the package, *rowan* ensures
-high efficiency for operating on the large arrays common in computer graphics or
-scientific applications. The package avoids any hard dependencies other than
-NumPy itself and uses NumPy arrays as a universal language, making *rowan* an
-unobtrusive dependency with essentially zero barrier for introduction into
-existing code bases. A full-featured quaternion library, *rowan* has extensive
-capabilities in addition to basic quaternion arithmetic operations. These
-functions include: methods for point set registration, including some that are
-specialized for solving the Procrustes problem of superimposing corresponding
-sets of points; functions for quaternion calculus and interpolation; the ability
-to sample random rotation quaternions from $SO(3)$; and functions to compute
-various distance metrics on the quaternion manifold. For applications focused on
+first-class support for broadcasting for all modules and functions in the
+package, *rowan* ensures high efficiency for operating on the large arrays
+common in computer graphics or scientific applications. For large arrays (*e.g.*
+$N > 10000$) where performance limitations become significant, *rowan* outstrips
+pure Python packages such as *pyquaternion* [@pyquat] by roughly two orders of
+magnitude and approaches the performance of hybrid Python-C solutions such as
+the *numpy-quaternion* [@npquat] package. Although a typical function call with
+*rowan* is roughly 4 times slower than packages using C extensions, this slight
+performance difference is offset by *rowan*'s relative ease of installation and
+incorporation. The package avoids any hard dependencies other than NumPy itself
+and uses NumPy arrays as a universal language, making *rowan* an unobtrusive
+dependency with essentially zero barrier for introduction into existing code
+bases.
+
+A full-featured quaternion library, *rowan* has extensive capabilities in
+addition to basic quaternion arithmetic operations. These functions include:
+methods for point set registration, including some that are specialized for
+solving the Procrustes problem of superimposing corresponding sets of points;
+functions for quaternion calculus and interpolation; the ability to sample
+random rotation quaternions from $SO(3)$; and functions to compute various
+distance metrics on the quaternion manifold. For applications focused on
 rotations, *rowan* provides the ability to convert between numerous common
 rotation formalisms, including full support for all Euler angle conventions,
 which is not found in other Python quaternion packages.
