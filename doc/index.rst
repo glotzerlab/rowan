@@ -128,6 +128,12 @@ and then run the packaged unit tests with the coverage module:
 
     coverage run -m unittest discover tests
 
+Running Benchmarks
+------------------
+Benchmarks for the package are contained in a Jupyter notebook in the `benchmarks` folder in the root of the repository.
+If you do not have or do not wish to use the notebook format, an equivalent Benchmarks.py script is also included.
+The benchmarks compare rowan to two alternative packages, so you will need to install ``pyquaternion`` and ``numpy_quaternion`` if you wish to see those comparisons.
+
 Building Documentation
 ----------------------
 
