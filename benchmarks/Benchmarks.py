@@ -9,7 +9,6 @@ import tqdm
 import pprint
 import numpy as np
 import pandas as pd
-import matplotlib
 from matplotlib import pyplot as plt
 
 
@@ -30,14 +29,14 @@ import quaternion
 import rowan
 
 
-# In[4]:
+# In[6]:
 
 
 def arr_to_pyquat(arr):
     if len(arr.shape) > 1:
         pq_arr = np.empty(arr.shape[:-1], dtype='object')
-        for i in range(len(arr)):
-            pq_arr[i] = pyquaternion.Quaternion(arr[i])
+        for i, x in enumerate(arr):
+            pq_arr[i] = pyquaternion.Quaternion(x)
     else:
         pq_arr = np.array([pyquaternion.Quaternion(arr)])
     return pq_arr
@@ -155,7 +154,7 @@ for N in tqdm.tqdm(Ns):
     )
 
 
-# In[8]:
+# In[7]:
 
 
 pyquat_times['Norm'] = []
@@ -262,7 +261,7 @@ df[(df['N'] == 100000)].drop('pyquaternion', axis=1)
 view = df.groupby(["N", "operation"]).mean()
 view['rowan vs. npq'] = view['rowan']/view['npquaternion']
 view['pyq vs. rowan'] = view['pyquaternion']/view['rowan']
-view
+print(view)
 
 
 # In[14]:
@@ -280,7 +279,6 @@ df[df['N'] == 100000].drop(['N', 'npquaternion'], axis=1).groupby(
     ["operation"]).mean().plot.barh(ax=axes[1, 1], logx=True, color = cols[0:4:2], title="$\log_{10}(N) = 6$")
 for ax in axes.flatten():
     ax.set_ylabel("")
-    ax.set_label
 plt.show()
 fig.savefig("Performance.png")
 
