@@ -552,7 +552,8 @@ def _vector_bisector(v1, v2):
     # Since np.inner and np.dot require manipulating the shapes in ways that
     # might be expensive and may not play nicely with broadcasting, we perform
     # the dot product manually on the broadcasted arrays
-    v1_norm, v2_norm = np.broadcast_arrays(_normalize_vec(v1), _normalize_vec(v2))
+    v1_norm, v2_norm = np.broadcast_arrays(_normalize_vec(v1),
+                                           _normalize_vec(v2))
     ap = np.isclose(np.sum(v1_norm*v2_norm, axis=-1), -1)
 
     if np.any(ap):
@@ -562,9 +563,9 @@ def _vector_bisector(v1, v2):
         not_ap = np.logical_not(ap)
         result[not_ap] = _normalize_vec(v1_norm[not_ap] + v2_norm[not_ap])
 
-        # To use cross products to find the normal, we need to choose a unit vector
-        # that is also not (anti)parallel to the original. Keep two options
-        # available to avoid this case.
+        # To use cross products to find the normal, we need to choose a unit
+        # vector that is also not (anti)parallel to the original. Keep two
+        # options available to avoid this case.
         one_vec = np.array([[1, 0, 0]])
         other_one_vec = np.array([[0, 1, 0]])
         cross_element = np.where(
