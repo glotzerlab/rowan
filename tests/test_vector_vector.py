@@ -29,15 +29,23 @@ class TestVectorVector(unittest.TestCase):
     def test_ap(self):
         """Test finding quaternion to rotate antiparallel vectors onto each
         other"""
+        # For this test, there are multiple quaternions that would effect the
+        # correct rotation, so rather than checking for a specific one we check
+        # that the appropriate rotation results from applying the quaternion
+        vec1 = np.array([1, 0, 0])
+        vec2 = np.array([0, 1, 0])
+        quat = rowan.vector_vector_rotation(vec1, vec2)
+        self.assertTrue(
+                np.allclose(
+                    rowan.rotate(quat, vec1),
+                    vec2/np.linalg.norm(vec2, axis=-1)
+                    ))
+
         vec1 = np.array([1, 0, 0])
         vec2 = np.array([[0, 1, 0],
                          [2, 0, 0],
                          [-2, 0, 0]])
         quat = rowan.vector_vector_rotation(vec1, vec2)
-
-        # For this test, there are multiple quaternions that would effect the
-        # correct rotation, so rather than checking for a specific one we check
-        # that the appropriate rotation results from applying the quaternion
         self.assertTrue(
                 np.allclose(
                     rowan.rotate(quat, vec1),
