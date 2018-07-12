@@ -32,7 +32,7 @@ def exp(q):
 
     Example::
 
-        q_exp = exp(q)
+        q_exp = rowan.exp([1, 0, 0, 0])
     """
     # Ensure compatibility for numpy < 1.13; older numpy fail with
     # the fancy indexing used below when array is 1d
@@ -86,8 +86,9 @@ def expb(q, b):
 
     Example::
 
-        q_exp = exp(q, 2)
+        q_exp = rowan.expb([1, 0, 0, 0], 2)
     """
+    q = np.asarray(q)
     return exp(q*np.log(b))
 
 
@@ -104,7 +105,7 @@ def exp10(q):
 
     Example::
 
-        q_exp = exp(q, 2)
+        q_exp = rowan.exp10([1, 0, 0, 0])
     """
     return expb(q, 10)
 
@@ -132,7 +133,7 @@ def log(q):
 
     Example::
 
-        ln_q = log(q)
+        ln_q  = rowan.log([1, 0, 0, 0])
     """
     # Ensure compatibility for numpy < 1.13; older numpy fail with
     # the fancy indexing used below when array is 1d
@@ -204,7 +205,7 @@ def logb(q, b):
 
     Example::
 
-        log2_q = logb(q, 2)
+        log2_q = rowan.logb([1, 0, 0, 0], 2)
     """
     q = np.asarray(q)
     return log(q)/np.log(b)
@@ -223,7 +224,7 @@ def log10(q):
 
     Example::
 
-        log10_q = log10(q)
+        log10_q = rowan.log10([1, 0, 0, 0])
     """
     q = np.asarray(q)
     return logb(q, 10)
@@ -248,8 +249,9 @@ def power(q, n):
 
     Example::
 
-        q_n = power(q, n)
+        q_5 = rowan.power([1, 0, 0, 0], 5)
     """
+    q = np.asarray(q)
     # Need matching shapes
     if len(q.shape) == 1:
         flat = True
@@ -290,7 +292,7 @@ def conjugate(q):
 
     Example::
 
-        q_star = conjugate(q)
+        q_star = rowan.conjugate([1, 0, 0, 0])
     """
     # Don't use asarray to avoid modifying in place
     conjugate = np.array(q)
@@ -309,7 +311,7 @@ def inverse(q):
 
     Example::
 
-        q_inv = inverse(q)
+        q_inv = rowan.inverse([1, 0, 0, 0])
     """
     q = np.asarray(q)
 
@@ -348,9 +350,7 @@ def multiply(qi, qj):
 
     Example::
 
-        qi = np.array([[1, 0, 0, 0]])
-        qj = np.array([[1, 0, 0, 0]])
-        prod = multiply(qi, qj)
+        prod = rowan.multiply([1, 0, 0, 0], [2, 0, 0, 0])
     """
     qi = np.asarray(qi)
     qj = np.asarray(qj)
@@ -380,9 +380,7 @@ def divide(qi, qj):
 
     Example::
 
-        qi = np.array([[1, 0, 0, 0]])
-        qj = np.array([[1, 0, 0, 0]])
-        prod = divide(qi, qj)
+        quot = rowan.divide([1, 0, 0, 0], [2, 0, 0, 0])
     """
     return multiply(qi, inverse(qj))
 
@@ -398,8 +396,7 @@ def norm(q):
 
     Example::
 
-        q = np.random.rand(10, 4)
-        norms = norm(q)
+        norms = rowan.norm([10, 0, 0, 0])
     """
     q = np.asarray(q)
     return np.linalg.norm(q, axis=-1)
@@ -416,8 +413,7 @@ def normalize(q):
 
     Example::
 
-        q = np.random.rand(10, 4)
-        u = normalize(q)
+        u = rowan.normalize([10, 0, 0, 0])
     """
     q = np.asarray(q)
     norms = norm(q)
@@ -425,7 +421,18 @@ def normalize(q):
 
 
 def is_unit(q):
-    """Check if all input quaternions have unit norm."""
+    """Check if all input quaternions have unit norm.
+
+    Args:
+        q ((...,4) np.array): Array of quaternions.
+
+    Returns:
+        bool: Whether or not all inputs are unit quaternions
+
+    Example::
+
+        rowan.is_unit([10, 0, 0, 0])
+   """
     return np.allclose(norm(q), 1)
 
 
@@ -453,8 +460,7 @@ def from_mirror_plane(x, y, z):
 
     Example::
 
-        plane = (1, 2, 3)
-        quat_ref = from_mirror_plane(*plane)
+        quat_ref = rowan.from_mirror_plane(*(1, 2, 3))
     """
     x, y, z = np.broadcast_arrays(x, y, z)
     q = np.empty(x.shape + (4,))
@@ -486,10 +492,7 @@ def reflect(q, v):
 
     Example::
 
-        from rowan import random
-        q = random.rand(1, 4)
-        v = np.random.rand(1, 3)
-        v_reflected = reflect(q, v)
+        v_reflected = rowan.reflect([1, 0, 0, 0], [1, 1, 1])
     """
     q = np.asarray(q)
     _validate_unit(q)
@@ -515,10 +518,7 @@ def rotate(q, v):
 
     Example::
 
-        from rowan import random
-        q = random.rand(1, 4)
-        v = np.random.rand(1, 3)
-        v_rot = rotate(q, v)
+        v_rot = rowan.reflect([1, 0, 0, 0], [1, 1, 1])
     """
     q = np.asarray(q)
     _validate_unit(q)
@@ -562,6 +562,10 @@ def vector_vector_rotation(v1, v2):
 
     Returns:
         Array of shape (..., 4) containing  quaternions that rotate v1 onto v2.
+
+    Example::
+
+        q_rot = rowan.vector_vector_rotation([1, 0, 0], [0, 1, 0])
     """
     v1 = np.asarray(v1)
     v2 = np.asarray(v2)
@@ -592,9 +596,7 @@ def from_euler(alpha, beta, gamma, convention='zyx',
 
     Example::
 
-        rands = np.random.rand(100, 3)
-        alpha, beta, gamma = rands.T
-        ql = from_euler(alpha, beta, gamma)
+        ql = rowan.from_euler(0.3, 0.5, 0.7)
     """
     angles = np.broadcast_arrays(alpha, beta, gamma)
 
@@ -715,13 +717,15 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
 
     Example::
 
+        import numpy as np
         rands = np.random.rand(100, 3)
         alpha, beta, gamma = rands.T
-        ql = from_euler(alpha, beta, gamma)
-        alpha_return, beta_return, gamma_return = to_euler(ql)
-        assert(np.all(alpha_return == alpha))
-        assert(np.all(beta_return == beta))
-        assert(np.all(gamma_return == gamma))
+        ql = rowan.from_euler(alpha, beta, gamma)
+        alpha_return, beta_return, gamma_return = np.split(
+            rowan.to_euler(ql), 3, axis = 1)
+        assert(np.allclose(alpha_return.flatten(), alpha))
+        assert(np.allclose(beta_return.flatten(), beta))
+        assert(np.allclose(gamma_return.flatten(), gamma))
     """
     q = np.asarray(q)
     _validate_unit(q)
@@ -870,6 +874,10 @@ def from_matrix(mat, require_orthogonal=True):
     Returns:
         Array of shape (..., 4) containing the corresponding rotation
         quaternions.
+
+    Example::
+
+        ql = rowan.from_matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
     """
     mat = np.asarray(mat)
     if require_orthogonal and not np.allclose(np.linalg.det(mat), 1):
@@ -917,6 +925,10 @@ def to_matrix(q, require_unit=True):
     Returns:
         Array of shape (..., 3, 3) containing the corresponding rotation
         matrices.
+
+    Example::
+
+        ql = rowan.to_matrix([1, 0, 0, 0]])
     """
     q = np.asarray(q)
 
@@ -957,9 +969,7 @@ def from_axis_angle(axes, angles):
 
     Example::
 
-        axis = np.array([[1, 0, 0]])
-        ang = np.pi/3
-        quat = from_axis_angle(axis, ang)
+        quat = rowan.from_axis_angle([[1, 0, 0]], np.pi/3)
     """
     axes = np.asarray(axes)
 
@@ -989,6 +999,10 @@ def to_axis_angle(q):
         A tuple of np.arrays (axes, angles) where axes has
         shape (...,3) and angles has shape (...,1). The
         angles are in radians.
+
+    Example::
+
+        quat = rowan.to_axis_angle([[1, 0, 0, 0]])
     """
     q = np.asarray(q)
     _validate_unit(q)
@@ -1016,6 +1030,10 @@ def equal(p, q):
 
     Returns:
         A boolean array of shape (...) indicating equality.
+
+    Example::
+
+        rowan.equal([1, 0, 0, 0], [1, 0, 0, 0])
     """
     return np.all(p == q, axis=-1)
 
@@ -1032,6 +1050,10 @@ def not_equal(p, q):
 
     Returns:
         A boolean array of shape (...) indicating inequality.
+
+    Example::
+
+        rowan.not_equal([-1, 0, 0, 0], [1, 0, 0, 0])
     """
     return np.any(p != q, axis=-1)
 
@@ -1047,6 +1069,11 @@ def isnan(q):
     Returns:
         A boolean array of shape (...) indicating whether or not the input
         quaternions were NaN.
+
+    Example::
+
+        import numpy as np
+        rowan.isnan([np.nan, 0, 0, 0])
     """
     return np.any(np.isnan(q), axis=-1)
 
@@ -1061,6 +1088,11 @@ def isinf(q):
 
     Returns:
         A boolean array of shape (...) indicating infinite quaternions.
+
+    Example::
+
+        import numpy as np
+        rowan.isinf([np.nan, 0, 0, 0])
     """
     return np.any(np.isinf(q), axis=-1)
 
@@ -1075,6 +1107,10 @@ def isfinite(q):
 
     Returns:
         A boolean array of shape (...) indicating finite quaternions.
+
+    Example::
+
+        rowan.isfinite([1, 0, 0, 0])
     """
     return np.all(np.isfinite(q), axis=-1)
 
@@ -1091,6 +1127,10 @@ def allclose(p, q, **kwargs):
 
     Returns:
         Boolean indicating whether or not all quaternions are close.
+
+    Example::
+
+        rowan.allclose([1, 0, 0, 0], [1, 0, 0, 0])
     """
     return np.allclose(p, q, **kwargs)
 
@@ -1109,5 +1149,9 @@ def isclose(p, q, **kwargs):
 
     Returns:
         A boolean array of shape (...) indicating which quaternions are close.
+
+    Example::
+
+        rowan.allclose([[1, 0, 0, 0]], [[1, 0, 0, 0]])
     """
     return np.all(np.isclose(p, q, **kwargs), axis=-1)

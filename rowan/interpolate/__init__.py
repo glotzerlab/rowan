@@ -42,9 +42,8 @@ def slerp(q0, q1, t, ensure_shortest=True):
 
     Example::
 
-        q0 = np.array([[1, 0, 0, 0]])
-        q1 = np.array([[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]])
-        slerp(q0, q1, 0.5)
+        import numpy as np
+        q_slerp = rowan.interpolate.slerp([[1, 0, 0, 0]], [[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]], 0.5)
     """
     _validate_unit(q0)
     _validate_unit(q1)
@@ -78,9 +77,8 @@ def slerp_prime(q0, q1, t, ensure_shortest=True):
 
     Example::
 
-        q0 = np.array([[1, 0, 0, 0]])
-        q1 = np.array([[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]])
-        slerp_prime(q0, q1, 0.5)
+        import numpy as np
+        q_slerp_prime rowan.interpolate.slerp_prime([[1, 0, 0, 0]], [[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]], 0.5)
     """
     _validate_unit(q0)
     _validate_unit(q1)
@@ -129,11 +127,9 @@ def squad(p, a, b, q, t):
 
     Example::
 
-        q0 = np.array([[1, 0, 0, 0]])
-        q1 = np.array([[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]])
-        q2 = np.array([[0, np.sqrt(2)/2, np.sqrt(2)/2, 0]])
-        q3 = np.array([[0, 0, np.sqrt(2)/2, np.sqrt(2)/2]])
-        squad(q0, q1, q2, q3, 0.5)
+        import numpy as np
+        q_squad = rowan.interpolate.squad([1, 0, 0, 0], [np.sqrt(2)/2, np.sqrt(2)/2, 0, 0],
+            [0, np.sqrt(2)/2, np.sqrt(2)/2, 0], [0, 0, np.sqrt(2)/2, np.sqrt(2)/2], 0.5)
     """
     _validate_unit(p)
     _validate_unit(a)

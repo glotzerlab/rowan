@@ -62,7 +62,7 @@ python setup.py install --user
 The package is currently tested for Python versions 2.7 and Python >= 3.3 on Unix-like systems.
 Continuous integrated testing is performed using CircleCI on these Python versions with NumPy versions 1.10 and above.
 
-To run the packaged unit tests, execute:
+To run the packaged unit tests, execute the following line from the root of the repository:
 
 ```bash
 python -m unittest discover tests

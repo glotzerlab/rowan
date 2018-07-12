@@ -34,6 +34,10 @@ def derivative(q, v):
 
     Returns:
         Array of shape (..., 4) containing element-wise derivatives of q.
+
+    Example::
+
+        q_prime = rowan.calculus.derivative([1, 0, 0, 0], [1, 0, 0])
     """
     q = np.asarray(q)
     v = np.asarray(v)
@@ -72,9 +76,7 @@ def integrate(q, v, dt):
 
     Example::
 
-        q = np.array([1, 0, 0, 0])
-        v = np.array([0, 0, 1e-2])
-        v_next = integrate(q, v, 1)
+        v_next = rowan.calculus.integrate([1, 0, 0, 0], [0, 0, 1e-2], 1)
     """
     q = np.asarray(q)
     v = np.asarray(v)

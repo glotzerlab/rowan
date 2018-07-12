@@ -45,11 +45,9 @@ def distance(p, q):
 
     Example::
 
-        p = np.array([[1, 0, 0, 0]])
-        q = np.array([[1, 0, 0, 0]])
-        distance(p, q)
+        rowan.geometry.distance([1, 0, 0, 0], [1, 0, 0, 0])
     """
-    return norm(p - q)
+    return norm(np.asarray(p) - np.asarray(q))
 
 
 def sym_distance(p, q):
@@ -73,10 +71,10 @@ def sym_distance(p, q):
 
     Example::
 
-        p = np.array([[1, 0, 0, 0]])
-        q = np.array([[-1, 0, 0, 0]])
-        sym_distance(p, q) # 0
+        rowan.geometry.sym_distance([1, 0, 0, 0], [-1, 0, 0, 0])
     """
+    p = np.asarray(p)
+    q = np.asarray(q)
     return np.minimum(norm(p - q), norm(p + q))
 
 
@@ -107,7 +105,11 @@ def riemann_exp_map(p, v):
         Array of shape (..., 4) containing the endpoints of the geodesic
         starting from :math:`p` and traveling a distance :math:`\lvert\lvert
         v\rvert\rvert` in the direction of :math:`v`.
-        """
+
+    Example::
+
+        rowan.geometry.riemann_exp_map([1, 0, 0, 0], [-1, 0, 0, 0])
+    """
     return multiply(p, exp(v))
 
 
@@ -129,6 +131,10 @@ def riemann_log_map(p, q):
         Array of shape (..., 4) containing quaternions pointing from p to q with
         magnitudes equal to the length of the geodesics joining these
         quaternions.
+
+    Example::
+
+        rowan.geometry.riemann_log_map([1, 0, 0, 0], [-1, 0, 0, 0])
     """
     return log(multiply(inverse(q), p))
 
@@ -161,6 +167,10 @@ def intrinsic_distance(p, q):
     Returns:
         Array of shape (...) containing the element-wise intrinsic distances
         between the two sets of quaternions.
+
+    Example::
+
+        rowan.geometry.intrinsic_distance([1, 0, 0, 0], [-1, 0, 0, 0])
     """
     # TODO: Consider implementing the optimization
 #    if not np.allclose(2*np.arccos(np.linalg.norm(np.inner(p, q))),
@@ -188,7 +198,13 @@ def sym_intrinsic_distance(p, q):
     Returns:
         Array of shape (...) containing the element-wise symmetrized intrinsic
         distances between the two sets of quaternions.
+
+    Example::
+
+        rowan.geometry.sym_intrinsic_distance([1, 0, 0, 0], [-1, 0, 0, 0])
     """
+    p = np.asarray(p)
+    q = np.asarray(q)
     return np.where(norm(p - q) < norm(p + q),
                     norm(riemann_log_map(p, q)),
                     norm(riemann_log_map(p, -q))
@@ -202,11 +218,15 @@ def angle(p):
     ``intrinsic_distance(p, np.array([1, 0, 0, 0]))``.
 
     Args:
-        p ((...,4) np.array): Array of quaternions..
+        p ((...,4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) containing the element-wise angles traced out by
         these rotations.
+
+    Example::
+
+        rowan.geometry.angle([1, 0, 0, 0])
     """
 
     # TODO: Make sure all the quaternions are rotations

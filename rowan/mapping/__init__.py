@@ -79,6 +79,24 @@ def kabsch(X, Y, require_rotation=True):
     Returns:
         A tuple (R, t) where R is the (m x m) rotation matrix to rotate the
         points and t is the translation.
+
+    Example::
+
+        import numpy as np
+
+        # Create some random points, then make a random transformation of
+        # these points
+        points = np.random.rand(10, 3)
+        rotation = rowan.random.rand(1)
+        translation = np.random.rand(1, 3)
+        transformed_points = rowan.rotate(rotation, points) + translation
+
+        # Recover the rotation and check
+        R, t = rowan.mapping.kabsch(points, transformed_points)
+        q = rowan.from_matrix(R)
+
+        assert np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+        assert np.allclose(translation, t)
     """
     X = np.atleast_2d(X)
     Y = np.atleast_2d(Y)
@@ -127,6 +145,23 @@ def horn(X, Y):
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
         is the translation.
+
+    Example::
+
+        import numpy as np
+
+        # Create some random points, then make a random transformation of
+        # these points
+        points = np.random.rand(10, 3)
+        rotation = rowan.random.rand(1)
+        translation = np.random.rand(1, 3)
+        transformed_points = rowan.rotate(rotation, points) + translation
+
+        # Recover the rotation and check
+        q, t = rowan.mapping.horn(points, transformed_points)
+
+        assert np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+        assert np.allclose(translation, t)
     """
     X = np.atleast_2d(X)
     Y = np.atleast_2d(Y)
@@ -189,7 +224,9 @@ def davenport(X, Y):
     particular matrix, the Davenport K-matrix, which is then diagonalized to
     find the appropriate eigenvalues. More modern algorithms aim to solve the
     characteristic equation directly rather than diagonalizing, which can
-    provide speed benefits at the potential cost of robustness.
+    provide speed benefits at the potential cost of robustness. The
+    implementation in ``rowan`` does not do this, instead simply computing the
+    spectral decomposition.
 
     Args:
         X ((N, 3) np.array): First set of N points.
@@ -198,6 +235,23 @@ def davenport(X, Y):
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
         is the translation.
+
+    Example::
+
+        import numpy as np
+
+        # Create some random points, then make a random transformation of
+        # these points
+        points = np.random.rand(10, 3)
+        rotation = rowan.random.rand(1)
+        translation = np.random.rand(1, 3)
+        transformed_points = rowan.rotate(rotation, points) + translation
+
+        # Recover the rotation and check
+        q, t = rowan.mapping.davenport(points, transformed_points)
+
+        assert np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+        assert np.allclose(translation, t)
     """
     X = np.atleast_2d(X)
     Y = np.atleast_2d(Y)
@@ -225,10 +279,6 @@ def davenport(X, Y):
     K[0, 1:] = z.T
     K[1:, 0] = z
     K[0, 0] = tr_B
-#    K[:3, :3] = B + B.T - np.eye(3)*tr_B
-#    K[3, :3] = z.T
-#    K[:3, 3] = z
-#    K[3, 3] = tr_B
 
     w, v = np.linalg.eig(K)
     q = v[:, np.argmax(w)]
@@ -256,6 +306,23 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
         is the translation.
+
+    Example::
+
+        import numpy as np
+
+        # Create some random points, then make a random transformation of
+        # these points
+        points = np.random.rand(10, 3)
+        rotation = rowan.random.rand(1)
+        translation = np.random.rand(1, 3)
+        transformed_points = rowan.rotate(rotation, points) + translation
+
+        # Recover the rotation and check
+        q, t = rowan.mapping.procrustes(points, transformed_points, method='horn')
+
+        assert np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+        assert np.allclose(translation, t)
     """
     import sys
     thismodule = sys.modules[__name__]
@@ -314,6 +381,26 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
     Returns:
         A tuple (R, t) where R is the matrix to rotate the points and t
         is the translation.
+
+    Example::
+
+        import numpy as np
+
+        # Create some random points, then make a random transformation of
+        # these points
+        points = np.random.rand(10, 3)
+
+        # Only works for small rotations
+        rotation = rowan.from_axis_angle((1, 0, 0), 0.01)
+        translation = np.random.rand(1, 3)
+        transformed_points = rowan.rotate(rotation, points) + translation
+
+        # Recover the rotation and check
+        R, t = rowan.mapping.icp(points, transformed_points)
+        q = rowan.from_matrix(R)
+
+        assert np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+        assert np.allclose(translation, t)
     """
 
     import sys

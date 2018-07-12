@@ -6,7 +6,10 @@ rowan
     :local:
 
 Welcome to the documentation for rowan, a package for working with quaternions!
-Quaternions form a number system with various interesting properties, and they have a number of uses.
+Quaternions, which form a number system with various interesting properties, were originally developed for classical mechanics.
+Although they have since been largely displaced from this application by vector mathematics, they have become a standard method of representing rotations in three dimensions.
+Quaternions are now commonly used for this purpose in various fields, including computer graphics and attitude control.
+
 This package provides tools for standard algebraic operations on quaternions as well as a number of additional tools for *e.g.* measuring distances between quaternions, interpolating between them, and performing basic point-cloud mapping.
 A particular focus of the rowan package is working with unit quaternions, which are a popular means of representing rotations in 3D.
 In order to provide a unified framework for working with the various rotation formalisms in 3D, rowan allows easy interconversion between these formalisms.
@@ -110,7 +113,7 @@ Running Tests
 The package is currently tested for Python versions 2.7 and Python >= 3.3 on Unix-like systems.
 Continuous integrated testing is performed using CircleCI on these Python versions with NumPy versions 1.10 and above.
 
-To run the packaged unit tests, execute:
+To run the packaged unit tests, execute the following line from the root of the repository:
 
 .. code-block:: bash
 
