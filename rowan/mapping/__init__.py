@@ -95,7 +95,8 @@ def kabsch(X, Y, require_rotation=True):
         R, t = rowan.mapping.kabsch(points, transformed_points)
         q = rowan.from_matrix(R)
 
-        assert np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+        assert np.logical_or(
+            np.allclose(rotation, q), np.allclose(rotation, -q))
         assert np.allclose(translation, t)
     """
     X = np.atleast_2d(X)
@@ -160,7 +161,8 @@ def horn(X, Y):
         # Recover the rotation and check
         q, t = rowan.mapping.horn(points, transformed_points)
 
-        assert np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+        assert np.logical_or(
+            np.allclose(rotation, q), np.allclose(rotation, -q))
         assert np.allclose(translation, t)
     """
     X = np.atleast_2d(X)
@@ -250,7 +252,8 @@ def davenport(X, Y):
         # Recover the rotation and check
         q, t = rowan.mapping.davenport(points, transformed_points)
 
-        assert np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+        assert np.logical_or(
+            np.allclose(rotation, q), np.allclose(rotation, -q))
         assert np.allclose(translation, t)
     """
     X = np.atleast_2d(X)
@@ -319,9 +322,11 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
         transformed_points = rowan.rotate(rotation, points) + translation
 
         # Recover the rotation and check
-        q, t = rowan.mapping.procrustes(points, transformed_points, method='horn')
+        q, t = rowan.mapping.procrustes(
+            points, transformed_points, method='horn')
 
-        assert np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+        assert np.logical_or(
+            np.allclose(rotation, q), np.allclose(rotation, -q))
         assert np.allclose(translation, t)
     """
     import sys
@@ -399,7 +404,8 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         R, t = rowan.mapping.icp(points, transformed_points)
         q = rowan.from_matrix(R)
 
-        assert np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+        assert np.logical_or(
+            np.allclose(rotation, q), np.allclose(rotation, -q))
         assert np.allclose(translation, t)
     """
 
