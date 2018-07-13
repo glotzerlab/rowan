@@ -44,30 +44,37 @@ complex dependencies for accessing their full features or require conversion
 into some internal format, making them cumbersome to incorporate into existing
 code bases that need to operate on raw arrays [@npquat].
 
-The *rowan* package, named for William Rowan Hamilton, is a quaternion package
+The ``rowan`` package, named for William Rowan Hamilton, is a quaternion package
 that addresses these issues. By operating directly on NumPy arrays and offering
 first-class support for broadcasting for all modules and functions in the
-package, *rowan* ensures high efficiency for operating on the large arrays
-common in computer graphics or scientific applications. For large arrays (*e.g.*
-$N > 10000$) where performance limitations become significant, *rowan* outstrips
-pure Python packages such as *pyquaternion* [@pyquat] by roughly two orders of
-magnitude and approaches the performance of hybrid Python-C solutions such as
-the *numpy-quaternion* [@npquat] package. Although a typical function call with
-*rowan* is roughly 4 times slower than packages using C extensions, this slight
-performance difference is offset by *rowan*'s relative ease of installation and
-incorporation. The package avoids any hard dependencies other than NumPy itself
-and uses NumPy arrays as a universal language, making *rowan* an unobtrusive
+package, ``rowan`` ensures high efficiency for operating on the large arrays
+common in computer graphics or scientific applications. We quantify performance
+in Figure 1 by comparison to ``pyquaternion`` [@pyquat] and ``numpy-quaternion``
+[@npquat], two well-known alternatives to ``rowan``. For small arrays, the
+performance benefits of ``numpy-quaternion`` and ``rowan`` are somewhat muted
+since the Python function calls dominate the total run time. In fact, at this
+scale  ``rowan`` performs quite similarly to ``pyquaternion``, which is a pure
+Python solution, while ``numpy-quaternion``, a hybrid Python-C solution,
+performs faster than both. For large arrays (*e.g.* $N > 10000$) where
+performance limitations become significant, however, ``rowan`` outstrips
+``pyquaternion``  by roughly two orders of magnitude and approaches the
+performance of ``numpy-quaternion``. Although a typical function call with
+``rowan`` is, on average, roughly 4 times slower than ``numpy-quaternion``, this
+performance difference is offset by ``rowan``'s relative ease of installation
+and incorporation. The package avoids any hard dependencies other than NumPy
+itself and directly uses NumPy arrays, making ``rowan`` an unobtrusive
 dependency with essentially zero barrier for introduction into existing code
 bases.
+![Performance Comparison](Performance.png)
 
-A full-featured quaternion library, *rowan* has extensive capabilities in
+A full-featured quaternion library, ``rowan`` has extensive capabilities in
 addition to basic quaternion arithmetic operations. These functions include:
 methods for point set registration, including some that are specialized for
 solving the Procrustes problem of superimposing corresponding sets of points;
 functions for quaternion calculus and interpolation; the ability to sample
 random rotation quaternions from $SO(3)$; and functions to compute various
 distance metrics on the quaternion manifold. For applications focused on
-rotations, *rowan* provides the ability to convert between numerous common
+rotations, ``rowan`` provides the ability to convert between numerous common
 rotation formalisms, including full support for all Euler angle conventions,
 which is not found in other Python quaternion packages.
 
@@ -84,11 +91,11 @@ containing independent implementations of quaternion operations with slightly
 different features and levels of generality. The resulting code fragmentation
 makes code maintenance much more challenging and fails to provide a standard
 implementation of quaternion operations for more ad hoc analysis tasks that
-arise in specific contexts. *rowan* addresses these needs by providing a
+arise in specific contexts. ``rowan`` addresses these needs by providing a
 unified, high-performance, easily utilized solution. The package was
 incorporated into the open-source plato [@plato] simulation visualization tool
 as well some internal packages that have not yet been open-sourced. Going
-forward, *rowan* will not only simplify the maintenance of many of our existing
+forward, ``rowan`` will not only simplify the maintenance of many of our existing
 code bases, it will also facilitate code development involving quaternion
 operations going forward, both within and outside our group.
 
