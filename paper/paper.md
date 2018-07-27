@@ -78,26 +78,27 @@ rotations, ``rowan`` provides the ability to convert between numerous common
 rotation formalisms, including full support for all Euler angle conventions,
 which is not found in other Python quaternion packages.
 
-This package arose due to the representation of anisotropic particle
+This package arose due to the need to represent anisotropic particle
 orientations in Monte Carlo simulations in the Glotzer Group at the University
 of Michigan. Unlike configurations of spherical particles, which can be
-described by their positions alone, configurations of anisotropic particles must
-also contain information on particle orientations and how they rotate over the
-course of the simulation. Our simulation software HOOMD-blue [@Anderson2008c,
-@Glaser2015f] uses quaternions to represent particle orientations, as do many of
-the packages we write for analyzing these simulations. Although some packages
-require C++ implementations, a large number are pure Python code bases, each
-containing independent implementations of quaternion operations with slightly
-different features and levels of generality. The resulting code fragmentation
-makes code maintenance much more challenging and fails to provide a standard
-implementation of quaternion operations for more ad hoc analysis tasks that
-arise in specific contexts. ``rowan`` addresses these needs by providing a
-unified, high-performance, easily utilized solution. The package was
-incorporated into the open-source plato [@plato] simulation visualization tool
-as well some internal packages that have not yet been open-sourced. Going
-forward, ``rowan`` will not only simplify the maintenance of many of our existing
-code bases, it will also facilitate code development involving quaternion
-operations going forward, both within and outside our group.
+described by their positions alone, configurations of anisotropic particles
+must also contain information on particle orientations and how they rotate over
+the course of the simulation. Our simulation software HOOMD-blue
+[@Anderson2008c, @Glaser2015f] uses quaternions to represent particle
+orientations, as do many of the packages we write for analyzing these
+simulations. Although some packages require C++ implementations, a large number
+are pure Python code bases, and each of these originally contained independent
+implementations of quaternion operations with slightly different features and
+levels of generality. The resulting code fragmentation made code maintenance
+much more challenging and failed to provide a standard implementation of
+quaternion operations for more ad hoc analysis tasks that arise in specific
+contexts. ``rowan`` addressed these needs by providing a unified,
+high-performance, easily utilized solution. The package was incorporated into
+the open-source plato [@plato] simulation visualization tool as well as some
+internal packages that have not yet been open-sourced. Going forward, ``rowan``
+will not only simplify the maintenance of our existing code bases, it will also
+facilitate future code development involving quaternion operations both within
+and outside our group.
 
 # Acknowledgements
 
