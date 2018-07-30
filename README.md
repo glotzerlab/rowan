@@ -61,10 +61,10 @@ python setup.py install --user
 
 ## Testing
 
-The package is currently tested for Python versions 2.7, 3.3, 3.4, 3.5, 3.6, and 3.7 on Unix-like systems.
+The package is currently tested for Python versions 2.7 and Python >= 3.3 on Unix-like systems.
 Continuous integrated testing is performed using CircleCI on these Python versions with NumPy versions 1.10 and above.
 
-To run the packaged unit tests, execute:
+To run the packaged unit tests, execute the following line from the root of the repository:
 
 ```bash
 python -m unittest discover tests
@@ -76,7 +76,7 @@ To check test coverage, make sure the coverage module is installed:
 pip install coverage
 ```
 
-and then run the packaged unit tests:
+and then run the packaged unit tests with the coverage module:
 
 ```bash
 coverage run -m unittest discover tests
@@ -110,7 +110,7 @@ Documentation for rowan is written in [reStructuredText](http://docutils.sourcef
 To build the documentation, first install Sphinx:
 
 ```bash
-pip install sphinx
+pip install sphinx sphinx_rtd_theme
 ```
 
 You can then use Sphinx to create the actual documentation in either PDF or HTML form by running the following commands in the rowan root directory:

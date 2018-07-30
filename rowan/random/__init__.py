@@ -24,7 +24,7 @@ __all__ = ['rand',
 
 
 def rand(*args):
-    R"""Generate random rotations uniformly
+    R"""Generate random rotations that are uniformly distributed on a unit sphere.
 
     This is a convenience function *a la* ``np.random.rand``. If you want a
     function that takes a tuple as input, use :py:func:`random_sample` instead.
@@ -35,6 +35,10 @@ def rand(*args):
     Return:
         Random quaternions of the shape provided with an additional axis of
         length 4.
+
+    Example::
+
+        q_rand = rowan.random.rand(3, 3, 2)
     """
     if len(args) == 0:
         return random_sample()
@@ -60,6 +64,10 @@ def random_sample(size=None):
     Return:
         Random quaternions of the shape provided with an additional axis of
         length 4.
+
+    Example::
+
+        q_rand = rowan.random.random_sample((3, 3, 2))
     """
     if size is None:
         size = (3,)
