@@ -5,11 +5,37 @@ This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html
 Unreleased
 ----------
 
+v1.1.0 - 2018-07-30
+-------------------
+
+Added
++++++
+
+* Included benchmarks including comparison to alternatives.
+* Installation instructions in the Sphinx documentation.
+* More examples for rowan.mapping.
+
+Changed
++++++++
+
+* All examples in docstrings now use the full paths of subpackages.
+* All examples in docstrings import all needed packages aside from rowan.
+
 Fixed
 +++++
 
-* Numerous style fixes
-* Fix version numbering in the Changelog
+* Instability in vector\_vector\_rotation for antiparallel vectors.
+* Various code style issues.
+* Broken example in the Sphinx documentation.
+
+v1.0.0 - 2018-05-29
+-------------------
+
+Fixed
++++++
+
+* Numerous style fixes.
+* Fix version numbering in the Changelog.
 
 v0.6.1 - 2018-04-20
 -------------------
@@ -34,7 +60,7 @@ v0.5.1 - 2018-04-13
 Fixed
 +++++
 
-* README rendering on PyPI
+* README rendering on PyPI.
 
 v0.5.0 - 2018-04-12
 -------------------
