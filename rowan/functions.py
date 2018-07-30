@@ -230,7 +230,6 @@ def log10(q):
 
 
 def power(q, n):
-    # TODO: Write polar decomposition function #noqa
     R"""Computes the power of a quaternion :math:`q^n`.
 
     Quaternions raised to a scalar power are defined according to the polar
@@ -250,6 +249,7 @@ def power(q, n):
 
         q_n = power(q, n)
     """
+    # TODO: Write polar decomposition function #noqa
     # Need matching shapes
     if len(q.shape) == 1:
         flat = True
@@ -549,8 +549,36 @@ def _vector_bisector(v1, v2):
     Returns:
         Array of shape (..., 3) containing vector bisectors.
     """
+    # Since np.inner and np.dot require manipulating the shapes in ways that
+    # might be expensive and may not play nicely with broadcasting, we perform
+    # the dot product manually on the broadcasted arrays
+    v1_norm, v2_norm = np.broadcast_arrays(_normalize_vec(v1),
+                                           _normalize_vec(v2))
+    ap = np.isclose(np.sum(v1_norm*v2_norm, axis=-1), -1)
 
-    return _normalize_vec(_normalize_vec(v1) + _normalize_vec(v2))
+    if np.any(ap):
+        result = np.empty(v1_norm.shape)
+
+        # Parallel vectors are fine, only antiparallel vectors cause problems
+        not_ap = np.logical_not(ap)
+        result[not_ap] = _normalize_vec(v1_norm[not_ap] + v2_norm[not_ap])
+
+        # To use cross products to find the normal, we need to choose a unit
+        # vector that is also not (anti)parallel to the original. Keep two
+        # options available to avoid this case.
+        one_vec = np.array([[1, 0, 0]])
+        other_one_vec = np.array([[0, 1, 0]])
+        cross_element = np.where(
+                            np.isclose(
+                                np.abs(np.dot(v1_norm[ap], one_vec.T)),
+                                1),
+                            other_one_vec,
+                            one_vec)
+        result[ap] = np.cross(v1_norm[ap], cross_element)
+
+        return result
+    else:
+        return _normalize_vec(v1_norm + v2_norm)
 
 
 def vector_vector_rotation(v1, v2):
