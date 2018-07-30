@@ -1,6 +1,35 @@
 rowan
 =====
 
+.. contents::
+    :local:
+
+|ReadTheDocs|
+|CircleCI|
+|Codecov|
+|PyPI|
+|Codacy|
+|Versions|
+|Zenodo|
+|JOSS|
+
+.. |ReadTheDocs| image:: https://readthedocs.org/projects/rowan/badge/?version=latest
+    :target: http://rowan.readthedocs.io/en/latest/?badge=latest
+.. |CircleCI| image:: https://circleci.com/bb/glotzer/rowan.svg?style=svg
+    :target: https://circleci.com/bb/glotzer/rowan
+.. |Codecov| image:: https://codecov.io/bb/glotzer/rowan/branch/master/graph/badge.svg
+    :target: https://codecov.io/bb/glotzer/rowan
+.. |PyPI| image:: https://img.shields.io/pypi/v/rowan.svg
+    :target: https://pypi.org/project/rowan/
+.. |Codacy| image:: https://api.codacy.com/project/badge/Grade/44a7677f2d7341e68a8338d1513f71e9
+    :target: https://www.codacy.com/app/vramasub/rowan
+.. |Versions| image:: https://img.shields.io/pypi/pyversions/rowan.svg
+    :target: https://bitbucket.org/glotzer/rowan/
+.. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1323676.svg
+    :target: https://doi.org/10.5281/zenodo.1323676
+.. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.00787/status.svg
+    :target: https://doi.org/10.21105/joss.00787)
+
 Welcome to the documentation for rowan, a package for working with quaternions!
 Quaternions form a number system with various interesting properties, and they have a number of uses.
 This package provides tools for standard algebraic operations on quaternions as well as a number of additional tools for *e.g.* measuring distances between quaternions, interpolating between them, and performing basic point-cloud mapping.
