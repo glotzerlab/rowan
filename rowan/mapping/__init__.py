@@ -352,12 +352,11 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
         qs = []
         ts = []
         for eq in equivalent_quaternions:
-            q, t = method(X, rotate(eq, Y))
-            if method == 'kabsch':
+            q, t = method(rotate(eq, X), Y)
+            if method.__name__ == 'kabsch':
                 qs.append(from_matrix(q))
             else:
                 qs.append(q)
-            qs.append(q)
             ts.append(t)
         index = np.argmin([angle(q) for q in qs])
         return qs[index], ts[index]
