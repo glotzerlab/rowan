@@ -39,9 +39,13 @@ class TestMatrix(unittest.TestCase):
         mat = np.array([[0, 0, 1],
                         [1, 0, 0],
                         [0, 1, 0]])
-        self.assertTrue(np.allclose(
-            rowan.from_matrix(mat), half
-        ))
+
+        self.assertTrue(
+            np.logical_or(
+                np.allclose(rowan.from_matrix(mat), half), 
+                np.allclose(rowan.from_matrix(mat), -half) 
+            )
+        )
 
         mat = np.array([[0, 1, 0],
                         [0, 0, -1],
