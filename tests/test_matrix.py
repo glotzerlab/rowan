@@ -42,8 +42,8 @@ class TestMatrix(unittest.TestCase):
 
         self.assertTrue(
             np.logical_or(
-                np.allclose(rowan.from_matrix(mat), half), 
-                np.allclose(rowan.from_matrix(mat), -half) 
+                np.allclose(rowan.from_matrix(mat), half),
+                np.allclose(rowan.from_matrix(mat), -half)
             )
         )
 
