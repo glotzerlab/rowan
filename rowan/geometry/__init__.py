@@ -233,4 +233,4 @@ def angle(p):
     # where they need to be.
 
     _validate_unit(p)
-    return norm(log(p))
+    return 2*norm(log(p))
