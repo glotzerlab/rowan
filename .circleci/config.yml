@@ -87,7 +87,7 @@ references:
             python -m wheel version
             python setup.py sdist
             python setup.py bdist_wheel
-            python -m twine upload dist/*
+            python -m twine upload --username vramasub --password ${PYPI_PASSWORD} dist/*
 
 jobs:
   complete:
