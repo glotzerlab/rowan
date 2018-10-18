@@ -124,8 +124,6 @@ workflows:
       - build_and_deploy:
           filters:
             tags:
-              only:
-                - /^v.*/
+              only: /^v.*/
             branches:
-              ignore:
-                - /.*/
+              ignore: /.*/
