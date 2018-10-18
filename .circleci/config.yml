@@ -1,4 +1,5 @@
 version: 2
+
 references:
   im36: &im36
     docker:
@@ -74,7 +75,6 @@ references:
       - run:
           name: Deploy dist and wheels
           command: |
-            # Faster to just test one env first
             pip3.6 install --user flake8
             pip3.6 install --user numpy
             pip3.6 install --user scipy
@@ -108,22 +108,24 @@ workflows:
   all:
     jobs:
       - complete:
-        filters:
-          branches:
-            only:
-              - master
-              - develop
-              - /release-*/
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+                - /release-*/
       - test_only:
-        filters:
-          branches:
-            ignore:
-              - master
-              - develop
-              - /release-*/
+          filters:
+            branches:
+              ignore:
+                - master
+                - develop
+                - /release-*/
       - build_and_deploy:
-        filters:
-          tags:
-            only: /^v.*/
-          branches:
-            ignore: /.*/
+          filters:
+            tags:
+              only:
+                - /^v.*/
+            branches:
+              ignore:
+                - /.*/
