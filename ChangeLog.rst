@@ -5,6 +5,23 @@ This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html
 Unreleased
 ----------
 
+v1.1.1 - 2018-10-18
+-------------------
+
+Added
++++++
+
+* Automated deployment using CircleCI.
+* Added PDF of paper to the repository.
+
+Fixed
++++++
+
+* Added missing factor of 2 in angle calculation.
+* Fixed issue where method was not respected in rowan.mapping.
+* Disabled equivalent quaternion feature and test of rowan.mapping, which has a known bug.
+* Added missing negative in failing unit test.
+
 v1.1.0 - 2018-07-30
 -------------------
 
