@@ -5,6 +5,30 @@ This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html
 Unreleased
 ----------
 
+v1.1.5 - 2018-10-18
+-------------------
+
+Fixed
++++++
+
+* Fourth try of releasing using CircleCI.
+
+v1.1.4 - 2018-10-18
+-------------------
+
+Fixed
++++++
+
+* Third try of releasing using CircleCI.
+
+v1.1.3 - 2018-10-18
+-------------------
+
+Fixed
++++++
+
+* Second try of releasing using CircleCI.
+
 v1.1.2 - 2018-10-18
 -------------------
 
