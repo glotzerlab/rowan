@@ -69,6 +69,26 @@ references:
             - ~/.local
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
+  pypi_wheels: &pypi_wheels
+    steps:
+      - run:
+          name: Deploy dist and wheels
+          command: |
+            # Faster to just test one env first
+            pip3.6 install --user flake8
+            pip3.6 install --user numpy
+            pip3.6 install --user scipy
+            python3.6 -m flake8 --show-source .
+            python3.6 -m unittest discover tests -v
+            python --version
+            python -m pip --version
+            python -m pip install -U twine wheel setuptools
+            python -m twine --version
+            python -m wheel version
+            python setup.py sdist
+            python setup.py bdist_wheel
+            twine upload dist/*
+
 jobs:
   complete:
     <<: *im36
@@ -78,22 +98,35 @@ jobs:
     <<: *im36
     <<: *wd
     <<: *run_tests_only
+  build_and_deploy:
+    <<: *im36
+    <<: *wd
+    <<: *pypi_wheels
 
 workflows:
-    version: 2
-    all:
-      jobs:
-        - complete:
-            filters:
-              branches:
-                only:
-                  - master
-                  - develop
-                  - /release-*/
-        - test_only:
-            filters:
-              branches:
-                ignore:
-                  - master
-                  - develop
-                  - /release-*/
+  version: 2
+  test:
+    jobs:
+      - complete:
+        filters:
+          branches:
+            only:
+              - master
+              - develop
+              - /release-*/
+      - test_only:
+        filters:
+          branches:
+            ignore:
+              - master
+              - develop
+              - /release-*/
+
+  deploy:
+    jobs:
+      - build_and_deploy:
+        filters:
+          tags:
+            only: /^v.*/
+          branches:
+            ignore: /.*/
