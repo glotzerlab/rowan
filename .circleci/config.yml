@@ -105,12 +105,10 @@ jobs:
 
 workflows:
   version: 2
-  all:
+  testing:
     jobs:
       - complete:
           filters:
-            tags:
-              only: /^v.*/
             branches:
               only:
                 - master
@@ -123,13 +121,11 @@ workflows:
                 - master
                 - develop
                 - /release-*/
+  deploy:
+    jobs:
       - build_and_deploy:
-          requires:
-              - complete
           filters:
             tags:
-              only:
-                - /^v.*/
+              only: /^v.*/
             branches:
-              ignore:
-                - /.*/
+              ignore: /.*/
