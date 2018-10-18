@@ -109,6 +109,8 @@ workflows:
     jobs:
       - complete:
           filters:
+            tags:
+              only: /^v.*/
             branches:
               only:
                 - master
@@ -122,8 +124,12 @@ workflows:
                 - develop
                 - /release-*/
       - build_and_deploy:
+          requires:
+              - complete
           filters:
             tags:
-              only: /^v.*/
+              only:
+                - /^v.*/
             branches:
-              ignore: /.*/
+              ignore:
+                - /.*/
