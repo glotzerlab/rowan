@@ -34,9 +34,6 @@ class TestRotate(unittest.TestCase):
                     one,
                     one_vector) == one_vector))
 
-        with self.assertRaises(ValueError):
-            rowan.rotate(2*one, one_vector)
-
     def test_2d_array(self):
         """Rotating sets of vectors by sets of quaternions"""
         ones = np.repeat(one[np.newaxis, :], 10, axis=0)

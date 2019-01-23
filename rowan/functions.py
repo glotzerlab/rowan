@@ -495,11 +495,7 @@ def reflect(q, v):
         v_reflected = rowan.reflect([1, 0, 0, 0], [1, 1, 1])
     """
     q = np.asarray(q)
-    _validate_unit(q)
     v = np.asarray(v)
-
-    if not np.allclose(norm(q), 1):
-        raise ValueError("Reflection quaternions must have unit norm")
 
     # Convert vector to quaternion representation
     quat_v = _promote_vec(v)
@@ -521,11 +517,7 @@ def rotate(q, v):
         v_rot = rowan.reflect([1, 0, 0, 0], [1, 1, 1])
     """
     q = np.asarray(q)
-    _validate_unit(q)
     v = np.asarray(v)
-
-    if not np.allclose(norm(q), 1):
-        raise ValueError("Rotation quaternions must have unit norm")
 
     # Convert vector to quaternion representation
     quat_v = _promote_vec(v)
