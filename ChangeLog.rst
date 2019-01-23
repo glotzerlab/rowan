@@ -5,6 +5,14 @@ This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html
 Unreleased
 ----------
 
+v1.1.7 - 2019-01-23
+-------------------
+
+Changed
++++++++
+
+* Stop requiring unit quaternions for rotation and reflection (allows scaling).
+
 v1.1.6 - 2018-10-18
 -------------------
 
