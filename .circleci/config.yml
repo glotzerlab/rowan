@@ -72,6 +72,8 @@ references:
 
   pypi_wheels: &pypi_wheels
     steps:
+      - checkout
+
       - run:
           name: Deploy dist and wheels
           command: |
@@ -80,14 +82,15 @@ references:
             pip3.6 install --user scipy
             python3.6 -m flake8 --show-source .
             python3.6 -m unittest discover tests -v
-            python --version
-            python -m pip --version
-            python -m pip install -U twine wheel setuptools
-            python -m twine --version
-            python -m wheel version
-            python setup.py sdist
-            python setup.py bdist_wheel
-            python -m twine upload --username vramasub --password ${PYPI_PASSWORD} dist/*
+            python3.6 --version
+            pip3.6 --version
+            pip3.6 install --user -U twine wheel setuptools
+            export PATH=~/.local/bin:${PATH}
+            twine --version
+            wheel version
+            python3.6 setup.py sdist
+            python3.6 setup.py bdist_wheel
+            twine upload --username vramasub --password ${PYPI_PASSWORD} dist/*
 
 jobs:
   complete:
@@ -105,7 +108,7 @@ jobs:
 
 workflows:
   version: 2
-  all:
+  testing:
     jobs:
       - complete:
           filters:
@@ -121,6 +124,8 @@ workflows:
                 - master
                 - develop
                 - /release-*/
+  deploy:
+    jobs:
       - build_and_deploy:
           filters:
             tags:

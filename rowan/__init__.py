@@ -33,7 +33,7 @@ from .functions import (allclose, conjugate, divide, exp, expb, exp10, equal,
                         vector_vector_rotation)
 
 # Get the version
-__version__ = '1.1.1'
+__version__ = '1.1.6'
 
 __all__ = ['calculus', 'geometry', 'interpolate', 'mapping', 'random',
            'allclose', 'conjugate', 'divide', 'exp', 'expb', 'exp10', 'equal',
