@@ -16,16 +16,16 @@ rowan
 
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/rowan/badge/?version=latest
     :target: http://rowan.readthedocs.io/en/latest/?badge=latest
-.. |CircleCI| image:: https://circleci.com/bb/glotzer/rowan.svg?style=svg
-    :target: https://circleci.com/bb/glotzer/rowan
-.. |Codecov| image:: https://codecov.io/bb/glotzer/rowan/branch/master/graph/badge.svg
-    :target: https://codecov.io/bb/glotzer/rowan
+.. |CircleCI| image:: https://circleci.com/gh/glotzerlab/rowan.svg?style=svg
+    :target: https://circleci.com/gh/glotzerlab/rowan
+.. |Codecov| image:: https://codecov.io/gh/glotzerlab/rowan/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/glotzerlab/rowan
 .. |PyPI| image:: https://img.shields.io/pypi/v/rowan.svg
     :target: https://pypi.org/project/rowan/
 .. |Codacy| image:: https://api.codacy.com/project/badge/Grade/44a7677f2d7341e68a8338d1513f71e9
     :target: https://www.codacy.com/app/vramasub/rowan
 .. |Versions| image:: https://img.shields.io/pypi/pyversions/rowan.svg
-    :target: https://bitbucket.org/glotzer/rowan/
+    :target: https://github.com/glotzerlab/rowan/
 .. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1323676.svg
     :target: https://doi.org/10.5281/zenodo.1323676
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.00787/status.svg
@@ -100,11 +100,11 @@ then install rowan:
     $ conda install rowan
 
 
-If you wish, you may also install rowan by cloning `the repository <https://bitbucket.org/glotzer/rowan>`_ and running the setup script:
+If you wish, you may also install rowan by cloning `the repository <https://github.com/glotzerlab/rowan>`_ and running the setup script:
 
 .. code-block:: bash
 
-    $ git clone https://bitbucket.org/glotzer/rowan.git
+    $ git clone https://github.com/glotzerlab/rowan.git
     $ cd rowan
     $ python setup.py install --user
 
@@ -186,8 +186,8 @@ You can then use Sphinx to create the actual documentation in either PDF or HTML
 Support and Contribution
 ========================
 
-This package is hosted on `Bitbucket <https://bitbucket.org/glotzer/rowan>`_.
-Please report any bugs or problems that you find on the `issue tracker <https://bitbucket.org/glotzer/rowan/issues>`_.
+This package is hosted on `GitHub <https://github.com/glotzerlab/rowan>`_.
+Please report any bugs or problems that you find on the `issue tracker <https://github.com/glotzerlab/rowan/issues>`_.
 
 All contributions to rowan are welcomed via pull requests!
 Please see the :doc:`development guide <development>` for more information on requirements for new code.
