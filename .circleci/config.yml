@@ -118,14 +118,14 @@ workflows:
               only:
                 - master
                 - develop
-                - /release-*/
+                - /release-.*/
       - test_only:
           filters:
             branches:
               ignore:
                 - master
                 - develop
-                - /release-*/
+                - /release-.*/
   deploy:
     jobs:
       - build_and_deploy:
