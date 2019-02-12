@@ -22,7 +22,7 @@ rowan
     :target: https://codecov.io/gh/glotzerlab/rowan
 .. |PyPI| image:: https://img.shields.io/pypi/v/rowan.svg
     :target: https://pypi.org/project/rowan/
-.. |Codacy| image:: https://api.codacy.com/project/badge/Grade/44a7677f2d7341e68a8338d1513f71e9
+.. |Codacy| image:: https://api.codacy.com/project/badge/Grade/2ff6c23cb9be4f77827428a87e0e9cfc
     :target: https://www.codacy.com/app/vramasub/rowan
 .. |Versions| image:: https://img.shields.io/pypi/pyversions/rowan.svg
     :target: https://github.com/glotzerlab/rowan/
