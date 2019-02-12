@@ -5,6 +5,19 @@ This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html
 Unreleased
 ----------
 
+v1.2.0 - 2019-02-12
+-------------------
+
+Changed
++++++++
+
+* Code is now hosted on GitHub.
+
+Fixed
++++++
+
+* Various style issues.
+
 v1.1.7 - 2019-01-23
 -------------------
 
