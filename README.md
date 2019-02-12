@@ -9,7 +9,6 @@
 [![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.1323676.svg)](https://doi.org/10.5281/zenodo.1323676)
 [![JOSS](http://joss.theoj.org/papers/10.21105/joss.00787/status.svg)](https://doi.org/10.21105/joss.00787)
 
-
 Welcome to rowan, a python package for quaternions.
 The package is built entirely on top of NumPy and represents quaternions using NumPy arrays, meaning that all functions support arbitrarily high-dimensional arrays of quaternions.
 Quaternions are encoded as arrays of shape `(...,4)`, with the convention that the final dimension of an array `(a, b, c, d)` represents the quaternion `a + bi + cj + dk`.
@@ -19,7 +18,7 @@ If you have any questions about how to work with rowan, please visit the
 
 ## Authors
 
-* Vyas Ramasubramani <vramasub@umich.edu> (Lead developer)
+*   Vyas Ramasubramani <mailto:vramasub@umich.edu> (Lead developer)
 
 ## Setup
 
@@ -56,8 +55,8 @@ python setup.py install --user
 
 ### Requirements
 
-* Python = 2.7, >= 3.3
-* NumPy >= 1.10
+*   Python = 2.7, >= 3.3
+*   NumPy >= 1.10
 
 ## Testing
 
