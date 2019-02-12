@@ -116,7 +116,7 @@ def kabsch(X, Y, require_rotation=True):
 
     H = X_c.T.dot(Y_c)
 
-    U, S, Vt = np.linalg.svd(H)
+    U, _, Vt = np.linalg.svd(H)
 
     R = Vt.T.dot(U.T)
 
@@ -447,7 +447,7 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
     # Copy points so we have originals available.
     cur_points = np.copy(X)
     err_old = 0
-    for i in range(max_iterations):
+    for _ in range(max_iterations):
         # Rather than a coarse nearest neighbors, we apply the Hungarian
         # algorithm to ensure that we do not have duplicates. Unfortunately,
         # this precludes acceleration of the spatial search but is worthwhile
