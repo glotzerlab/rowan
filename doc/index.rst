@@ -24,8 +24,6 @@ rowan
     :target: https://pypi.org/project/rowan/
 .. |Codacy| image:: https://api.codacy.com/project/badge/Grade/2ff6c23cb9be4f77827428a87e0e9cfc
     :target: https://www.codacy.com/app/vramasub/rowan
-.. |Versions| image:: https://img.shields.io/pypi/pyversions/rowan.svg
-    :target: https://github.com/glotzerlab/rowan/
 .. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1323676.svg
     :target: https://doi.org/10.5281/zenodo.1323676
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.00787/status.svg

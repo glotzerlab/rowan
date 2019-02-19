@@ -5,7 +5,6 @@
 [![Codecov](https://codecov.io/gh/glotzerlab/rowan/branch/master/graph/badge.svg)](https://codecov.io/gh/glotzerlab/rowan)
 [![PyPI](https://img.shields.io/pypi/v/rowan.svg)](https://pypi.org/project/rowan/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2ff6c23cb9be4f77827428a87e0e9cfc)](https://www.codacy.com/app/vramasub/rowan)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/rowan.svg)](https://github.com/glotzerlab/rowan/)
 [![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.1323676.svg)](https://doi.org/10.5281/zenodo.1323676)
 [![JOSS](http://joss.theoj.org/papers/10.21105/joss.00787/status.svg)](https://doi.org/10.21105/joss.00787)
 
