@@ -85,8 +85,19 @@ class TestFromAxisAngle(unittest.TestCase):
 class TestToAxisAngle(unittest.TestCase):
     """Test converting to axis angle representation"""
 
+    def test_div_zero(self):
+        q = (1, 0, 0, 0)
+        axes, angles = rowan.to_axis_angle(q)
+        self.assertTrue(np.allclose(axes, [0, 0, 0]))
+        self.assertEqual(angles, 0)
+
     def test_to_axis_angle(self):
-        axes, angles = rowan.to_axis_angle(
-            np.array((np.sqrt(2)/2, np.sqrt(2)/2, 0, 0)))
+        q = (np.sqrt(2)/2, np.sqrt(2)/2, 0, 0)
+        axes, angles = rowan.to_axis_angle(q)
         self.assertTrue(np.allclose(axes, np.array([1, 0, 0])))
         self.assertTrue(np.allclose(angles, np.pi/2))
+
+        q2 = np.stack((q, q), axis=0)
+        axes, angles = rowan.to_axis_angle(q2)
+        self.assertTrue(np.allclose(axes, np.array([[1, 0, 0], [1, 0, 0]])))
+        self.assertTrue(np.allclose(angles, [np.pi/2, np.pi/2]))
