@@ -1031,8 +1031,8 @@ def to_axis_angle(q):
     sines = np.sin(angles/2)
     # Avoid divide by zero issues; these values will not be used
     sines[sines == 0] = 1
-    axes = np.where(angles != 0,
-                    q[..., 1:]/sines,
+    axes = np.where(angles[..., np.newaxis] != 0,
+                    q[..., 1:]/sines[..., np.newaxis],
                     0)
 
     return axes, angles
