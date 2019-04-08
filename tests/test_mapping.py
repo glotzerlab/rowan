@@ -169,8 +169,10 @@ class TestMapping(unittest.TestCase):
 
         # Sort the points in a deterministic manner for comparison
         recovered_points = rotate(q, points) + t
-        ordered_recovered_points = recovered_points[np.argsort(recovered_points[:, 0])]
-        ordered_transformed_points = transformed_points[np.argsort(transformed_points[:, 0])]
+        ordered_recovered_points = recovered_points[
+            np.argsort(recovered_points[:, 0])]
+        ordered_transformed_points = transformed_points[
+            np.argsort(transformed_points[:, 0])]
 
         self.assertTrue(
                 np.allclose(
