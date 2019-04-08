@@ -144,7 +144,6 @@ class TestMapping(unittest.TestCase):
                         )
                     )
 
-    @unittest.skip("This feature is currently broken and must be fixed")
     def test_equivalent(self):
         """Perform a rotation and ensure that we can recover it"""
         # Test on an octahedron
@@ -157,7 +156,7 @@ class TestMapping(unittest.TestCase):
 
         # This is just a selected subset
         eq = [from_axis_angle([0, 0, 1], a) for a in
-              [0, 2*np.pi/3, 4*np.pi/3]]
+              [0, np.pi/2, np.pi, 3*np.pi/2]]
 
         np.random.seed(0)
         rotation = random.rand(1)
@@ -168,10 +167,15 @@ class TestMapping(unittest.TestCase):
         q, t = mapping.procrustes(points, transformed_points,
                                   equivalent_quaternions=eq)
 
+        # Sort the points in a deterministic manner for comparison
+        recovered_points = rotate(q, points) + t
+        ordered_recovered_points = recovered_points[np.argsort(recovered_points[:, 0])]
+        ordered_transformed_points = transformed_points[np.argsort(transformed_points[:, 0])]
+
         self.assertTrue(
                 np.allclose(
-                    transformed_points,
-                    rotate(q, points) + t
+                    ordered_recovered_points,
+                    ordered_transformed_points
                     )
                 )
 
