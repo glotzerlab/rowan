@@ -349,6 +349,7 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
         else:
             method = getattr(thismodule, 'davenport')
     if equivalent_quaternions is not None:
+        equivalent_quaternions = np.atleast_2d(equivalent_quaternions)
         qs = []
         ts = []
         for eq in equivalent_quaternions:
