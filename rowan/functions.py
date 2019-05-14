@@ -948,7 +948,7 @@ def to_matrix(q, require_unit=True):
 
     Example::
 
-        ql = rowan.to_matrix([1, 0, 0, 0]])
+        ql = rowan.to_matrix([1, 0, 0, 0])
     """
     q = np.asarray(q)
 
