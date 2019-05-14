@@ -514,7 +514,7 @@ def rotate(q, v):
 
     Example::
 
-        v_rot = rowan.reflect([1, 0, 0, 0], [1, 1, 1])
+        v_rot = rowan.rotate([1, 0, 0, 0], [1, 1, 1])
     """
     q = np.asarray(q)
     v = np.asarray(v)
