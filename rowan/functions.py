@@ -514,7 +514,7 @@ def rotate(q, v):
 
     Example::
 
-        v_rot = rowan.reflect([1, 0, 0, 0], [1, 1, 1])
+        v_rot = rowan.rotate([1, 0, 0, 0], [1, 1, 1])
     """
     q = np.asarray(q)
     v = np.asarray(v)
@@ -948,7 +948,7 @@ def to_matrix(q, require_unit=True):
 
     Example::
 
-        ql = rowan.to_matrix([1, 0, 0, 0]])
+        ql = rowan.to_matrix([1, 0, 0, 0])
     """
     q = np.asarray(q)
 
