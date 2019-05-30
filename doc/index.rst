@@ -10,7 +10,6 @@ rowan
 |Codecov|
 |PyPI|
 |Codacy|
-|Versions|
 |Zenodo|
 |JOSS|
 

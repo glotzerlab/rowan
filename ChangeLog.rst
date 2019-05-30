@@ -5,6 +5,17 @@ This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html
 Unreleased
 ----------
 
+Added
++++++
+
+* Official ContributorAgreement.
+
+Fixed
++++++
+
+* Broadcasting for nD arrays of quaternions in to\_axis\_angle is fixed.
+* Providing equivalent quaternions to mapping.procrustes properly performs rotations.
+
 v1.2.0 - 2019-02-12
 -------------------
 
