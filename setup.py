@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 import os
 
 # Gets the version
-version = '1.2.0'
+version = '1.2.1'
 
 # Read README for PyPI, fallback if it fails.
 desc = 'Perform quaternion operations using NumPy arrays'

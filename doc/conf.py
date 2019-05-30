@@ -55,7 +55,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'rowan'
-copyright = '2018, Vyas Ramasubramani'
+copyright = '2010-2019, Regents of the University of Michigan'
 author = 'Vyas Ramasubramani'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -64,7 +64,7 @@ author = 'Vyas Ramasubramani'
 #
 # The full version, including alpha/beta/rc tags.
 
-release = '1.2.0'
+release = '1.2.1'
 
 # The short X.Y version.
 version = release[:3]
