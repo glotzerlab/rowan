@@ -1,4 +1,4 @@
-# Copyright (c) 2018 The Regents of the University of Michigan
+# Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 R"""Submodule containing all standard functions"""
@@ -21,7 +21,9 @@ def _support_1d(func):
     Currently the decorator is only designed for functions that take a single
     argument.
     """
-    def wrapper(q, *args, **kwargs):
+
+    # Wrapper function to ensure that input arrays are at least 2-dimensional.
+    def func_atleast_2d(q, *args, **kwargs):
         q = np.asarray(q)
         if len(q.shape) == 1:
             flat = True
@@ -34,7 +36,7 @@ def _support_1d(func):
         else:
             return ret
 
-    return wrapper
+    return func_atleast_2d
 
 
 @_support_1d
