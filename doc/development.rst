@@ -126,7 +126,7 @@ Release Guide
 
 To make a new release of rowan, follow the following steps:
 
-#. Make a new branch off of develop based on the expected new version, *e.g.*
+#. Make a new branch off of master based on the expected new version, *e.g.*
    release-2.3.1.
 #. Make any final changes as desired on this branch. Push the changes and
    ensure all tests are passing as expected on the new branch.
