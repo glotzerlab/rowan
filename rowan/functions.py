@@ -7,6 +7,37 @@ from __future__ import division, print_function, absolute_import
 import numpy as np
 
 
+def _support_1d(func):
+    R"""Decorator to raise input array shape to 2D and flatten on output.
+
+    In order to support arbitrary-dimensional arrays, rowan makes liberal use
+    of fancy NumPy indexing tricks, in particular the '...' indexer. However,
+    NumPy versions older than 1.13 fail for inputs that are 1-dimensional that
+    use this approach. For backwards compatibility with older NumPy versions,
+    this decorator manually promotes input arrays to at least 2-dimensional
+    arrays, then flattens them back to the input shape if needed. This function
+    can be removed when we officially drop support for NumPy < 1.13
+
+    Currently the decorator is only designed for functions that take a single
+    argument.
+    """
+    def wrapper(q, *args, **kwargs):
+        q = np.asarray(q)
+        if len(q.shape) == 1:
+            flat = True
+            q = np.atleast_2d(q)
+        else:
+            flat = False
+        ret = func(q, *args, **kwargs)
+        if flat:
+            return ret.squeeze()
+        else:
+            return ret
+
+    return wrapper
+
+
+@_support_1d
 def exp(q):
     R"""Computes the natural exponential function :math:`e^q`.
 
@@ -34,14 +65,7 @@ def exp(q):
 
         q_exp = rowan.exp([1, 0, 0, 0])
     """
-    # Ensure compatibility for numpy < 1.13; older numpy fail with
-    # the fancy indexing used below when array is 1d
     q = np.asarray(q)
-    if len(q.shape) == 1:
-        flat = True
-        q = np.atleast_2d(q)
-    else:
-        flat = False
 
     expo = np.empty(q.shape)
     norms = np.linalg.norm(q[..., 1:], axis=-1)
@@ -58,10 +82,7 @@ def exp(q):
     else:
         expo[..., 1:] = 0
 
-    if flat:
-        return expo.squeeze()
-    else:
-        return expo
+    return expo
 
 
 def expb(q, b):
@@ -110,6 +131,7 @@ def exp10(q):
     return expb(q, 10)
 
 
+@_support_1d
 def log(q):
     R"""Computes the quaternion natural logarithm.
 
@@ -135,15 +157,7 @@ def log(q):
 
         ln_q  = rowan.log([1, 0, 0, 0])
     """
-    # Ensure compatibility for numpy < 1.13; older numpy fail with
-    # the fancy indexing used below when array is 1d
     q = np.asarray(q)
-    if len(q.shape) == 1:
-        flat = True
-        q = np.atleast_2d(q)
-    else:
-        flat = False
-
     log = np.empty(q.shape)
 
     # We need all the norms to avoid divide by zeros later.
@@ -176,10 +190,7 @@ def log(q):
     else:
         log[..., 1:] = 0
 
-    if flat:
-        return log.squeeze()
-    else:
-        return log
+    return log
 
 
 def logb(q, b):
@@ -230,6 +241,7 @@ def log10(q):
     return logb(q, 10)
 
 
+@_support_1d
 def power(q, n):
     R"""Computes the power of a quaternion :math:`q^n`.
 
@@ -252,12 +264,6 @@ def power(q, n):
     """
     # TODO: Write polar decomposition function #noqa
     q = np.asarray(q)
-    # Need matching shapes
-    if len(q.shape) == 1:
-        flat = True
-        q = np.atleast_2d(q)
-    else:
-        flat = False
 
     newshape = np.broadcast(q[..., 0], n).shape
     q = np.broadcast_to(q, newshape + (4,))
@@ -275,10 +281,7 @@ def power(q, n):
     else:
         powers = exp(n[..., np.newaxis]*log(q))
 
-    if flat:
-        return powers.squeeze()
-    else:
-        return powers
+    return powers
 
 
 def conjugate(q):
@@ -300,6 +303,7 @@ def conjugate(q):
     return conjugate
 
 
+@_support_1d
 def inverse(q):
     R"""Computes the inverse of an array of quaternions.
 
@@ -313,14 +317,8 @@ def inverse(q):
 
         q_inv = rowan.inverse([1, 0, 0, 0])
     """
-    q = np.asarray(q)
-
-    if len(q.shape) == 1:
-        flat = True
-        inverses = np.array(np.atleast_2d(q))
-    else:
-        flat = False
-        inverses = np.array(q)
+    # Copy input so that we can safely modify in place.
+    inverses = np.array(q)
 
     normsq = norm(inverses)**2
     if np.any(normsq):
@@ -329,10 +327,7 @@ def inverse(q):
         inverses[normsq > 0] = inverses[normsq > 0]/normsq[
                 normsq > 0, np.newaxis]
 
-    if flat:
-        return inverses.squeeze()
-    else:
-        return inverses
+    return inverses
 
 
 def multiply(qi, qj):
