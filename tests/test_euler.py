@@ -181,3 +181,66 @@ class TestEuler(unittest.TestCase):
                     ),
                     msg="Failed for convention {}, axis type {}".format(
                         convention, axis_type))
+
+    def test_zero_beta(self):
+        """Check cases where beta is 0."""
+        # The simplest failure cases will just involve two equal nonzero
+        # quaternion components, which when normalized will be sqrt(2). These
+        # simple cases correspond to alpha=pi/2 and gamma=0 (and beta=0).
+        root2 = np.sqrt(2)/2
+
+        # These are the quaternions that will fail because the normally used
+        # entries in the matrix are 0, so the arctan functions return
+        # meaningless values.
+        test_quats = [
+            ('xzx', 'intrinsic', (root2, root2, 0, 0)),
+            ('xyx', 'intrinsic', (root2, root2, 0, 0)),
+            ('xyx', 'intrinsic', (0, 0, -root2, -root2)),
+            ('yxy', 'intrinsic', (root2, 0, root2, 0)),
+            ('yzy', 'intrinsic', (root2, 0, root2, 0)),
+            ('zyz', 'intrinsic', (root2, 0, 0, root2)),
+            ('zxz', 'intrinsic', (root2, 0, 0, root2)),
+            ('xzy', 'intrinsic', (root2, 0, 0, root2)),
+            ('xzy', 'intrinsic', (-0.5, -0.5,  0.5, -0.5)),
+            ('xyz', 'intrinsic', (root2, 0, root2, 0)),
+            ('xyz', 'intrinsic', (-0.5, -0.5, -0.5, -0.5)),
+            ('yxz', 'intrinsic', (root2, root2, 0, 0)),
+            ('yxz', 'intrinsic', (0.5, 0.5, 0.5, -0.5)),
+            ('yzx', 'intrinsic', (root2, 0, 0, root2)),
+            ('yzx', 'intrinsic', (-0.5, -0.5, -0.5, -0.5)),
+            ('zyx', 'intrinsic', (root2, 0, root2, 0)),
+            ('zyx', 'intrinsic', (-0.5, 0.5, -0.5, -0.5)),
+            ('zxy', 'intrinsic', (root2, root2, 0, 0)),
+            ('zxy', 'intrinsic', (-0.5, -0.5, -0.5, -0.5)),
+        ]
+
+        # Choose simplest vector with all 3 components (otherwise tests won't
+        # catch the problem because there's no component to rotate).
+        test_vector = [1, 1, 1]
+        for convention, axis_type, quat in test_quats:
+            # Since angle representations may not be unique, checking that
+            # quaternions are equal may not work. Instead we need to perform
+            # multiple conversions to get back to quaternions and check that
+            # the rotations are identical.
+            # print("Running")
+            euler = rowan.to_euler(
+                    quat,
+                    convention, axis_type
+                    )
+            converted = rowan.from_euler(
+                *euler,
+                convention, axis_type
+            )
+            try:
+                self.assertTrue(
+                    np.allclose(
+                        rowan.rotate(quat, test_vector),
+                        rowan.rotate(converted, test_vector),
+                        atol=1e-6
+                    ),
+                    msg="\nFailed for convention {},\naxis type {},\nquat {},\nconverted = {}\nrotate1 = {}\nrotate2 = {}".format(
+                        convention, axis_type, quat, converted,
+                        rowan.rotate(quat, test_vector),
+                        rowan.rotate(converted, test_vector)))
+            except AssertionError as e:
+                print(e)

@@ -697,7 +697,7 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         R_y(\theta)  =& \left(\begin{array}{ccc}
                             \cos \theta  & 0 & \sin \theta \\
                             0            & 1 &  0          \\
-                            -\sin \theta & 1 & \cos \theta \\
+                            -\sin \theta & 0 & \cos \theta \\
                          \end{array}\right)\\
         R_z(\theta)  =& \left(\begin{array}{ccc}
                             \cos \theta & -\sin \theta & 0 \\
@@ -745,66 +745,158 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         assert(np.allclose(gamma_return.flatten(), gamma))
     """
     q = np.asarray(q)
-    _validate_unit(q)
 
     try:
         mats = to_matrix(q)
+        # Due to minor numerical imprecision, the to_matrix function could
+        # generate a (very slightly) nonorthogonal matrix (e.g. with a norm of
+        # 1 + 2e-8). That is sufficient to throw off the trigonometric
+        # functions, so it's worthwhile to explicitly normalize for safety.
+        mats /= np.linalg.norm(mats, 2, (-1, -2))[..., np.newaxis, np.newaxis]
     except ValueError:
         raise ValueError(
             "Not all quaternions in q are unit quaternions.")
 
+    # In all possible compositions, there are cases where given some 0 elements
+    # the simplest combination of matrix elements will give the wrong solution.
+    # In those cases, we have to use other parts of the matrix. Also, in that
+    # case we have one Euler angle as a free variable.
     if axis_type == 'intrinsic':
         # Have to hardcode the different possibilities.
         # Classical Euler angles
         if convention == 'xzx':
-            alpha = np.arctan2(mats[..., 2, 0], mats[..., 1, 0])
             beta = np.arccos(mats[..., 0, 0])
-            gamma = np.arctan2(mats[..., 0, 2], -mats[..., 0, 1])
+            where_zero = np.isclose(np.sin(beta), 0, atol=1e-6)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(mats[..., 0, 2], -mats[..., 0, 1])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 2, 1], mats[..., 1, 1]),
+                np.arctan2(mats[..., 2, 0], mats[..., 1, 0])
+            )
         elif convention == 'xyx':
-            alpha = np.arctan2(mats[..., 1, 0], -mats[..., 2, 0])
             beta = np.arccos(mats[..., 0, 0])
-            gamma = np.arctan2(mats[..., 0, 1], mats[..., 0, 2])
+            where_zero = np.isclose(np.sin(beta), 0, atol=1e-6)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(mats[..., 0, 1], mats[..., 0, 2])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 2, 1], mats[..., 1, 1]),
+                np.arctan2(mats[..., 1, 0], -mats[..., 2, 0])
+            )
         elif convention == 'yxy':
-            alpha = np.arctan2(mats[..., 0, 1], mats[..., 2, 1])
             beta = np.arccos(mats[..., 1, 1])
-            gamma = np.arctan2(mats[..., 1, 0], -mats[..., 1, 2])
+            where_zero = np.isclose(np.sin(beta), 0, atol=1e-6)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(mats[..., 1, 0], -mats[..., 1, 2])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 0, 2], mats[..., 0, 0]),
+                np.arctan2(mats[..., 0, 1], mats[..., 2, 1])
+            )
         elif convention == 'yzy':
-            alpha = np.arctan2(mats[..., 2, 1], -mats[..., 0, 1])
             beta = np.arccos(mats[..., 1, 1])
-            gamma = np.arctan2(mats[..., 1, 2], mats[..., 1, 0])
+            where_zero = np.isclose(np.sin(beta), 0, atol=1e-6)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(mats[..., 1, 2], mats[..., 1, 0])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 0, 2], mats[..., 0, 0]),
+                np.arctan2(mats[..., 2, 1], -mats[..., 0, 1])
+            )
         elif convention == 'zyz':
-            alpha = np.arctan2(mats[..., 1, 2], mats[..., 0, 2])
             beta = np.arccos(mats[..., 2, 2])
-            gamma = np.arctan2(mats[..., 2, 1], -mats[..., 2, 0])
+            where_zero = np.isclose(np.sin(beta), 0, atol=1e-6)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(mats[..., 2, 1], -mats[..., 2, 0])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 1, 0], mats[..., 0, 0]),
+                np.arctan2(mats[..., 1, 2], mats[..., 0, 2])
+            )
         elif convention == 'zxz':
-            alpha = np.arctan2(mats[..., 0, 2], -mats[..., 1, 2])
             beta = np.arccos(mats[..., 2, 2])
-            gamma = np.arctan2(mats[..., 2, 0], mats[..., 2, 1])
+            where_zero = np.isclose(np.sin(beta), 0, atol=1e-6)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(mats[..., 2, 0], mats[..., 2, 1])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 1, 0], mats[..., 0, 0]),
+                np.arctan2(mats[..., 0, 2], -mats[..., 1, 2])
+            )
         # Tait-Bryan angles
         elif convention == 'xzy':
-            alpha = np.arctan2(mats[..., 2, 1], mats[..., 1, 1])
             beta = np.arcsin(-mats[..., 0, 1])
-            gamma = np.arctan2(mats[..., 0, 2], mats[..., 0, 0])
+            where_zero = np.isclose(np.cos(beta), 0)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(mats[..., 0, 2], mats[..., 0, 0])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 2, 0], mats[..., 1, 0]),
+                np.arctan2(mats[..., 2, 1], mats[..., 1, 1])
+            )
         elif convention == 'xyz':
-            alpha = np.arctan2(-mats[..., 1, 2], mats[..., 2, 2])
             beta = np.arcsin(mats[..., 0, 2])
-            gamma = np.arctan2(-mats[..., 0, 1], mats[..., 0, 0])
+            where_zero = np.isclose(np.cos(beta), 0)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(-mats[..., 0, 1], mats[..., 0, 0])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 2, 1], mats[..., 1, 1]),
+                np.arctan2(-mats[..., 1, 2], mats[..., 2, 2])
+            )
         elif convention == 'yxz':
-            alpha = np.arctan2(mats[..., 0, 2], mats[..., 2, 2])
             beta = np.arcsin(-mats[..., 1, 2])
-            gamma = np.arctan2(mats[..., 1, 0], mats[..., 1, 1])
+            where_zero = np.isclose(np.cos(beta), 0)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(mats[..., 1, 0], mats[..., 1, 1])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 0, 1], mats[..., 0, 0]),
+                np.arctan2(mats[..., 0, 2], mats[..., 2, 2])
+            )
         elif convention == 'yzx':
-            alpha = np.arctan2(-mats[..., 2, 0], mats[..., 0, 0])
             beta = np.arcsin(mats[..., 1, 0])
-            gamma = np.arctan2(-mats[..., 1, 2], mats[..., 1, 1])
+            where_zero = np.isclose(np.cos(beta), 0)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(-mats[..., 1, 2], mats[..., 1, 1])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 2, 1], mats[..., 2, 2]),
+                np.arctan2(-mats[..., 2, 0], mats[..., 0, 0])
+            )
         elif convention == 'zyx':
-            alpha = np.arctan2(mats[..., 1, 0], mats[..., 0, 0])
             beta = np.arcsin(-mats[..., 2, 0])
-            gamma = np.arctan2(mats[..., 2, 1], mats[..., 2, 2])
+            where_zero = np.isclose(np.cos(beta), 0)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(mats[..., 2, 1], mats[..., 2, 2])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 1, 2], mats[..., 1, 1]),
+                np.arctan2(mats[..., 1, 0], mats[..., 0, 0])
+            )
         elif convention == 'zxy':
-            alpha = np.arctan2(-mats[..., 0, 1], mats[..., 1, 1])
             beta = np.arcsin(mats[..., 2, 1])
-            gamma = np.arctan2(-mats[..., 2, 0], mats[..., 2, 2])
+            where_zero = np.isclose(np.cos(beta), 0)
+
+            gamma = np.where(where_zero, 0,
+                np.arctan2(-mats[..., 2, 0], mats[..., 2, 2])
+            )
+            alpha = np.where(where_zero,
+                np.arctan2(mats[..., 1, 0], mats[..., 0, 0]),
+                np.arctan2(-mats[..., 0, 1], mats[..., 1, 1])
+            )
         else:
             raise ValueError("Unknown convention selected!")
     elif axis_type == 'extrinsic':
@@ -815,53 +907,65 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
 
         # Classical Euler angles
         if convention == 'xzx':
-            alpha = np.arctan2(mats[..., 0, 2], -mats[..., 0, 1])
             beta = np.arccos(mats[..., 0, 0])
+
+            alpha = np.arctan2(mats[..., 0, 2], -mats[..., 0, 1])
             gamma = np.arctan2(mats[..., 2, 0], mats[..., 1, 0])
         elif convention == 'xyx':
-            alpha = np.arctan2(mats[..., 0, 1], mats[..., 0, 2])
             beta = np.arccos(mats[..., 0, 0])
+
+            alpha = np.arctan2(mats[..., 0, 1], mats[..., 0, 2])
             gamma = np.arctan2(mats[..., 1, 0], -mats[..., 2, 0])
         elif convention == 'yxy':
-            alpha = np.arctan2(mats[..., 1, 0], -mats[..., 1, 2])
             beta = np.arccos(mats[..., 1, 1])
+
+            alpha = np.arctan2(mats[..., 1, 0], -mats[..., 1, 2])
             gamma = np.arctan2(mats[..., 0, 1], mats[..., 2, 1])
         elif convention == 'yzy':
-            alpha = np.arctan2(mats[..., 1, 2], mats[..., 1, 0])
             beta = np.arccos(mats[..., 1, 1])
+
+            alpha = np.arctan2(mats[..., 1, 2], mats[..., 1, 0])
             gamma = np.arctan2(mats[..., 2, 1], -mats[..., 0, 1])
         elif convention == 'zyz':
-            alpha = np.arctan2(mats[..., 2, 1], -mats[..., 2, 0])
             beta = np.arccos(mats[..., 2, 2])
+
+            alpha = np.arctan2(mats[..., 2, 1], -mats[..., 2, 0])
             gamma = np.arctan2(mats[..., 1, 2], mats[..., 0, 2])
         elif convention == 'zxz':
-            alpha = np.arctan2(mats[..., 2, 0], mats[..., 2, 1])
             beta = np.arccos(mats[..., 2, 2])
+
+            alpha = np.arctan2(mats[..., 2, 0], mats[..., 2, 1])
             gamma = np.arctan2(mats[..., 0, 2], -mats[..., 1, 2])
         # Tait-Bryan angles
         elif convention == 'xzy':
-            alpha = np.arctan2(-mats[..., 1, 2], mats[..., 1, 1])
             beta = np.arcsin(mats[..., 1, 0])
+
+            alpha = np.arctan2(-mats[..., 1, 2], mats[..., 1, 1])
             gamma = np.arctan2(-mats[..., 2, 0], mats[..., 0, 0])
         elif convention == 'xyz':
-            alpha = np.arctan2(mats[..., 2, 1], mats[..., 2, 2])
             beta = np.arcsin(-mats[..., 2, 0])
+
+            alpha = np.arctan2(mats[..., 2, 1], mats[..., 2, 2])
             gamma = np.arctan2(mats[..., 1, 0], mats[..., 0, 0])
         elif convention == 'yxz':
-            alpha = np.arctan2(-mats[..., 2, 0], mats[..., 2, 2])
             beta = np.arcsin(mats[..., 2, 1])
+
+            alpha = np.arctan2(-mats[..., 2, 0], mats[..., 2, 2])
             gamma = np.arctan2(-mats[..., 0, 1], mats[..., 1, 1])
         elif convention == 'yzx':
-            alpha = np.arctan2(mats[..., 0, 2], mats[..., 0, 0])
             beta = np.arcsin(-mats[..., 0, 1])
+
+            alpha = np.arctan2(mats[..., 0, 2], mats[..., 0, 0])
             gamma = np.arctan2(mats[..., 2, 1], mats[..., 1, 1])
         elif convention == 'zyx':
-            alpha = np.arctan2(-mats[..., 0, 1], mats[..., 0, 0])
             beta = np.arcsin(mats[..., 0, 2])
+
+            alpha = np.arctan2(-mats[..., 0, 1], mats[..., 0, 0])
             gamma = np.arctan2(-mats[..., 1, 2], mats[..., 2, 2])
         elif convention == 'zxy':
-            alpha = np.arctan2(mats[..., 1, 0], mats[..., 1, 1])
             beta = np.arcsin(-mats[..., 1, 2])
+
+            alpha = np.arctan2(mats[..., 1, 0], mats[..., 1, 1])
             gamma = np.arctan2(mats[..., 0, 2], mats[..., 2, 2])
         else:
             raise ValueError("Unknown convention selected!")
