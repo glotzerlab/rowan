@@ -745,6 +745,7 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         assert(np.allclose(gamma_return.flatten(), gamma))
     """
     q = np.asarray(q)
+    _validate_unit(q)
 
     try:
         mats = to_matrix(q)
