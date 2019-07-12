@@ -189,24 +189,15 @@ class TestEuler(unittest.TestCase):
         # simple cases correspond to alpha=pi/2 and gamma=0 (and beta=0).
         root2 = np.sqrt(2)/2
 
-        # These are the quaternions that will fail because the normally used
-        # entries in the matrix are 0, so the arctan functions return
-        # meaningless values.
-
-        # First set is the quaternions that result when evaluating the nonzero
-        # trig function (the function in beta that leads to a 1 or -1) at the
-        # positive value. This means that if the matrix entry is -sin(beta),
-        # this quaternion corresponding to choosing beta = pi/2, so that matrix
-        # entry will be -1.
-
-        # Start with where either np.sin(beta) > 0 or np.cos(beta) > 0,
-        # whichever one is the one that's alone. Similarly, start with cases
-        # where np.sin(alpha) > 0 or np.cos(alpha) > 0, whichever one is
-        # relevant.
-
         # Since everything is done using matrices, it's easier to construct
-        # everything using matrices as well. We assume gamma is 0 (gimbal lock)
-        # and just scan the other possible values.
+        # everything using matrices as well. We assume gamma is 0 since, due to gimbal lock,
+        # only either alpha+gamma or alpha-gamma is a relevant parameter, and
+        # we just scan the other possible values. The actual function is
+        # defined such that gamma will always be zero in those cases. We define
+        # the matrices using lambda functions to support sweeping a range of
+        # values for alpha and beta, specifically to test cases where signs
+        # flip e.g. cos(0) vs cos(pi). These sign flips lead to changes in the
+        # rotation angles that must be tested.
         mats_euler_intrinsic = [
                 ('xzx', 'intrinsic', lambda alpha, beta: [[np.cos(beta), 0, 0],
                                      [0, np.cos(beta)*np.cos(alpha), -np.sin(alpha)],
@@ -249,76 +240,23 @@ class TestEuler(unittest.TestCase):
                                      [0, -1, 0]]),
         ]
 
+        # Extrinsic rotations can be tested identically to intrinsic rotations
+        # in the case of proper Euler angles.
         mats_euler_extrinsic = [
-            (m[0][::-1], 'extrinsic', m[2]) for m in mats_euler_intrinsic
+            (m[0], 'extrinsic', m[2]) for m in mats_euler_intrinsic
         ]
 
-        # Need to add the requisite negative sign for the tb angles
+
+        # For Tait-Bryan angles, extrinsic rotations axis order must be
+        # reversed (since axes 1 and 3 are not identical), but more
+        # importantly, due to the sum/difference of alpha and gamma that
+        # arises, we need to test the negative of alpha to catch the dangerous
+        # cases. In practice we get the same results since we're sweeping alpha
+        # values in the tests below, but it's useful to set this up precisely.
         mats_tb_extrinsic = [
             (m[0][::-1], 'extrinsic',
                 lambda alpha, beta: m[2](-alpha, beta)) for m in mats_tb_intrinsic
         ]
-
-
-        # intrinsic_bpos_apos_euler = [
-            # ('xzx', 'intrinsic', (root2, root2, 0, 0)),
-            # ('xyx', 'intrinsic', (root2, root2, 0, 0)),
-            # ('yxy', 'intrinsic', (root2, 0, root2, 0)),
-            # ('yzy', 'intrinsic', (root2, 0, root2, 0)),
-            # ('zyz', 'intrinsic', (root2, 0, 0, root2)),
-            # ('zxz', 'intrinsic', (root2, 0, 0, root2)),
-        # ]
-        # intrinsic_bpos_aneg_euler = [
-            # ('xzx', 'intrinsic', (-root2, root2, 0, 0)),
-            # ('xyx', 'intrinsic', (-root2, root2, 0, 0)),
-            # ('yxy', 'intrinsic', (-root2, 0, root2, 0)),
-            # ('yzy', 'intrinsic', (-root2, 0, root2, 0)),
-            # ('zyz', 'intrinsic', (-root2, 0, 0, root2)),
-            # ('zxz', 'intrinsic', (-root2, 0, 0, root2)),
-        # ]
-        # intrinsic_bpos_apos_tb = [
-            # ('xzy', 'intrinsic', (-0.5, -0.5, 0.5, -0.5)),
-            # # ('xzy', 'intrinsic', (root2, root2, 0, 0)),
-            # # ('xyz', 'intrinsic', (root2, root2, 0, 0)),
-            # # ('yxz', 'intrinsic', (0.5, 0.5, 0.5, -0.5)),
-            # # ('yzx', 'intrinsic', (-0.5, -0.5, -0.5, -0.5)),
-            # # ('zyx', 'intrinsic', (-0.5, 0.5, -0.5, -0.5)),
-            # # ('zxy', 'intrinsic', (-0.5, -0.5, -0.5, -0.5)),
-        # ]
-        # intrinsic_bpos_aneg_tb = [
-            # ('xzy', 'intrinsic', (-0.5, 0.5, -0.5, -0.5)),
-            # # ('xzy', 'intrinsic', (root2, root2, 0, 0)),
-            # # ('xyz', 'intrinsic', (root2, root2, 0, 0)),
-            # # ('yxz', 'intrinsic', (0.5, 0.5, 0.5, -0.5)),
-            # # ('yzx', 'intrinsic', (-0.5, -0.5, -0.5, -0.5)),
-            # # ('zyx', 'intrinsic', (-0.5, 0.5, -0.5, -0.5)),
-            # # ('zxy', 'intrinsic', (-0.5, -0.5, -0.5, -0.5)),
-        # ]
-        # test_quats_intrinsic_positive = intrinsic_bpos_alph_neg_euler + intrinsic_bpos_alph_pos_euler + intrinsic_bpos_alph_pos_tb + intrinsic_bpos_alph_neg_tb
-
-        # # These quaternions evaluate at a beta where the sign is flipped.
-        # test_quats_intrinsic_negative = [
-            # # ('xyx', 'intrinsic', (0, 0, -root2, -root2)),
-            # # ('xzy', 'intrinsic', (root2, 0, 0, root2)),
-            # # ('xzy', 'intrinsic', (-0.5, -0.5,  0.5, -0.5)),
-            # # ('xyz', 'intrinsic', (root2, 0, root2, 0)),
-            # # ('xyz', 'intrinsic', (-0.5, -0.5, -0.5, -0.5)),
-            # # ('yxz', 'intrinsic', (root2, root2, 0, 0)),
-            # # ('yzx', 'intrinsic', (root2, 0, 0, root2)),
-            # # ('zyx', 'intrinsic', (root2, 0, root2, 0)),
-            # # ('zxy', 'intrinsic', (root2, root2, 0, 0)),
-        # ]
-
-
-        # test_quats_intrinsic = test_quats_intrinsic_positive + test_quats_intrinsic_negative
-
-        # test_quats_extrinsic = [
-            # (q[0][::-1], 'extrinsic', q[2]) for q in test_quats_intrinsic
-        # ]
-
-        # test_quats = test_quats_intrinsic# + test_quats_extrinsic
-        # test_quats = ('yzx', 'extrinsic', (root2, root2, 0, 0)),
-
 
         # Since angle representations may not be unique, checking that
         # quaternions are equal may not work. Instead we perform rotations and
@@ -326,27 +264,26 @@ class TestEuler(unittest.TestCase):
         # simplest vector with all 3 components (otherwise tests won't catch
         # the problem because there's no component to rotate).
         test_vector = [1, 1, 1]
-        all_betas = ((0, np.pi), (np.pi/2, -np.pi/2))
-        alphas = (0, np.pi/2, np.pi, 3*np.pi/2)
 
         mats_intrinsic = (mats_euler_intrinsic, mats_tb_intrinsic)
         mats_extrinsic = (mats_euler_extrinsic, mats_tb_extrinsic)
+
+        # The beta angles are different for proper Euler angles and Tait-Bryan
+        # angles because the relevant beta terms will be sines and cosines,
+        # respectively.
+        all_betas = ((0, np.pi), (np.pi/2, -np.pi/2))
+        alphas = (0, np.pi/2, np.pi, 3*np.pi/2)
+
         for mats in (mats_intrinsic, mats_extrinsic):
             for betas, mat_set in zip(all_betas, mats):
-                # print(betas, mat_set)
-                # print()
                 for beta in betas:
                     for alpha in alphas:
                         for convention, axis_type, mat_func in mat_set:
-                            # if convention == 'zyx':
-                                # continue
                             mat = mat_func(alpha, beta)
-                            # print(alpha, beta, axis_type, convention, mat)
                             if np.linalg.det(mat) == -1:
                                 # Some of these will be improper rotations.
                                 continue
                             quat = rowan.from_matrix(mat)
-                            # print("Running")
                             euler = rowan.to_euler(
                                     quat,
                                     convention, axis_type
@@ -355,18 +292,14 @@ class TestEuler(unittest.TestCase):
                                 *euler,
                                 convention, axis_type
                             )
-                            try:
-                                self.assertTrue(
-                                    np.allclose(
-                                        rowan.rotate(quat, test_vector),
-                                        rowan.rotate(converted, test_vector),
-                                        atol=1e-6
-                                    ),
-                                    msg="\nFailed for convention {}\naxis type {}\nquat {}\nconverted = {}\nrotate1 = {}\nrotate2 = {}\nmat= {}\nalpha = {}\nbeta = {}\neuler = {}".format(
-                                        convention, axis_type, quat, converted,
-                                        rowan.rotate(quat, test_vector),
-                                        rowan.rotate(converted, test_vector),
-                                        mat, alpha, beta, euler))
-                            except AssertionError as e:
-                                raise
-                                print(e)
+                            self.assertTrue(
+                                np.allclose(
+                                    rowan.rotate(quat, test_vector),
+                                    rowan.rotate(converted, test_vector),
+                                    atol=1e-6
+                                ),
+                                msg="\nFailed for convention {}\naxis type {}\nquat {}\nconverted = {}\nrotate1 = {}\nrotate2 = {}\nmat= {}\nalpha = {}\nbeta = {}\neuler = {}".format(
+                                    convention, axis_type, quat, converted,
+                                    rowan.rotate(quat, test_vector),
+                                    rowan.rotate(converted, test_vector),
+                                    mat, alpha, beta, euler))
