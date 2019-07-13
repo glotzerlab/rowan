@@ -325,8 +325,8 @@ class TestEuler(unittest.TestCase):
                                        axis type {},
                                        alpha = {},
                                        beta = {}""".format(
-                                           convention, axis_type, quat,
-                                           converted, alpha, beta))
+                                           convention, axis_type,
+                                           alpha, beta))
 
                     # For completeness, also test with broadcasting.
                     quaternions = np.asarray(quaternions).reshape(-1,  4)
