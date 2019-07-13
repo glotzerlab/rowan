@@ -184,60 +184,80 @@ class TestEuler(unittest.TestCase):
 
     def test_zero_beta(self):
         """Check cases where beta is 0."""
-        # The simplest failure cases will just involve two equal nonzero
-        # quaternion components, which when normalized will be sqrt(2). These
-        # simple cases correspond to alpha=pi/2 and gamma=0 (and beta=0).
-        root2 = np.sqrt(2)/2
-
-        # Since everything is done using matrices, it's easier to construct
-        # everything using matrices as well. We assume gamma is 0 since, due to gimbal lock,
-        # only either alpha+gamma or alpha-gamma is a relevant parameter, and
-        # we just scan the other possible values. The actual function is
-        # defined such that gamma will always be zero in those cases. We define
-        # the matrices using lambda functions to support sweeping a range of
-        # values for alpha and beta, specifically to test cases where signs
-        # flip e.g. cos(0) vs cos(pi). These sign flips lead to changes in the
-        # rotation angles that must be tested.
+        # Since the Euler calculations are all done using matrices, it's easier
+        # to construct the test cases by directly using matrices as well. We
+        # assume gamma is 0 since, due to gimbal lock, only either alpha+gamma
+        # or alpha-gamma is a relevant parameter, and we just scan the other
+        # possible values. The actual function is defined such that gamma will
+        # always be zero in those cases. We define the matrices using lambda
+        # functions to support sweeping a range of values for alpha and beta,
+        # specifically to test cases where signs flip e.g. cos(0) vs cos(pi).
+        # These sign flips lead to changes in the rotation angles that must be
+        # tested.
         mats_euler_intrinsic = [
-                ('xzx', 'intrinsic', lambda alpha, beta: [[np.cos(beta), 0, 0],
-                                     [0, np.cos(beta)*np.cos(alpha), -np.sin(alpha)],
-                                     [0, np.cos(beta)*np.sin(alpha), np.cos(alpha)]]),
-                ('xyx', 'intrinsic', lambda alpha, beta: [[np.cos(beta), 0, 0],
-                                     [0, np.cos(alpha), -np.cos(beta)*np.sin(alpha)],
-                                     [0, np.sin(alpha), np.cos(beta)*np.cos(alpha)]]),
-                ('yxy', 'intrinsic', lambda alpha, beta: [[np.cos(alpha), 0, np.cos(beta)*np.sin(alpha)],
-                                     [0, np.cos(beta), 0],
-                                     [-np.sin(alpha), 0, np.cos(beta)*np.cos(alpha)]]),
-                ('yzy', 'intrinsic', lambda alpha, beta: [[np.cos(beta)*np.cos(alpha), 0, np.sin(alpha)],
-                                     [0, np.cos(beta), 0],
-                                     [-np.cos(beta)*np.sin(alpha), 0, np.cos(alpha)]]),
-                ('zyz', 'intrinsic', lambda alpha, beta: [[np.cos(beta)*np.cos(alpha), -np.sin(alpha), 0],
-                                     [np.cos(beta)*np.sin(alpha), np.cos(beta), 0],
-                                     [0, 0, np.cos(beta)]]),
-                ('zxz', 'intrinsic', lambda alpha, beta: [[np.cos(alpha), -np.cos(beta)*np.sin(alpha), 0],
-                                     [np.sin(alpha), np.cos(beta)*np.cos(beta), 0],
-                                     [0, 0, np.cos(beta)]]),
+                ('xzx', 'intrinsic',
+                 lambda alpha, beta:
+                 [[np.cos(beta), 0, 0],
+                  [0, np.cos(beta)*np.cos(alpha), -np.sin(alpha)],
+                  [0, np.cos(beta)*np.sin(alpha), np.cos(alpha)]]),
+                ('xyx', 'intrinsic',
+                 lambda alpha, beta:
+                 [[np.cos(beta), 0, 0],
+                  [0, np.cos(alpha), -np.cos(beta)*np.sin(alpha)],
+                  [0, np.sin(alpha), np.cos(beta)*np.cos(alpha)]]),
+                ('yxy', 'intrinsic',
+                 lambda alpha, beta:
+                 [[np.cos(alpha), 0, np.cos(beta)*np.sin(alpha)],
+                  [0, np.cos(beta), 0],
+                  [-np.sin(alpha), 0, np.cos(beta)*np.cos(alpha)]]),
+                ('yzy', 'intrinsic',
+                 lambda alpha, beta:
+                 [[np.cos(beta)*np.cos(alpha), 0, np.sin(alpha)],
+                  [0, np.cos(beta), 0],
+                  [-np.cos(beta)*np.sin(alpha), 0, np.cos(alpha)]]),
+                ('zyz', 'intrinsic',
+                 lambda alpha, beta:
+                 [[np.cos(beta)*np.cos(alpha), -np.sin(alpha), 0],
+                  [np.cos(beta)*np.sin(alpha), np.cos(beta), 0],
+                  [0, 0, np.cos(beta)]]),
+                ('zxz', 'intrinsic',
+                 lambda alpha, beta:
+                 [[np.cos(alpha), -np.cos(beta)*np.sin(alpha), 0],
+                  [np.sin(alpha), np.cos(beta)*np.cos(beta), 0],
+                  [0, 0, np.cos(beta)]]),
         ]
 
         mats_tb_intrinsic = [
-                ('xzy', 'intrinsic', lambda alpha, beta: [[0, -np.sin(beta), 0],
-                                     [np.sin(beta)*np.cos(alpha), 0, -np.sin(alpha)],
-                                     [np.sin(beta)*np.sin(alpha), 0, np.cos(alpha)]]),
-                ('xyz', 'intrinsic', lambda alpha, beta: [[0, 0, np.sin(beta)],
-                                     [np.sin(beta)*np.sin(alpha), np.cos(alpha), 0],
-                                     [-np.sin(beta)*np.cos(alpha), np.sin(alpha), 0]]),
-                ('yxz', 'intrinsic', lambda alpha, beta: [[np.cos(alpha), np.sin(beta)*np.sin(alpha), 0],
-                                     [0, 0, -np.sin(beta)],
-                                     [-np.sin(alpha), np.sin(beta)*np.cos(alpha), 0]]),
-                ('yzx', 'intrinsic', lambda alpha, beta: [[0, -np.sin(beta)*np.cos(alpha), np.sin(alpha)],
-                                     [np.sin(beta), 0, 0],
-                                     [0, np.sin(beta)*np.sin(alpha), np.cos(alpha)]]),
-                ('zyx', 'intrinsic', lambda alpha, beta: [[0, -np.sin(alpha), np.sin(beta)*np.cos(alpha)],
-                                     [0, np.cos(alpha), np.sin(beta)*np.sin(alpha)],
-                                     [-np.sin(beta), 0, 0]]),
-                ('zxy', 'intrinsic', lambda alpha, beta: [[np.cos(alpha), 0, np.sin(beta)*np.sin(alpha)],
-                                     [np.sin(alpha), 0, -np.sin(beta)*np.cos(alpha)],
-                                     [0, -1, 0]]),
+                ('xzy', 'intrinsic',
+                 lambda alpha, beta:
+                 [[0, -np.sin(beta), 0],
+                  [np.sin(beta)*np.cos(alpha), 0, -np.sin(alpha)],
+                  [np.sin(beta)*np.sin(alpha), 0, np.cos(alpha)]]),
+                ('xyz', 'intrinsic',
+                 lambda alpha, beta:
+                 [[0, 0, np.sin(beta)],
+                  [np.sin(beta)*np.sin(alpha), np.cos(alpha), 0],
+                  [-np.sin(beta)*np.cos(alpha), np.sin(alpha), 0]]),
+                ('yxz', 'intrinsic',
+                 lambda alpha, beta:
+                 [[np.cos(alpha), np.sin(beta)*np.sin(alpha), 0],
+                  [0, 0, -np.sin(beta)],
+                  [-np.sin(alpha), np.sin(beta)*np.cos(alpha), 0]]),
+                ('yzx', 'intrinsic',
+                 lambda alpha, beta:
+                 [[0, -np.sin(beta)*np.cos(alpha), np.sin(alpha)],
+                  [np.sin(beta), 0, 0],
+                  [0, np.sin(beta)*np.sin(alpha), np.cos(alpha)]]),
+                ('zyx', 'intrinsic',
+                 lambda alpha, beta:
+                 [[0, -np.sin(alpha), np.sin(beta)*np.cos(alpha)],
+                  [0, np.cos(alpha), np.sin(beta)*np.sin(alpha)],
+                  [-np.sin(beta), 0, 0]]),
+                ('zxy', 'intrinsic',
+                 lambda alpha, beta:
+                 [[np.cos(alpha), 0, np.sin(beta)*np.sin(alpha)],
+                  [np.sin(alpha), 0, -np.sin(beta)*np.cos(alpha)],
+                  [0, -1, 0]]),
         ]
 
         # Extrinsic rotations can be tested identically to intrinsic rotations
@@ -245,7 +265,6 @@ class TestEuler(unittest.TestCase):
         mats_euler_extrinsic = [
             (m[0], 'extrinsic', m[2]) for m in mats_euler_intrinsic
         ]
-
 
         # For Tait-Bryan angles, extrinsic rotations axis order must be
         # reversed (since axes 1 and 3 are not identical), but more
@@ -255,7 +274,8 @@ class TestEuler(unittest.TestCase):
         # values in the tests below, but it's useful to set this up precisely.
         mats_tb_extrinsic = [
             (m[0][::-1], 'extrinsic',
-                lambda alpha, beta: m[2](-alpha, beta)) for m in mats_tb_intrinsic
+             lambda alpha, beta: m[2](-alpha, beta)
+             ) for m in mats_tb_intrinsic
         ]
 
         # Since angle representations may not be unique, checking that
@@ -277,7 +297,7 @@ class TestEuler(unittest.TestCase):
         for mats in (mats_intrinsic, mats_extrinsic):
             for betas, mat_set in zip(all_betas, mats):
                 for convention, axis_type, mat_func in mat_set:
-                    current_quaternions = []
+                    quaternions = []
                     for beta in betas:
                         for alpha in alphas:
                             mat = mat_func(alpha, beta)
@@ -285,7 +305,7 @@ class TestEuler(unittest.TestCase):
                                 # Some of these will be improper rotations.
                                 continue
                             quat = rowan.from_matrix(mat)
-                            current_quaternions.append(quat)
+                            quaternions.append(quat)
                             euler = rowan.to_euler(
                                     quat,
                                     convention, axis_type
@@ -300,12 +320,17 @@ class TestEuler(unittest.TestCase):
                                     rowan.rotate(converted, test_vector),
                                     atol=1e-6
                                 ),
-                                msg="\nFailed for convention {}, axis type {}, alpha = {}, beta = {}".format(convention, axis_type, quat, converted, alpha, beta))
+                                msg="""Failed for convention {},
+                                       axis type {},
+                                       alpha = {},
+                                       beta = {}""".format(
+                                           convention, axis_type, quat,
+                                           converted, alpha, beta))
 
                     # For completeness, also test with broadcasting.
-                    current_quaternions = np.asarray(current_quaternions).reshape(-1,  4)
+                    quaternions = np.asarray(quaternions).reshape(-1,  4)
                     all_euler = rowan.to_euler(
-                                    current_quaternions,
+                                    quaternions,
                                     convention, axis_type
                                     )
                     converted = rowan.from_euler(
@@ -314,7 +339,7 @@ class TestEuler(unittest.TestCase):
                     )
                     self.assertTrue(
                         np.allclose(
-                            rowan.rotate(current_quaternions, test_vector),
+                            rowan.rotate(quaternions, test_vector),
                             rowan.rotate(converted, test_vector),
                             atol=1e-6
                         ))

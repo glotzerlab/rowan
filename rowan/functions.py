@@ -722,6 +722,21 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
     `Euler angles <https://en.wikipedia.org/wiki/Euler_angles>`_
     (specifically the section on converting between representations).
 
+    .. warning::
+
+        Euler angles are a highly problematic representation for a number of
+        reasons, not least of which is the large number of possible conventions
+        and their relative imprecision when compared to using quaternions (or
+        axis-angle representations). If possible, you should avoid Euler angles
+        and work with quaternions instead. If Euler angles are required, note
+        that they are susceptible to `gimbal lock
+        <https://en.wikipedia.org/wiki/Gimbal_lock>`_, which leads to ambiguity
+        in the representation of a given rotation. To address this issue, in
+        cases where gimbal lock arises, :func:`~.to_euler` adopts the
+        convention that :math:`\gamma=0` and represents the rotation entirely
+        in terms of :math:`\beta` and :math:`\alpha`.
+
+
     Args:
         q ((...,4) np.array): Quaternions to transform.
         convention (str): One of the 6 valid conventions zxz,
@@ -787,11 +802,9 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.sin(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(mats[..., 0, 2], -mats[..., 0, 1])
-        )
+                         np.arctan2(mats[..., 0, 2], -mats[..., 0, 1]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(mats[..., 2, 0], mats[..., 1, 0])
-        )
+                         np.arctan2(mats[..., 2, 0], mats[..., 1, 0]))
         zero_terms = np.arctan2(-multiplier*mats[..., 1, 2], mats[..., 2, 2])
     elif convention == 'xyx':
         beta = np.arccos(mats[..., 0, 0])
@@ -799,11 +812,9 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.sin(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(mats[..., 0, 1], mats[..., 0, 2])
-        )
+                         np.arctan2(mats[..., 0, 1], mats[..., 0, 2]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(mats[..., 1, 0], -mats[..., 2, 0])
-        )
+                         np.arctan2(mats[..., 1, 0], -mats[..., 2, 0]))
         zero_terms = np.arctan2(multiplier*mats[..., 2, 1], mats[..., 1, 1])
     elif convention == 'yxy':
         beta = np.arccos(mats[..., 1, 1])
@@ -811,11 +822,9 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.sin(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(mats[..., 1, 0], -mats[..., 1, 2])
-        )
+                         np.arctan2(mats[..., 1, 0], -mats[..., 1, 2]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(mats[..., 0, 1], mats[..., 2, 1])
-        )
+                         np.arctan2(mats[..., 0, 1], mats[..., 2, 1]))
         zero_terms = np.arctan2(-multiplier*mats[..., 2, 0], mats[..., 0, 0])
     elif convention == 'yzy':
         beta = np.arccos(mats[..., 1, 1])
@@ -823,11 +832,9 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.sin(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(mats[..., 1, 2], mats[..., 1, 0])
-        )
+                         np.arctan2(mats[..., 1, 2], mats[..., 1, 0]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(mats[..., 2, 1], -mats[..., 0, 1])
-        )
+                         np.arctan2(mats[..., 2, 1], -mats[..., 0, 1]))
         zero_terms = np.arctan2(multiplier*mats[..., 0, 2], mats[..., 2, 2])
     elif convention == 'zyz':
         beta = np.arccos(mats[..., 2, 2])
@@ -835,11 +842,9 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.sin(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(mats[..., 2, 1], -mats[..., 2, 0])
-        )
+                         np.arctan2(mats[..., 2, 1], -mats[..., 2, 0]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(mats[..., 1, 2], mats[..., 0, 2])
-        )
+                         np.arctan2(mats[..., 1, 2], mats[..., 0, 2]))
         zero_terms = np.arctan2(-multiplier*mats[..., 0, 1], mats[..., 1, 1])
     elif convention == 'zxz':
         beta = np.arccos(mats[..., 2, 2])
@@ -847,11 +852,9 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.sin(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(mats[..., 2, 0], mats[..., 2, 1])
-        )
+                         np.arctan2(mats[..., 2, 0], mats[..., 2, 1]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(mats[..., 0, 2], -mats[..., 1, 2])
-        )
+                         np.arctan2(mats[..., 0, 2], -mats[..., 1, 2]))
         zero_terms = np.arctan2(multiplier*mats[..., 1, 0], mats[..., 0, 0])
     # Tait-Bryan angles
     elif convention == 'xzy':
@@ -859,11 +862,9 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.cos(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(mats[..., 0, 2], mats[..., 0, 0])
-        )
+                         np.arctan2(mats[..., 0, 2], mats[..., 0, 0]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(mats[..., 2, 1], mats[..., 1, 1])
-        )
+                         np.arctan2(mats[..., 2, 1], mats[..., 1, 1]))
         zero_terms = np.arctan2(-mats[..., 1, 2], mats[..., 2, 2])
     elif convention == 'xyz':
         beta = np.arcsin(mats[..., 0, 2])
@@ -871,11 +872,9 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.cos(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(-mats[..., 0, 1], mats[..., 0, 0])
-        )
+                         np.arctan2(-mats[..., 0, 1], mats[..., 0, 0]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(-mats[..., 1, 2], mats[..., 2, 2])
-        )
+                         np.arctan2(-mats[..., 1, 2], mats[..., 2, 2]))
         zero_terms = np.arctan2(multiplier*mats[..., 2, 1], mats[..., 1, 1])
     elif convention == 'yxz':
         beta = np.arcsin(-mats[..., 1, 2])
@@ -883,11 +882,9 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.cos(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(mats[..., 1, 0], mats[..., 1, 1])
-        )
+                         np.arctan2(mats[..., 1, 0], mats[..., 1, 1]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(mats[..., 0, 2], mats[..., 2, 2])
-        )
+                         np.arctan2(mats[..., 0, 2], mats[..., 2, 2]))
         zero_terms = np.arctan2(-multiplier*mats[..., 2, 0], mats[..., 0, 0])
     elif convention == 'yzx':
         beta = np.arcsin(mats[..., 1, 0])
@@ -895,22 +892,18 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.cos(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(-mats[..., 1, 2], mats[..., 1, 1])
-        )
+                         np.arctan2(-mats[..., 1, 2], mats[..., 1, 1]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(-mats[..., 2, 0], mats[..., 0, 0])
-        )
+                         np.arctan2(-mats[..., 2, 0], mats[..., 0, 0]))
         zero_terms = np.arctan2(multiplier*mats[..., 0, 2], mats[..., 2, 2])
     elif convention == 'zyx':
         beta = np.arcsin(-mats[..., 2, 0])
         where_zero = np.isclose(np.cos(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(mats[..., 2, 1], mats[..., 2, 2])
-        )
+                         np.arctan2(mats[..., 2, 1], mats[..., 2, 2]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(mats[..., 1, 0], mats[..., 0, 0])
-        )
+                         np.arctan2(mats[..., 1, 0], mats[..., 0, 0]))
         zero_terms = np.arctan2(-mats[..., 0, 1], mats[..., 1, 1])
     elif convention == 'zxy':
         beta = np.arcsin(mats[..., 2, 1])
@@ -918,11 +911,9 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
         where_zero = np.isclose(np.cos(beta), 0, atol=atol)
 
         gamma = np.where(where_zero, 0,
-            np.arctan2(-mats[..., 2, 0], mats[..., 2, 2])
-        )
+                         np.arctan2(-mats[..., 2, 0], mats[..., 2, 2]))
         alpha = np.where(where_zero, 0,
-            np.arctan2(-mats[..., 0, 1], mats[..., 1, 1])
-        )
+                         np.arctan2(-mats[..., 0, 1], mats[..., 1, 1]))
         zero_terms = np.arctan2(multiplier*mats[..., 1, 0], mats[..., 0, 0])
     else:
         raise ValueError("Unknown convention selected!")
