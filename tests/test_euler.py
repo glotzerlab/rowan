@@ -276,14 +276,16 @@ class TestEuler(unittest.TestCase):
 
         for mats in (mats_intrinsic, mats_extrinsic):
             for betas, mat_set in zip(all_betas, mats):
-                for beta in betas:
-                    for alpha in alphas:
-                        for convention, axis_type, mat_func in mat_set:
+                for convention, axis_type, mat_func in mat_set:
+                    current_quaternions = []
+                    for beta in betas:
+                        for alpha in alphas:
                             mat = mat_func(alpha, beta)
                             if np.linalg.det(mat) == -1:
                                 # Some of these will be improper rotations.
                                 continue
                             quat = rowan.from_matrix(mat)
+                            current_quaternions.append(quat)
                             euler = rowan.to_euler(
                                     quat,
                                     convention, axis_type
@@ -298,8 +300,21 @@ class TestEuler(unittest.TestCase):
                                     rowan.rotate(converted, test_vector),
                                     atol=1e-6
                                 ),
-                                msg="\nFailed for convention {}\naxis type {}\nquat {}\nconverted = {}\nrotate1 = {}\nrotate2 = {}\nmat= {}\nalpha = {}\nbeta = {}\neuler = {}".format(
-                                    convention, axis_type, quat, converted,
-                                    rowan.rotate(quat, test_vector),
-                                    rowan.rotate(converted, test_vector),
-                                    mat, alpha, beta, euler))
+                                msg="\nFailed for convention {}, axis type {}, alpha = {}, beta = {}".format(convention, axis_type, quat, converted, alpha, beta))
+
+                    # For completeness, also test with broadcasting.
+                    current_quaternions = np.asarray(current_quaternions).reshape(-1,  4)
+                    all_euler = rowan.to_euler(
+                                    current_quaternions,
+                                    convention, axis_type
+                                    )
+                    converted = rowan.from_euler(
+                        all_euler[..., 0], all_euler[..., 1], all_euler[..., 2],
+                        convention, axis_type
+                    )
+                    self.assertTrue(
+                        np.allclose(
+                            rowan.rotate(current_quaternions, test_vector),
+                            rowan.rotate(converted, test_vector),
+                            atol=1e-6
+                        ))
