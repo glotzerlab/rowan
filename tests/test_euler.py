@@ -321,12 +321,9 @@ class TestEuler(unittest.TestCase):
                                     rowan.rotate(converted, test_vector),
                                     atol=1e-6
                                 ),
-                                msg="""Failed for convention {},
-                                       axis type {},
-                                       alpha = {},
-                                       beta = {}""".format(
-                                           convention, axis_type,
-                                           alpha, beta))
+                                msg="""Failed for convention {}, \
+axis type {}, alpha = {}, beta = {}""".format(convention, axis_type,
+                                              alpha, beta))
 
                     # For completeness, also test with broadcasting.
                     quaternions = np.asarray(quaternions).reshape(-1,  4)

@@ -967,7 +967,6 @@ def from_matrix(mat, require_orthogonal=True):
     """
     mat = np.asarray(mat)
     if require_orthogonal and not np.allclose(np.linalg.det(mat), 1):
-        print("The determinant: ", np.linalg.det(mat))
         raise ValueError(
             "Not all of your matrices are orthogonal. \
 Please ensure that there are no improper rotations. \
