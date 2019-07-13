@@ -312,7 +312,8 @@ class TestEuler(unittest.TestCase):
                                     )
                             converted = rowan.from_euler(
                                 *euler,
-                                convention, axis_type
+                                convention=convention,
+                                axis_type=axis_type
                             )
                             self.assertTrue(
                                 np.allclose(

@@ -927,8 +927,16 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
     # By convention, the zero terms that we calculate are always based on
     # setting gamma to zero and applying to alpha. We assign them after the
     # fact to enable the memcopy-free swap of alpha and gamma for extrinsic
-    # angles.
-    alpha[where_zero] = zero_terms[where_zero]
+    # angles. For Python 2 compatibility, we need to index appropriately.
+    try:
+        alpha[where_zero] = zero_terms[where_zero]
+    except IndexError:
+        # This is necessary for Python 2 compatibility and limitations with the
+        # indexing behavior. Since the only possible case is a single set of
+        # inputs, we can just skip any indexing and overwrite directly if
+        # needed.
+        if where_zero:
+            alpha = zero_terms
     return np.stack((alpha, beta, gamma), axis=-1)
 
 
