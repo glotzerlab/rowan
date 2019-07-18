@@ -761,15 +761,15 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
     """
     q = np.asarray(q)
     _validate_unit(q)
-    atol = 1e-6
+    atol = 1e-3
 
     try:
-        mats = to_matrix(q)
         # Due to minor numerical imprecision, the to_matrix function could
         # generate a (very slightly) nonorthogonal matrix (e.g. with a norm of
         # 1 + 2e-8). That is sufficient to throw off the trigonometric
-        # functions, so it's worthwhile to explicitly normalize for safety.
-        mats /= np.linalg.norm(mats, 2, (-1, -2))[..., np.newaxis, np.newaxis]
+        # functions, so it's worthwhile to explicitly clip for safety,
+        # especially since we've already checked the quaternion norm.
+        mats = np.clip(to_matrix(q), -1, 1)
     except ValueError:
         raise ValueError(
             "Not all quaternions in q are unit quaternions.")
