@@ -300,45 +300,44 @@ class TestEuler(unittest.TestCase):
                     quaternions = []
                     for beta in betas:
                         for alpha in alphas:
-                            for with_noise in [True, False]:
-                                mat = mat_func(alpha, beta)
-                                if np.linalg.det(mat) == -1:
-                                    # Some of these will be improper rotations.
-                                    continue
-                                quat = rowan.from_matrix(mat)
-                                if with_noise:
-                                    quat = rowan.normalize(quat + np.random.rand(4)*1e-7)
-                                quaternions.append(quat)
-                                euler = rowan.to_euler(
-                                        quat,
-                                        convention, axis_type
-                                        )
-                                converted = rowan.from_euler(
-                                    *euler,
-                                    convention=convention,
-                                    axis_type=axis_type
-                                )
-                                correct_rotation = rowan.rotate(quat, test_vector)
-                                test_rotation = rowan.rotate(converted, test_vector)
-                                self.assertTrue(
-                                    np.allclose(
-                                        correct_rotation,
-                                        test_rotation,
-                                        atol=1e-6
-                                    ),
-                                    msg="""
-                                           Failed for convention {},
-                                           axis type {},
-                                           alpha = {},
-                                           beta = {}.
-                                           Expected quaternion: {}.
-                                           Calculated: {}.
-                                           Expected vector: {}.
-                                           Calculated vector: {}.""".format(
-                                                convention, axis_type,
-                                                alpha, beta, quat,
-                                                converted, correct_rotation,
-                                                test_rotation))
+                            mat = mat_func(alpha, beta)
+                            if np.linalg.det(mat) == -1:
+                                # Some of these will be improper rotations.
+                                continue
+                            quat = rowan.from_matrix(mat)
+                            quaternions.append(quat)
+                            euler = rowan.to_euler(
+                                    quat,
+                                    convention, axis_type
+                                    )
+                            converted = rowan.from_euler(
+                                *euler,
+                                convention=convention,
+                                axis_type=axis_type
+                            )
+                            correct_rotation = rowan.rotate(quat,
+                                                            test_vector)
+                            test_rotation = rowan.rotate(converted,
+                                                         test_vector)
+                            self.assertTrue(
+                                np.allclose(
+                                    correct_rotation,
+                                    test_rotation,
+                                    atol=1e-6
+                                ),
+                                msg="""
+                                       Failed for convention {},
+                                       axis type {},
+                                       alpha = {},
+                                       beta = {}.
+                                       Expected quaternion: {}.
+                                       Calculated: {}.
+                                       Expected vector: {}.
+                                       Calculated vector: {}.""".format(
+                                            convention, axis_type,
+                                            alpha, beta, quat,
+                                            converted, correct_rotation,
+                                            test_rotation))
 
                     # For completeness, also test with broadcasting.
                     quaternions = np.asarray(quaternions).reshape(-1,  4)
@@ -356,6 +355,3 @@ class TestEuler(unittest.TestCase):
                             rowan.rotate(converted, test_vector),
                             atol=1e-6
                         ))
-
-if __name__ == "__main__":
-    unittest.main()
