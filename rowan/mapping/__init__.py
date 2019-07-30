@@ -402,7 +402,8 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         # Apply a random translation and permutation
         translation = np.random.rand(1, 3)
         permutation = np.random.permutation(10)
-        transformed_points = rowan.rotate(rotation, points[permutation]) + translation
+        transformed_points = rowan.rotate(
+            rotation, points[permutation]) + translation
 
         # Recover the rotation and check
         R, t, indices = rowan.mapping.icp(points, transformed_points,

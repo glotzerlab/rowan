@@ -3,7 +3,6 @@ from __future__ import division, print_function, absolute_import
 
 import unittest
 import numpy as np
-import numpy.testing as npt
 
 from rowan import mapping, random, rotate, from_matrix, from_axis_angle
 
@@ -233,9 +232,11 @@ class TestMapping(unittest.TestCase):
             translation = np.random.rand(1, 3)
 
             permutation = np.random.permutation(num_points)
-            transformed_points = rotate(rotation, points[permutation]) + translation
+            transformed_points = rotate(
+                rotation, points[permutation]) + translation
 
-            q, t, indices = mapping.icp(points, transformed_points, return_indices=True)
+            q, t, indices = mapping.icp(
+                points, transformed_points, return_indices=True)
             q = from_matrix(q)
 
             deltas = transformed_points - (rotate(q, points[indices]) + t)
