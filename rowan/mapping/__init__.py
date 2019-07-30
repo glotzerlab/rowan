@@ -382,9 +382,10 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         unique_match (bool): Whether to require nearest neighbors to be unique.
         max_iterations (int): Number of iterations to attempt.
         tolerance (float): Indicates convergence.
+        return_indices(bool): Whether to return indices.
 
     Returns:
-        A tuple (R, t, indices) where R is the matrix to rotate the points, t
+        A tuple (R, t[, indices]) where R is the matrix to rotate the points, t
         is the translation, and indices are the indices of X that map to points
         in Y.
 
@@ -404,7 +405,8 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         transformed_points = rowan.rotate(rotation, points[permutation]) + translation
 
         # Recover the rotation and check
-        R, t, indices = rowan.mapping.icp(points, transformed_points)
+        R, t, indices = rowan.mapping.icp(points, transformed_points,
+                                          return_indices=True)
         q = rowan.from_matrix(R)
 
         assert np.logical_or(
