@@ -370,7 +370,7 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
 
 
 def icp(X, Y, method='best', unique_match=True, max_iterations=20,
-        tolerance=0.001):
+        tolerance=0.001, return_indices=False):
     R"""Find best mapping using the Iterative Closest Point algorithm.
 
     Args:
@@ -384,29 +384,33 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         tolerance (float): Indicates convergence.
 
     Returns:
-        A tuple (R, t) where R is the matrix to rotate the points and t
-        is the translation.
+        A tuple (R, t, indices) where R is the matrix to rotate the points, t
+        is the translation, and indices are the indices of X that map to points
+        in Y.
 
     Example::
 
         import numpy as np
 
-        # Create some random points, then make a random transformation of
-        # these points
+        # Create some random points
         points = np.random.rand(10, 3)
 
         # Only works for small rotations
         rotation = rowan.from_axis_angle((1, 0, 0), 0.01)
+
+        # Apply a random translation and permutation
         translation = np.random.rand(1, 3)
-        transformed_points = rowan.rotate(rotation, points) + translation
+        permutation = np.random.permutation(10)
+        transformed_points = rowan.rotate(rotation, points[permutation]) + translation
 
         # Recover the rotation and check
-        R, t = rowan.mapping.icp(points, transformed_points)
+        R, t, indices = rowan.mapping.icp(points, transformed_points)
         q = rowan.from_matrix(R)
 
         assert np.logical_or(
             np.allclose(rotation, q), np.allclose(rotation, -q))
         assert np.allclose(translation, t)
+        assert np.array_equal(permutation, indices)
     """
 
     import sys
@@ -484,4 +488,10 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
     if q.shape[-1] == 4:
         R = to_matrix(q)
 
-    return R, t
+    # sort indices to reverse the permutation
+    indices = np.argsort(indices)
+
+    if return_indices:
+        return R, t, indices
+    else:
+        return R, t
