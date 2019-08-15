@@ -197,7 +197,8 @@ class TestMapping(unittest.TestCase):
 
             transformed_points = rotate(rotation, points) + translation
 
-            q, t = mapping.icp(points, transformed_points)
+            q, t, indices = mapping.icp(points, transformed_points,
+                                        return_indices=True)
             q = from_matrix(q)
 
             # In the case of just two points, the mapping is not unique,
@@ -213,7 +214,7 @@ class TestMapping(unittest.TestCase):
             self.assertTrue(
                     np.allclose(
                         transformed_points,
-                        rotate(q, points) + t
+                        rotate(q, points[indices]) + t
                         )
                     )
 
@@ -230,15 +231,19 @@ class TestMapping(unittest.TestCase):
             rotation = from_axis_angle([0.3, 0.3, 0.3], 0.3)
             translation = np.random.rand(1, 3)
 
-            transformed_points = rotate(rotation, points) + translation
-            indices = np.arange(num_points)
-            np.random.shuffle(indices)
-            shuffled_points = points[indices]
+            permutation = np.random.permutation(num_points)
+            transformed_points = rotate(
+                rotation, points[permutation]) + translation
 
-            q, t = mapping.icp(shuffled_points, transformed_points)
+            q, t, indices = mapping.icp(
+                points, transformed_points, return_indices=True)
             q = from_matrix(q)
 
-            deltas = transformed_points - (rotate(q, shuffled_points) + t)
+            deltas = transformed_points - (rotate(q, points[indices]) + t)
             norms = np.linalg.norm(deltas, axis=-1)
             # This is purely a heuristic, since we can't guarantee exact matches
-            self.assertTrue(np.mean(norms) < 1)
+            self.assertTrue(np.mean(norms) < 0.5)
+
+
+if __name__ == '__main__':
+    unittest.main()
