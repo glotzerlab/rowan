@@ -491,10 +491,10 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
     if q.shape[-1] == 4:
         R = to_matrix(q)
 
-    # sort indices to reverse the permutation
-    indices = np.argsort(indices)
-
     if return_indices:
+        # sort indices to reverse the permutation
+        indices = np.argsort(indices)
+        
         return R, t, indices
     else:
         return R, t
