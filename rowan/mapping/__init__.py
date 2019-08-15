@@ -494,7 +494,7 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
     if return_indices:
         # sort indices to reverse the permutation
         indices = np.argsort(indices)
-        
+
         return R, t, indices
     else:
         return R, t
