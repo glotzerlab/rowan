@@ -5,6 +5,22 @@ This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html
 Unreleased
 ----------
 
+v1.2.2 - 2019-09-11
+-------------------
+
+Added
++++++
+
+* Mapping indices can be returned upon request from mapping.icp.
+
+Fixed
++++++
+
+* Euler angle calculations when cos(beta) = 0.
+
+v1.2.1 - 2019-05-30
+-------------------
+
 Added
 +++++
 
