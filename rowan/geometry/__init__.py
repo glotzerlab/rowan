@@ -215,7 +215,7 @@ def angle(p):
     R"""Compute the angle of rotation of a quaternion.
 
     Note that this is identical to
-    ``intrinsic_distance(p, np.array([1, 0, 0, 0]))``.
+    ``2*intrinsic_distance(p, np.array([1, 0, 0, 0]))``.
 
     Args:
         p ((...,4) np.array): Array of quaternions.
