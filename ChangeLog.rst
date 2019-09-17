@@ -5,6 +5,11 @@ This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html
 Unreleased
 ----------
 
+Fixed
++++++
+
+* Docstring of geometry.angle was missing a factor of 2 in the comparison to intrinsic_distance.
+
 v1.2.2 - 2019-09-11
 -------------------
 
