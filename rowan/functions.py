@@ -22,7 +22,10 @@ def _support_1d(func):
     argument.
     """
 
+    from functools import wraps
+
     # Wrapper function to ensure that input arrays are at least 2-dimensional.
+    @wraps(func)
     def func_atleast_2d(q, *args, **kwargs):
         q = np.asarray(q)
         if len(q.shape) == 1:
