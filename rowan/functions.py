@@ -1047,6 +1047,8 @@ calling this function.")
 def from_axis_angle(axes, angles):
     R"""Find quaternions to rotate a specified angle about a specified axis.
 
+    All angles are assumed to be **counterclockwise** rotations about the axis.
+
     Args:
         axes ((...,3) np.array): An array of vectors (the axes).
         angles (float or (...,1) np.array): An array of angles in radians.
@@ -1080,6 +1082,8 @@ def from_axis_angle(axes, angles):
 
 def to_axis_angle(q):
     R"""Convert the quaternions in q to axis angle representations.
+
+    The output angles are **counterclockwise** rotations about the axis.
 
     Args:
         q ((...,4) np.array): An array of quaternions.
