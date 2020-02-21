@@ -49,7 +49,7 @@ In addition, :py:mod:`rowan.mapping` also includes some functionality for
 more general point set registration. If a point cloud has a set of known
 symmetries, these can be tested explicitly by :py:mod:`rowan.mapping` to
 find the smallest rotation required for optimal mapping. If no such
-correspondence is knowna at all, then the iterative closest point algorithm can
+correspondence is known at all, then the iterative closest point algorithm can
 be used to approximate the mapping.
 """
 from __future__ import division, print_function, absolute_import
