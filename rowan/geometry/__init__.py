@@ -36,8 +36,8 @@ def distance(p, q):
     values in the range :math:`[0, 2]`.
 
     Args:
-        p ((...,4) np.array): First array of quaternions.
-        q ((...,4) np.array): Second array of quaternions.
+        p ((..., 4) np.array): First array of quaternions.
+        q ((..., 4) np.array): Second array of quaternions.
 
     Returns:
         Array of shape (...) containing the element-wise distances between the
@@ -59,8 +59,8 @@ def sym_distance(p, q):
     similarity.
 
     Args:
-        p ((...,4) np.array): First array of quaternions.
-        q ((...,4) np.array): Second array of quaternions.
+        p ((..., 4) np.array): First array of quaternions.
+        q ((..., 4) np.array): Second array of quaternions.
 
     When applied to unit quaternions, this function produces
     values in the range :math:`[0, \sqrt{2}]`.
@@ -98,8 +98,8 @@ def riemann_exp_map(p, v):
         \end{equation}
 
     Args:
-        p ((...,4) np.array): Points on the manifold of quaternions.
-        v ((...,4) np.array): Tangent vectors to traverse.
+        p ((..., 4) np.array): Points on the manifold of quaternions.
+        v ((..., 4) np.array): Tangent vectors to traverse.
 
     Returns:
         Array of shape (..., 4) containing the endpoints of the geodesic
@@ -124,8 +124,8 @@ def riemann_log_map(p, q):
     quaternions.
 
     Args:
-        p ((...,4) np.array): Starting points (quaternions).
-        q ((...,4) np.array): Endpoints (quaternions).
+        p ((..., 4) np.array): Starting points (quaternions).
+        q ((..., 4) np.array): Endpoints (quaternions).
 
     Returns:
         Array of shape (..., 4) containing quaternions pointing from p to q with
@@ -161,8 +161,8 @@ def intrinsic_distance(p, q):
         analysis. J Math Imaging Vis 35(2):155-164
 
     Args:
-        p ((...,4) np.array): First array of quaternions.
-        q ((...,4) np.array): Second array of quaternions.
+        p ((..., 4) np.array): First array of quaternions.
+        q ((..., 4) np.array): Second array of quaternions.
 
     Returns:
         Array of shape (...) containing the element-wise intrinsic distances
@@ -192,8 +192,8 @@ def sym_intrinsic_distance(p, q):
     values in the range :math:`[0, \frac{\pi}{2}]`.
 
     Args:
-        p ((...,4) np.array): First array of quaternions.
-        q ((...,4) np.array): Second array of quaternions.
+        p ((..., 4) np.array): First array of quaternions.
+        q ((..., 4) np.array): Second array of quaternions.
 
     Returns:
         Array of shape (...) containing the element-wise symmetrized intrinsic
@@ -218,7 +218,7 @@ def angle(p):
     ``2*intrinsic_distance(p, np.array([1, 0, 0, 0]))``.
 
     Args:
-        p ((...,4) np.array): Array of quaternions.
+        p ((..., 4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) containing the element-wise angles traced out by

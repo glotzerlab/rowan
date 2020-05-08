@@ -29,8 +29,8 @@ def derivative(q, v):
                    2012/08/24/quaternion-differentiation/
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
-        v ((...,3) np.array): Array of angular velocities.
+        q ((..., 4) np.array): Array of quaternions.
+        v ((..., 3) np.array): Array of angular velocities.
 
     Returns:
         Array of shape (..., 4) containing element-wise derivatives of q.
@@ -67,8 +67,8 @@ def integrate(q, v, dt):
                  how-to-integrate-quaternions/
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
-        v ((...,3) np.array): Array of angular velocities.
+        q ((..., 4) np.array): Array of quaternions.
+        v ((..., 3) np.array): Array of angular velocities.
         dt ((...) np.array): Array of timesteps.
 
     Returns:
