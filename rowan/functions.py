@@ -575,7 +575,7 @@ def _vector_bisector(v1, v2):
 
 def vector_vector_rotation(v1, v2):
     R"""Find the quaternion to rotate one vector onto another.
-    
+
     .. note::
 
         Vector-vector rotation is underspecified, with one degree of freedom
