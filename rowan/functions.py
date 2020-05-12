@@ -61,7 +61,7 @@ def exp(q):
         \end{align}
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) containing exponentials of q.
@@ -105,7 +105,7 @@ def expb(q, b):
         \end{align}
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) containing exponentials of q.
@@ -124,7 +124,7 @@ def exp10(q):
     Wrapper around :py:func:`expb`.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) containing exponentials of q.
@@ -153,7 +153,7 @@ def log(q):
         \end{equation}
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) containing logarithms of q.
@@ -213,7 +213,7 @@ def logb(q, b):
         \end{align}
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
         n ((...) np.array): Scalars to use as log bases.
 
     Returns:
@@ -233,7 +233,7 @@ def log10(q):
     Wrapper around :py:func:`logb`.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) containing logarithms of q.
@@ -257,7 +257,7 @@ def power(q, n):
     more efficiently by noting that :math:`q^n = \exp(n \ln(q))`.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
         n ((...) np.arrray): Scalars to exponentiate quaternions with.
 
     Returns:
@@ -293,7 +293,7 @@ def conjugate(q):
     R"""Conjugates an array of quaternions.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) containing conjugates of q.
@@ -313,7 +313,7 @@ def inverse(q):
     R"""Computes the inverse of an array of quaternions.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) containing inverses of q.
@@ -342,8 +342,8 @@ def multiply(qi, qj):
     first and second set of quaternions must be passed in the correct order.
 
     Args:
-        qi ((...,4) np.array): Array of left quaternions.
-        qj ((...,4) np.array): Array of right quaternions.
+        qi ((..., 4) np.array): Array of left quaternions.
+        qj ((..., 4) np.array): Array of right quaternions.
 
     Returns:
         Array of shape (...) containing element-wise products of q.
@@ -372,8 +372,8 @@ def divide(qi, qj):
     :math:`q_i q_j^{-1}`.
 
     Args:
-        qi ((...,4) np.array): Dividend quaternions.
-        qj ((...,4) np.array): Divisor quaternions.
+        qi ((..., 4) np.array): Dividend quaternions.
+        qj ((..., 4) np.array): Divisor quaternions.
 
     Returns:
         Array of shape (...) containing element-wise quotients of qi and qj.
@@ -389,7 +389,7 @@ def norm(q):
     R"""Compute the quaternion norm.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) containing norms of q.
@@ -406,7 +406,7 @@ def normalize(q):
     R"""Normalize quaternions.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         Array of shape (...) of normalized quaternions.
@@ -424,7 +424,7 @@ def is_unit(q):
     """Check if all input quaternions have unit norm.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         bool: Whether or not all inputs are unit quaternions
@@ -484,8 +484,8 @@ def reflect(q, v):
     For help constructing a mirror plane, see :py:func:`from_mirror_plane`.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
-        v ((...,3) np.array): Array of vectors.
+        q ((..., 4) np.array): Array of quaternions.
+        v ((..., 3) np.array): Array of vectors.
 
     Returns:
         Array of shape (..., 3) containing reflections of v.
@@ -506,8 +506,8 @@ def rotate(q, v):
     R"""Rotate a list of vectors by a corresponding set of quaternions.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
-        v ((...,3) np.array): Array of vectors.
+        q ((..., 4) np.array): Array of quaternions.
+        v ((..., 3) np.array): Array of vectors.
 
     Returns:
         Array of shape (..., 3) containing rotations of v.
@@ -535,8 +535,8 @@ def _vector_bisector(v1, v2):
     R"""Find the vector bisecting two vectors.
 
     Args:
-        v1 ((...,3) np.array): First array of vectors.
-        v2 ((...,3) np.array): Second array of vectors.
+        v1 ((..., 3) np.array): First array of vectors.
+        v2 ((..., 3) np.array): Second array of vectors.
 
     Returns:
         Array of shape (..., 3) containing vector bisectors.
@@ -576,9 +576,15 @@ def _vector_bisector(v1, v2):
 def vector_vector_rotation(v1, v2):
     R"""Find the quaternion to rotate one vector onto another.
 
+    .. note::
+
+        Vector-vector rotation is underspecified, with one degree of freedom
+        possible in the resulting quaternion. This method chooses to rotate by
+        :math:`\pi` around the vector bisecting v1 and v2.
+
     Args:
-        v1 ((...,3) np.array): Array of vectors to rotate.
-        v2 ((...,3) np.array): Array of vector to rotate onto.
+        v1 ((..., 3) np.array): Array of vectors to rotate.
+        v2 ((..., 3) np.array): Array of vector to rotate onto.
 
     Returns:
         Array of shape (..., 4) containing  quaternions that rotate v1 onto v2.
@@ -741,7 +747,7 @@ def to_euler(q, convention='zyx', axis_type='intrinsic'):
 
 
     Args:
-        q ((...,4) np.array): Quaternions to transform.
+        q ((..., 4) np.array): Quaternions to transform.
         convention (str): One of the 6 valid conventions zxz,
             xyx, yzy, zyz, xzx, yxy.
         axes (str): Whether to use extrinsic or intrinsic.
@@ -958,7 +964,7 @@ def from_matrix(mat, require_orthogonal=True):
         https://doi.org/10.2514/2.4654
 
     Args:
-        mat ((...,3,3) np.array): An array of rotation matrices.
+        mat ((..., 3, 3) np.array): An array of rotation matrices.
 
     Returns:
         Array of shape (..., 4) containing the corresponding rotation
@@ -1009,7 +1015,7 @@ def to_matrix(q, require_unit=True):
     <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix>`_.
 
     Args:
-        q ((...,4) np.array): An array of quaternions.
+        q ((..., 4) np.array): An array of quaternions.
 
     Returns:
         Array of shape (..., 3, 3) containing the corresponding rotation
@@ -1050,9 +1056,9 @@ def from_axis_angle(axes, angles):
     All angles are assumed to be **counterclockwise** rotations about the axis.
 
     Args:
-        axes ((...,3) np.array): An array of vectors (the axes).
-        angles (float or (...,1) np.array): An array of angles in radians.
-            Will be broadcast to match shape of v as needed.
+        axes ((..., 3) np.array): An array of vectors (the axes).
+        angles (float or (..., 1) np.array): An array of angles in radians.
+            Will be broadcasted to match shape of axes as needed.
 
     Returns:
         Array of shape (..., 4) containing the corresponding rotation
@@ -1086,11 +1092,11 @@ def to_axis_angle(q):
     The output angles are **counterclockwise** rotations about the axis.
 
     Args:
-        q ((...,4) np.array): An array of quaternions.
+        q ((..., 4) np.array): An array of quaternions.
 
     Returns:
         A tuple of np.arrays (axes, angles) where axes has
-        shape (...,3) and angles has shape (...,1). The
+        shape (..., 3) and angles has shape (..., 1). The
         angles are in radians.
 
     Example::
@@ -1118,8 +1124,8 @@ def equal(p, q):
     equality and then aggregates along the quaternion axis.
 
     Args:
-        p ((...,4) np.array): First array of quaternions.
-        q ((...,4) np.array): Second array of quaternions.
+        p ((..., 4) np.array): First array of quaternions.
+        q ((..., 4) np.array): Second array of quaternions.
 
     Returns:
         A boolean array of shape (...) indicating equality.
@@ -1138,8 +1144,8 @@ def not_equal(p, q):
     equality and then aggregates along the quaternion axis.
 
     Args:
-        p ((...,4) np.array): First array of quaternions.
-        q ((...,4) np.array): Second array of quaternions.
+        p ((..., 4) np.array): First array of quaternions.
+        q ((..., 4) np.array): Second array of quaternions.
 
     Returns:
         A boolean array of shape (...) indicating inequality.
@@ -1157,7 +1163,7 @@ def isnan(q):
     A quaternion is defined as NaN if any elements are NaN.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         A boolean array of shape (...) indicating whether or not the input
@@ -1177,7 +1183,7 @@ def isinf(q):
     A quaternion is defined as infinite if any elements are infinite.
 
     Args:
-        q ((...,4) np.array): Array of quaternions
+        q ((..., 4) np.array): Array of quaternions
 
     Returns:
         A boolean array of shape (...) indicating infinite quaternions.
@@ -1196,7 +1202,7 @@ def isfinite(q):
     A quaternion is defined as finite if all elements are finite.
 
     Args:
-        q ((...,4) np.array): Array of quaternions.
+        q ((..., 4) np.array): Array of quaternions.
 
     Returns:
         A boolean array of shape (...) indicating finite quaternions.
@@ -1214,8 +1220,8 @@ def allclose(p, q, **kwargs):
     This is a direct wrapper of the corresponding NumPy function.
 
     Args:
-        p ((...,4) np.array): First array of quaternions.
-        q ((...,4) np.array): Second array of quaternions.
+        p ((..., 4) np.array): First array of quaternions.
+        q ((..., 4) np.array): Second array of quaternions.
         **kwargs: Keyword arguments to pass to np.allclose.
 
     Returns:
@@ -1236,8 +1242,8 @@ def isclose(p, q, **kwargs):
     the quaternion axis.
 
     Args:
-        p ((...,4) np.array): First array of quaternions.
-        q ((...,4) np.array): Second array of quaternions.
+        p ((..., 4) np.array): First array of quaternions.
+        q ((..., 4) np.array): Second array of quaternions.
         **kwargs: Keyword arguments to pass to np.isclose.
 
     Returns:

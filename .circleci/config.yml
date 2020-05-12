@@ -3,7 +3,7 @@ version: 2
 references:
   im36: &im36
     docker:
-      - image: themattrix/tox   
+      - image: themattrix/tox
 
   wd: &wd
     working_directory: ~/repo
@@ -22,18 +22,16 @@ references:
           name: run tests
           command: |
             # Faster to just test one env first
-            pip3.6 install --user flake8
-            pip3.6 install --user numpy
-            pip3.6 install --user scipy
+            pip3.6 install --progress-bar off --user flake8 numpy scipy
             python3.6 -m flake8 --show-source .
             python3.6 -m unittest discover tests -v
 
             # Test python-dependency matrix with tox
-            pip3.6 install --user tox
+            pip3.6 install --progress-bar off --user tox
             tox
 
             # Run with coverage
-            pip3.6 install --user coverage codacy-coverage
+            pip3.6 install --progress-bar off --user coverage codacy-coverage
             export PATH=~/.local/bin:${PATH}
             coverage run -m unittest discover tests
             apt-get -yq update
@@ -61,9 +59,7 @@ references:
           name: run tests
           command: |
             # Faster to just test one env first
-            pip3.6 install --user flake8
-            pip3.6 install --user numpy
-            pip3.6 install --user scipy
+            pip3.6 install --progress-bar off --user flake8 numpy scipy
             python3.6 -m flake8 --show-source .
             python3.6 -m unittest discover tests -v
 
@@ -79,14 +75,12 @@ references:
       - run:
           name: Deploy dist and wheels
           command: |
-            pip3.6 install --user flake8
-            pip3.6 install --user numpy
-            pip3.6 install --user scipy
+            pip3.6 install --progress-bar off --user flake8 numpy scipy
             python3.6 -m flake8 --show-source .
             python3.6 -m unittest discover tests -v
             python3.6 --version
             pip3.6 --version
-            pip3.6 install --user -U twine wheel setuptools
+            pip3.6 install --progress-bar off --user -U twine wheel setuptools
             export PATH=~/.local/bin:${PATH}
             twine --version
             wheel version
