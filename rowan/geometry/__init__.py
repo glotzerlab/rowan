@@ -9,7 +9,6 @@ quaternions do not necessarily coincide with good metrics for similarities
 between rotations. An overview of distance measurements can be found in
 `this paper <https://link.springer.com/article/10.1007/s10851-009-0161-2>`_.
 """
-from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
@@ -85,10 +84,10 @@ def riemann_exp_map(p, v):
     The nonzero quaternions form a Lie algebra :math:`\mathbb{H}^*` that
     is also a Riemannian manifold. In general, given a point :math:`p` on a
     Riemannian manifold :math:`\mathcal{M}` and an element of the tangent
-    space at :math:`p`, :math:`v \in T_p\mathcal{M}`, the Riemannian exponential
-    map is defined by the geodesic starting at :math:`p` and tracing out
-    an arc of length :math:`v` in the direction of :math:`v`. This function
-    computes the endpoint of that path (which is itself a quaternion).
+    space at :math:`p`, :math:`v \in T_p\mathcal{M}`, the Riemannian
+    exponential map is defined by the geodesic starting at :math:`p` and
+    tracing out an arc of length :math:`v` in the direction of :math:`v`. This
+    function computes the endpoint of that path (which is itself a quaternion).
 
     Explicitly, we define the exponential map as
 
@@ -117,9 +116,9 @@ def riemann_log_map(p, q):
     R"""Compute the log map on the Riemannian manifold :math:`\mathbb{H}^*` of
     nonzero quaterions.
 
-    This function inverts :py:func:`riemann_exp_map`. See that function for more
-    details. In brief, given two quaternions p and q, this method returns a
-    third quaternion parameterizing the geodesic passing from p to q. It is
+    This function inverts :py:func:`riemann_exp_map`. See that function for
+    more details. In brief, given two quaternions p and q, this method returns
+    a third quaternion parameterizing the geodesic passing from p to q. It is
     therefore an important measure of the distance between the two input
     quaternions.
 
@@ -128,8 +127,8 @@ def riemann_log_map(p, q):
         q ((..., 4) np.array): Endpoints (quaternions).
 
     Returns:
-        Array of shape (..., 4) containing quaternions pointing from p to q with
-        magnitudes equal to the length of the geodesics joining these
+        Array of shape (..., 4) containing quaternions pointing from p to q
+        with magnitudes equal to the length of the geodesics joining these
         quaternions.
 
     Example::

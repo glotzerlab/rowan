@@ -2,7 +2,6 @@
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
 R"""Submodule containing all standard functions"""
-from __future__ import division, print_function, absolute_import
 
 import numpy as np
 

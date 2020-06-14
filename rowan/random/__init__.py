@@ -14,7 +14,6 @@ subpackage is entirely focused on generating rotation quaternions.
 #
 #    other alternatives:
 #    http://home.lu.lv/~sd20008/papers/essays/Random%20unitary%20[paper].pdf
-from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
@@ -24,7 +23,7 @@ __all__ = ['rand',
 
 
 def rand(*args):
-    R"""Generate random rotations that are uniformly distributed on a unit sphere.
+    R"""Generate random rotations uniformly distributed on a unit sphere.
 
     This is a convenience function *a la* ``np.random.rand``. If you want a
     function that takes a tuple as input, use :py:func:`random_sample` instead.

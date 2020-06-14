@@ -15,8 +15,8 @@ performs the superposition in order to compare two (or more) shapes.
 If points in the two sets have a known correspondence, the problem is much
 simpler. Various precise formulations exist that admit analytical formulations,
 such as the `orthogonal Procrustes problem
-<https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem>`_ searching for an
-orthogonal transformation
+<https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem>`_ searching for
+an orthogonal transformation
 
 .. math::
     \begin{equation}
@@ -29,21 +29,21 @@ or, if a pure rotation is desired, Wahba's problem
 .. math::
     \begin{equation}
         \min_{\boldsymbol{R} \in SO(3)} \frac{1}{2} \sum_{k=1}^N a_k \lvert
-        \lvert \boldsymbol{w}_k - \boldsymbol{R} \boldsymbol{v}_k \rvert\rvert^2
+        \lvert \boldsymbol{w}_k - \boldsymbol{R}\boldsymbol{v}_k\rvert\rvert^2
     \end{equation}
 
 Numerous algorithms to solve this problem exist, particularly in the field of
-aerospace engineering and robotics where this problem must be solved on embedded
-systems with limited processing. Since that constraint does not apply here, this
-package simply implements some of the most stable known methods irrespective of
-cost. In particular, this package contains the Kabsch algorithm, which solves
-Wahba's problem using an SVD in the vein of `Peter Schonemann's original
-solution <https://link.springer.com/article/10.1007/BF02289451>`_ to
-the orthogonal Procrustes problem. Additionally this package contains the
-`Davenport q method <https://ntrs.nasa.gov/search.jsp?R=19670009376>`_, which
-works directly with quaternions. The most popular algorithms for Wahba's problem
-are variants of the q method that are faster at the cost of some stability; we
-omit these here.
+aerospace engineering and robotics where this problem must be solved on
+embedded systems with limited processing. Since that constraint does not apply
+here, this package simply implements some of the most stable known methods
+irrespective of cost. In particular, this package contains the Kabsch
+algorithm, which solves Wahba's problem using an SVD in the vein of `Peter
+Schonemann's original solution
+<https://link.springer.com/article/10.1007/BF02289451>`_ to the orthogonal
+Procrustes problem. Additionally this package contains the `Davenport q method
+<https://ntrs.nasa.gov/search.jsp?R=19670009376>`_, which works directly with
+quaternions. The most popular algorithms for Wahba's problem are variants of
+the q method that are faster at the cost of some stability; we omit these here.
 
 In addition, :py:mod:`rowan.mapping` also includes some functionality for
 more general point set registration. If a point cloud has a set of known
@@ -52,7 +52,6 @@ find the smallest rotation required for optimal mapping. If no such
 correspondence is known at all, then the iterative closest point algorithm can
 be used to approximate the mapping.
 """
-from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
@@ -465,7 +464,8 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
             row_ind, indices = optimize.linear_sum_assignment(pair_distances)
             distances = pair_distances[row_ind, indices]
         else:
-            distances, indices = nn.kneighbors(cur_points, return_distance=True)
+            distances, indices = nn.kneighbors(
+                cur_points, return_distance=True)
             distances = distances.ravel()
             indices = indices.ravel()
 
