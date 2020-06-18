@@ -1,7 +1,8 @@
-import unittest
 import doctest
-import rowan
 import pkgutil
+import unittest
+
+import rowan
 
 
 def load_tests(loader, tests, ignore):

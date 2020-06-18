@@ -1,7 +1,7 @@
 version: 2
 
 references:
-  im36: &im36
+  imtox: &imtox
     docker:
       - image: themattrix/tox
 
@@ -23,7 +23,9 @@ references:
           command: |
             # Faster to just test one env first
             pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort
-            python3.8 -m flake8 --show-source .
+            python3.8 -m flake8 --show-source rowan
+            # Ignore isort errors in tests that are due to ambiguity over whether or not rowan is third party.
+            python3.8 -m flake8 --extend-ignore=I001,I004 --show-source tests/
             python3.8 -m unittest discover tests -v
 
             # Test python-dependency matrix with tox
@@ -60,7 +62,9 @@ references:
           command: |
             # Faster to just test one env first
             pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort
-            python3.8 -m flake8 --show-source .
+            python3.8 -m flake8 --show-source rowan
+            # Ignore isort errors in tests that are due to ambiguity over whether or not rowan is third party.
+            python3.8 -m flake8 --extend-ignore=I001,I004 --show-source tests/
             python3.8 -m unittest discover tests -v
 
       - save_cache:
@@ -76,7 +80,9 @@ references:
           name: Deploy dist and wheels
           command: |
             pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort
-            python3.8 -m flake8 --show-source .
+            python3.8 -m flake8 --show-source rowan
+            # Ignore isort errors in tests that are due to ambiguity over whether or not rowan is third party.
+            python3.8 -m flake8 --extend-ignore=I001,I004 --show-source tests/
             python3.8 -m unittest discover tests -v
             python3.8 --version
             pip3.8 --version
@@ -90,15 +96,15 @@ references:
 
 jobs:
   complete:
-    <<: *im36
+    <<: *imtox
     <<: *wd
     <<: *runall
   test_only:
-    <<: *im36
+    <<: *imtox
     <<: *wd
     <<: *run_tests_only
   build_and_deploy:
-    <<: *im36
+    <<: *imtox
     <<: *wd
     <<: *pypi_wheels
 
