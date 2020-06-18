@@ -30,9 +30,12 @@ Code contributions should keep these ideals in mind and adhere to the following 
   * Preserve backwards-compatibility whenever possible. Make clear if something must change, and notify package maintainers that merging such changes will require a major release.
   * Enable broadcasting if at all possible. Functions for which broadcasting is not available must be documented as such.
 
+To provide a reasonable balance between a high level of backwards compatibility and a reasonable maintenance burden, **rowan** has adopted `NEP 29`_ to limit the Python and NumPy versions that will be supported.
+
 
 .. _github: https://github.com/glotzerlab/rowan
 .. _OneFlow: https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow
+.. _NEP 29: https://numpy.org/neps/nep-0029-deprecation_policy.html
 
 .. tip::
 
