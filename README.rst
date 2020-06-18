@@ -49,26 +49,6 @@ Core features of rowan include (but are not limited to):
   and the Iterative Closest Point algorithm.
 * Quaternion interpolation (slerp, squad).
 
-.. toctree::
-    :maxdepth: 2
-    :caption: Modules:
-
-    package-rowan
-    package-calculus
-    package-geometry
-    package-interpolate
-    package-mapping
-    package-random
-
-.. toctree::
-    :maxdepth: 1
-    :caption: Reference:
-
-    development
-    license
-    changelog
-    credits
-
 Getting Started
 ===============
 
@@ -186,11 +166,4 @@ This package is hosted on `GitHub <https://github.com/glotzerlab/rowan>`_.
 Please report any bugs or problems that you find on the `issue tracker <https://github.com/glotzerlab/rowan/issues>`_.
 
 All contributions to rowan are welcomed via pull requests!
-Please see the :doc:`development guide <development>` for more information on requirements for new code.
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+Please see the `development guide <https://rowan.readthedocs.io/en/latest/development.html>`_ for more information on requirements for new code.
