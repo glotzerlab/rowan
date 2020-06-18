@@ -9,7 +9,7 @@ version = '1.2.2'
 desc = 'Perform quaternion operations using NumPy arrays'
 try:
     readme_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'README.md')
+                               'README.rst')
     with open(readme_file) as f:
         readme = f.read()
 except ImportError:
