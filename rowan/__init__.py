@@ -16,8 +16,6 @@ any function of 2 (or more) quaternions can take arrays of shapes that do
 not match and return results according to NumPy's broadcasting rules.
 """
 
-from __future__ import division, print_function, absolute_import
-
 from . import calculus
 from . import geometry
 from . import interpolate
@@ -38,7 +36,7 @@ __version__ = '1.2.2'
 __all__ = ['calculus', 'geometry', 'interpolate', 'mapping', 'random',
            'allclose', 'conjugate', 'divide', 'exp', 'expb', 'exp10', 'equal',
            'from_axis_angle', 'from_euler', 'from_matrix', 'from_mirror_plane',
-           'inverse', 'isclose', 'isinf', 'isfinite', 'isnan', 'is_unit', 'log',
-           'logb', 'log10', 'multiply', 'norm', 'normalize', 'not_equal',
-           'power', 'reflect', 'rotate', 'to_axis_angle', 'to_euler',
-           'to_matrix', 'vector_vector_rotation']
+           'inverse', 'isclose', 'isinf', 'isfinite', 'isnan', 'is_unit',
+           'log', 'logb', 'log10', 'multiply', 'norm', 'normalize',
+           'not_equal', 'power', 'reflect', 'rotate', 'to_axis_angle',
+           'to_euler', 'to_matrix', 'vector_vector_rotation']

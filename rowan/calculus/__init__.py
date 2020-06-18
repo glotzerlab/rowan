@@ -4,7 +4,6 @@
 R"""This subpackage provides the ability to compute the derivative and
 integral of a quaternion.
 """
-from __future__ import division, print_function, absolute_import
 
 import numpy as np
 

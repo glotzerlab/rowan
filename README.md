@@ -54,13 +54,13 @@ python setup.py install --user
 
 ### Requirements
 
-*   Python = 2.7, >= 3.3
-*   NumPy >= 1.10
+*   Python = >= 3.6
+*   NumPy >= 1.15
 
 ## Testing
 
-The package is currently tested for Python versions 2.7 and Python >= 3.3 on Unix-like systems.
-Continuous integrated testing is performed using CircleCI on these Python versions with NumPy versions 1.10 and above.
+The package is currently tested for Python >= 3.6 on Unix-like systems.
+Continuous integrated testing is performed using CircleCI on these Python versions with NumPy versions 1.15 and above.
 
 To run the packaged unit tests, execute the following line from the root of the repository:
 

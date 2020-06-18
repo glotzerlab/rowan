@@ -1,4 +1,4 @@
 ###### Requirements without Version Specifiers ######
 
 ###### Requirements with Version Specifiers ######
-numpy>=1.10
+numpy>=1.15
