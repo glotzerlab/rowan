@@ -1,7 +1,8 @@
-"""Test the reflection of quaternions for various array sizes"""
-from __future__ import division, print_function, absolute_import
+"""Test the reflection of quaternions for various array sizes."""
+from __future__ import absolute_import, division, print_function
 
 import unittest
+
 import numpy as np
 
 import rowan
@@ -16,10 +17,10 @@ z_quat = np.array([0, 0, 0, 1])
 
 
 class TestReflect(unittest.TestCase):
-    """Test the core reflection operation"""
+    """Test the core reflection operation."""
 
     def from_mirror_plane_single(self):
-        """Simple test of reflection about axes"""
+        """Test simple reflection about axes."""
         x_plane = rowan.from_mirror_plane(x[0], x[1], x[2])
         y_plane = rowan.from_mirror_plane(y[0], y[1], y[2])
         z_plane = rowan.from_mirror_plane(z[0], z[1], z[2])
@@ -28,7 +29,7 @@ class TestReflect(unittest.TestCase):
         self.assertTrue(np.all(z_plane == z_quat))
 
     def test_single_quaternion(self):
-        """Testing trivial reflections about planes"""
+        """Testing trivial reflections about planes."""
         x_reflect = rowan.reflect(x_quat, x)
         y_reflect = rowan.reflect(y_quat, y)
         z_reflect = rowan.reflect(z_quat, z)
@@ -38,10 +39,8 @@ class TestReflect(unittest.TestCase):
         self.assertTrue(np.all(z_reflect == -z))
 
     def test_broadcast(self):
-        """Ensure broadcasting works"""
+        """Ensure broadcasting works."""
         x_plane = rowan.from_mirror_plane([x[0], x[0]], x[1], x[2])
-        self.assertTrue(np.all(x_plane == x_quat[np.newaxis, :].repeat(
-            2, axis=0)))
+        self.assertTrue(np.all(x_plane == x_quat[np.newaxis, :].repeat(2, axis=0)))
         x_reflect = rowan.reflect(x_plane, x)
-        self.assertTrue(np.all(x_reflect == -x[np.newaxis, :].repeat(
-            2, axis=0)))
+        self.assertTrue(np.all(x_reflect == -x[np.newaxis, :].repeat(2, axis=0)))

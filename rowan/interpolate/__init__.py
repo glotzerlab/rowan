@@ -1,33 +1,36 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-R"""
-The rowan package provides a simple interface to slerp, the standard method
-of quaternion interpolation for two quaternions.
+"""Interpolate between pairs of quaternions.
+
+The rowan package provides a simple interface to slerp, the standard method of
+quaternion interpolation for two quaternions.
 """
 
 import numpy as np
 
-from ..functions import power, multiply, conjugate, _validate_unit, log
+from ..functions import _validate_unit, conjugate, log, multiply, power
 
-__all__ = ['slerp',
-           'slerp_prime',
-           'squad']
+__all__ = ["slerp", "slerp_prime", "squad"]
 
 
 def slerp(q0, q1, t, ensure_shortest=True):
-    R"""Spherical linear interpolation between p and q.
+    r"""Spherical linear interpolation between p and q.
 
     The `slerp formula <https://en.wikipedia.org/wiki/Slerp#Quaternion_Slerp>`_
     can be easily expressed in terms of the quaternion exponential (see
-    :py:func:`rowan.exp`).
+    :func:`rowan.exp`).
 
     Args:
-        q0 ((..., 4) np.array): First array of quaternions.
-        q1 ((..., 4) np.array): Second array of quaternions.
-        t ((...) np.array): Interpolation parameter :math:`\in [0, 1]`
-        ensure_shortest (bool): Flip quaternions to ensure we traverse the
-            geodesic in the shorter (:math:`<180^{\circ}`) direction.
+        q0 ((..., 4) :class:`numpy.ndarray`):
+            First array of quaternions.
+        q1 ((..., 4) :class:`numpy.ndarray`):
+            Second array of quaternions.
+        t ((...) :class:`numpy.ndarray`):
+            Interpolation parameter :math:`\in [0, 1]`
+        ensure_shortest (bool):
+            Flip quaternions to ensure we traverse the geodesic in the shorter
+            (:math:`<180^{\circ}`) direction.
 
     .. note::
 
@@ -41,9 +44,10 @@ def slerp(q0, q1, t, ensure_shortest=True):
 
     Example::
 
-        import numpy as np
-        q_slerp = rowan.interpolate.slerp(
-            [[1, 0, 0, 0]], [[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]], 0.5)
+        >>> import numpy as np
+        >>> rowan.interpolate.slerp(
+        ...     [[1, 0, 0, 0]], [[np.sqrt(2)/2, np.sqrt(2)/2, 0, 0]], 0.5)
+        array([[0.92387953, 0.38268343, 0.        , 0.        ]])
     """
     _validate_unit(q0)
     _validate_unit(q1)
@@ -54,7 +58,7 @@ def slerp(q0, q1, t, ensure_shortest=True):
 
     # Ensure that we turn the short way around
     if ensure_shortest:
-        cos_theta = np.sum(q0*q1, axis=-1)
+        cos_theta = np.sum(q0 * q1, axis=-1)
         flip = cos_theta < 0
         q1[flip] *= -1
 
@@ -62,14 +66,18 @@ def slerp(q0, q1, t, ensure_shortest=True):
 
 
 def slerp_prime(q0, q1, t, ensure_shortest=True):
-    R"""Compute the derivative of slerp.
+    r"""Compute the derivative of slerp.
 
     Args:
-        q0 ((..., 4) np.array): First set of quaternions.
-        q1 ((..., 4) np.array): Second set of quaternions.
-        t ((...) np.array): Interpolation parameter :math:`\in [0, 1]`
-        ensure_shortest (bool): Flip quaternions to ensure we traverse the
-            geodesic in the shorter (:math:`<180^{\circ}`) direction
+        q0 ((..., 4) :class:`numpy.ndarray`):
+            First set of quaternions.
+        q1 ((..., 4) :class:`numpy.ndarray`):
+            Second set of quaternions.
+        t ((...) :class:`numpy.ndarray`):
+            Interpolation parameter :math:`\in [0, 1]`
+        ensure_shortest (bool):
+            Flip quaternions to ensure we traverse the geodesic in the shorter
+            (:math:`<180^{\circ}`) direction
 
     Returns:
         An array of shape (..., 4) containing the element-wise derivatives of
@@ -90,18 +98,18 @@ def slerp_prime(q0, q1, t, ensure_shortest=True):
 
     # Ensure that we turn the short way around
     if ensure_shortest:
-        cos_theta = np.sum(q0*q1, axis=-1)
+        cos_theta = np.sum(q0 * q1, axis=-1)
         flip = cos_theta < 0
         q1[flip] *= -1
 
     return multiply(
-            multiply(q0, power(multiply(conjugate(q0), q1), t)),
-            log(multiply(conjugate(q0), q1))
-            )
+        multiply(q0, power(multiply(conjugate(q0), q1), t)),
+        log(multiply(conjugate(q0), q1)),
+    )
 
 
 def squad(p, a, b, q, t):
-    R"""Cubically interpolate between p and q.
+    r"""Cubically interpolate between p and q.
 
     The SQUAD formula is just a repeated application of Slerp between multiple
     quaternions as originally derived in [Shoemake85]_:
@@ -117,22 +125,23 @@ def squad(p, a, b, q, t):
         SIGGRAPH Comput. Graph., 19(3):245-254, July 1985.
 
     Args:
-        p ((..., 4) np.array): First endpoint of interpolation.
-        a ((..., 4) np.array): First control point of interpolation.
-        b ((..., 4) np.array): Second control point of interpolation.
-        q ((..., 4) np.array): Second endpoint of interpolation.
-        t ((...) np.array): Interpolation parameter :math:`t \in [0, 1]`.
+        p ((..., 4) :class:`numpy.ndarray`): First endpoint of interpolation.
+        a ((..., 4) :class:`numpy.ndarray`): First control point of interpolation.
+        b ((..., 4) :class:`numpy.ndarray`): Second control point of interpolation.
+        q ((..., 4) :class:`numpy.ndarray`): Second endpoint of interpolation.
+        t ((...) :class:`numpy.ndarray`): Interpolation parameter :math:`t \in [0, 1]`.
 
     Returns:
         An array containing the element-wise interpolations between p and q.
 
     Example::
 
-        import numpy as np
-        q_squad = rowan.interpolate.squad(
-            [1, 0, 0, 0], [np.sqrt(2)/2, np.sqrt(2)/2, 0, 0],
-            [0, np.sqrt(2)/2, np.sqrt(2)/2, 0],
-            [0, 0, np.sqrt(2)/2, np.sqrt(2)/2], 0.5)
+        >>> import numpy as np
+        >>> rowan.interpolate.squad(
+        ...     [1, 0, 0, 0], [np.sqrt(2)/2, np.sqrt(2)/2, 0, 0],
+        ...     [0, np.sqrt(2)/2, np.sqrt(2)/2, 0],
+        ...     [0, 0, np.sqrt(2)/2, np.sqrt(2)/2], 0.5)
+        array([[0.64550177, 0.47254009, 0.52564058, 0.28937053]])
     """
     _validate_unit(p)
     _validate_unit(a)
@@ -140,7 +149,9 @@ def squad(p, a, b, q, t):
     _validate_unit(q)
     t = np.clip(t, 0, 1)
 
-    return slerp(slerp(p, q, t, ensure_shortest=False),
-                 slerp(a, b, t, ensure_shortest=False),
-                 2*t*(1-t),
-                 ensure_shortest=False)
+    return slerp(
+        slerp(p, q, t, ensure_shortest=False),
+        slerp(a, b, t, ensure_shortest=False),
+        2 * t * (1 - t),
+        ensure_shortest=False,
+    )

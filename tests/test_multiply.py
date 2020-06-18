@@ -1,9 +1,10 @@
-"""Test the multiplication of quaternions for various array sizes"""
-from __future__ import division, print_function, absolute_import
+"""Test the multiplication of quaternions for various array sizes."""
+from __future__ import absolute_import, division, print_function
 
-import unittest
-import numpy as np
 import os
+import unittest
+
+import numpy as np
 
 import rowan
 
@@ -11,20 +12,18 @@ zero = np.array([0, 0, 0, 0])
 one = np.array([1, 0, 0, 0])
 
 # Load test files
-TESTDATA_FILENAME = os.path.join(
-    os.path.dirname(__file__),
-    'files/test_arrays.npz')
+TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), "files/test_arrays.npz")
 with np.load(TESTDATA_FILENAME) as data:
-    input1 = data['input1']
-    input2 = data['input2']
-    stored_product = data['product']
+    input1 = data["input1"]
+    input2 = data["input2"]
+    stored_product = data["product"]
 
 
 class TestMultiply(unittest.TestCase):
-    """Test the core multiplication operation"""
+    """Test the core multiplication operation."""
 
     def test_single_quaternion(self):
-        """Simplest case of quaternion multiplication"""
+        """Simplest case of quaternion multiplication."""
         # Multiply zeros
         product = rowan.multiply(zero, zero)
         self.assertTrue(np.all(product == np.array([0, 0, 0, 0])))
@@ -34,44 +33,48 @@ class TestMultiply(unittest.TestCase):
         self.assertTrue(np.all(product == np.array([1, 0, 0, 0])))
 
     def test_2d_array(self):
-        """Multiplying arrays of quaternions"""
+        """Multiplying arrays of quaternions."""
         zeros = np.repeat(zero[np.newaxis, :], 10, axis=0)
         ones = np.repeat(one[np.newaxis, :], 10, axis=0)
 
         # Multiply zeros
         product = rowan.multiply(zeros, zeros)
-        self.assertTrue(np.all(product == np.repeat(
-            np.array([0, 0, 0, 0])[np.newaxis, :], 10, axis=0)))
+        self.assertTrue(
+            np.all(
+                product == np.repeat(np.array([0, 0, 0, 0])[np.newaxis, :], 10, axis=0)
+            )
+        )
 
         # Multiply ones
         product = rowan.multiply(ones, ones)
-        self.assertTrue(np.all(product == np.repeat(
-            np.array([1, 0, 0, 0])[np.newaxis, :], 10, axis=0)))
+        self.assertTrue(
+            np.all(
+                product == np.repeat(np.array([1, 0, 0, 0])[np.newaxis, :], 10, axis=0)
+            )
+        )
 
         # Complex random array
         product = rowan.multiply(input1, input2)
         self.assertTrue(np.allclose(product, stored_product))
 
     def test_3d_array(self):
-        """Multiplying higher dimensional arrays of quaternions"""
+        """Multiplying higher dimensional arrays of quaternions."""
         num_reps = 20
         expanded_shape = (int(num_reps / 5), 5, 4)
         zeros = np.reshape(
-            np.repeat(zero[np.newaxis, :], num_reps, axis=0), expanded_shape)
+            np.repeat(zero[np.newaxis, :], num_reps, axis=0), expanded_shape
+        )
         ones = np.reshape(
-            np.repeat(one[np.newaxis, :], num_reps, axis=0), expanded_shape)
+            np.repeat(one[np.newaxis, :], num_reps, axis=0), expanded_shape
+        )
         expected_product_zeros = np.reshape(
-            np.repeat(
-                np.array([0, 0, 0, 0])[np.newaxis, :],
-                num_reps,
-                axis=0),
-            expanded_shape)
+            np.repeat(np.array([0, 0, 0, 0])[np.newaxis, :], num_reps, axis=0),
+            expanded_shape,
+        )
         expected_product_ones = np.reshape(
-            np.repeat(
-                np.array([1, 0, 0, 0])[np.newaxis, :],
-                num_reps,
-                axis=0),
-            expanded_shape)
+            np.repeat(np.array([1, 0, 0, 0])[np.newaxis, :], num_reps, axis=0),
+            expanded_shape,
+        )
 
         # Zeros
         product = rowan.multiply(zeros, zeros)
@@ -85,18 +88,14 @@ class TestMultiply(unittest.TestCase):
         num_reps = input1.shape[0]
         expanded_shape = (int(num_reps / 5), 5, 4)
         product = rowan.multiply(
-            np.reshape(
-                input1, expanded_shape), np.reshape(
-                input2, expanded_shape))
+            np.reshape(input1, expanded_shape), np.reshape(input2, expanded_shape)
+        )
         self.assertTrue(
-            np.allclose(
-                product,
-                np.reshape(
-                    stored_product,
-                    expanded_shape)))
+            np.allclose(product, np.reshape(stored_product, expanded_shape))
+        )
 
     def test_broadcast(self):
-        """Ensure broadcasting works"""
+        """Ensure broadcasting works."""
         # Multiply zeros, simple shape check
         shape = (45, 3, 13, 4)
         many_zeros = np.zeros(shape)
@@ -105,10 +104,7 @@ class TestMultiply(unittest.TestCase):
 
         # Two nonconforming array sizes
         with self.assertRaises(ValueError):
-            rowan.multiply(
-                    many_zeros,
-                    np.repeat(zero[np.newaxis, :], 2, axis=0)
-                    )
+            rowan.multiply(many_zeros, np.repeat(zero[np.newaxis, :], 2, axis=0))
 
         # Require broadcasting in multiple dimensions
         zeros_A = np.zeros((1, 1, 3, 8, 1, 4))
@@ -129,7 +125,7 @@ class TestMultiply(unittest.TestCase):
                 self.assertTrue(np.all(product[i, j, :] == single_prod))
 
     def test_divide(self):
-        """Ensure division works"""
+        """Ensure division works."""
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         np.random.seed(0)
         for shape_i in shapes:
@@ -137,8 +133,5 @@ class TestMultiply(unittest.TestCase):
             for shape_j in shapes:
                 y = np.random.random_sample(shape_j)
                 self.assertTrue(
-                        np.allclose(
-                            rowan.divide(x, y),
-                            rowan.multiply(x, rowan.inverse(y))
-                            )
-                        )
+                    np.allclose(rowan.divide(x, y), rowan.multiply(x, rowan.inverse(y)))
+                )

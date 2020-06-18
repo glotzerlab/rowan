@@ -1,21 +1,19 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-R"""This subpackage provides the ability to compute the derivative and
-integral of a quaternion.
-"""
+r"""Compute derivatives and integrals of quaternions."""
 
 import numpy as np
 
-from ..functions import multiply, _promote_vec, _validate_unit, exp
+from ..functions import _promote_vec, _validate_unit, exp, multiply
 
-__all__ = ['derivative',
-           'integrate']
+__all__ = ["derivative", "integrate"]
 
 
 def derivative(q, v):
-    R"""Compute the instantaneous derivative of unit quaternions, which is
-    defined as
+    r"""Compute the instantaneous derivative of unit quaternions.
+
+    Derivatives of quaternions are defined by the equation:
 
     .. math::
         \dot{q} = \frac{1}{2} \boldsymbol{v} q
@@ -28,26 +26,28 @@ def derivative(q, v):
                    2012/08/24/quaternion-differentiation/
 
     Args:
-        q ((..., 4) np.array): Array of quaternions.
-        v ((..., 3) np.array): Array of angular velocities.
+        q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
+        v ((..., 3) :class:`numpy.ndarray`): Array of angular velocities.
 
     Returns:
         Array of shape (..., 4) containing element-wise derivatives of q.
 
     Example::
 
-        q_prime = rowan.calculus.derivative([1, 0, 0, 0], [1, 0, 0])
+        >>> rowan.calculus.derivative([1, 0, 0, 0], [1, 0, 0])
+        array([0. , 0.5, 0. , 0. ])
     """
     q = np.asarray(q)
     v = np.asarray(v)
 
     _validate_unit(q)
-    return 0.5*multiply(q, _promote_vec(v))
+    return 0.5 * multiply(q, _promote_vec(v))
 
 
 def integrate(q, v, dt):
-    R"""Integrate unit quaternions by angular velocity using the following
-    equation:
+    r"""Integrate unit quaternions by angular velocity.
+
+    The integral uses the following equation:
 
     .. math::
         \dot{q} = \exp\left(\frac{1}{2} \boldsymbol{v} dt\right) q
@@ -66,16 +66,17 @@ def integrate(q, v, dt):
                  how-to-integrate-quaternions/
 
     Args:
-        q ((..., 4) np.array): Array of quaternions.
-        v ((..., 3) np.array): Array of angular velocities.
-        dt ((...) np.array): Array of timesteps.
+        q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
+        v ((..., 3) :class:`numpy.ndarray`): Array of angular velocities.
+        dt ((...) :class:`numpy.ndarray`): Array of timesteps.
 
     Returns:
         Array of shape (..., 4) containing element-wise integrals of q.
 
     Example::
 
-        v_next = rowan.calculus.integrate([1, 0, 0, 0], [0, 0, 1e-2], 1)
+        >>> rowan.calculus.integrate([1, 0, 0, 0], [0, 0, 1e-2], 1)
+        array([0.9999875 , 0.        , 0.        , 0.00499998])
     """
     q = np.asarray(q)
     v = np.asarray(v)
@@ -83,4 +84,4 @@ def integrate(q, v, dt):
 
     _validate_unit(q)
 
-    return multiply(exp(_promote_vec(v*dt/2)), q)
+    return multiply(exp(_promote_vec(v * dt / 2)), q)

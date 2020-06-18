@@ -1,30 +1,32 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-R"""This subpackage provides various tools for working with the geometric
-representation of quaternions. A particular focus is computing the distance
-between quaternions. These distance computations can be complicated,
-particularly good metrics for distance on the Riemannian manifold representing
-quaternions do not necessarily coincide with good metrics for similarities
-between rotations. An overview of distance measurements can be found in
-`this paper <https://link.springer.com/article/10.1007/s10851-009-0161-2>`_.
+r"""Various tools for working with the geometric representation of quaternions.
+
+A particular focus is computing the distance between quaternions. These distance
+computations can be complicated, particularly good metrics for distance on the
+Riemannian manifold representing quaternions do not necessarily coincide with good
+metrics for similarities between rotations. An overview of distance measurements can be
+found in `this paper <https://link.springer.com/article/10.1007/s10851-009-0161-2>`_.
 """
 
 import numpy as np
 
-from ..functions import norm, exp, multiply, inverse, log, _validate_unit
+from ..functions import _validate_unit, exp, inverse, log, multiply, norm
 
-__all__ = ['distance',
-           'sym_distance',
-           'riemann_exp_map',
-           'riemann_log_map',
-           'intrinsic_distance',
-           'sym_intrinsic_distance',
-           'angle']
+__all__ = [
+    "distance",
+    "sym_distance",
+    "riemann_exp_map",
+    "riemann_log_map",
+    "intrinsic_distance",
+    "sym_intrinsic_distance",
+    "angle",
+]
 
 
 def distance(p, q):
-    R"""Determine the distance between quaternions p and q.
+    r"""Determine the distance between quaternions p and q.
 
     This is the most basic distance that can be defined on
     the space of quaternions; it is the metric induced by
@@ -35,8 +37,8 @@ def distance(p, q):
     values in the range :math:`[0, 2]`.
 
     Args:
-        p ((..., 4) np.array): First array of quaternions.
-        q ((..., 4) np.array): Second array of quaternions.
+        p ((..., 4) :class:`numpy.ndarray`): First array of quaternions.
+        q ((..., 4) :class:`numpy.ndarray`): Second array of quaternions.
 
     Returns:
         Array of shape (...) containing the element-wise distances between the
@@ -44,22 +46,23 @@ def distance(p, q):
 
     Example::
 
-        rowan.geometry.distance([1, 0, 0, 0], [1, 0, 0, 0])
+        >>> rowan.geometry.distance([1, 0, 0, 0], [1, 0, 0, 0])
+        0.0
     """
     return norm(np.asarray(p) - np.asarray(q))
 
 
 def sym_distance(p, q):
-    R"""Determine the distance between quaternions p and q.
+    r"""Determine the distance between quaternions p and q.
 
-    This is a symmetrized version of :py:func:`distance` that
+    This is a symmetrized version of :func:`distance` that
     accounts for the fact that :math:`p` and :math:`-p` represent
     identical rotations. This makes it a useful measure of rotation
     similarity.
 
     Args:
-        p ((..., 4) np.array): First array of quaternions.
-        q ((..., 4) np.array): Second array of quaternions.
+        p ((..., 4) :class:`numpy.ndarray`): First array of quaternions.
+        q ((..., 4) :class:`numpy.ndarray`): Second array of quaternions.
 
     When applied to unit quaternions, this function produces
     values in the range :math:`[0, \sqrt{2}]`.
@@ -70,7 +73,8 @@ def sym_distance(p, q):
 
     Example::
 
-        rowan.geometry.sym_distance([1, 0, 0, 0], [-1, 0, 0, 0])
+        >>> rowan.geometry.sym_distance([1, 0, 0, 0], [-1, 0, 0, 0])
+        0.0
     """
     p = np.asarray(p)
     q = np.asarray(q)
@@ -78,8 +82,7 @@ def sym_distance(p, q):
 
 
 def riemann_exp_map(p, v):
-    R"""Compute the exponential map on the Riemannian manifold
-    :math:`\mathbb{H}^*` of nonzero quaterions.
+    r"""Compute the exponential map on the Riemannian manifold :math:`\mathbb{H}^*`.
 
     The nonzero quaternions form a Lie algebra :math:`\mathbb{H}^*` that
     is also a Riemannian manifold. In general, given a point :math:`p` on a
@@ -97,8 +100,8 @@ def riemann_exp_map(p, v):
         \end{equation}
 
     Args:
-        p ((..., 4) np.array): Points on the manifold of quaternions.
-        v ((..., 4) np.array): Tangent vectors to traverse.
+        p ((..., 4) :class:`numpy.ndarray`): Points on the manifold of quaternions.
+        v ((..., 4) :class:`numpy.ndarray`): Tangent vectors to traverse.
 
     Returns:
         Array of shape (..., 4) containing the endpoints of the geodesic
@@ -113,18 +116,17 @@ def riemann_exp_map(p, v):
 
 
 def riemann_log_map(p, q):
-    R"""Compute the log map on the Riemannian manifold :math:`\mathbb{H}^*` of
-    nonzero quaterions.
+    r"""Compute the log map on the Riemannian manifold :math:`\mathbb{H}^*`.
 
-    This function inverts :py:func:`riemann_exp_map`. See that function for
+    This function inverts :func:`riemann_exp_map`. See that function for
     more details. In brief, given two quaternions p and q, this method returns
     a third quaternion parameterizing the geodesic passing from p to q. It is
     therefore an important measure of the distance between the two input
     quaternions.
 
     Args:
-        p ((..., 4) np.array): Starting points (quaternions).
-        q ((..., 4) np.array): Endpoints (quaternions).
+        p ((..., 4) :class:`numpy.ndarray`): Starting points (quaternions).
+        q ((..., 4) :class:`numpy.ndarray`): Endpoints (quaternions).
 
     Returns:
         Array of shape (..., 4) containing quaternions pointing from p to q
@@ -133,17 +135,17 @@ def riemann_log_map(p, q):
 
     Example::
 
-        rowan.geometry.riemann_log_map([1, 0, 0, 0], [-1, 0, 0, 0])
+        >>> rowan.geometry.riemann_log_map([1, 0, 0, 0], [-1, 0, 0, 0])
+        array([0., 0., 0., 0.])
     """
     return log(multiply(inverse(q), p))
 
 
 def intrinsic_distance(p, q):
-    R"""Compute the intrinsic distance between quaternions on the manifold of
-    quaternions.
+    r"""Compute the intrinsic distance between quaternions.
 
     The quaternion distance is determined as the length of the quaternion
-    joining the two quaternions (see :py:func:`riemann_log_map`). Rather
+    joining the two quaternions (see :func:`riemann_log_map`). Rather
     than computing this directly, however, as shown in [Huynh09]_ we can
     compute this distance using the following equivalence:
 
@@ -160,8 +162,8 @@ def intrinsic_distance(p, q):
         analysis. J Math Imaging Vis 35(2):155-164
 
     Args:
-        p ((..., 4) np.array): First array of quaternions.
-        q ((..., 4) np.array): Second array of quaternions.
+        p ((..., 4) :class:`numpy.ndarray`): First array of quaternions.
+        q ((..., 4) :class:`numpy.ndarray`): Second array of quaternions.
 
     Returns:
         Array of shape (...) containing the element-wise intrinsic distances
@@ -172,18 +174,17 @@ def intrinsic_distance(p, q):
         rowan.geometry.intrinsic_distance([1, 0, 0, 0], [-1, 0, 0, 0])
     """
     # TODO: Consider implementing the optimization
-#    if not np.allclose(2*np.arccos(np.linalg.norm(np.inner(p, q))),
-#            norm(riemann_log_map(p, q))):
-#        raise ValueError("Huh?")
-#    return 2*np.arccos(np.linalg.norm(np.inner(p, q))),
+    #    if not np.allclose(2*np.arccos(np.linalg.norm(np.inner(p, q))),
+    #            norm(riemann_log_map(p, q))):
+    #        raise ValueError("Huh?")
+    #    return 2*np.arccos(np.linalg.norm(np.inner(p, q))),
     return norm(riemann_log_map(p, q))
 
 
 def sym_intrinsic_distance(p, q):
-    R"""Compute the intrinsic distance between quaternions on the manifold of
-    quaternions.
+    r"""Compute the symmetrized intrinsic distance between quaternions.
 
-    This is a symmetrized version of :py:func:`intrinsic_distance` that
+    This is a symmetrized version of :func:`intrinsic_distance` that
     accounts for the double cover :math:`SU(2)\rightarrow SO(3)`, making it a
     more useful metric for rotation similarity.
 
@@ -191,8 +192,8 @@ def sym_intrinsic_distance(p, q):
     values in the range :math:`[0, \frac{\pi}{2}]`.
 
     Args:
-        p ((..., 4) np.array): First array of quaternions.
-        q ((..., 4) np.array): Second array of quaternions.
+        p ((..., 4) :class:`numpy.ndarray`): First array of quaternions.
+        q ((..., 4) :class:`numpy.ndarray`): Second array of quaternions.
 
     Returns:
         Array of shape (...) containing the element-wise symmetrized intrinsic
@@ -200,24 +201,26 @@ def sym_intrinsic_distance(p, q):
 
     Example::
 
-        rowan.geometry.sym_intrinsic_distance([1, 0, 0, 0], [-1, 0, 0, 0])
+        >>> rowan.geometry.sym_intrinsic_distance([1, 0, 0, 0], [-1, 0, 0, 0])
+        array(0.)
     """
     p = np.asarray(p)
     q = np.asarray(q)
-    return np.where(norm(p - q) < norm(p + q),
-                    norm(riemann_log_map(p, q)),
-                    norm(riemann_log_map(p, -q))
-                    )
+    return np.where(
+        norm(p - q) < norm(p + q),
+        norm(riemann_log_map(p, q)),
+        norm(riemann_log_map(p, -q)),
+    )
 
 
 def angle(p):
-    R"""Compute the angle of rotation of a quaternion.
+    r"""Compute the angle of rotation of a quaternion.
 
     Note that this is identical to
     ``2*intrinsic_distance(p, np.array([1, 0, 0, 0]))``.
 
     Args:
-        p ((..., 4) np.array): Array of quaternions.
+        p ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
         Array of shape (...) containing the element-wise angles traced out by
@@ -225,11 +228,10 @@ def angle(p):
 
     Example::
 
-        rowan.geometry.angle([1, 0, 0, 0])
+        >>> rowan.geometry.angle([1, 0, 0, 0])
+        0.0
     """
-
     # TODO: Make sure all the quaternions are rotations
     # where they need to be.
-
     _validate_unit(p)
-    return 2*norm(log(p))
+    return 2 * norm(log(p))
