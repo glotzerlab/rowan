@@ -1,11 +1,12 @@
 """Test the generation of random quaternions"""
-from __future__ import division, print_function, absolute_import
+from __future__ import absolute_import, division, print_function
 
 import unittest
+
 import numpy as np
 
-from rowan import random as random
 from rowan import norm
+from rowan import random as random
 
 
 class TestRandom(unittest.TestCase):

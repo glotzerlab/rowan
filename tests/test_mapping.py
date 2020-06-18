@@ -1,10 +1,11 @@
 """Test algorithms for point-cloud mapping."""
-from __future__ import division, print_function, absolute_import
+from __future__ import absolute_import, division, print_function
 
 import unittest
+
 import numpy as np
 
-from rowan import mapping, random, rotate, from_matrix, from_axis_angle
+from rowan import from_axis_angle, from_matrix, mapping, random, rotate
 
 zero = np.array([0, 0, 0, 0])
 one = np.array([1, 0, 0, 0])

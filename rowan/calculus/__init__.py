@@ -7,7 +7,7 @@ integral of a quaternion.
 
 import numpy as np
 
-from ..functions import multiply, _promote_vec, _validate_unit, exp
+from ..functions import _promote_vec, _validate_unit, exp, multiply
 
 __all__ = ["derivative", "integrate"]
 

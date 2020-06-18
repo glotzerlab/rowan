@@ -1,12 +1,12 @@
 """Test functions to interpolate between quaternion"""
-from __future__ import division, print_function, absolute_import
+from __future__ import absolute_import, division, print_function
 
 import unittest
 
 import numpy as np
 
-from rowan import interpolate
 import rowan
+from rowan import interpolate
 
 zero = np.array([0, 0, 0, 0])
 one = np.array([1, 0, 0, 0])

@@ -8,7 +8,7 @@ of quaternion interpolation for two quaternions.
 
 import numpy as np
 
-from ..functions import power, multiply, conjugate, _validate_unit, log
+from ..functions import _validate_unit, conjugate, log, multiply, power
 
 __all__ = ["slerp", "slerp_prime", "squad"]
 
