@@ -2,19 +2,25 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/en/1.0.0/>`_
 This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html>`_.
 
 
-v1.3.0 - xxxx-xx-xx
+v1.3.0 - 2020-06-18
 -------------------
+
+Added
++++++
+
+* Extensive new validation using numerous flake8 plugins (including black for code style and pydocstyle for docstrings, among others).
+
+Changed
++++++++
+
+* Drop support for all Python versions earlier than 3.6 and all NumPy versions before 1.15.
 
 Fixed
 +++++
 
 * Docstring of geometry.angle was missing a factor of 2 in the comparison to intrinsic_distance.
 * Docstrings of functions using support1d decorator were losing their docstring (fixed with functools.wraps).
-
-Changed
-+++++++
-
-* Drop Python 2 support.
+* Docstrings of return types of all functions.
 
 v1.2.2 - 2019-09-11
 -------------------
