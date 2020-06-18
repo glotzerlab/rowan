@@ -727,8 +727,8 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
             Whether to use extrinsic or intrinsic.
 
     Returns:
-        Array of shape (..., 3) containing Euler angles :math:`(\alpha, \beta,
-        \gamma)` as the last dimension (in radians).
+        Array of shape (..., 3) containing Euler angles :math:`(\alpha, \beta, \gamma)`
+        as the last dimension (in radians).
 
     Example::
 
