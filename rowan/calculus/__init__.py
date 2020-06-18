@@ -34,7 +34,8 @@ def derivative(q, v):
 
     Example::
 
-        q_prime = rowan.calculus.derivative([1, 0, 0, 0], [1, 0, 0])
+        >>> rowan.calculus.derivative([1, 0, 0, 0], [1, 0, 0])
+        array([0. , 0.5, 0. , 0. ])
     """
     q = np.asarray(q)
     v = np.asarray(v)
@@ -74,7 +75,8 @@ def integrate(q, v, dt):
 
     Example::
 
-        v_next = rowan.calculus.integrate([1, 0, 0, 0], [0, 0, 1e-2], 1)
+        >>> rowan.calculus.integrate([1, 0, 0, 0], [0, 0, 1e-2], 1)
+        array([0.9999875 , 0.        , 0.        , 0.00499998])
     """
     q = np.asarray(q)
     v = np.asarray(v)

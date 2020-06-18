@@ -81,22 +81,22 @@ def kabsch(X, Y, require_rotation=True):
 
     Example::
 
-        import numpy as np
+        >>> import numpy as np
 
-        # Create some random points, then make a random transformation of
-        # these points
-        points = np.random.rand(10, 3)
-        rotation = rowan.random.rand(1)
-        translation = np.random.rand(1, 3)
-        transformed_points = rowan.rotate(rotation, points) + translation
+        >>> # Create some random points, then make a random transformation of
+        >>> # these points
+        >>> points = np.random.rand(10, 3)
+        >>> rotation = rowan.random.rand(1)
+        >>> translation = np.random.rand(1, 3)
+        >>> transformed_points = rowan.rotate(rotation, points) + translation
 
-        # Recover the rotation and check
-        R, t = rowan.mapping.kabsch(points, transformed_points)
-        q = rowan.from_matrix(R)
+        >>> # Recover the rotation and check
+        >>> R, t = rowan.mapping.kabsch(points, transformed_points)
+        >>> q = rowan.from_matrix(R)
 
-        assert np.logical_or(
-            np.allclose(rotation, q), np.allclose(rotation, -q))
-        assert np.allclose(translation, t)
+        >>> assert np.logical_or(
+        ...     np.allclose(rotation, q), np.allclose(rotation, -q))
+        >>> assert np.allclose(translation, t)
     """
     X = np.atleast_2d(X)
     Y = np.atleast_2d(Y)
@@ -147,21 +147,21 @@ def horn(X, Y):
 
     Example::
 
-        import numpy as np
+        >>> import numpy as np
 
-        # Create some random points, then make a random transformation of
-        # these points
-        points = np.random.rand(10, 3)
-        rotation = rowan.random.rand(1)
-        translation = np.random.rand(1, 3)
-        transformed_points = rowan.rotate(rotation, points) + translation
+        >>> # Create some random points, then make a random transformation of
+        >>> # these points
+        >>> points = np.random.rand(10, 3)
+        >>> rotation = rowan.random.rand(1)
+        >>> translation = np.random.rand(1, 3)
+        >>> transformed_points = rowan.rotate(rotation, points) + translation
 
-        # Recover the rotation and check
-        q, t = rowan.mapping.horn(points, transformed_points)
+        >>> # Recover the rotation and check
+        >>> q, t = rowan.mapping.horn(points, transformed_points)
 
-        assert np.logical_or(
-            np.allclose(rotation, q), np.allclose(rotation, -q))
-        assert np.allclose(translation, t)
+        >>> assert np.logical_or(
+        ...     np.allclose(rotation, q), np.allclose(rotation, -q))
+        >>> assert np.allclose(translation, t)
     """
     X = np.atleast_2d(X)
     Y = np.atleast_2d(Y)
@@ -237,21 +237,21 @@ def davenport(X, Y):
 
     Example::
 
-        import numpy as np
+        >>> import numpy as np
 
-        # Create some random points, then make a random transformation of
-        # these points
-        points = np.random.rand(10, 3)
-        rotation = rowan.random.rand(1)
-        translation = np.random.rand(1, 3)
-        transformed_points = rowan.rotate(rotation, points) + translation
+        >>> # Create some random points, then make a random transformation of
+        >>> # these points
+        >>> points = np.random.rand(10, 3)
+        >>> rotation = rowan.random.rand(1)
+        >>> translation = np.random.rand(1, 3)
+        >>> transformed_points = rowan.rotate(rotation, points) + translation
 
-        # Recover the rotation and check
-        q, t = rowan.mapping.davenport(points, transformed_points)
+        >>> # Recover the rotation and check
+        >>> q, t = rowan.mapping.davenport(points, transformed_points)
 
-        assert np.logical_or(
-            np.allclose(rotation, q), np.allclose(rotation, -q))
-        assert np.allclose(translation, t)
+        >>> assert np.logical_or(
+        ...     np.allclose(rotation, q), np.allclose(rotation, -q))
+        >>> assert np.allclose(translation, t)
     """
     X = np.atleast_2d(X)
     Y = np.atleast_2d(Y)
@@ -311,22 +311,22 @@ def procrustes(X, Y, method="best", equivalent_quaternions=None):
 
     Example::
 
-        import numpy as np
+        >>> import numpy as np
 
-        # Create some random points, then make a random transformation of
-        # these points
-        points = np.random.rand(10, 3)
-        rotation = rowan.random.rand(1)
-        translation = np.random.rand(1, 3)
-        transformed_points = rowan.rotate(rotation, points) + translation
+        >>> # Create some random points, then make a random transformation of
+        >>> # these points
+        >>> points = np.random.rand(10, 3)
+        >>> rotation = rowan.random.rand(1)
+        >>> translation = np.random.rand(1, 3)
+        >>> transformed_points = rowan.rotate(rotation, points) + translation
 
-        # Recover the rotation and check
-        q, t = rowan.mapping.procrustes(
-            points, transformed_points, method='horn')
+        >>> # Recover the rotation and check
+        >>> q, t = rowan.mapping.procrustes(
+        ...     points, transformed_points, method='horn')
 
-        assert np.logical_or(
-            np.allclose(rotation, q), np.allclose(rotation, -q))
-        assert np.allclose(translation, t)
+        >>> assert np.logical_or(
+        ...     np.allclose(rotation, q), np.allclose(rotation, -q))
+        >>> assert np.allclose(translation, t)
     """
     import sys
 
@@ -402,29 +402,29 @@ def icp(
 
     Example::
 
-        import numpy as np
+        >>> import numpy as np
 
-        # Create some random points
-        points = np.random.rand(10, 3)
+        >>> # Create some random points
+        >>> points = np.random.rand(10, 3)
 
-        # Only works for small rotations
-        rotation = rowan.from_axis_angle((1, 0, 0), 0.01)
+        >>> # Only works for small rotations
+        >>> rotation = rowan.from_axis_angle((1, 0, 0), 0.01)
 
-        # Apply a random translation and permutation
-        translation = np.random.rand(1, 3)
-        permutation = np.random.permutation(10)
-        transformed_points = rowan.rotate(
-            rotation, points[permutation]) + translation
+        >>> # Apply a random translation and permutation
+        >>> translation = np.random.rand(1, 3)
+        >>> permutation = np.random.permutation(10)
+        >>> transformed_points = rowan.rotate(
+        ...     rotation, points[permutation]) + translation
 
-        # Recover the rotation and check
-        R, t, indices = rowan.mapping.icp(points, transformed_points,
-                                          return_indices=True)
-        q = rowan.from_matrix(R)
+        >>> # Recover the rotation and check
+        >>> R, t, indices = rowan.mapping.icp(points, transformed_points,
+        ...                                   return_indices=True)
+        >>> q = rowan.from_matrix(R)
 
-        assert np.logical_or(
-            np.allclose(rotation, q), np.allclose(rotation, -q))
-        assert np.allclose(translation, t)
-        assert np.array_equal(permutation, indices)
+        >>> assert np.logical_or(
+        ...     np.allclose(rotation, q), np.allclose(rotation, -q))
+        >>> assert np.allclose(translation, t)
+        >>> assert np.array_equal(permutation, indices)
     """
     import sys
 

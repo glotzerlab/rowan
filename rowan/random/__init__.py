@@ -36,7 +36,7 @@ def rand(*args):
 
     Example::
 
-        q_rand = rowan.random.rand(3, 3, 2)
+        >>> rowan.random.rand(3, 3, 2) # doctest: +SKIP
     """
     if len(args) == 0:
         return random_sample()
@@ -65,7 +65,7 @@ def random_sample(size=None):
 
     Example::
 
-        q_rand = rowan.random.random_sample((3, 3, 2))
+        >>> rowan.random.random_sample((3, 3, 2)) # doctest: +SKIP
     """
     if size is None:
         size = (3,)
