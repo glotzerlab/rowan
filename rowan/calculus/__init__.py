@@ -30,7 +30,7 @@ def derivative(q, v):
         v ((..., 3) :class:`numpy.ndarray`): Array of angular velocities.
 
     Returns:
-        Array of shape (..., 4) containing element-wise derivatives of q.
+        (..., 4) :class:`numpy.ndarray`: Derivatives of ``q``.
 
     Example::
 
@@ -71,7 +71,7 @@ def integrate(q, v, dt):
         dt ((...) :class:`numpy.ndarray`): Array of timesteps.
 
     Returns:
-        Array of shape (..., 4) containing element-wise integrals of q.
+        (..., 4) :class:`numpy.ndarray`: Integrals of ``q``.
 
     Example::
 

@@ -9,7 +9,7 @@ version = '1.2.2'
 desc = 'Perform quaternion operations using NumPy arrays'
 try:
     readme_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'README.md')
+                               'README.rst')
     with open(readme_file) as f:
         readme = f.read()
 except ImportError:
@@ -22,7 +22,7 @@ setup(name='rowan',
       version=version,
       description=desc,
       long_description=readme,
-      long_description_content_type='text/markdown',
+      long_description_content_type='text/x-rst',
       url='https://github.com/glotzerlab/rowan',
       author='Vyas Ramasubramani',
       author_email='vramasub@umich.edu',

@@ -14,32 +14,33 @@ Design Philosophy and Code Guidelines
 =====================================
 
 The goal of **rowan** is to provide a flexible, easy-to-use, and scalable approach to dealing with rotation representations.
-To ensure maximum flexibility, **rowan** operates entirely on NumPy arrays, which serve as the *de facto* standard for efficient multi-dimensional arrays in Python.
-To be available for a wide variety of applications, **rowan** works for arbitrarily shaped NumPy arrays, mimicking `NumPy broadcasting <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_ to the maximum extent possible.
-**rowan** is meant to be as lightweight and easy to install as possible.
-Although it is designed to provide good performance, it is written in **pure Python** and as such may not be the correct choice in cases where the performance of quaternion operations is a critical bottleneck.
+To best serve these goals, **rowan** operates entirely on NumPy arrays (the *de facto* standard for efficient multi-dimensional arrays in Python) and supports `NumPy broadcasting <https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html>`_ wherever possible.
+Use of broadcasting ensures that **rowan** can take full advantage of NumPy performance, and in general all operations are very fast (benchmarks are included in the code base).
+Furthermore, to remain lightweight and easy to install, **rowan** is written in **pure Python** and has no hard dependencies aside from NumPy.
 
-All code contributed to **rowan** must adhere to the following guidelines:
+Code contributions should keep these ideals in mind and adhere to the following guidelines:
 
   * Use the OneFlow_ model of development:
     - Both new features and bug fixes should be developed in branches based on ``master``.
     - Hotfixes (critical bugs that need to be released *fast*) should be developed in a branch based on the latest tagged release.
   * All code must be compatible with all supported versions of Python (listed in the package ``setup.py`` file).
   * Avoid external dependencies where possible, and avoid introducing **any** hard dependencies. Soft dependencies are allowed for specific functionality, but such dependencies cannot impede the installation of **rowan** or the use of any other features.
-  * All code should adhere to the source code conventions discussed below.
-  * Follow the rules for documentation discussed below.
-  * Create `unit tests <https://en.wikipedia.org/wiki/Unit_testing>`_  and `integration tests <https://en.wikipedia.org/wiki/Integration_testing>`_ that cover the common cases and the corner cases of the code (more information below).
+  * All code should adhere to the source code and documentation conventions discussed below.
+  * Create `unit tests <https://en.wikipedia.org/wiki/Unit_testing>`_  and `integration tests <https://en.wikipedia.org/wiki/Integration_testing>`_ as part of development.
   * Preserve backwards-compatibility whenever possible. Make clear if something must change, and notify package maintainers that merging such changes will require a major release.
   * Enable broadcasting if at all possible. Functions for which broadcasting is not available must be documented as such.
-  * For consistency, NumPy should **always** be imported as ``np`` in code: ``import numpy as np``.
+
+To provide a reasonable balance between a high level of backwards compatibility and a reasonable maintenance burden, **rowan** has adopted `NEP 29`_ to limit the Python and NumPy versions that will be supported.
+
 
 .. _github: https://github.com/glotzerlab/rowan
 .. _OneFlow: https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow
+.. _NEP 29: https://numpy.org/neps/nep-0029-deprecation_policy.html
 
 .. tip::
 
     During continuous integration, the code is checked automatically with `Flake8`_.
-    Run the following commands to set up a pre-commit hook that will ensure your code is compliant before committing:
+    To ensure your code is compliant before committing, you can set up a pre-commit hook using `pre-commit`_ (recommended) or use flake8's built-in hooks installation:
 
     .. code-block:: bash
 
@@ -48,6 +49,7 @@ All code contributed to **rowan** must adhere to the following guidelines:
 
 
 .. _Flake8: http://flake8.pycqa.org/en/latest/
+.. _pre-commit: https://pre-commit.com/
 
 .. note::
 
@@ -57,57 +59,34 @@ All code contributed to **rowan** must adhere to the following guidelines:
 Source Code Conventions
 -----------------------
 
-All code in rowan should follow `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ guidelines, which are the *de facto* standard for Python code.
-In addition, follow the `Google Python Style Guide <https://google.github.io/styleguide/pyguide.html>`_, which is largely a superset of PEP 8.
-Note that Google has amended their standards to match PEP 8's 4 spaces guideline, so write code accordingly.
 
-All code should follow the principles in `PEP 20 <https://www.python.org/dev/peps/pep-0020/>`_.
+The **rowan** package adheres to a relatively strict set of style guidelines.
+All code in **rowan** should be formatted using `black`_; a notable consequence of this is that the recommended max line length is 88, not the more common 80.
+Imports should be formatted using `isort`_.
+For guidance on the style, see `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ and the `Google Python Style Guide <https://google.github.io/styleguide/pyguide.html>`_, but any ambiguities should be resolved automatically by running black.
+All code should also follow the principles in `PEP 20 <https://www.python.org/dev/peps/pep-0020/>`_.
 In particular, always prefer simple, explicit code where possible, avoiding unnecessary convolution or complicated code that could be written more simply.
 Avoid writing code in a manner that will be difficult for others to understand.
 
+.. tip::
+
+    Developers should format their code using black and isort locally using the commands:
+
+    .. code-block:: bash
+
+        black --exclude "coxeter/[polytri|bentley_ottman]" coxeter/ tests/
+        isort -rc coxeter/ tests/
+
+.. _black: https://black.readthedocs.io/
+.. _isort: https://timothycrosley.github.io/isort/
 
 Documentation
 -------------
 
-API documentation should be written as part of the docstrings of the package.
-All docstrings should be written in the Google style.
-
-Python example:
-
-.. code-block:: python
-
-    # This is the correct style
-    def multiply(x, y):
-        """Multiply two numbers
-
-        Args:
-            x (float): The first number
-            y (float): The second number
-
-        Returns:
-            The product
-        """
-
-    # This is the incorrect style
-    def multiply(x, y):
-        """Multiply two numbers
-
-        :param x: The first number
-        :type x: float
-        :param y: The second number
-        :type y: float
-        :returns: The product
-        :rtype: float
-        """
-
-Documentation must be included for all functions in all files.
+API documentation should be written as part of the docstrings of the package in the `Google style <https://google.github.io/styleguide/pyguide.html#383-functions-and-methods>`__.
+There is one notable exception to the guide: class properties should be documented in the getters functions, not as class attributes, to allow for more useful help messages and inheritance of docstrings.
+Docstrings may be validated using `pydocstyle <http://www.pydocstyle.org/>`__ (or using the flake8-docstrings plugin as documented above).
 The `official documentation <https://rowan.readthedocs.io/>`_ is generated from the docstrings using `Sphinx <http://www.sphinx-doc.org/en/stable/index.html>`_.
-
-In addition to API documentation, inline comments are **highly encouraged**.
-Code should be written as transparently as possible, so the primary goal of documentation should be explaining the algorithms or mathematical concepts underlying the code.
-Avoid comments that simply restate the nature of lines of code.
-For example, the comment "compute the spectral decomposition of A" is uninformative, since the code itself should make this obvious, *e.g*, ``np.linalg.eigh``.
-On the other hand, the comment "the eigenvector corresponding to the largest eigenvalue of the A matrix is the quaternion" is instructive.
 
 
 Unit Tests

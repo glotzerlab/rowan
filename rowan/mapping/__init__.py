@@ -76,8 +76,8 @@ def kabsch(X, Y, require_rotation=True):
         require_rotation (bool): If false, the returned quaternion.
 
     Returns:
-        A tuple (R, t) where R is the (m x m) rotation matrix to rotate the
-        points and t is the translation.
+        tuple[(m, m) :class:`numpy.ndarray`, (m, ) :class:`numpy.ndarray`]:
+            The rotation matrix and translation vector to map ``X`` onto ``Y``.
 
     Example::
 
@@ -142,8 +142,8 @@ def horn(X, Y):
         Y ((N, 3) :class:`numpy.ndarray`): Second set of N points.
 
     Returns:
-        A tuple (q, t) where q is the quaternion to rotate the points and t
-        is the translation.
+        tuple[(4, ) :class:`numpy.ndarray`, (m, ) :class:`numpy.ndarray`]:
+            The quaternion and translation vector to map ``X`` onto ``Y``.
 
     Example::
 
@@ -232,8 +232,8 @@ def davenport(X, Y):
         Y ((N, 3) :class:`numpy.ndarray`): Second set of N points.
 
     Returns:
-        A tuple (q, t) where q is the quaternion to rotate the points and t
-        is the translation.
+        tuple[(4, ) :class:`numpy.ndarray`, (m, ) :class:`numpy.ndarray`]:
+            The quaternion and translation vector to map ``X`` onto ``Y``.
 
     Example::
 
@@ -306,8 +306,8 @@ def procrustes(X, Y, method="best", equivalent_quaternions=None):
             be tested exhaustively to find the smallest symmetry-equivalent rotation.
 
     Returns:
-        A tuple (q, t) where q is the quaternion to rotate the points and t
-        is the translation.
+        tuple[(4, ) :class:`numpy.ndarray`, (m, ) :class:`numpy.ndarray`]:
+            The quaternion and translation vector to map ``X`` onto ``Y``.
 
     Example::
 
@@ -367,7 +367,7 @@ def procrustes(X, Y, method="best", equivalent_quaternions=None):
             return q, t
 
 
-def icp(
+def icp(  # noqa: C901
     X,
     Y,
     method="best",
@@ -396,9 +396,10 @@ def icp(
             Whether to return indices.
 
     Returns:
-        A tuple (R, t[, indices]) where R is the matrix to rotate the points, t
-        is the translation, and indices are the indices of X that map to points
-        in Y.
+        tuple[(4, ) :class:`numpy.ndarray`, (m, ) :class:`numpy.ndarray`[, (N, ) :class:`numpy.ndarray`]]:
+            The quaternion and translation vector to map ``X`` onto ``Y``. The
+            (optional) last return value is an array of indices mapping points in ``X``
+            to points in ``Y``.
 
     Example::
 
@@ -425,7 +426,7 @@ def icp(
         ...     np.allclose(rotation, q), np.allclose(rotation, -q))
         >>> assert np.allclose(translation, t)
         >>> assert np.array_equal(permutation, indices)
-    """
+    """  # noqa: E501
     import sys
 
     if method != "best":

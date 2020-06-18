@@ -41,8 +41,7 @@ def distance(p, q):
         q ((..., 4) :class:`numpy.ndarray`): Second array of quaternions.
 
     Returns:
-        Array of shape (...) containing the element-wise distances between the
-        two sets of quaternions.
+        (...) :class:`numpy.ndarray`: Distances between ``p`` and ``q``.
 
     Example::
 
@@ -68,8 +67,7 @@ def sym_distance(p, q):
     values in the range :math:`[0, \sqrt{2}]`.
 
     Returns:
-        Array of shape (...) containing the element-wise symmetrized distances
-        between the two sets of quaternions.
+        (...) :class:`numpy.ndarray`: Symmetrized distances between ``p`` and ``q``.
 
     Example::
 
@@ -104,9 +102,9 @@ def riemann_exp_map(p, v):
         v ((..., 4) :class:`numpy.ndarray`): Tangent vectors to traverse.
 
     Returns:
-        Array of shape (..., 4) containing the endpoints of the geodesic
-        starting from :math:`p` and traveling a distance :math:`\lvert\lvert
-        v\rvert\rvert` in the direction of :math:`v`.
+        (..., 4) :class:`numpy.ndarray`:
+            The endpoints of the geodesic starting from :math:`p` and traveling a
+            distance :math:`\lvert\lvert v\rvert\rvert` in the direction of :math:`v`.
 
     Example::
 
@@ -129,9 +127,9 @@ def riemann_log_map(p, q):
         q ((..., 4) :class:`numpy.ndarray`): Endpoints (quaternions).
 
     Returns:
-        Array of shape (..., 4) containing quaternions pointing from p to q
-        with magnitudes equal to the length of the geodesics joining these
-        quaternions.
+        (..., 4) :class:`numpy.ndarray`:
+            The quaternions pointing from :math:`p` to :math:`q` with magnitudes equal
+            to the length of the geodesics joining these quaternions.
 
     Example::
 
@@ -166,8 +164,7 @@ def intrinsic_distance(p, q):
         q ((..., 4) :class:`numpy.ndarray`): Second array of quaternions.
 
     Returns:
-        Array of shape (...) containing the element-wise intrinsic distances
-        between the two sets of quaternions.
+        (...) :class:`numpy.ndarray`: Intrinsic distances between ``p`` and ``q``.
 
     Example::
 
@@ -196,8 +193,8 @@ def sym_intrinsic_distance(p, q):
         q ((..., 4) :class:`numpy.ndarray`): Second array of quaternions.
 
     Returns:
-        Array of shape (...) containing the element-wise symmetrized intrinsic
-        distances between the two sets of quaternions.
+        (...) :class:`numpy.ndarray`:
+            Symmetrized intrinsic distances between ``p`` and ``q``.
 
     Example::
 
@@ -223,8 +220,7 @@ def angle(p):
         p ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        Array of shape (...) containing the element-wise angles traced out by
-        these rotations.
+        (...) :class:`numpy.ndarray`: Angles traced out by the rotations ``p``.
 
     Example::
 
