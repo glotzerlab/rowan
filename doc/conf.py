@@ -72,7 +72,7 @@ author = 'Vyas Ramasubramani'
 #
 # The full version, including alpha/beta/rc tags.
 
-release = '1.2.2'
+release = '1.3.0'
 
 # The short X.Y version.
 version = release[:3]
