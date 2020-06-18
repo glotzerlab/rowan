@@ -1,9 +1,10 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-r"""
-The rowan package provides a simple interface to slerp, the standard method
-of quaternion interpolation for two quaternions.
+"""Interpolate between pairs of quaternions.
+
+The rowan package provides a simple interface to slerp, the standard method of
+quaternion interpolation for two quaternions.
 """
 
 import numpy as np
@@ -18,14 +19,18 @@ def slerp(q0, q1, t, ensure_shortest=True):
 
     The `slerp formula <https://en.wikipedia.org/wiki/Slerp#Quaternion_Slerp>`_
     can be easily expressed in terms of the quaternion exponential (see
-    :py:func:`rowan.exp`).
+    :func:`rowan.exp`).
 
     Args:
-        q0 ((..., 4) np.array): First array of quaternions.
-        q1 ((..., 4) np.array): Second array of quaternions.
-        t ((...) np.array): Interpolation parameter :math:`\in [0, 1]`
-        ensure_shortest (bool): Flip quaternions to ensure we traverse the
-            geodesic in the shorter (:math:`<180^{\circ}`) direction.
+        q0 ((..., 4) :class:`numpy.ndarray`):
+            First array of quaternions.
+        q1 ((..., 4) :class:`numpy.ndarray`):
+            Second array of quaternions.
+        t ((...) :class:`numpy.ndarray`):
+            Interpolation parameter :math:`\in [0, 1]`
+        ensure_shortest (bool):
+            Flip quaternions to ensure we traverse the geodesic in the shorter
+            (:math:`<180^{\circ}`) direction.
 
     .. note::
 
@@ -63,11 +68,15 @@ def slerp_prime(q0, q1, t, ensure_shortest=True):
     r"""Compute the derivative of slerp.
 
     Args:
-        q0 ((..., 4) np.array): First set of quaternions.
-        q1 ((..., 4) np.array): Second set of quaternions.
-        t ((...) np.array): Interpolation parameter :math:`\in [0, 1]`
-        ensure_shortest (bool): Flip quaternions to ensure we traverse the
-            geodesic in the shorter (:math:`<180^{\circ}`) direction
+        q0 ((..., 4) :class:`numpy.ndarray`):
+            First set of quaternions.
+        q1 ((..., 4) :class:`numpy.ndarray`):
+            Second set of quaternions.
+        t ((...) :class:`numpy.ndarray`):
+            Interpolation parameter :math:`\in [0, 1]`
+        ensure_shortest (bool):
+            Flip quaternions to ensure we traverse the geodesic in the shorter
+            (:math:`<180^{\circ}`) direction
 
     Returns:
         An array of shape (..., 4) containing the element-wise derivatives of
@@ -115,11 +124,11 @@ def squad(p, a, b, q, t):
         SIGGRAPH Comput. Graph., 19(3):245-254, July 1985.
 
     Args:
-        p ((..., 4) np.array): First endpoint of interpolation.
-        a ((..., 4) np.array): First control point of interpolation.
-        b ((..., 4) np.array): Second control point of interpolation.
-        q ((..., 4) np.array): Second endpoint of interpolation.
-        t ((...) np.array): Interpolation parameter :math:`t \in [0, 1]`.
+        p ((..., 4) :class:`numpy.ndarray`): First endpoint of interpolation.
+        a ((..., 4) :class:`numpy.ndarray`): First control point of interpolation.
+        b ((..., 4) :class:`numpy.ndarray`): Second control point of interpolation.
+        q ((..., 4) :class:`numpy.ndarray`): Second endpoint of interpolation.
+        t ((...) :class:`numpy.ndarray`): Interpolation parameter :math:`t \in [0, 1]`.
 
     Returns:
         An array containing the element-wise interpolations between p and q.

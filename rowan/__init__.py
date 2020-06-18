@@ -1,14 +1,15 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-r"""
-The core :py:mod:`rowan` package contains functions for operating on
+"""The rowan package for working with quaternions.
+
+The core :mod:`rowan` package contains functions for operating on
 quaternions. The core package is focused on robust implementations of key
 functions like multiplication, exponentiation, norms, and others. Simple
 functionality such as addition is inherited directly from NumPy due to
 the representation of quaternions as NumPy arrays. Many core NumPy functions
 implemented for normal arrays are reimplemented to work on quaternions (
-such as :py:func:`allclose` and :py:func:`isfinite`). Additionally, `NumPy
+such as :func:`allclose` and :func:`isfinite`). Additionally, `NumPy
 broadcasting
 <https://docs.scipy.org/doc/numpy-1.14.0/user/basics.broadcasting.html#>`_
 is enabled throughout rowan unless otherwise specified. This means that

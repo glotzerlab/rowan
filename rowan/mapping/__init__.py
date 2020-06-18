@@ -1,7 +1,8 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-r"""
+r"""Solve Procrustes-type problems and perform basic point-cloud registration.
+
 The general space of problems that this subpackage addresses is a small subset
 of the broader space of `point set registration
 <https://en.wikipedia.org/wiki/Point_set_registration>`_, which attempts to
@@ -45,9 +46,9 @@ Procrustes problem. Additionally this package contains the `Davenport q method
 quaternions. The most popular algorithms for Wahba's problem are variants of
 the q method that are faster at the cost of some stability; we omit these here.
 
-In addition, :py:mod:`rowan.mapping` also includes some functionality for
+In addition, :mod:`rowan.mapping` also includes some functionality for
 more general point set registration. If a point cloud has a set of known
-symmetries, these can be tested explicitly by :py:mod:`rowan.mapping` to
+symmetries, these can be tested explicitly by :mod:`rowan.mapping` to
 find the smallest rotation required for optimal mapping. If no such
 correspondence is known at all, then the iterative closest point algorithm can
 be used to approximate the mapping.
@@ -62,8 +63,7 @@ __all__ = ["kabsch", "davenport", "procrustes", "icp"]
 
 
 def kabsch(X, Y, require_rotation=True):
-    r"""Find the optimal rotation and translation to map between two sets of
-    points.
+    r"""Find the optimal rotation and translation to map between two sets of points.
 
     This function implements the
     `Kabsch algorithm <https://en.wikipedia.org/wiki/Kabsch_algorithm>`_, which
@@ -71,8 +71,8 @@ def kabsch(X, Y, require_rotation=True):
     is that the SVD works in dimensions > 3.
 
     Args:
-        X ((N, m) np.array): First set of N points.
-        Y ((N, m) np.array): Second set of N points.
+        X ((N, m) :class:`numpy.ndarray`): First set of N points.
+        Y ((N, m) :class:`numpy.ndarray`): Second set of N points.
         require_rotation (bool): If false, the returned quaternion.
 
     Returns:
@@ -130,8 +130,7 @@ def kabsch(X, Y, require_rotation=True):
 
 
 def horn(X, Y):
-    r"""Find the optimal rotation and translation to map between two sets of
-    points.
+    r"""Find the optimal rotation and translation to map between two sets of points.
 
     This function implements the quaternion-based method of `Horn
     <https://www.osapublishing.org/josaa/abstract.cfm?id=2711>`_. For a simpler
@@ -139,8 +138,8 @@ def horn(X, Y):
     <https://cnx.org/contents/HV-RsdwL@23/Molecular-Distance-Measures>`_.
 
     Args:
-        X ((N, 3) np.array): First set of N points.
-        Y ((N, 3) np.array): Second set of N points.
+        X ((N, 3) :class:`numpy.ndarray`): First set of N points.
+        Y ((N, 3) :class:`numpy.ndarray`): Second set of N points.
 
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
@@ -216,8 +215,7 @@ def horn(X, Y):
 
 
 def davenport(X, Y):
-    r"""Find the optimal rotation and translation to map between two sets of
-    points.
+    r"""Find the optimal rotation and translation to map between two sets of points.
 
     This function implements the `Davenport q-method
     <https://ntrs.nasa.gov/search.jsp?R=19670009376>`_, the most robust method
@@ -230,8 +228,8 @@ def davenport(X, Y):
     spectral decomposition.
 
     Args:
-        X ((N, 3) np.array): First set of N points.
-        Y ((N, 3) np.array): Second set of N points.
+        X ((N, 3) :class:`numpy.ndarray`): First set of N points.
+        Y ((N, 3) :class:`numpy.ndarray`): Second set of N points.
 
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
@@ -294,16 +292,18 @@ def procrustes(X, Y, method="best", equivalent_quaternions=None):
     r"""Solve the orthogonal Procrustes problem with algorithmic options.
 
     Args:
-        X ((N, m) np.array): First set of N points.
-        Y ((N, m) np.array): Second set of N points.
-        method (str): A method to use. Options are 'kabsch', 'davenport'
-            and 'horn'. The default is to select the best option ('best').
-        equivalent_quaternions (array-like): If the precise correspondence is
-            not known, but the points are known to be part of a body with
-            specific symmetries, the set of quaternions generating
-            symmetry-equivalent configurations can be provided. These
-            quaternions will be tested exhaustively to find the smallest
-            symmetry-equivalent rotation.
+        X ((N, m) :class:`numpy.ndarray`):
+            First set of N points.
+        Y ((N, m) :class:`numpy.ndarray`):
+            Second set of N points.
+        method (str):
+            A method to use. Options are 'kabsch', 'davenport' and 'horn'. The default
+            is to select the best option ('best').
+        equivalent_quaternions (array-like):
+            If the precise correspondence is not known, but the points are known to be
+            part of a body with specific symmetries, the set of quaternions generating
+            symmetry-equivalent configurations can be provided. These quaternions will
+            be tested exhaustively to find the smallest symmetry-equivalent rotation.
 
     Returns:
         A tuple (q, t) where q is the quaternion to rotate the points and t
@@ -330,11 +330,9 @@ def procrustes(X, Y, method="best", equivalent_quaternions=None):
     """
     import sys
 
-    thismodule = sys.modules[__name__]
-
     if method != "best":
         try:
-            method = getattr(thismodule, method)
+            method = getattr(sys.modules[__name__], method)
         except KeyError:
             raise ValueError("The input method is not known")
     else:
@@ -345,9 +343,9 @@ def procrustes(X, Y, method="best", equivalent_quaternions=None):
         elif len(X.shape) != 2:
             raise ValueError("Input arrays must be 2D arrays")
         if X.shape[1] != 3:
-            method = getattr(thismodule, "kabsch")
+            method = kabsch
         else:
-            method = getattr(thismodule, "davenport")
+            method = davenport
     if equivalent_quaternions is not None:
         equivalent_quaternions = np.atleast_2d(equivalent_quaternions)
         qs = []
@@ -381,15 +379,21 @@ def icp(
     r"""Find best mapping using the Iterative Closest Point algorithm.
 
     Args:
-        X ((N, m) np.array): First set of N points.
-        Y ((N, m) np.array): Second set of N points.
-        method (str): A method to use for each alignment. Options are 'kabsch',
-            'davenport' and 'horn'. The default is to select the best option
-            ('best').
-        unique_match (bool): Whether to require nearest neighbors to be unique.
-        max_iterations (int): Number of iterations to attempt.
-        tolerance (float): Indicates convergence.
-        return_indices(bool): Whether to return indices.
+        X ((N, m) :class:`numpy.ndarray`):
+            First set of N points.
+        Y ((N, m) :class:`numpy.ndarray`):
+            Second set of N points.
+        method (str):
+            A method to use for each alignment. Options are 'kabsch', 'davenport' and
+            'horn'. The default is to select the best option ('best').
+        unique_match (bool):
+            Whether to require nearest neighbors to be unique.
+        max_iterations (int):
+            Number of iterations to attempt.
+        tolerance (float):
+            Indicates convergence.
+        return_indices(bool):
+            Whether to return indices.
 
     Returns:
         A tuple (R, t[, indices]) where R is the matrix to rotate the points, t
@@ -422,14 +426,11 @@ def icp(
         assert np.allclose(translation, t)
         assert np.array_equal(permutation, indices)
     """
-
     import sys
-
-    thismodule = sys.modules[__name__]
 
     if method != "best":
         try:
-            method = getattr(thismodule, method)
+            method = getattr(sys.modules[__name__], method)
         except KeyError:
             raise ValueError("The input method is not known")
     else:
@@ -440,9 +441,9 @@ def icp(
         elif len(X.shape) != 2:
             raise ValueError("Input arrays must be (Nx3) arrays")
         if X.shape[1] != 3:
-            method = getattr(thismodule, "kabsch")
+            method = kabsch
         else:
-            method = getattr(thismodule, "davenport")
+            method = davenport
 
     if unique_match:
         try:

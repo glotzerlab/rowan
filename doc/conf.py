@@ -41,6 +41,14 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax']
 
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'numpy': ('https://docs.scipy.org/doc/numpy', None),
+}
+
+# The reST default role to use for all documents.
+default_role = 'any'
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
