@@ -17,13 +17,39 @@ not match and return results according to NumPy's broadcasting rules.
 """
 
 from . import calculus, geometry, interpolate, mapping, random
-from .functions import (allclose, conjugate, divide, equal, exp, exp10, expb,
-                        from_axis_angle, from_euler, from_matrix,
-                        from_mirror_plane, inverse, is_unit, isclose, isfinite,
-                        isinf, isnan, log, log10, logb, multiply, norm,
-                        normalize, not_equal, power, reflect, rotate,
-                        to_axis_angle, to_euler, to_matrix,
-                        vector_vector_rotation)
+from .functions import (
+    allclose,
+    conjugate,
+    divide,
+    equal,
+    exp,
+    exp10,
+    expb,
+    from_axis_angle,
+    from_euler,
+    from_matrix,
+    from_mirror_plane,
+    inverse,
+    is_unit,
+    isclose,
+    isfinite,
+    isinf,
+    isnan,
+    log,
+    log10,
+    logb,
+    multiply,
+    norm,
+    normalize,
+    not_equal,
+    power,
+    reflect,
+    rotate,
+    to_axis_angle,
+    to_euler,
+    to_matrix,
+    vector_vector_rotation,
+)
 
 # Get the version
 __version__ = "1.2.2"
