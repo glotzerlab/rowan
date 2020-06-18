@@ -31,7 +31,8 @@ def exp(q):
 
     Example::
 
-        >>> q_exp = rowan.exp([1, 0, 0, 0])
+        >>> rowan.exp([1, 0, 0, 0])
+        array([2.71828183, 0.        , 0.        , 0.        ])
     """
     q = np.asarray(q)
 
@@ -77,7 +78,8 @@ def expb(q, b):
 
     Example::
 
-        >>> q_exp = rowan.expb([1, 0, 0, 0], 2)
+        >>> rowan.expb([1, 0, 0, 0], 2)
+        array([2., 0., 0., 0.])
     """
     q = np.asarray(q)
     return exp(q * np.log(b))
@@ -96,7 +98,8 @@ def exp10(q):
 
     Example::
 
-        >>> q_exp = rowan.exp10([1, 0, 0, 0])
+        >>> rowan.exp10([1, 0, 0, 0])
+        array([10.,  0.,  0.,  0.])
     """
     return expb(q, 10)
 
@@ -124,7 +127,8 @@ def log(q):
 
     Example::
 
-        >>> ln_q  = rowan.log([1, 0, 0, 0])
+        >>> rowan.log([1, 0, 0, 0])
+        array([0., 0., 0., 0.])
     """
     q = np.asarray(q)
     log = np.empty(q.shape)
@@ -184,7 +188,8 @@ def logb(q, b):
 
     Example::
 
-        >>> log2_q = rowan.logb([1, 0, 0, 0], 2)
+        >>> rowan.logb([1, 0, 0, 0], 2)
+        array([0., 0., 0., 0.])
     """
     q = np.asarray(q)
     return log(q) / np.log(b)
@@ -227,7 +232,8 @@ def power(q, n):
 
     Example::
 
-        >>> q_5 = rowan.power([1, 0, 0, 0], 5)
+        >>> rowan.power([1, 0, 0, 0], 5)
+        array([1., 0., 0., 0.])
     """
     # TODO: Write polar decomposition function #noqa
     q = np.asarray(q)
@@ -261,7 +267,8 @@ def conjugate(q):
 
     Example::
 
-        >>> q_star = rowan.conjugate([1, 0, 0, 0])
+        >>> rowan.conjugate([0.5, 0.5, -0.5, 0.5])
+        array([ 0.5, -0.5,  0.5, -0.5])
     """
     # Don't use asarray to avoid modifying in place
     conjugate = np.array(q)
@@ -280,10 +287,11 @@ def inverse(q):
 
     Example::
 
-        >>> q_inv = rowan.inverse([1, 0, 0, 0])
+        >>> rowan.inverse([1, 0, 0, 0])
+        array([ 1., -0., -0., -0.])
     """
-    # Copy input so that we can safely modify in place.
-    inverses = np.array(q)
+    # Copy input so that we can safely modify in place, ensure float.
+    inverses = np.array(q, dtype=float)
 
     normsq = norm(inverses) ** 2
     if np.any(normsq):
@@ -309,7 +317,8 @@ def multiply(qi, qj):
 
     Example::
 
-        >>> prod = rowan.multiply([1, 0, 0, 0], [2, 0, 0, 0])
+        >>> rowan.multiply([1, 0, 0, 0], [2, 0, 0, 0])
+        array([2., 0., 0., 0.])
     """
     qi = np.asarray(qi)
     qj = np.asarray(qj)
@@ -342,7 +351,8 @@ def divide(qi, qj):
 
     Example::
 
-        >>> quot = rowan.divide([1, 0, 0, 0], [2, 0, 0, 0])
+        >>> rowan.divide([1, 0, 0, 0], [2, 0, 0, 0])
+        array([0.5, 0. , 0. , 0. ])
     """
     return multiply(qi, inverse(qj))
 
@@ -358,7 +368,8 @@ def norm(q):
 
     Example::
 
-        >>> norms = rowan.norm([10, 0, 0, 0])
+        >>> rowan.norm([10, 0, 0, 0])
+        10.0
     """
     q = np.asarray(q)
     return np.linalg.norm(q, axis=-1)
@@ -375,7 +386,8 @@ def normalize(q):
 
     Example::
 
-        >>> u = rowan.normalize([10, 0, 0, 0])
+        >>> rowan.normalize([10, 0, 0, 0])
+        array([1., 0., 0., 0.])
     """
     q = np.asarray(q)
     norms = norm(q)
@@ -423,7 +435,8 @@ def from_mirror_plane(x, y, z):
 
     Example::
 
-        >>> quat_ref = rowan.from_mirror_plane(*(1, 2, 3))
+        >>> rowan.from_mirror_plane(*(1, 2, 3))
+        array([0., 1., 2., 3.])
     """
     x, y, z = np.broadcast_arrays(x, y, z)
     q = np.empty(x.shape + (4,))
@@ -454,7 +467,8 @@ def reflect(q, v):
 
     Example::
 
-        >>> v_reflected = rowan.reflect([1, 0, 0, 0], [1, 1, 1])
+        >>> rowan.reflect([1, 0, 0, 0], [1, 1, 1])
+        array([1., 1., 1.])
     """
     q = np.asarray(q)
     v = np.asarray(v)
@@ -476,7 +490,8 @@ def rotate(q, v):
 
     Example::
 
-        >>> v_rot = rowan.rotate([1, 0, 0, 0], [1, 1, 1])
+        >>> rowan.rotate([1, 0, 0, 0], [1, 1, 1])
+        array([1., 1., 1.])
     """
     q = np.asarray(q)
     v = np.asarray(v)
@@ -551,7 +566,8 @@ def vector_vector_rotation(v1, v2):
 
     Example::
 
-        >>> q_rot = rowan.vector_vector_rotation([1, 0, 0], [0, 1, 0])
+        >>> rowan.vector_vector_rotation([1, 0, 0], [0, 1, 0])
+        array([6.12323400e-17, 7.07106781e-01, 7.07106781e-01, 0.00000000e+00])
     """
     v1 = np.asarray(v1)
     v2 = np.asarray(v2)
@@ -586,7 +602,8 @@ def from_euler(alpha, beta, gamma, convention="zyx", axis_type="intrinsic"):
 
     Example::
 
-        >>> ql = rowan.from_euler(0.3, 0.5, 0.7)
+        >>> rowan.from_euler(0.3, 0.5, 0.7)
+        array([0.91262714, 0.29377717, 0.27944389, 0.05213241])
     """
     angles = np.broadcast_arrays(alpha, beta, gamma)
 
@@ -904,7 +921,8 @@ def from_matrix(mat, require_orthogonal=True):
 
     Example::
 
-        >>> ql = rowan.from_matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+        >>> rowan.from_matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+        array([ 1., -0., -0., -0.])
     """
     mat = np.asarray(mat)
     if require_orthogonal and not np.allclose(np.linalg.det(mat), 1):
@@ -955,7 +973,10 @@ def to_matrix(q, require_unit=True):
 
     Example::
 
-        >>> ql = rowan.to_matrix([1, 0, 0, 0])
+        >>> rowan.to_matrix([1, 0, 0, 0])
+        array([[1., 0., 0.],
+               [0., 1., 0.],
+               [0., 0., 1.]])
     """
     q = np.asarray(q)
 
@@ -1001,7 +1022,8 @@ def from_axis_angle(axes, angles):
     Example::
 
         >>> import numpy as np
-        >>> quat = rowan.from_axis_angle([[1, 0, 0]], np.pi/3)
+        >>> rowan.from_axis_angle([[1, 0, 0]], np.pi/3)
+        array([[0.8660254, 0.5      , 0.       , 0.       ]])
     """
     axes = np.asarray(axes)
 
@@ -1035,7 +1057,8 @@ def to_axis_angle(q):
 
     Example::
 
-        >>> quat = rowan.to_axis_angle([[1, 0, 0, 0]])
+        >>> rowan.to_axis_angle([[1, 0, 0, 0]])
+        (array([[0., 0., 0.]]), array([0.]))
     """
     q = np.asarray(q)
     _validate_unit(q)
