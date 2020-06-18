@@ -669,6 +669,7 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
     elemental rotations about the three Cartesian axes:
 
     .. math::
+
         \begin{eqnarray*}
         R_x(\theta)  =& \left(\begin{array}{ccc}
                             1 & 0           & 0            \\
