@@ -1,18 +1,13 @@
 import unittest
 import doctest
 import rowan
-from rowan import functions
-import inspect
+import pkgutil
 
 
 def load_tests(loader, tests, ignore):
-    optionflags = doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE
-    tests.addTests(doctest.DocTestSuite(
-        functions, optionflags=optionflags, globs={'rowan': rowan}))
-    #  for name, member in inspect.getmembers(rowan):
-        #  if inspect.ismodule(member):
-            #  tests.addTests(doctest.DocTestSuite(
-                #  member, optionflags=optionflags))
+    modules = pkgutil.walk_packages(rowan.__path__, rowan.__name__ + '.')
+    for a, module_name, c in modules:
+        tests.addTests(doctest.DocTestSuite(module_name, globs={'rowan': rowan}))
     return tests
 
 
