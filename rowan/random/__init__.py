@@ -31,8 +31,9 @@ def rand(*args):
         shape (tuple): The shape of the array to generate.
 
     Return:
-        Random quaternions of the shape provided with an additional axis of
-        length 4.
+        :class:`numpy.ndarray`:
+            Random quaternions of the shape provided with an additional axis of length
+            4.
 
     Example::
 
@@ -60,8 +61,9 @@ def random_sample(size=None):
         size (tuple): The shape of the array to generate.
 
     Return:
-        Random quaternions of the shape provided with an additional axis of
-        length 4.
+        :class:`numpy.ndarray`:
+            Random quaternions of the shape provided with an additional axis of length
+            4.
 
     Example::
 

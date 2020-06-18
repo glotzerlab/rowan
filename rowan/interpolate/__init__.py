@@ -39,8 +39,7 @@ def slerp(q0, q1, t, ensure_shortest=True):
         interval they fall on).
 
     Returns:
-        Array of shape (..., 4) containing the element-wise interpolations
-        between p and q.
+        (..., 4) :class:`numpy.ndarray`: Interpolations between ``p`` and ``q``.
 
     Example::
 
@@ -80,8 +79,8 @@ def slerp_prime(q0, q1, t, ensure_shortest=True):
             (:math:`<180^{\circ}`) direction
 
     Returns:
-        An array of shape (..., 4) containing the element-wise derivatives of
-        interpolations between p and q.
+        (..., 4) :class:`numpy.ndarray`:
+            The derivative of the interpolations between ``p`` and ``q``.
 
     Example::
 
@@ -132,7 +131,8 @@ def squad(p, a, b, q, t):
         t ((...) :class:`numpy.ndarray`): Interpolation parameter :math:`t \in [0, 1]`.
 
     Returns:
-        An array containing the element-wise interpolations between p and q.
+        (..., 4) :class:`numpy.ndarray`:
+            Interpolations between ``p`` and ``q``.
 
     Example::
 

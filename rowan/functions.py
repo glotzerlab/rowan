@@ -27,7 +27,7 @@ def exp(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        Array of shape (...) containing exponentials of q.
+        (...) :class:`numpy.ndarray`: Exponentials of ``q``.
 
     Example::
 
@@ -74,7 +74,7 @@ def expb(q, b):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        Array of shape (...) containing exponentials of q.
+        (...) :class:`numpy.ndarray`: Exponentials of ``q``.
 
     Example::
 
@@ -94,7 +94,7 @@ def exp10(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        Array of shape (...) containing exponentials of q.
+        (...) :class:`numpy.ndarray`: Exponentials of ``q``.
 
     Example::
 
@@ -123,7 +123,7 @@ def log(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        Array of shape (...) containing logarithms of q.
+        (...) :class:`numpy.ndarray`: Logarithms of ``q``.
 
     Example::
 
@@ -184,7 +184,7 @@ def logb(q, b):
         n ((...) :class:`numpy.ndarray`): Scalars to use as log bases.
 
     Returns:
-        Array of shape (...) containing logarithms of q.
+        (...) :class:`numpy.ndarray`: Logarithms of ``q``.
 
     Example::
 
@@ -204,11 +204,12 @@ def log10(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        Array of shape (...) containing logarithms of q.
+        (...) :class:`numpy.ndarray`: Logarithms of ``q``.
 
     Example::
 
-        log10_q = rowan.log10([1, 0, 0, 0])
+        >>> rowan.log10([1, 0, 0, 0])
+        array([0., 0., 0., 0.])
     """
     q = np.asarray(q)
     return logb(q, 10)
@@ -228,7 +229,7 @@ def power(q, n):
         n ((...) np.arrray): Scalars to exponentiate quaternions with.
 
     Returns:
-        Array of shape (...) containing powers of q.
+        (...) :class:`numpy.ndarray`: Powers of ``q``.
 
     Example::
 
@@ -263,7 +264,7 @@ def conjugate(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        Array of shape (...) containing conjugates of q.
+        (...) :class:`numpy.ndarray`: Conjugates of ``q``.
 
     Example::
 
@@ -283,7 +284,7 @@ def inverse(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        Array of shape (...) containing inverses of q.
+        (...) :class:`numpy.ndarray`: Inverses of ``q``.
 
     Example::
 
@@ -313,7 +314,9 @@ def multiply(qi, qj):
         qj ((..., 4) :class:`numpy.ndarray`): Array of right quaternions.
 
     Returns:
-        Array of shape (...) containing element-wise products of q.
+        (...) :class:`numpy.ndarray`:
+            Element-wise products of ``q`` (obeying broadcasting rules up to the last
+            dimension of ``qi`` and ``qj``).
 
     Example::
 
@@ -347,7 +350,9 @@ def divide(qi, qj):
         qj ((..., 4) :class:`numpy.ndarray`): Divisor quaternions.
 
     Returns:
-        Array of shape (...) containing element-wise quotients of qi and qj.
+        (...) :class:`numpy.ndarray`:
+            Element-wise quotients of ``q`` (obeying broadcasting rules up to the last
+            dimension of ``qi`` and ``qj``).
 
     Example::
 
@@ -364,7 +369,7 @@ def norm(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        Array of shape (...) containing norms of q.
+        (...) :class:`numpy.ndarray`: Norms of ``q``.
 
     Example::
 
@@ -382,7 +387,7 @@ def normalize(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        Array of shape (...) of normalized quaternions.
+        (..., 4) :class:`numpy.ndarray`: Normalized versions of ``q``.
 
     Example::
 
@@ -401,7 +406,8 @@ def is_unit(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        bool: Whether or not all inputs are unit quaternions.
+        (...) :class:`numpy.ndarray` of bool:
+            Whether or not all inputs are unit quaternions.
 
     Example::
 
@@ -430,8 +436,8 @@ def from_mirror_plane(x, y, z):
         z ((...) :class:`numpy.ndarray`): Third planar component.
 
     Returns:
-        Array of shape (...) containing quaternions reflecting about the input
-        plane :math:`(x, y, z)`.
+        (...) :class:`numpy.ndarray`:
+            Quaternions reflecting about the input plane :math:`(x, y, z)`.
 
     Example::
 
@@ -463,7 +469,8 @@ def reflect(q, v):
         v ((..., 3) :class:`numpy.ndarray`): Array of vectors.
 
     Returns:
-        Array of shape (..., 3) containing reflections of v.
+        (..., 4) :class:`numpy.ndarray`:
+            The result of reflecting ``v`` using ``q``.
 
     Example::
 
@@ -486,7 +493,8 @@ def rotate(q, v):
         v ((..., 3) :class:`numpy.ndarray`): Array of vectors.
 
     Returns:
-        Array of shape (..., 3) containing rotations of v.
+        (..., 4) :class:`numpy.ndarray`:
+            The result of rotating ``v`` using ``q``.
 
     Example::
 
@@ -516,7 +524,7 @@ def _vector_bisector(v1, v2):
         v2 ((..., 3) :class:`numpy.ndarray`): Second array of vectors.
 
     Returns:
-        Array of shape (..., 3) containing vector bisectors.
+        (...) :class:`numpy.ndarray`: The vector bisectors.
     """
     # Since np.inner and np.dot require manipulating the shapes in ways that
     # might be expensive and may not play nicely with broadcasting, we perform
@@ -562,7 +570,7 @@ def vector_vector_rotation(v1, v2):
         v2 ((..., 3) :class:`numpy.ndarray`): Array of vector to rotate onto.
 
     Returns:
-        Array of shape (..., 4) containing  quaternions that rotate v1 onto v2.
+        (..., 4) :class:`numpy.ndarray`: Quaternions that rotate ``v1`` onto ``v2``.
 
     Example::
 
@@ -597,8 +605,7 @@ def from_euler(alpha, beta, gamma, convention="zyx", axis_type="intrinsic"):
             Whether to use extrinsic or intrinsic rotations.
 
     Returns:
-        Array of shape (..., 4) containing quaternions corresponding to the
-        input angles.
+        (..., 4) :class:`numpy.ndarray`: Quaternions corresponding to the input angles.
 
     Example::
 
@@ -729,8 +736,8 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
             Whether to use extrinsic or intrinsic.
 
     Returns:
-        Array of shape (..., 3) containing Euler angles :math:`(\alpha, \beta, \gamma)`
-        as the last dimension (in radians).
+        (..., 3) :class:`numpy.ndarray`:
+            Euler angles :math:`(\alpha, \beta, \gamma)` corresponding to ``q``.
 
     Example::
 
@@ -918,8 +925,7 @@ def from_matrix(mat, require_orthogonal=True):
         mat ((..., 3, 3) :class:`numpy.ndarray`): An array of rotation matrices.
 
     Returns:
-        Array of shape (..., 4) containing the corresponding rotation
-        quaternions.
+        (..., 4) :class:`numpy.ndarray`: The corresponding rotation quaternions.
 
     Example::
 
@@ -970,8 +976,7 @@ def to_matrix(q, require_unit=True):
         q ((..., 4) :class:`numpy.ndarray`): An array of quaternions.
 
     Returns:
-        Array of shape (..., 3, 3) containing the corresponding rotation
-        matrices.
+        (..., 3, 3) :class:`numpy.ndarray`: The corresponding rotation matrices.
 
     Example::
 
@@ -1018,8 +1023,7 @@ def from_axis_angle(axes, angles):
             as needed.
 
     Returns:
-        Array of shape (..., 4) containing the corresponding rotation
-        quaternions.
+        (..., 4) :class:`numpy.ndarray`: The corresponding rotation quaternions.
 
     Example::
 
@@ -1054,8 +1058,8 @@ def to_axis_angle(q):
         q ((..., 4) :class:`numpy.ndarray`): An array of quaternions.
 
     Returns:
-        A tuple of :class:`numpy.ndarray` (axes, angles) where axes has shape (..., 3)
-        and angles has shape (..., 1). The angles are in radians.
+        tuple[(..., 3) :class:`numpy.ndarray`, (..., 1) :class:`numpy.ndarray`]:
+            The axes and the angles (in radians).
 
     Example::
 
@@ -1087,7 +1091,7 @@ def equal(p, q):
         q ((..., 4) :class:`numpy.ndarray`): Second array of quaternions.
 
     Returns:
-        A boolean array of shape (...) indicating equality.
+        (...) :class:`numpy.ndarray` of bool: Whether ``p`` and ``q`` are equal.
 
     Example::
 
@@ -1108,7 +1112,7 @@ def not_equal(p, q):
         q ((..., 4) :class:`numpy.ndarray`): Second array of quaternions.
 
     Returns:
-        A boolean array of shape (...) indicating inequality.
+        (...) :class:`numpy.ndarray` of bool: Whether ``p`` and ``q`` are unequal.
 
     Example::
 
@@ -1127,8 +1131,7 @@ def isnan(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        A boolean array of shape (...) indicating whether or not the input
-        quaternions were NaN.
+        (...) :class:`numpy.ndarray` of bool: Whether ``q`` is NaN.
 
     Example::
 
@@ -1148,7 +1151,7 @@ def isinf(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions
 
     Returns:
-        A boolean array of shape (...) indicating infinite quaternions.
+        (...) :class:`numpy.ndarray` of bool: Whether ``q`` is infinite.
 
     Example::
 
@@ -1168,7 +1171,7 @@ def isfinite(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        A boolean array of shape (...) indicating finite quaternions.
+        (...) :class:`numpy.ndarray` of bool: Whether ``q`` is finite.
 
     Example::
 
@@ -1189,7 +1192,7 @@ def allclose(p, q, **kwargs):
         \*\*kwargs: Keyword arguments to pass to np.allclose.
 
     Returns:
-        Boolean indicating whether or not all quaternions are close.
+        bool: Whether all of ``p`` and ``q`` are close.
 
     Example::
 
@@ -1212,7 +1215,8 @@ def isclose(p, q, **kwargs):
         \*\*kwargs: Keyword arguments to pass to np.isclose.
 
     Returns:
-        A boolean array of shape (...) indicating which quaternions are close.
+        (...) :class:`numpy.ndarray` of bool:
+            Whether ``p`` and ``q`` are close element-wise.
 
     Example::
 
