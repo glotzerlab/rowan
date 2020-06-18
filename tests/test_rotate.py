@@ -13,14 +13,12 @@ zero_vector = np.array([0, 0, 0])
 one_vector = np.array([1, 0, 0])
 
 # Load test files
-TESTDATA_FILENAME = os.path.join(
-    os.path.dirname(__file__),
-    'files/test_arrays.npz')
+TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), "files/test_arrays.npz")
 with np.load(TESTDATA_FILENAME) as data:
-    input1 = data['input1']
-    input2 = data['input2']
-    stored_rotation = data['rotated_vectors']
-    vector_inputs = data['vector_inputs']
+    input1 = data["input1"]
+    input2 = data["input2"]
+    stored_rotation = data["rotated_vectors"]
+    vector_inputs = data["vector_inputs"]
 
 
 class TestRotate(unittest.TestCase):
@@ -28,11 +26,7 @@ class TestRotate(unittest.TestCase):
 
     def test_single_quaternion(self):
         """Testing trivial rotations"""
-        self.assertTrue(
-            np.all(
-                rowan.rotate(
-                    one,
-                    one_vector) == one_vector))
+        self.assertTrue(np.all(rowan.rotate(one, one_vector) == one_vector))
 
     def test_2d_array(self):
         """Rotating sets of vectors by sets of quaternions"""
@@ -40,19 +34,12 @@ class TestRotate(unittest.TestCase):
         one_vectors = np.repeat(one_vector[np.newaxis, :], 10, axis=0)
 
         # Simple tests
-        self.assertTrue(
-            np.all(
-                rowan.rotate(
-                    ones,
-                    one_vectors) == one_vectors))
+        self.assertTrue(np.all(rowan.rotate(ones, one_vectors) == one_vectors))
 
         # Complex random array
         self.assertTrue(
-            np.allclose(
-                rowan.rotate(
-                    input1,
-                    vector_inputs),
-                stored_rotation))
+            np.allclose(rowan.rotate(input1, vector_inputs), stored_rotation)
+        )
 
     def test_3d_array(self):
         """Rotating higher dimensional arrays of vectors
@@ -61,31 +48,28 @@ class TestRotate(unittest.TestCase):
         expanded_shape = (num_reps // 5, 5, 4)
         expanded_shape_vec = (num_reps // 5, 5, 3)
         ones = np.reshape(
-            np.repeat(one[np.newaxis, :], num_reps, axis=0), expanded_shape)
-        one_vectors = np.reshape(np.repeat(
-            one_vector[np.newaxis, :], num_reps, axis=0), expanded_shape_vec)
+            np.repeat(one[np.newaxis, :], num_reps, axis=0), expanded_shape
+        )
+        one_vectors = np.reshape(
+            np.repeat(one_vector[np.newaxis, :], num_reps, axis=0), expanded_shape_vec
+        )
 
         # Simple tests
-        self.assertTrue(
-            np.all(
-                rowan.rotate(
-                    ones,
-                    one_vectors) == one_vectors))
+        self.assertTrue(np.all(rowan.rotate(ones, one_vectors) == one_vectors))
 
         # Complex random array
         num_reps = input1.shape[0]
         expanded_shape = (num_reps // 5, 5, 4)
         expanded_shape_vec = (num_reps // 5, 5, 3)
         rotation_result = rowan.rotate(
-            np.reshape(
-                input1, expanded_shape), np.reshape(
-                vector_inputs, expanded_shape_vec))
+            np.reshape(input1, expanded_shape),
+            np.reshape(vector_inputs, expanded_shape_vec),
+        )
         self.assertTrue(
             np.allclose(
-                rotation_result,
-                np.reshape(
-                    stored_rotation,
-                    expanded_shape_vec)))
+                rotation_result, np.reshape(stored_rotation, expanded_shape_vec)
+            )
+        )
 
     def test_broadcast(self):
         """Ensure broadcasting works"""
@@ -99,10 +83,7 @@ class TestRotate(unittest.TestCase):
 
         # Two nonconforming array sizes
         with self.assertRaises(ValueError):
-            rowan.rotate(
-                    many_ones,
-                    np.repeat(zero_vector[np.newaxis, :], 2, axis=0)
-                    )
+            rowan.rotate(many_ones, np.repeat(zero_vector[np.newaxis, :], 2, axis=0))
 
         # Require broadcasting in multiple dimensions
         ones_quat = np.zeros((1, 1, 3, 8, 1, 4))

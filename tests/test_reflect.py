@@ -40,8 +40,6 @@ class TestReflect(unittest.TestCase):
     def test_broadcast(self):
         """Ensure broadcasting works"""
         x_plane = rowan.from_mirror_plane([x[0], x[0]], x[1], x[2])
-        self.assertTrue(np.all(x_plane == x_quat[np.newaxis, :].repeat(
-            2, axis=0)))
+        self.assertTrue(np.all(x_plane == x_quat[np.newaxis, :].repeat(2, axis=0)))
         x_reflect = rowan.reflect(x_plane, x)
-        self.assertTrue(np.all(x_reflect == -x[np.newaxis, :].repeat(
-            2, axis=0)))
+        self.assertTrue(np.all(x_reflect == -x[np.newaxis, :].repeat(2, axis=0)))

@@ -1,7 +1,7 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-R"""
+r"""
 The general space of problems that this subpackage addresses is a small subset
 of the broader space of `point set registration
 <https://en.wikipedia.org/wiki/Point_set_registration>`_, which attempts to
@@ -58,11 +58,11 @@ import numpy as np
 from ..functions import from_matrix, rotate, to_matrix
 from ..geometry import angle
 
-__all__ = ['kabsch', 'davenport', 'procrustes', 'icp']
+__all__ = ["kabsch", "davenport", "procrustes", "icp"]
 
 
 def kabsch(X, Y, require_rotation=True):
-    R"""Find the optimal rotation and translation to map between two sets of
+    r"""Find the optimal rotation and translation to map between two sets of
     points.
 
     This function implements the
@@ -130,7 +130,7 @@ def kabsch(X, Y, require_rotation=True):
 
 
 def horn(X, Y):
-    R"""Find the optimal rotation and translation to map between two sets of
+    r"""Find the optimal rotation and translation to map between two sets of
     points.
 
     This function implements the quaternion-based method of `Horn
@@ -216,7 +216,7 @@ def horn(X, Y):
 
 
 def davenport(X, Y):
-    R"""Find the optimal rotation and translation to map between two sets of
+    r"""Find the optimal rotation and translation to map between two sets of
     points.
 
     This function implements the `Davenport q-method
@@ -277,7 +277,7 @@ def davenport(X, Y):
     # quaternion with scalar part in the 4th entry. The q-matrix here is
     # slightly modified to avoid this problem
     K = np.empty((4, 4))
-    K[1:, 1:] = B + B.T - np.eye(3)*tr_B
+    K[1:, 1:] = B + B.T - np.eye(3) * tr_B
     K[0, 1:] = z.T
     K[1:, 0] = z
     K[0, 0] = tr_B
@@ -290,8 +290,8 @@ def davenport(X, Y):
     return q, t
 
 
-def procrustes(X, Y, method='best', equivalent_quaternions=None):
-    R"""Solve the orthogonal Procrustes problem with algorithmic options.
+def procrustes(X, Y, method="best", equivalent_quaternions=None):
+    r"""Solve the orthogonal Procrustes problem with algorithmic options.
 
     Args:
         X ((N, m) np.array): First set of N points.
@@ -329,9 +329,10 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
         assert np.allclose(translation, t)
     """
     import sys
+
     thismodule = sys.modules[__name__]
 
-    if method != 'best':
+    if method != "best":
         try:
             method = getattr(thismodule, method)
         except KeyError:
@@ -344,16 +345,16 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
         elif len(X.shape) != 2:
             raise ValueError("Input arrays must be 2D arrays")
         if X.shape[1] != 3:
-            method = getattr(thismodule, 'kabsch')
+            method = getattr(thismodule, "kabsch")
         else:
-            method = getattr(thismodule, 'davenport')
+            method = getattr(thismodule, "davenport")
     if equivalent_quaternions is not None:
         equivalent_quaternions = np.atleast_2d(equivalent_quaternions)
         qs = []
         ts = []
         for eq in equivalent_quaternions:
             q, t = method(rotate(eq, X), Y)
-            if method.__name__ == 'kabsch':
+            if method.__name__ == "kabsch":
                 qs.append(from_matrix(q))
             else:
                 qs.append(q)
@@ -362,15 +363,22 @@ def procrustes(X, Y, method='best', equivalent_quaternions=None):
         return qs[index], ts[index]
     else:
         q, t = method(X, Y)
-        if method == 'kabsch':
+        if method == "kabsch":
             return from_matrix(q), t
         else:
             return q, t
 
 
-def icp(X, Y, method='best', unique_match=True, max_iterations=20,
-        tolerance=0.001, return_indices=False):
-    R"""Find best mapping using the Iterative Closest Point algorithm.
+def icp(
+    X,
+    Y,
+    method="best",
+    unique_match=True,
+    max_iterations=20,
+    tolerance=0.001,
+    return_indices=False,
+):
+    r"""Find best mapping using the Iterative Closest Point algorithm.
 
     Args:
         X ((N, m) np.array): First set of N points.
@@ -416,9 +424,10 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
     """
 
     import sys
+
     thismodule = sys.modules[__name__]
 
-    if method != 'best':
+    if method != "best":
         try:
             method = getattr(thismodule, method)
         except KeyError:
@@ -431,25 +440,30 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
         elif len(X.shape) != 2:
             raise ValueError("Input arrays must be (Nx3) arrays")
         if X.shape[1] != 3:
-            method = getattr(thismodule, 'kabsch')
+            method = getattr(thismodule, "kabsch")
         else:
-            method = getattr(thismodule, 'davenport')
+            method = getattr(thismodule, "davenport")
 
     if unique_match:
         try:
             from scipy import spatial, optimize
         except ImportError:
-            raise ImportError("Running with unique_match requires scipy. "
-                              "Please install scipy and try again.")
+            raise ImportError(
+                "Running with unique_match requires scipy. "
+                "Please install scipy and try again."
+            )
     else:
         try:
             from sklearn import neighbors
+
             nn = neighbors.NearestNeighbors(n_neighbors=1)
             nn.fit(Y)
         except ImportError:
-            raise ImportError("Running without unique_match requires "
-                              "scikit-learn. Please install sklearn and try "
-                              "again.")
+            raise ImportError(
+                "Running without unique_match requires "
+                "scikit-learn. Please install sklearn and try "
+                "again."
+            )
 
     # Copy points so we have originals available.
     cur_points = np.copy(X)
@@ -464,8 +478,7 @@ def icp(X, Y, method='best', unique_match=True, max_iterations=20,
             row_ind, indices = optimize.linear_sum_assignment(pair_distances)
             distances = pair_distances[row_ind, indices]
         else:
-            distances, indices = nn.kneighbors(
-                cur_points, return_distance=True)
+            distances, indices = nn.kneighbors(cur_points, return_distance=True)
             distances = distances.ravel()
             indices = indices.ravel()
 

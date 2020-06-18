@@ -1,7 +1,7 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-R"""This subpackage provides the ability to compute the derivative and
+r"""This subpackage provides the ability to compute the derivative and
 integral of a quaternion.
 """
 
@@ -9,12 +9,11 @@ import numpy as np
 
 from ..functions import multiply, _promote_vec, _validate_unit, exp
 
-__all__ = ['derivative',
-           'integrate']
+__all__ = ["derivative", "integrate"]
 
 
 def derivative(q, v):
-    R"""Compute the instantaneous derivative of unit quaternions, which is
+    r"""Compute the instantaneous derivative of unit quaternions, which is
     defined as
 
     .. math::
@@ -42,11 +41,11 @@ def derivative(q, v):
     v = np.asarray(v)
 
     _validate_unit(q)
-    return 0.5*multiply(q, _promote_vec(v))
+    return 0.5 * multiply(q, _promote_vec(v))
 
 
 def integrate(q, v, dt):
-    R"""Integrate unit quaternions by angular velocity using the following
+    r"""Integrate unit quaternions by angular velocity using the following
     equation:
 
     .. math::
@@ -83,4 +82,4 @@ def integrate(q, v, dt):
 
     _validate_unit(q)
 
-    return multiply(exp(_promote_vec(v*dt/2)), q)
+    return multiply(exp(_promote_vec(v * dt / 2)), q)

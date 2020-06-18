@@ -1,7 +1,7 @@
 # Copyright (c) 2019 The Regents of the University of Michigan
 # All rights reserved.
 # This software is licensed under the BSD 3-Clause License.
-R"""This subpackage provides various tools for working with the geometric
+r"""This subpackage provides various tools for working with the geometric
 representation of quaternions. A particular focus is computing the distance
 between quaternions. These distance computations can be complicated,
 particularly good metrics for distance on the Riemannian manifold representing
@@ -14,17 +14,19 @@ import numpy as np
 
 from ..functions import norm, exp, multiply, inverse, log, _validate_unit
 
-__all__ = ['distance',
-           'sym_distance',
-           'riemann_exp_map',
-           'riemann_log_map',
-           'intrinsic_distance',
-           'sym_intrinsic_distance',
-           'angle']
+__all__ = [
+    "distance",
+    "sym_distance",
+    "riemann_exp_map",
+    "riemann_log_map",
+    "intrinsic_distance",
+    "sym_intrinsic_distance",
+    "angle",
+]
 
 
 def distance(p, q):
-    R"""Determine the distance between quaternions p and q.
+    r"""Determine the distance between quaternions p and q.
 
     This is the most basic distance that can be defined on
     the space of quaternions; it is the metric induced by
@@ -50,7 +52,7 @@ def distance(p, q):
 
 
 def sym_distance(p, q):
-    R"""Determine the distance between quaternions p and q.
+    r"""Determine the distance between quaternions p and q.
 
     This is a symmetrized version of :py:func:`distance` that
     accounts for the fact that :math:`p` and :math:`-p` represent
@@ -78,7 +80,7 @@ def sym_distance(p, q):
 
 
 def riemann_exp_map(p, v):
-    R"""Compute the exponential map on the Riemannian manifold
+    r"""Compute the exponential map on the Riemannian manifold
     :math:`\mathbb{H}^*` of nonzero quaterions.
 
     The nonzero quaternions form a Lie algebra :math:`\mathbb{H}^*` that
@@ -113,7 +115,7 @@ def riemann_exp_map(p, v):
 
 
 def riemann_log_map(p, q):
-    R"""Compute the log map on the Riemannian manifold :math:`\mathbb{H}^*` of
+    r"""Compute the log map on the Riemannian manifold :math:`\mathbb{H}^*` of
     nonzero quaterions.
 
     This function inverts :py:func:`riemann_exp_map`. See that function for
@@ -139,7 +141,7 @@ def riemann_log_map(p, q):
 
 
 def intrinsic_distance(p, q):
-    R"""Compute the intrinsic distance between quaternions on the manifold of
+    r"""Compute the intrinsic distance between quaternions on the manifold of
     quaternions.
 
     The quaternion distance is determined as the length of the quaternion
@@ -172,15 +174,15 @@ def intrinsic_distance(p, q):
         rowan.geometry.intrinsic_distance([1, 0, 0, 0], [-1, 0, 0, 0])
     """
     # TODO: Consider implementing the optimization
-#    if not np.allclose(2*np.arccos(np.linalg.norm(np.inner(p, q))),
-#            norm(riemann_log_map(p, q))):
-#        raise ValueError("Huh?")
-#    return 2*np.arccos(np.linalg.norm(np.inner(p, q))),
+    #    if not np.allclose(2*np.arccos(np.linalg.norm(np.inner(p, q))),
+    #            norm(riemann_log_map(p, q))):
+    #        raise ValueError("Huh?")
+    #    return 2*np.arccos(np.linalg.norm(np.inner(p, q))),
     return norm(riemann_log_map(p, q))
 
 
 def sym_intrinsic_distance(p, q):
-    R"""Compute the intrinsic distance between quaternions on the manifold of
+    r"""Compute the intrinsic distance between quaternions on the manifold of
     quaternions.
 
     This is a symmetrized version of :py:func:`intrinsic_distance` that
@@ -204,14 +206,15 @@ def sym_intrinsic_distance(p, q):
     """
     p = np.asarray(p)
     q = np.asarray(q)
-    return np.where(norm(p - q) < norm(p + q),
-                    norm(riemann_log_map(p, q)),
-                    norm(riemann_log_map(p, -q))
-                    )
+    return np.where(
+        norm(p - q) < norm(p + q),
+        norm(riemann_log_map(p, q)),
+        norm(riemann_log_map(p, -q)),
+    )
 
 
 def angle(p):
-    R"""Compute the angle of rotation of a quaternion.
+    r"""Compute the angle of rotation of a quaternion.
 
     Note that this is identical to
     ``2*intrinsic_distance(p, np.array([1, 0, 0, 0]))``.
@@ -232,4 +235,4 @@ def angle(p):
     # where they need to be.
 
     _validate_unit(p)
-    return 2*norm(log(p))
+    return 2 * norm(log(p))

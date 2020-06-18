@@ -24,11 +24,9 @@ class TestFromAxisAngle(unittest.TestCase):
         theta = np.pi
         quats = rowan.from_axis_angle(v, theta)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
-        self.assertTrue(np.allclose(quats,
-                                    np.array([[0, 1, 0, 0],
-                                              [0, 0, 1, 0],
-                                              [0, 0, 0, 1]]))
-                        )
+        self.assertTrue(
+            np.allclose(quats, np.array([[0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]))
+        )
 
     def test_multiple(self):
         """Test multiple vectors against multiple angles"""
@@ -36,27 +34,45 @@ class TestFromAxisAngle(unittest.TestCase):
         theta = np.array([np.pi, np.pi / 2, np.pi / 3])
         quats = rowan.from_axis_angle(v, theta)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
-        self.assertTrue(np.allclose(quats, np.array([[0, 1, 0, 0], [np.sqrt(
-            2) / 2, 0, np.sqrt(2) / 2, 0], [np.sqrt(3) / 2, 0, 0, 1 / 2]])))
+        self.assertTrue(
+            np.allclose(
+                quats,
+                np.array(
+                    [
+                        [0, 1, 0, 0],
+                        [np.sqrt(2) / 2, 0, np.sqrt(2) / 2, 0],
+                        [np.sqrt(3) / 2, 0, 0, 1 / 2],
+                    ]
+                ),
+            )
+        )
 
     def test_complex(self):
         """Test higher dimensions and broadcasting"""
         # Various ways of producing the same output
-        expected_output = np.array([[0, 1, 0, 0],
-                                    [np.sqrt(2) / 2, 0, np.sqrt(2) / 2, 0],
-                                    [np.sqrt(3) / 2, 0, 0, 1 / 2]])[
-            np.newaxis, np.newaxis, ...].repeat(
-            2, axis=0).repeat(2, axis=1)
+        expected_output = (
+            np.array(
+                [
+                    [0, 1, 0, 0],
+                    [np.sqrt(2) / 2, 0, np.sqrt(2) / 2, 0],
+                    [np.sqrt(3) / 2, 0, 0, 1 / 2],
+                ]
+            )[np.newaxis, np.newaxis, ...]
+            .repeat(2, axis=0)
+            .repeat(2, axis=1)
+        )
 
         # Matching array shapes (no broadcasing at all)
-        v = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])[
-            np.newaxis, np.newaxis, ...].repeat(
-            2, axis=0).repeat(
-            2, axis=1)
-        theta = np.array([np.pi, np.pi / 2, np.pi / 3])[
-            np.newaxis, np.newaxis, ...].repeat(
-            2, axis=0).repeat(
-            2, axis=1)
+        v = (
+            np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])[np.newaxis, np.newaxis, ...]
+            .repeat(2, axis=0)
+            .repeat(2, axis=1)
+        )
+        theta = (
+            np.array([np.pi, np.pi / 2, np.pi / 3])[np.newaxis, np.newaxis, ...]
+            .repeat(2, axis=0)
+            .repeat(2, axis=1)
+        )
 
         quats = rowan.from_axis_angle(v, theta)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
@@ -76,8 +92,8 @@ class TestFromAxisAngle(unittest.TestCase):
 
         # Broadcasting in both
         quats = rowan.from_axis_angle(
-                v_reduced[:, np.newaxis, ...],
-                theta_reduced[np.newaxis, :, ...])
+            v_reduced[:, np.newaxis, ...], theta_reduced[np.newaxis, :, ...]
+        )
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, expected_output))
 
@@ -92,12 +108,12 @@ class TestToAxisAngle(unittest.TestCase):
         self.assertEqual(angles, 0)
 
     def test_to_axis_angle(self):
-        q = (np.sqrt(2)/2, np.sqrt(2)/2, 0, 0)
+        q = (np.sqrt(2) / 2, np.sqrt(2) / 2, 0, 0)
         axes, angles = rowan.to_axis_angle(q)
         self.assertTrue(np.allclose(axes, np.array([1, 0, 0])))
-        self.assertTrue(np.allclose(angles, np.pi/2))
+        self.assertTrue(np.allclose(angles, np.pi / 2))
 
         q2 = np.stack((q, q), axis=0)
         axes, angles = rowan.to_axis_angle(q2)
         self.assertTrue(np.allclose(axes, np.array([[1, 0, 0], [1, 0, 0]])))
-        self.assertTrue(np.allclose(angles, [np.pi/2, np.pi/2]))
+        self.assertTrue(np.allclose(angles, [np.pi / 2, np.pi / 2]))

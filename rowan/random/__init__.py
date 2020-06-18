@@ -17,13 +17,11 @@ subpackage is entirely focused on generating rotation quaternions.
 
 import numpy as np
 
-__all__ = ['rand',
-           'random_sample'
-           ]
+__all__ = ["rand", "random_sample"]
 
 
 def rand(*args):
-    R"""Generate random rotations uniformly distributed on a unit sphere.
+    r"""Generate random rotations uniformly distributed on a unit sphere.
 
     This is a convenience function *a la* ``np.random.rand``. If you want a
     function that takes a tuple as input, use :py:func:`random_sample` instead.
@@ -46,7 +44,7 @@ def rand(*args):
 
 
 def random_sample(size=None):
-    R"""Generate random rotations uniformly
+    r"""Generate random rotations uniformly
 
     In general, sampling from the space of all quaternions will not generate
     uniform rotations. What we want is a distribution that accounts for the
@@ -75,15 +73,15 @@ def random_sample(size=None):
 
     u = np.random.random_sample(size)
 
-    theta1 = 2*np.pi*u[..., 1]
+    theta1 = 2 * np.pi * u[..., 1]
     s1 = np.sin(theta1)
     c1 = np.cos(theta1)
-    theta2 = 2*np.pi*u[..., 2]
+    theta2 = 2 * np.pi * u[..., 2]
     s2 = np.sin(theta2)
     c2 = np.cos(theta2)
 
-    r1 = np.sqrt(1-u[..., 0])
+    r1 = np.sqrt(1 - u[..., 0])
     r2 = np.sqrt(u[..., 0])
 
-    quats = np.stack((s1*r1, c1*r1, s2*r2, c2*r2), axis=-1)
+    quats = np.stack((s1 * r1, c1 * r1, s2 * r2, c2 * r2), axis=-1)
     return quats.squeeze()
