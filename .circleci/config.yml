@@ -22,7 +22,7 @@ references:
           name: run tests
           command: |
             # Faster to just test one env first
-            pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort
+            pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort numpy scipy
             python3.8 -m flake8 --show-source rowan
             # Ignore isort errors in tests that are due to ambiguity over whether or not rowan is third party.
             python3.8 -m flake8 --extend-ignore=I001,I004 --show-source tests/
@@ -61,7 +61,7 @@ references:
           name: run tests
           command: |
             # Faster to just test one env first
-            pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort
+            pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort numpy scipy
             python3.8 -m flake8 --show-source rowan
             # Ignore isort errors in tests that are due to ambiguity over whether or not rowan is third party.
             python3.8 -m flake8 --extend-ignore=I001,I004 --show-source tests/
@@ -79,7 +79,7 @@ references:
       - run:
           name: Deploy dist and wheels
           command: |
-            pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort
+            pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort numpy scipy
             python3.8 -m flake8 --show-source rowan
             # Ignore isort errors in tests that are due to ambiguity over whether or not rowan is third party.
             python3.8 -m flake8 --extend-ignore=I001,I004 --show-source tests/
