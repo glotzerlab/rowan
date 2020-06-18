@@ -6,42 +6,6 @@ R"""Submodule containing all standard functions"""
 import numpy as np
 
 
-def _support_1d(func):
-    R"""Decorator to raise input array shape to 2D and flatten on output.
-
-    In order to support arbitrary-dimensional arrays, rowan makes liberal use
-    of fancy NumPy indexing tricks, in particular the '...' indexer. However,
-    NumPy versions older than 1.13 fail for inputs that are 1-dimensional that
-    use this approach. For backwards compatibility with older NumPy versions,
-    this decorator manually promotes input arrays to at least 2-dimensional
-    arrays, then flattens them back to the input shape if needed. This function
-    can be removed when we officially drop support for NumPy < 1.13
-
-    Currently the decorator is only designed for functions that take a single
-    argument.
-    """
-
-    from functools import wraps
-
-    # Wrapper function to ensure that input arrays are at least 2-dimensional.
-    @wraps(func)
-    def func_atleast_2d(q, *args, **kwargs):
-        q = np.asarray(q)
-        if len(q.shape) == 1:
-            flat = True
-            q = np.atleast_2d(q)
-        else:
-            flat = False
-        ret = func(q, *args, **kwargs)
-        if flat:
-            return ret.squeeze()
-        else:
-            return ret
-
-    return func_atleast_2d
-
-
-@_support_1d
 def exp(q):
     R"""Computes the natural exponential function :math:`e^q`.
 
@@ -135,7 +99,6 @@ def exp10(q):
     return expb(q, 10)
 
 
-@_support_1d
 def log(q):
     R"""Computes the quaternion natural logarithm.
 
@@ -245,7 +208,6 @@ def log10(q):
     return logb(q, 10)
 
 
-@_support_1d
 def power(q, n):
     R"""Computes the power of a quaternion :math:`q^n`.
 
@@ -307,7 +269,6 @@ def conjugate(q):
     return conjugate
 
 
-@_support_1d
 def inverse(q):
     R"""Computes the inverse of an array of quaternions.
 
