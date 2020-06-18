@@ -2,7 +2,7 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/en/1.0.0/>`_
 This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html>`_.
 
 
-Unreleased
+v1.3.0 - xxxx-xx-xx
 ----------
 
 Fixed
@@ -10,6 +10,11 @@ Fixed
 
 * Docstring of geometry.angle was missing a factor of 2 in the comparison to intrinsic_distance.
 * Docstrings of functions using support1d decorator were losing their docstring (fixed with functools.wraps).
+
+Changed
++++++++
+
+* Drop Python 2 support.
 
 v1.2.2 - 2019-09-11
 -------------------

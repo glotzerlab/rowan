@@ -15,6 +15,9 @@ try:
 except ImportError:
     readme = desc
 
+# Supported versions are determined according to NEP 29.
+# https://numpy.org/neps/nep-0029-deprecation_policy.html
+
 setup(name='rowan',
       version=version,
       description=desc,
@@ -26,18 +29,15 @@ setup(name='rowan',
       packages=find_packages(exclude=["tests"]),
       zip_safe=True,
       install_requires=[
-          'numpy>=1.10'
+          'numpy>=1.15'
       ],
-      python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, <4',
+      python_requires='>=3.6, <4',
       classifiers=[
-          'Development Status :: 3 - Alpha',
+          'Development Status :: 6 - Mature',
           'License :: OSI Approved :: BSD License',
-          'Programming Language :: Python :: 2.7',
-          'Programming Language :: Python :: 3.3',
-          'Programming Language :: Python :: 3.4',
-          'Programming Language :: Python :: 3.5',
           'Programming Language :: Python :: 3.6',
           'Programming Language :: Python :: 3.7',
+          'Programming Language :: Python :: 3.8',
           'Topic :: Scientific/Engineering :: Mathematics',
       ],
       )
