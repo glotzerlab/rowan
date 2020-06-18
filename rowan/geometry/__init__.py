@@ -46,7 +46,8 @@ def distance(p, q):
 
     Example::
 
-        rowan.geometry.distance([1, 0, 0, 0], [1, 0, 0, 0])
+        >>> rowan.geometry.distance([1, 0, 0, 0], [1, 0, 0, 0])
+        0.0
     """
     return norm(np.asarray(p) - np.asarray(q))
 
@@ -72,7 +73,8 @@ def sym_distance(p, q):
 
     Example::
 
-        rowan.geometry.sym_distance([1, 0, 0, 0], [-1, 0, 0, 0])
+        >>> rowan.geometry.sym_distance([1, 0, 0, 0], [-1, 0, 0, 0])
+        0.0
     """
     p = np.asarray(p)
     q = np.asarray(q)
@@ -133,7 +135,8 @@ def riemann_log_map(p, q):
 
     Example::
 
-        rowan.geometry.riemann_log_map([1, 0, 0, 0], [-1, 0, 0, 0])
+        >>> rowan.geometry.riemann_log_map([1, 0, 0, 0], [-1, 0, 0, 0])
+        array([0., 0., 0., 0.])
     """
     return log(multiply(inverse(q), p))
 
@@ -198,7 +201,8 @@ def sym_intrinsic_distance(p, q):
 
     Example::
 
-        rowan.geometry.sym_intrinsic_distance([1, 0, 0, 0], [-1, 0, 0, 0])
+        >>> rowan.geometry.sym_intrinsic_distance([1, 0, 0, 0], [-1, 0, 0, 0])
+        array(0.)
     """
     p = np.asarray(p)
     q = np.asarray(q)
@@ -224,7 +228,8 @@ def angle(p):
 
     Example::
 
-        rowan.geometry.angle([1, 0, 0, 0])
+        >>> rowan.geometry.angle([1, 0, 0, 0])
+        0.0
     """
     # TODO: Make sure all the quaternions are rotations
     # where they need to be.
