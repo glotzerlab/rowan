@@ -1,4 +1,4 @@
-"""Test the simple unary operator of the quaternion package"""
+"""Test the simple unary operator of the quaternion package."""
 from __future__ import absolute_import, division, print_function
 
 import unittest
@@ -11,8 +11,10 @@ zero = np.array([0, 0, 0, 0])
 
 
 class TestSimple(unittest.TestCase):
+    """Test simple quaternion operations in the core of the package."""
+
     def test_conjugate(self):
-        """Test quaternion conjugation"""
+        """Test quaternion conjugation."""
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
@@ -22,7 +24,7 @@ class TestSimple(unittest.TestCase):
             self.assertTrue(np.all(rowan.conjugate(quats) == quats_conj))
 
     def test_inverse(self):
-        """Test quaternion inverse"""
+        """Test quaternion inverse."""
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
@@ -33,7 +35,7 @@ class TestSimple(unittest.TestCase):
             self.assertTrue(np.allclose(rowan.inverse(quats), quats_conj))
 
     def test_norm(self):
-        """Test quaternion norm"""
+        """Test quaternion norm."""
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
@@ -42,7 +44,7 @@ class TestSimple(unittest.TestCase):
             self.assertTrue(np.all(rowan.norm(quats) == norms))
 
     def test_normalize(self):
-        """Test quaternion normalize"""
+        """Test quaternion normalize."""
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
@@ -53,7 +55,7 @@ class TestSimple(unittest.TestCase):
             )
 
     def test_equal(self):
-        """Test quaternion equality"""
+        """Test quaternion equality."""
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
@@ -63,7 +65,7 @@ class TestSimple(unittest.TestCase):
             self.assertFalse(np.any(rowan.equal(quats, 0)))
 
     def test_not_equal(self):
-        """Test quaternion inequality"""
+        """Test quaternion inequality."""
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
@@ -73,7 +75,7 @@ class TestSimple(unittest.TestCase):
             self.assertTrue(np.any(rowan.not_equal(quats, 0)))
 
     def test_allclose(self):
-        """Test all quaternion closeness"""
+        """Test all quaternion closeness."""
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
@@ -82,7 +84,7 @@ class TestSimple(unittest.TestCase):
             self.assertTrue(rowan.allclose(quats, quats - 1e-8))
 
     def test_isclose(self):
-        """Test element-wise quaternion closeness"""
+        """Test element-wise quaternion closeness."""
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
@@ -92,7 +94,7 @@ class TestSimple(unittest.TestCase):
             self.assertTrue(np.all(rowan.isclose(quats, quats - 1e-8)))
 
     def test_isfinite(self):
-        """Test quaternion finiteness"""
+        """Test quaternion finiteness."""
         x = np.array([np.inf] * 4)
         self.assertFalse(rowan.isfinite(x))
         x[1:] = 0
@@ -107,7 +109,7 @@ class TestSimple(unittest.TestCase):
             self.assertTrue(np.all(rowan.isfinite(quats)))
 
     def test_isinf(self):
-        """Test quaternion infiniteness"""
+        """Test quaternion infiniteness."""
         x = np.array([np.inf] * 4)
         self.assertTrue(rowan.isinf(x))
         x[1:] = 0
@@ -122,7 +124,7 @@ class TestSimple(unittest.TestCase):
             self.assertTrue(np.all(np.logical_not(rowan.isinf(quats))))
 
     def test_isnan(self):
-        """Test quaternions being of numeric type"""
+        """Test quaternions being of numeric type."""
         x = np.array([np.nan] * 4)
         self.assertTrue(rowan.isnan(x))
         x[1:] = 0

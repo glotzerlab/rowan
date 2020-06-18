@@ -1,4 +1,4 @@
-"""Test the multiplication of quaternions for various array sizes"""
+"""Test the multiplication of quaternions for various array sizes."""
 from __future__ import absolute_import, division, print_function
 
 import os
@@ -20,10 +20,10 @@ with np.load(TESTDATA_FILENAME) as data:
 
 
 class TestMultiply(unittest.TestCase):
-    """Test the core multiplication operation"""
+    """Test the core multiplication operation."""
 
     def test_single_quaternion(self):
-        """Simplest case of quaternion multiplication"""
+        """Simplest case of quaternion multiplication."""
         # Multiply zeros
         product = rowan.multiply(zero, zero)
         self.assertTrue(np.all(product == np.array([0, 0, 0, 0])))
@@ -33,7 +33,7 @@ class TestMultiply(unittest.TestCase):
         self.assertTrue(np.all(product == np.array([1, 0, 0, 0])))
 
     def test_2d_array(self):
-        """Multiplying arrays of quaternions"""
+        """Multiplying arrays of quaternions."""
         zeros = np.repeat(zero[np.newaxis, :], 10, axis=0)
         ones = np.repeat(one[np.newaxis, :], 10, axis=0)
 
@@ -58,7 +58,7 @@ class TestMultiply(unittest.TestCase):
         self.assertTrue(np.allclose(product, stored_product))
 
     def test_3d_array(self):
-        """Multiplying higher dimensional arrays of quaternions"""
+        """Multiplying higher dimensional arrays of quaternions."""
         num_reps = 20
         expanded_shape = (int(num_reps / 5), 5, 4)
         zeros = np.reshape(
@@ -95,7 +95,7 @@ class TestMultiply(unittest.TestCase):
         )
 
     def test_broadcast(self):
-        """Ensure broadcasting works"""
+        """Ensure broadcasting works."""
         # Multiply zeros, simple shape check
         shape = (45, 3, 13, 4)
         many_zeros = np.zeros(shape)
@@ -125,7 +125,7 @@ class TestMultiply(unittest.TestCase):
                 self.assertTrue(np.all(product[i, j, :] == single_prod))
 
     def test_divide(self):
-        """Ensure division works"""
+        """Ensure division works."""
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         np.random.seed(0)
         for shape_i in shapes:

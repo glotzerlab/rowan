@@ -1,4 +1,4 @@
-"""Test converting quaternions to and from axis-angle representation"""
+"""Test converting quaternions to and from axis-angle representation."""
 from __future__ import absolute_import, division, print_function
 
 import unittest
@@ -9,10 +9,10 @@ import rowan
 
 
 class TestFromAxisAngle(unittest.TestCase):
-    """Test converting from axis angle representation"""
+    """Test converting from axis angle representation."""
 
     def test_single(self):
-        """Test rotation about an axis"""
+        """Test rotation about an axis."""
         v = np.array([1, 0, 0])
         theta = np.pi
         quats = rowan.from_axis_angle(v, theta)
@@ -20,7 +20,7 @@ class TestFromAxisAngle(unittest.TestCase):
         self.assertTrue(np.allclose(quats, np.array([0, 1, 0, 0])))
 
     def test_multiple_vectors(self):
-        """Test multiple vectors against an angle"""
+        """Test multiple vectors against an angle."""
         v = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
         theta = np.pi
         quats = rowan.from_axis_angle(v, theta)
@@ -30,7 +30,7 @@ class TestFromAxisAngle(unittest.TestCase):
         )
 
     def test_multiple(self):
-        """Test multiple vectors against multiple angles"""
+        """Test multiple vectors against multiple angles."""
         v = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
         theta = np.array([np.pi, np.pi / 2, np.pi / 3])
         quats = rowan.from_axis_angle(v, theta)
@@ -49,7 +49,7 @@ class TestFromAxisAngle(unittest.TestCase):
         )
 
     def test_complex(self):
-        """Test higher dimensions and broadcasting"""
+        """Test higher dimensions and broadcasting."""
         # Various ways of producing the same output
         expected_output = (
             np.array(
@@ -100,15 +100,17 @@ class TestFromAxisAngle(unittest.TestCase):
 
 
 class TestToAxisAngle(unittest.TestCase):
-    """Test converting to axis angle representation"""
+    """Test converting to axis-angle representation."""
 
     def test_div_zero(self):
+        """Test converting the unit quaternion (which could cause division by zero)."""
         q = (1, 0, 0, 0)
         axes, angles = rowan.to_axis_angle(q)
         self.assertTrue(np.allclose(axes, [0, 0, 0]))
         self.assertEqual(angles, 0)
 
     def test_to_axis_angle(self):
+        """Test conversion to axis-angle representation."""
         q = (np.sqrt(2) / 2, np.sqrt(2) / 2, 0, 0)
         axes, angles = rowan.to_axis_angle(q)
         self.assertTrue(np.allclose(axes, np.array([1, 0, 0])))

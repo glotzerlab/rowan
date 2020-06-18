@@ -1,4 +1,4 @@
-"""Test derivative and integral"""
+"""Test derivative and integral."""
 from __future__ import absolute_import, division, print_function
 
 import unittest
@@ -13,10 +13,10 @@ one_vec = np.array([1, 0, 0])
 
 
 class TestCalculus(unittest.TestCase):
-    """Test derivatives and integrals"""
+    """Test derivatives and integrals."""
 
     def test_derivative(self):
-        """Test differentiation"""
+        """Test differentiation."""
         self.assertTrue(np.all(calculus.derivative(one, zero_vec) == 0))
         self.assertTrue(np.all(calculus.derivative(one, one_vec) == [0, 0.5, 0, 0]))
 
@@ -29,7 +29,7 @@ class TestCalculus(unittest.TestCase):
         self.assertTrue(np.allclose(calculus.derivative(x, v), ans))
 
     def test_integrate(self):
-        """Test integration"""
+        """Test integration."""
         self.assertTrue(np.all(calculus.integrate(one, zero_vec, 0) == one))
         self.assertTrue(np.all(calculus.integrate(one, one_vec, 0) == one))
         self.assertTrue(np.all(calculus.integrate(one, zero_vec, 1) == one))

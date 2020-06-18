@@ -13,10 +13,10 @@ half = np.array([0.5, 0.5, 0.5, 0.5])
 
 
 class TestMapping(unittest.TestCase):
-    """Test mapping functions"""
+    """Test mapping functions."""
 
     def test_kabsch(self):
-        """Perform a rotation and ensure that we can recover it"""
+        """Perform a rotation and ensure that we can recover it."""
         np.random.seed(0)
 
         for i in range(1, 12):
@@ -41,7 +41,7 @@ class TestMapping(unittest.TestCase):
             self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
 
     def test_horn(self):
-        """Perform a rotation and ensure that we can recover it"""
+        """Perform a rotation and ensure that we can recover it."""
         np.random.seed(0)
 
         for i in range(1, 12):
@@ -66,7 +66,7 @@ class TestMapping(unittest.TestCase):
             self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
 
     def test_davenport(self):
-        """Perform a rotation and ensure that we can recover it"""
+        """Perform a rotation and ensure that we can recover it."""
         np.random.seed(0)
 
         for i in range(1, 12):
@@ -90,7 +90,7 @@ class TestMapping(unittest.TestCase):
             self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
 
     def test_procrustes(self):
-        """Perform a rotation and ensure that we can recover it"""
+        """Perform a rotation and ensure that we can recover it."""
         np.random.seed(0)
 
         for i in range(1, 12):
@@ -114,7 +114,7 @@ class TestMapping(unittest.TestCase):
             self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
 
     def test_equivalent(self):
-        """Perform a rotation and ensure that we can recover it"""
+        """Perform a rotation and ensure that we can recover it."""
         # Test on an octahedron
         points = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]]
 
@@ -143,7 +143,7 @@ class TestMapping(unittest.TestCase):
         )
 
     def test_icp_exact(self):
-        """Ensure that ICP is exact for corresponding inputs"""
+        """Ensure that ICP is exact for corresponding inputs."""
         # Note that we do not bother to test the non-unique matching since we
         # know it provides very poor results.
         np.random.seed(0)
@@ -173,11 +173,10 @@ class TestMapping(unittest.TestCase):
             )
 
     def test_icp_mismatched(self):
-        """See how ICP works for non-corresponding inputs. Have set some
-        reasonable threshold for testing purposes."""
+        """See how ICP works for non-corresponding inputs."""
         np.random.seed(0)
 
-        # First test using unique matching, which should work
+        # First test using unique matching, which should work.
         for i in range(2, 6):
             num_points = 2 ** i
 
@@ -193,7 +192,8 @@ class TestMapping(unittest.TestCase):
 
             deltas = transformed_points - (rotate(q, points[indices]) + t)
             norms = np.linalg.norm(deltas, axis=-1)
-            # This is purely a heuristic, since we can't guarantee exact matches
+            # We have set some reasonable threshold for testing purposes, this is purely
+            # a heuristic since we can't guarantee exact matches
             self.assertTrue(np.mean(norms) < 0.5)
 
 

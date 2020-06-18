@@ -1,4 +1,4 @@
-"""Test functions to interpolate between quaternion"""
+"""Test functions to interpolate between quaternion."""
 from __future__ import absolute_import, division, print_function
 
 import unittest
@@ -14,10 +14,10 @@ root_two = np.array([np.sqrt(2) / 2, np.sqrt(2) / 2, 0, 0])
 
 
 class TestInterpolate(unittest.TestCase):
-    """Test quaternion interpolation"""
+    """Test quaternion interpolation."""
 
     def test_slerp(self):
-        """Test spherical linear interpolation"""
+        """Test spherical linear interpolation."""
         self.assertTrue(np.all(interpolate.slerp(one, one, 0) == one))
         self.assertTrue(np.all(interpolate.slerp(one, one, 1) == one))
         self.assertTrue(np.all(interpolate.slerp(one, one, 0.5) == one))
@@ -49,7 +49,7 @@ class TestInterpolate(unittest.TestCase):
         )
 
     def test_slerp_prime(self):
-        """Test spherical linear interpolation derivative"""
+        """Test spherical linear interpolation derivative."""
         self.assertTrue(np.all(interpolate.slerp_prime(one, one, 0) == zero))
         self.assertTrue(np.all(interpolate.slerp_prime(one, one, 1) == zero))
         self.assertTrue(np.all(interpolate.slerp_prime(one, one, 0.5) == zero))
@@ -65,7 +65,7 @@ class TestInterpolate(unittest.TestCase):
         )
 
     def test_squad(self):
-        """Test spherical quadratic interpolation"""
+        """Test spherical quadratic interpolation."""
         self.assertTrue(np.all(interpolate.squad(one, one, one, one, 0) == one))
         self.assertTrue(
             np.allclose(interpolate.squad(one, one, one, root_two, 1), root_two)

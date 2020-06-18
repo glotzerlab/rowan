@@ -1,4 +1,4 @@
-"""Test converting quaternions to and from Euler angles"""
+"""Test converting quaternions to and from Euler angles."""
 from __future__ import absolute_import, division, print_function
 
 import os
@@ -18,10 +18,10 @@ with np.load(TESTDATA_FILENAME) as data:
 
 
 class TestEuler(unittest.TestCase):
-    """Test Euler angle conversions"""
+    """Test Euler angle conversions."""
 
     def test_from_euler(self):
-        """Convert Euler angles to quaternions"""
+        """Convert Euler angles to quaternions."""
         alpha, beta, gamma = [0, 0, 0]
         self.assertTrue(
             np.all(rowan.from_euler(alpha, beta, gamma) == np.array([1, 0, 0, 0]))
@@ -81,7 +81,7 @@ class TestEuler(unittest.TestCase):
             rowan.from_euler(alpha, beta, gamma, "zyz", "bar")
 
     def test_to_euler(self):
-        """Test conversion to Euler angles"""
+        """Test conversion to Euler angles."""
         v = one
         self.assertTrue(np.all(rowan.to_euler(v) == np.array([0, 0, 0])))
 
@@ -115,7 +115,7 @@ class TestEuler(unittest.TestCase):
             rowan.to_euler(zero)
 
     def test_from_to_euler(self):
-        """2-way conversion starting from Euler angles"""
+        """2-way conversion starting from Euler angles."""
         np.random.seed(0)
         quats = rowan.normalize(np.random.rand(25, 4))
         conventions = [
@@ -152,7 +152,7 @@ class TestEuler(unittest.TestCase):
                 )
 
     def test_to_from_euler(self):
-        """2-way conversion starting from quaternions"""
+        """2-way conversion starting from quaternions."""
         np.random.seed(0)
         angles_euler = np.pi * np.random.rand(100, 3)
         conventions_euler = ["xzx", "xyx", "yxy", "yzy", "zyz", "zxz"]

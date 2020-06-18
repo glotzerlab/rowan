@@ -1,4 +1,4 @@
-"""Test functions to compute quaternion distance"""
+"""Test functions to compute quaternion distance."""
 from __future__ import absolute_import, division, print_function
 
 import os
@@ -14,16 +14,16 @@ inf_array = np.array([-np.inf, 0, 0, 0])
 
 
 class TestDistance(unittest.TestCase):
-    """Test distance metrics"""
+    """Test distance metrics."""
 
     def setUp(self):
-        """Get the data file used for all methods"""
+        """Get the data file used for all methods."""
         self.saved_data = np.load(
             os.path.join(os.path.dirname(__file__), "files/test_geometry.npz")
         )
 
     def test_distance(self):
-        """Test the simple distance metric"""
+        """Test the simple distance metric."""
         self.assertTrue(geometry.distance(one, one) == 0)
         self.assertTrue(geometry.distance(zero, zero) == 0)
         self.assertTrue(geometry.distance(zero, one) == 1)
@@ -38,7 +38,7 @@ class TestDistance(unittest.TestCase):
         self.assertTrue(np.allclose(my_ans, self.saved_data["distance"]))
 
     def test_sym_distance(self):
-        """Test the symmetric distance metric"""
+        """Test the symmetric distance metric."""
         self.assertTrue(geometry.sym_distance(one, one) == 0)
         self.assertTrue(geometry.sym_distance(zero, zero) == 0)
         self.assertTrue(geometry.sym_distance(zero, one) == 1)
@@ -53,7 +53,7 @@ class TestDistance(unittest.TestCase):
         self.assertTrue(np.allclose(self.saved_data["sym_distance"], my_ans))
 
     def test_riemann_exp_map(self):
-        """Test computation of the Riemannian exponential map"""
+        """Test computation of the Riemannian exponential map."""
         self.assertTrue(np.all(geometry.riemann_exp_map(zero, zero) == 0))
         self.assertTrue(np.all(geometry.riemann_exp_map(one, zero) == one))
         self.assertTrue(
@@ -70,7 +70,7 @@ class TestDistance(unittest.TestCase):
         self.assertTrue(np.allclose(self.saved_data["exp_map"], my_ans))
 
     def test_riemann_log_map(self):
-        """Test computation of the Riemannian logarithmic map"""
+        """Test computation of the Riemannian logarithmic map."""
         self.assertTrue(np.all(geometry.riemann_log_map(zero, zero) == inf_array))
         self.assertTrue(np.all(geometry.riemann_log_map(one, zero) == inf_array))
         self.assertTrue(
@@ -87,7 +87,7 @@ class TestDistance(unittest.TestCase):
         self.assertTrue(np.allclose(self.saved_data["log_map"], my_ans))
 
     def test_intrinsic_distance(self):
-        """Test computation of the intrinsic distance"""
+        """Test computation of the intrinsic distance."""
         self.assertTrue(geometry.intrinsic_distance(zero, zero) == np.inf)
         self.assertTrue(geometry.intrinsic_distance(one, zero) == np.inf)
         self.assertTrue(np.allclose(geometry.intrinsic_distance(one, one), 0))
@@ -102,7 +102,7 @@ class TestDistance(unittest.TestCase):
         self.assertTrue(np.allclose(self.saved_data["intrinsic_distance"], my_ans))
 
     def test_sym_intrinsic_distance(self):
-        """Test computation of the symmetric intrinsic distance"""
+        """Test computation of the symmetric intrinsic distance."""
         self.assertTrue(geometry.sym_intrinsic_distance(zero, zero) == np.inf)
         self.assertTrue(geometry.sym_intrinsic_distance(one, zero) == np.inf)
         self.assertTrue(np.allclose(geometry.sym_intrinsic_distance(one, one), 0))
@@ -119,7 +119,7 @@ class TestDistance(unittest.TestCase):
         self.assertTrue(np.allclose(self.saved_data["sym_intrinsic_distance"], my_ans))
 
     def test_angle(self):
-        """Test computation of angles"""
+        """Test computation of angles."""
         self.assertTrue(geometry.angle(one) == 0)
 
         p = normalize(self.saved_data["p"])

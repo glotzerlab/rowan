@@ -1,4 +1,4 @@
-"""Test function to rotate vector onto vector"""
+"""Test function to rotate vector onto vector."""
 from __future__ import absolute_import, division, print_function
 
 import unittest
@@ -9,8 +9,10 @@ import rowan
 
 
 class TestVectorVector(unittest.TestCase):
+    """Test rotation of a vector onto another vector."""
+
     def test_simple(self):
-        """Test finding quaternion to rotate a vector onto another vector"""
+        """Test finding quaternion to rotate a vector onto another vector."""
         vec1 = np.array([1, 0, 0])
         vec2 = np.array([0, 1, 0])
         vec3 = np.array([0, 0, 1])
@@ -24,8 +26,7 @@ class TestVectorVector(unittest.TestCase):
         )
 
     def test_ap(self):
-        """Test finding quaternion to rotate antiparallel vectors onto each
-        other"""
+        """Test finding quaternion to rotate antiparallel vectors onto each other."""
         # For this test, there are multiple quaternions that would effect the
         # correct rotation, so rather than checking for a specific one we check
         # that the appropriate rotation results from applying the quaternion
@@ -57,7 +58,7 @@ class TestVectorVector(unittest.TestCase):
         )
 
     def test_broadcast(self):
-        """Test broadcasting"""
+        """Test broadcasting."""
         vec1 = np.array([1, 0, 0])
         vec2 = np.array([0, 1, 0])
         vec3 = np.array([0, 0, 1])

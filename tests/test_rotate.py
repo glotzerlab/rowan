@@ -1,4 +1,4 @@
-"""Test the rotation of quaternions for various array sizes"""
+"""Test the rotation of quaternions for various array sizes."""
 from __future__ import absolute_import, division, print_function
 
 import os
@@ -23,14 +23,14 @@ with np.load(TESTDATA_FILENAME) as data:
 
 
 class TestRotate(unittest.TestCase):
-    """Test the core rotation operation"""
+    """Test the core rotation operation."""
 
     def test_single_quaternion(self):
-        """Testing trivial rotations"""
+        """Testing trivial rotations."""
         self.assertTrue(np.all(rowan.rotate(one, one_vector) == one_vector))
 
     def test_2d_array(self):
-        """Rotating sets of vectors by sets of quaternions"""
+        """Rotating sets of vectors by sets of quaternions."""
         ones = np.repeat(one[np.newaxis, :], 10, axis=0)
         one_vectors = np.repeat(one_vector[np.newaxis, :], 10, axis=0)
 
@@ -43,8 +43,7 @@ class TestRotate(unittest.TestCase):
         )
 
     def test_3d_array(self):
-        """Rotating higher dimensional arrays of vectors
-        by arrays of quaternions"""
+        """Rotating higher dimensional arrays of vectors by arrays of quaternions."""
         num_reps = 20
         expanded_shape = (num_reps // 5, 5, 4)
         expanded_shape_vec = (num_reps // 5, 5, 3)
@@ -73,7 +72,7 @@ class TestRotate(unittest.TestCase):
         )
 
     def test_broadcast(self):
-        """Ensure broadcasting works"""
+        """Ensure broadcasting works."""
         # Rotate zero by one, simple shape check
         shape = (45, 3, 13, 4)
         shape_out = (45, 3, 13, 3)

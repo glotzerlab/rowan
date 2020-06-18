@@ -1,4 +1,4 @@
-"""Test exponential, log, and powers of quaternions"""
+"""Test exponential, log, and powers of quaternions."""
 from __future__ import absolute_import, division, print_function
 
 import os
@@ -13,10 +13,10 @@ zero = np.array([0, 0, 0, 0])
 
 
 class TestExp(unittest.TestCase):
-    """Test exponential function"""
+    """Test exponential function."""
 
     def test_exp(self):
-        """Ensure that quaternion exponential behaves correctly"""
+        """Ensure that quaternion exponential behaves correctly."""
         self.assertTrue(np.all(rowan.exp(zero) == one))
         self.assertTrue(np.all(rowan.exp(one) == np.array([np.exp(1), 0, 0, 0])))
         x = np.array([0, 1, 1, 1])
@@ -56,7 +56,7 @@ class TestExp(unittest.TestCase):
             )
 
     def test_log(self):
-        """Ensure that quaternion logarithm behaves correctly"""
+        """Ensure that quaternion logarithm behaves correctly."""
         self.assertTrue(np.all(rowan.log(one) == zero))
         self.assertTrue(np.all(rowan.log(zero) == np.array([-np.inf, 0, 0, 0])))
         self.assertTrue(
@@ -89,7 +89,7 @@ class TestExp(unittest.TestCase):
             )
 
     def test_logb(self):
-        """Ensure that quaternion logarithm for any base behaves correctly"""
+        """Ensure that quaternion logarithm for any base behaves correctly."""
         base_test = 3
         self.assertTrue(np.all(rowan.logb(one, base_test) == zero))
         self.assertTrue(
@@ -109,7 +109,7 @@ class TestExp(unittest.TestCase):
             )
 
     def test_log10(self):
-        """Ensure that quaternion base 10 logarithm behaves correctly"""
+        """Ensure that quaternion base 10 logarithm behaves correctly."""
         self.assertTrue(np.all(rowan.log10(one) == zero))
         self.assertTrue(np.all(rowan.log10(zero) == np.array([-np.inf, 0, 0, 0])))
 
@@ -124,7 +124,7 @@ class TestExp(unittest.TestCase):
             )
 
     def test_power(self):
-        """Ensure that quaternion power behaves correctly"""
+        """Ensure that quaternion power behaves correctly."""
         self.assertTrue(np.all(rowan.power(one, 0) == one))
         self.assertTrue(np.all(rowan.power(one, 1) == one))
         self.assertTrue(np.all(rowan.power(one, 10) == one))

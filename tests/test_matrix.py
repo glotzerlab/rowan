@@ -1,4 +1,4 @@
-"""Test converting quaternions to and from rotation matrices"""
+"""Test converting quaternions to and from rotation matrices."""
 from __future__ import absolute_import, division, print_function
 
 import os
@@ -20,10 +20,10 @@ with np.load(TESTDATA_FILENAME) as data:
 
 
 class TestMatrix(unittest.TestCase):
-    """Test rotation matrix conversions"""
+    """Test rotation matrix conversions."""
 
     def test_from_matrix(self):
-
+        """Test conversion from a matrix to a quaternion."""
         self.assertTrue(np.all(rowan.from_matrix(np.eye(3)) == one))
 
         with self.assertRaises(ValueError):
@@ -44,6 +44,7 @@ class TestMatrix(unittest.TestCase):
         self.assertTrue(np.allclose(rowan.from_matrix(mat), v))
 
     def test_to_matrix(self):
+        """Test conversion from a quaternion to a matrix."""
         v = np.copy(zero)
         with self.assertRaises(ZeroDivisionError):
             rowan.to_matrix(v)
@@ -68,6 +69,7 @@ class TestMatrix(unittest.TestCase):
         )
 
     def test_to_from_matrix(self):
+        """Test conversion from a quaternion to a matrix and back."""
         # The equality is only guaranteed up to a sign
         converted = rowan.from_matrix(rowan.to_matrix(input1))
         self.assertTrue(
@@ -80,6 +82,7 @@ class TestMatrix(unittest.TestCase):
         )
 
     def test_rotation(self):
+        """Test that a quaternion and its converted matrix perform the same rotation."""
         quat_rotated = rowan.rotate(input1, vector_inputs)
 
         matrices = rowan.to_matrix(input1)
