@@ -9,6 +9,7 @@ rowan
 |CircleCI|
 |Codecov|
 |PyPI|
+|conda-forge|
 |Codacy|
 |Zenodo|
 |JOSS|
@@ -21,6 +22,8 @@ rowan
     :target: https://codecov.io/gh/glotzerlab/rowan
 .. |PyPI| image:: https://img.shields.io/pypi/v/rowan.svg
     :target: https://pypi.org/project/rowan/
+.. |conda-forge| image:: https://img.shields.io/conda/vn/conda-forge/rowan.svg
+   :target: https://anaconda.org/conda-forge/rowan
 .. |Codacy| image:: https://api.codacy.com/project/badge/Grade/2ff6c23cb9be4f77827428a87e0e9cfc
     :target: https://www.codacy.com/app/vramasub/rowan?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=glotzerlab/rowan&amp;utm_campaign=Badge_Grade
 .. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1323676.svg
