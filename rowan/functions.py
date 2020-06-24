@@ -226,7 +226,7 @@ def power(q, n):
 
     Args:
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
-        n ((...) np.array): Scalars to exponentiate quaternions with.
+        n ((...) :class:`numpy.ndarray`): Scalars to exponentiate quaternions with.
 
     Returns:
         (..., 4) :class:`numpy.ndarray`: Powers of ``q``.
