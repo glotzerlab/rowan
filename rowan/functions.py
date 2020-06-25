@@ -27,7 +27,7 @@ def exp(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        (...) :class:`numpy.ndarray`: Exponentials of ``q``.
+        (..., 4) :class:`numpy.ndarray`: Exponentials of ``q``.
 
     Example::
 
@@ -74,7 +74,7 @@ def expb(q, b):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        (...) :class:`numpy.ndarray`: Exponentials of ``q``.
+        (..., 4) :class:`numpy.ndarray`: Exponentials of ``q``.
 
     Example::
 
@@ -94,7 +94,7 @@ def exp10(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        (...) :class:`numpy.ndarray`: Exponentials of ``q``.
+        (..., 4) :class:`numpy.ndarray`: Exponentials of ``q``.
 
     Example::
 
@@ -123,7 +123,7 @@ def log(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        (...) :class:`numpy.ndarray`: Logarithms of ``q``.
+        (..., 4) :class:`numpy.ndarray`: Logarithms of ``q``.
 
     Example::
 
@@ -184,7 +184,7 @@ def logb(q, b):
         n ((...) :class:`numpy.ndarray`): Scalars to use as log bases.
 
     Returns:
-        (...) :class:`numpy.ndarray`: Logarithms of ``q``.
+        (..., 4) :class:`numpy.ndarray`: Logarithms of ``q``.
 
     Example::
 
@@ -204,7 +204,7 @@ def log10(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        (...) :class:`numpy.ndarray`: Logarithms of ``q``.
+        (..., 4) :class:`numpy.ndarray`: Logarithms of ``q``.
 
     Example::
 
@@ -226,10 +226,10 @@ def power(q, n):
 
     Args:
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
-        n ((...) np.arrray): Scalars to exponentiate quaternions with.
+        n ((...) :class:`numpy.ndarray`): Scalars to exponentiate quaternions with.
 
     Returns:
-        (...) :class:`numpy.ndarray`: Powers of ``q``.
+        (..., 4) :class:`numpy.ndarray`: Powers of ``q``.
 
     Example::
 
@@ -264,7 +264,7 @@ def conjugate(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        (...) :class:`numpy.ndarray`: Conjugates of ``q``.
+        (..., 4) :class:`numpy.ndarray`: Conjugates of ``q``.
 
     Example::
 
@@ -284,7 +284,7 @@ def inverse(q):
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
 
     Returns:
-        (...) :class:`numpy.ndarray`: Inverses of ``q``.
+        (..., 4) :class:`numpy.ndarray`: Inverses of ``q``.
 
     Example::
 
@@ -314,7 +314,7 @@ def multiply(qi, qj):
         qj ((..., 4) :class:`numpy.ndarray`): Array of right quaternions.
 
     Returns:
-        (...) :class:`numpy.ndarray`:
+        (..., 4) :class:`numpy.ndarray`:
             Element-wise products of ``q`` (obeying broadcasting rules up to the last
             dimension of ``qi`` and ``qj``).
 
@@ -350,7 +350,7 @@ def divide(qi, qj):
         qj ((..., 4) :class:`numpy.ndarray`): Divisor quaternions.
 
     Returns:
-        (...) :class:`numpy.ndarray`:
+        (..., 4) :class:`numpy.ndarray`:
             Element-wise quotients of ``q`` (obeying broadcasting rules up to the last
             dimension of ``qi`` and ``qj``).
 
@@ -436,7 +436,7 @@ def from_mirror_plane(x, y, z):
         z ((...) :class:`numpy.ndarray`): Third planar component.
 
     Returns:
-        (...) :class:`numpy.ndarray`:
+        (..., 4) :class:`numpy.ndarray`:
             Quaternions reflecting about the input plane :math:`(x, y, z)`.
 
     Example::
@@ -469,7 +469,7 @@ def reflect(q, v):
         v ((..., 3) :class:`numpy.ndarray`): Array of vectors.
 
     Returns:
-        (..., 4) :class:`numpy.ndarray`:
+        (..., 3) :class:`numpy.ndarray`:
             The result of reflecting ``v`` using ``q``.
 
     Example::
@@ -493,7 +493,7 @@ def rotate(q, v):
         v ((..., 3) :class:`numpy.ndarray`): Array of vectors.
 
     Returns:
-        (..., 4) :class:`numpy.ndarray`:
+        (..., 3) :class:`numpy.ndarray`:
             The result of rotating ``v`` using ``q``.
 
     Example::
@@ -524,7 +524,7 @@ def _vector_bisector(v1, v2):
         v2 ((..., 3) :class:`numpy.ndarray`): Second array of vectors.
 
     Returns:
-        (...) :class:`numpy.ndarray`: The vector bisectors.
+        (..., 3) :class:`numpy.ndarray`: The vector bisectors.
     """
     # Since np.inner and np.dot require manipulating the shapes in ways that
     # might be expensive and may not play nicely with broadcasting, we perform
@@ -1058,7 +1058,7 @@ def to_axis_angle(q):
         q ((..., 4) :class:`numpy.ndarray`): An array of quaternions.
 
     Returns:
-        tuple[(..., 3) :class:`numpy.ndarray`, (..., 1) :class:`numpy.ndarray`]:
+        tuple[(..., 3) :class:`numpy.ndarray`, (...) :class:`numpy.ndarray`]:
             The axes and the angles (in radians).
 
     Example::
@@ -1220,7 +1220,7 @@ def isclose(p, q, **kwargs):
 
     Example::
 
-        >>> rowan.allclose([[1, 0, 0, 0]], [[1, 0, 0, 0]])
-        True
+        >>> rowan.isclose([[1, 0, 0, 0]], [[1, 0, 0, 0]])
+        array([ True])
     """
     return np.all(np.isclose(p, q, **kwargs), axis=-1)
