@@ -37,7 +37,7 @@ Although they have since been largely displaced from this application by vector 
 Quaternions are now commonly used for this purpose in various fields, including computer graphics and attitude control.
 
 The package is built entirely on top of NumPy and represents quaternions using NumPy arrays, meaning that all functions support arbitrarily high-dimensional arrays of quaternions.
-Quaternions are encoded as arrays of shape `(..., 4)`, with the convention that the final dimension of an array `(a, b, c, d)` represents the quaternion `a + bi + cj + dk`.
+Quaternions are encoded as arrays of shape ```(..., 4)`, with the convention that the final dimension of an array ``(a, b, c, d)`` represents the quaternion ``a + bi + cj + dk``.
 This package provides tools for standard algebraic operations on quaternions as well as a number of additional tools for *e.g.* measuring distances between quaternions, interpolating between them, and performing basic point-cloud mapping.
 A particular focus of the rowan package is working with unit quaternions, which are a popular means of representing rotations in 3D.
 In order to provide a unified framework for working with the various rotation formalisms in 3D, rowan allows easy interconversion between these formalisms.
@@ -138,7 +138,7 @@ and then run the packaged unit tests with the coverage module:
 
 Running Benchmarks
 ------------------
-Benchmarks for the package are contained in a Jupyter notebook in the `benchmarks` folder in the root of the repository.
+Benchmarks for the package are contained in a Jupyter notebook in the ``benchmarks`` folder in the root of the repository.
 If you do not have or do not wish to use the notebook format, an equivalent Benchmarks.py script is also included.
 The benchmarks compare rowan to two alternative packages, so you will need to install ``pyquaternion`` and ``numpy_quaternion`` if you wish to see those comparisons.
 
