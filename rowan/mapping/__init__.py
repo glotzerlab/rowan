@@ -448,7 +448,7 @@ def icp(  # noqa: C901
 
     if unique_match:
         try:
-            from scipy import spatial, optimize
+            from scipy import optimize, spatial
         except ImportError:
             raise ImportError(
                 "Running with unique_match requires scipy. "
