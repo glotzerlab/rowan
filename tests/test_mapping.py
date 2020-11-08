@@ -35,7 +35,10 @@ class TestMapping(unittest.TestCase):
             # so we don't check the mapping itself, just the result.
             if i > 1:
                 self.assertTrue(
-                    np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+                    np.logical_or(
+                        np.allclose(rotation, q),
+                        np.allclose(rotation, -q),
+                    )
                 )
                 self.assertTrue(np.allclose(translation, t))
             self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
@@ -59,7 +62,10 @@ class TestMapping(unittest.TestCase):
             # so we don't check the mapping itself, just the result.
             if i > 1:
                 self.assertTrue(
-                    np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+                    np.logical_or(
+                        np.allclose(rotation, q),
+                        np.allclose(rotation, -q),
+                    )
                 )
                 self.assertTrue(np.allclose(translation, t))
 
@@ -84,7 +90,10 @@ class TestMapping(unittest.TestCase):
             # so we don't check the mapping itself, just the result.
             if i > 1:
                 self.assertTrue(
-                    np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+                    np.logical_or(
+                        np.allclose(rotation, q),
+                        np.allclose(rotation, -q),
+                    )
                 )
                 self.assertTrue(np.allclose(translation, t))
             self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
@@ -108,7 +117,10 @@ class TestMapping(unittest.TestCase):
             # so we don't check the mapping itself, just the result.
             if i > 1:
                 self.assertTrue(
-                    np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+                    np.logical_or(
+                        np.allclose(rotation, q),
+                        np.allclose(rotation, -q),
+                    )
                 )
                 self.assertTrue(np.allclose(translation, t))
             self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
@@ -165,7 +177,10 @@ class TestMapping(unittest.TestCase):
             # so we don't check the mapping itself, just the result.
             if i > 1:
                 self.assertTrue(
-                    np.logical_or(np.allclose(rotation, q), np.allclose(rotation, -q),)
+                    np.logical_or(
+                        np.allclose(rotation, q),
+                        np.allclose(rotation, -q),
+                    )
                 )
                 self.assertTrue(np.allclose(translation, t))
             self.assertTrue(
