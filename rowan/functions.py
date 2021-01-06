@@ -672,8 +672,9 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
 
     For simplicity, quaternions are converted to matrices, which are
     then converted to their Euler angle representations. All equations
-    for rotations are derived by considering compositions of the three
-    elemental rotations about the three Cartesian axes:
+    for rotations are derived by considering compositions of the `three
+    elemental rotations about the three Cartesian axes
+    <https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations>`_.
 
     Extrinsic rotations are represented by matrix multiplications in
     the proper order, so :math:`z-y-x` is represented by the
