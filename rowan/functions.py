@@ -675,26 +675,6 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
     for rotations are derived by considering compositions of the three
     elemental rotations about the three Cartesian axes:
 
-    .. math::
-
-        \begin{eqnarray*}
-        R_x(\theta)  =& \left(\begin{array}{ccc}
-                            1 & 0           & 0            \\
-                            0 & \cos \theta & -\sin \theta \\
-                            0 & \sin \theta & \cos \theta  \\
-                         \end{array}\right)\\
-        R_y(\theta)  =& \left(\begin{array}{ccc}
-                            \cos \theta  & 0 & \sin \theta \\
-                            0            & 1 &  0          \\
-                            -\sin \theta & 0 & \cos \theta \\
-                         \end{array}\right)\\
-        R_z(\theta)  =& \left(\begin{array}{ccc}
-                            \cos \theta & -\sin \theta & 0 \\
-                            \sin \theta & \cos \theta  & 0 \\
-                            0           & 0            & 1 \\
-                         \end{array}\right)\\
-        \end{eqnarray*}
-
     Extrinsic rotations are represented by matrix multiplications in
     the proper order, so :math:`z-y-x` is represented by the
     multiplication :math:`XYZ` so that the system is rotated first
