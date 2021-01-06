@@ -667,33 +667,14 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
 
         In all cases, the :math:`\alpha` and :math:`\gamma` angles are
         between :math:`\pm \pi`. For proper Euler angles, :math:`\beta`
-        is between :math:`0` and :math:`pi` degrees. For Tait-Bryan
+        is between :math:`0` and :math:`\pi` degrees. For Tait-Bryan
         angles, :math:`\beta` lies between :math:`\pm\pi/2`.
 
     For simplicity, quaternions are converted to matrices, which are
     then converted to their Euler angle representations. All equations
-    for rotations are derived by considering compositions of the three
-    elemental rotations about the three Cartesian axes:
-
-    .. math::
-
-        \begin{eqnarray*}
-        R_x(\theta)  =& \left(\begin{array}{ccc}
-                            1 & 0           & 0            \\
-                            0 & \cos \theta & -\sin \theta \\
-                            0 & \sin \theta & \cos \theta  \\
-                         \end{array}\right)\\
-        R_y(\theta)  =& \left(\begin{array}{ccc}
-                            \cos \theta  & 0 & \sin \theta \\
-                            0            & 1 &  0          \\
-                            -\sin \theta & 0 & \cos \theta \\
-                         \end{array}\right)\\
-        R_z(\theta)  =& \left(\begin{array}{ccc}
-                            \cos \theta & -\sin \theta & 0 \\
-                            \sin \theta & \cos \theta  & 0 \\
-                            0           & 0            & 1 \\
-                         \end{array}\right)\\
-        \end{eqnarray*}
+    for rotations are derived by considering compositions of the `three
+    elemental rotations about the three Cartesian axes
+    <https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations>`_.
 
     Extrinsic rotations are represented by matrix multiplications in
     the proper order, so :math:`z-y-x` is represented by the
