@@ -674,7 +674,10 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
     then converted to their Euler angle representations. All equations
     for rotations are derived by considering compositions of the `three
     elemental rotations about the three Cartesian axes
-    <https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations>`_.
+    <https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations>`_. A
+    Mathematica notebook describing this process can be found in the
+    `misc subdirectory of the repository
+    <https://github.com/glotzerlab/rowan/blob/master/misc/Euler.nb>`__.
 
     Extrinsic rotations are represented by matrix multiplications in
     the proper order, so :math:`z-y-x` is represented by the
