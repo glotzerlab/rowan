@@ -667,7 +667,7 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
 
         In all cases, the :math:`\alpha` and :math:`\gamma` angles are
         between :math:`\pm \pi`. For proper Euler angles, :math:`\beta`
-        is between :math:`0` and :math:`\pi` degrees. For Tait-Bryan
+        is between :math:`0` and :math:`\pi`. For Tait-Bryan
         angles, :math:`\beta` lies between :math:`\pm\pi/2`.
 
     For simplicity, quaternions are converted to matrices, which are
