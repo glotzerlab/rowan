@@ -8,7 +8,7 @@ calculus
 
     rowan.calculus.derivative
     rowan.calculus.integrate
- 
+
 .. rubric:: Details
 
 .. automodule:: rowan.calculus

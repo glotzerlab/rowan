@@ -9,7 +9,7 @@ interpolate
     rowan.interpolate.slerp
     rowan.interpolate.slerp_prime
     rowan.interpolate.squad
- 
+
 .. rubric:: Details
 
 .. automodule:: rowan.interpolate
