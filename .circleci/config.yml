@@ -75,10 +75,10 @@ jobs:
     <<: *pypi_wheels
 
 workflows:
-  version: 2.1
+  version: 2
   testing:
     jobs:
-      - complete:
+      - complete
   deploy:
     jobs:
       - build_and_deploy:
