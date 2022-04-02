@@ -43,13 +43,13 @@ jobs:
       - checkout
 
       - run:
-        name: Install oldest dependencies
-        command: |
-          python -m pip install --progress-bar off -U virtualenv --user
-          mkdir -p ./venv
-          python -m virtualenv ./venv --clear
-          . venv/bin/activate
-          python -m pip install --progress-bar off -U -r requirements/requirements-oldest.txt
+          name: Install oldest dependencies
+          command: |
+            python -m pip install --progress-bar off -U virtualenv --user
+            mkdir -p ./venv
+            python -m virtualenv ./venv --clear
+            . venv/bin/activate
+            python -m pip install --progress-bar off -U -r requirements/requirements-oldest.txt
 
       - run:
           <<: *run_tests
