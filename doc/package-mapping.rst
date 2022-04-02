@@ -10,7 +10,7 @@ mapping
     rowan.mapping.davenport
     rowan.mapping.procrustes
     rowan.mapping.icp
- 
+
 .. rubric:: Details
 
 .. automodule:: rowan.mapping
