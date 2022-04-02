@@ -1,0 +1,54 @@
+ci:
+  autoupdate_schedule: quarterly
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 'v4.1.0'
+    hooks:
+      - id: end-of-file-fixer
+        exclude: 'setup.cfg'
+      - id: trailing-whitespace
+        exclude: 'setup.cfg'
+      - id: check-builtin-literals
+      - id: check-executables-have-shebangs
+      - id: check-json
+        exclude: 'asv.conf.json'
+      - id: check-yaml
+      - id: debug-statements
+      - id: requirements-txt-fixer
+  #- repo: https://github.com/asottile/pyupgrade
+  #  rev: 'v2.31.0'
+  #  hooks:
+  #    - id: pyupgrade
+  #      args:
+  #        - --py36-plus
+  #- repo: https://github.com/PyCQA/isort
+  #  rev: '5.10.1'
+  #  hooks:
+  #    - id: isort
+  #- repo: https://github.com/psf/black
+  #  rev: '21.12b0'
+  #  hooks:
+  #    - id: black
+  #- repo: https://github.com/PyCQA/flake8
+  #  rev: '4.0.1'
+  #  hooks:
+  #    - id: flake8
+  #- repo: https://github.com/PyCQA/pydocstyle
+  #  rev: '6.1.1'
+  #  hooks:
+  #    - id: pydocstyle
+  #      exclude: |
+  #        (?x)^(
+  #          ^doc/|
+  #          ^tests/|
+  #          ^signac/common/configobj/|
+  #          ^signac/db/
+  #        )
+  #- repo: https://github.com/pre-commit/mirrors-mypy
+  #  rev: 'v0.930'
+  #  hooks:
+  #    - id: mypy
+  #      additional_dependencies:
+  #        - types-filelock
+  #        - types-redis
