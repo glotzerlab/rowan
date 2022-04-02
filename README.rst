@@ -10,7 +10,6 @@ rowan
 |Codecov|
 |PyPI|
 |conda-forge|
-|Codacy|
 |Zenodo|
 |JOSS|
 
@@ -30,6 +29,9 @@ rowan
     :target: https://doi.org/10.5281/zenodo.1323676
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.00787/status.svg
     :target: https://doi.org/10.21105/joss.00787
+.. |pre-commit.ci| image:: https://results.pre-commit.ci/badge/github/glotzerlab/rowan/master.svg
+    :target: https://results.pre-commit.ci/latest/github/glotzerlab/rowan/master
+    :alt: pre-commit.ci status
 
 Welcome to the documentation for rowan, a package for working with quaternions!
 Quaternions, which form a number system with various interesting properties, were originally developed for classical mechanics.
