@@ -11,18 +11,21 @@ references:
   wd: &wd
     working_directory: ~/repo
 
+  install_dependencies: &install_dependencies
+    name: Install dependencies
+    command: |
+      python -m pip install --progress-bar off -U virtualenv --user
+      mkdir -p ./venv
+      python -m virtualenv ./venv --clear
+      . venv/bin/activate
+      python -m pip install --progress-bar off -U coverage numpy scipy
+
   runall: &runall
     steps:
       - checkout
 
       - run:
-          name: Install dependencies
-          command: |
-            python -m pip install --progress-bar off -U virtualenv --user
-            mkdir -p ./venv
-            python -m virtualenv ./venv --clear
-            . venv/bin/activate
-            python -m pip install --progress-bar off -U coverage numpy scipy
+          <<: *install_dependencies
 
       - run:
           name: run tests
@@ -36,13 +39,7 @@ references:
       - checkout
 
       - run:
-          name: Install dependencies
-          command: |
-            python -m pip install --progress-bar off -U virtualenv --user
-            mkdir -p ./venv
-            python -m virtualenv ./venv --clear
-            . venv/bin/activate
-            python -m pip install --progress-bar off -U coverage codecov numpy scipy
+          <<: *install_dependencies
 
       - run:
           name: Deploy dist and wheels
@@ -56,7 +53,7 @@ references:
             python -m wheel version
             python setup.py sdist
             python setup.py bdist_wheel
-            twine upload --username vramasub --password ${PYPI_PASSWORD} dist/*
+            twine upload --username ${PYPI_USERNAME} --password ${PYPI_PASSWORD} dist/*
 
 jobs:
   complete:
