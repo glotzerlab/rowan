@@ -65,7 +65,7 @@ jobs:
       - run:
           <<: *run_tests
 
-  run_tests_oldest:
+  linux-oldest:
     # Run tests against a set of the oldest dependencies we support.
     docker:
       - image: cimg/python:3.6
