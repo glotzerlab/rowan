@@ -11,7 +11,7 @@ references:
       mkdir -p ./venv
       python -m virtualenv ./venv --clear
       . venv/bin/activate
-      python -m pip install --progress-bar off -U coverage pytest numpy scipy
+      python -m pip install --progress-bar off -U coverage pytest pytest-cov numpy scipy
 
   run_tests: &run_tests
     name: run tests
