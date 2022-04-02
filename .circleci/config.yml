@@ -34,6 +34,26 @@ jobs:
       - run:
           <<: *run_tests
 
+  run_tests_oldest:
+    # Run tests against a set of the oldest dependencies we support.
+    docker:
+      - image: cimg/python:3.6
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - run:
+        name: Install oldest dependencies
+        command: |
+          python -m pip install --progress-bar off -U virtualenv --user
+          mkdir -p ./venv
+          python -m virtualenv ./venv --clear
+          . venv/bin/activate
+          python -m pip install --progress-bar off -U -r requirements/requirements-oldest.txt
+
+      - run:
+          <<: *run_tests
+
   build_and_deploy:
     docker:
       - image: cimg/python:3.8
@@ -68,6 +88,7 @@ workflows:
       - run_tests:
           post-steps:
             - codecov/upload
+      - run_tests_oldest
   deploy:
     jobs:
       - build_and_deploy:
