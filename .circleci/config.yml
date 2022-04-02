@@ -28,19 +28,14 @@ references:
             python3.8 -m flake8 --extend-ignore=I001,I004 --show-source tests/
             python3.8 -m unittest discover tests -v
 
-            ## Test python-dependency matrix with tox
-            #pip3.8 install --progress-bar off --user tox
-            #tox
-            #
             # Run with coverage
-            pip3.8 install --progress-bar off --user coverage codacy-coverage
+            pip3.8 install --progress-bar off --user coverage
             export PATH=~/.local/bin:${PATH}
             coverage run -m unittest discover tests
             apt-get -yq update
             apt-get -yq install curl
             bash <(curl -s https://codecov.io/bash)
             coverage xml
-            python-codacy-coverage -r coverage.xml
 
       - save_cache:
           paths:
