@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  codecov: codecov/codecov@3.2.2
+
 references:
   imtox: &imtox
     docker:
@@ -12,85 +15,53 @@ references:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+      - run:
+          name: Install dependencies
+          command: |
+            python -m pip install --progress-bar off -U virtualenv --user
+            mkdir -p ./venv
+            python -m virtualenv ./venv --clear
+            . venv/bin/activate
+            python -m pip install --progress-bar off -U pip>=20.3
+            python -m pip install --progress-bar off -U coverage codecov numpy scipy
 
       - run:
           name: run tests
           command: |
-            # Faster to just test one env first
-            pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort numpy scipy
-            python3.8 -m flake8 --show-source rowan
-            # Ignore isort errors in tests that are due to ambiguity over whether or not rowan is third party.
-            python3.8 -m flake8 --extend-ignore=I001,I004 --show-source tests/
-            python3.8 -m unittest discover tests -v
-
-            ## Test python-dependency matrix with tox
-            #pip3.8 install --progress-bar off --user tox
-            #tox
-            #
             # Run with coverage
-            pip3.8 install --progress-bar off --user coverage
-            export PATH=~/.local/bin:${PATH}
-            coverage run -m unittest discover tests
+            . venv/bin/activate
+            python -m coverage run -m unittest discover tests -v
             apt-get -yq update
             apt-get -yq install curl
             bash <(curl -s https://codecov.io/bash)
             coverage xml
-
-      - save_cache:
-          paths:
-            - ~/.local
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
-
-  run_tests_only: &run_tests_only
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      - run:
-          name: run tests
-          command: |
-            # Faster to just test one env first
-            pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort numpy scipy
-            python3.8 -m flake8 --show-source rowan
-            # Ignore isort errors in tests that are due to ambiguity over whether or not rowan is third party.
-            python3.8 -m flake8 --extend-ignore=I001,I004 --show-source tests/
-            python3.8 -m unittest discover tests -v
-
-      - save_cache:
-          paths:
-            - ~/.local
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
 
   pypi_wheels: &pypi_wheels
     steps:
       - checkout
 
       - run:
+          name: Install dependencies
+          command: |
+            python -m pip install --progress-bar off -U virtualenv --user
+            mkdir -p ./venv
+            python -m virtualenv ./venv --clear
+            . venv/bin/activate
+            python -m pip install --progress-bar off -U pip>=20.3
+            python -m pip install --progress-bar off -U coverage codecov numpy scipy
+
+      - run:
           name: Deploy dist and wheels
           command: |
-            pip3.8 install --progress-bar off --user -U flake8 flake8-black flake8-bugbear flake8-docstrings flake8-rst-docstrings pep8-naming flake8-isort numpy scipy
-            python3.8 -m flake8 --show-source rowan
-            # Ignore isort errors in tests that are due to ambiguity over whether or not rowan is third party.
-            python3.8 -m flake8 --extend-ignore=I001,I004 --show-source tests/
-            python3.8 -m unittest discover tests -v
-            python3.8 --version
-            pip3.8 --version
-            pip3.8 install --progress-bar off --user -U twine wheel setuptools
-            export PATH=~/.local/bin:${PATH}
-            twine --version
-            wheel version
-            python3.8 setup.py sdist
-            python3.8 setup.py bdist_wheel
+            . venv/bin/activate
+            python -m unittest discover tests -v
+            python --version
+            python -m pip8 --version
+            python -m pip install --progress-bar off --user -U twine wheel setuptools
+            python -m twine --version
+            python -m wheel version
+            python setup.py sdist
+            python setup.py bdist_wheel
             twine upload --username vramasub --password ${PYPI_PASSWORD} dist/*
 
 jobs:
@@ -98,33 +69,16 @@ jobs:
     <<: *imtox
     <<: *wd
     <<: *runall
-  test_only:
-    <<: *imtox
-    <<: *wd
-    <<: *run_tests_only
   build_and_deploy:
     <<: *imtox
     <<: *wd
     <<: *pypi_wheels
 
 workflows:
-  version: 2
+  version: 2.1
   testing:
     jobs:
       - complete:
-          filters:
-            branches:
-              only:
-                - master
-                - develop
-                - /release-.*/
-      - test_only:
-          filters:
-            branches:
-              ignore:
-                - master
-                - develop
-                - /release-.*/
   deploy:
     jobs:
       - build_and_deploy:
