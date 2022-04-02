@@ -11,7 +11,14 @@ references:
       mkdir -p ./venv
       python -m virtualenv ./venv --clear
       . venv/bin/activate
-      python -m pip install --progress-bar off -U coverage numpy scipy
+      python -m pip install --progress-bar off -U coverage pytest numpy scipy
+
+  run_tests: &run_tests
+    name: run tests
+    command: |
+      # Run with coverage
+      . venv/bin/activate
+      python -m pytest -v --cov=rowan/ --cov-report=xml
 
 jobs:
   run_tests:
@@ -25,11 +32,7 @@ jobs:
           <<: *install_dependencies
 
       - run:
-          name: run tests
-          command: |
-            # Run with coverage
-            . venv/bin/activate
-            python -m coverage run -m unittest discover tests -v
+          <<: *run_tests
 
   build_and_deploy:
     docker:
@@ -40,6 +43,9 @@ jobs:
 
       - run:
           <<: *install_dependencies
+
+      - run:
+          <<: *run_tests
 
       - run:
           name: Deploy dist and wheels
