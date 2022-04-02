@@ -21,7 +21,7 @@ references:
       python -m pytest -v --cov=rowan/ --cov-report=xml
 
 jobs:
-  linux-3.7:
+  linux-python37:
     docker:
       - image: cimg/python:3.7
     working_directory: ~/repo
@@ -32,7 +32,7 @@ jobs:
       - run:
           <<: *run_tests
 
-  linux-3.8:
+  linux-python38:
     docker:
       - image: cimg/python:3.8
     working_directory: ~/repo
@@ -43,7 +43,7 @@ jobs:
       - run:
           <<: *run_tests
 
-  linux-3.9:
+  linux-python39:
     docker:
       - image: cimg/python:3.9
     working_directory: ~/repo
@@ -54,7 +54,7 @@ jobs:
       - run:
           <<: *run_tests
 
-  linux-3.10:
+  linux-python310:
     docker:
       - image: cimg/python:3.10
     working_directory: ~/repo
