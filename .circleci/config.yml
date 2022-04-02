@@ -121,7 +121,7 @@ workflows:
       - linux-python-310:
           post-steps:
             - codecov/upload
-      - run_tests_oldest
+      - linux-oldest
   deploy:
     jobs:
       - build_and_deploy:

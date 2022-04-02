@@ -30,23 +30,24 @@ Code contributions should keep these ideals in mind and adhere to the following 
   * Preserve backwards-compatibility whenever possible. Make clear if something must change, and notify package maintainers that merging such changes will require a major release.
   * Enable broadcasting if at all possible. Functions for which broadcasting is not available must be documented as such.
 
-To provide a reasonable balance between a high level of backwards compatibility and a reasonable maintenance burden, **rowan** has adopted `NEP 29`_ to limit the Python and NumPy versions that will be supported.
-
 
 .. _github: https://github.com/glotzerlab/rowan
 .. _OneFlow: https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow
-.. _NEP 29: https://numpy.org/neps/nep-0029-deprecation_policy.html
 
 .. tip::
 
-    During continuous integration, the code is checked automatically with `Flake8`_.
-    To ensure your code is compliant before committing, you can set up a pre-commit hook using `pre-commit`_ (recommended) or use flake8's built-in hooks installation:
+    During continuous integration, the code is checked automatically with `pre-commit`_.
+    To run these checks locally, you can install and run pre-commit like so:
 
     .. code-block:: bash
 
-        flake8 --install-hook git
-        git config --bool flake8.strict true
+        python -m pip install pre-commit
+        pre-commit run --all-files
 
+    To avoid having commits fail in case you forget to run this, you can set up a git pre-commit hook using `pre-commit`_:
+
+    .. code-block:: bash
+        pre-commit install
 
 .. _Flake8: http://flake8.pycqa.org/en/latest/
 .. _pre-commit: https://pre-commit.com/
@@ -59,7 +60,6 @@ To provide a reasonable balance between a high level of backwards compatibility 
 Source Code Conventions
 -----------------------
 
-
 The **rowan** package adheres to a relatively strict set of style guidelines.
 All code in **rowan** should be formatted using `black`_; a notable consequence of this is that the recommended max line length is 88, not the more common 80.
 Imports should be formatted using `isort`_.
@@ -68,17 +68,6 @@ All code should also follow the principles in `PEP 20 <https://www.python.org/de
 In particular, always prefer simple, explicit code where possible, avoiding unnecessary convolution or complicated code that could be written more simply.
 Avoid writing code in a manner that will be difficult for others to understand.
 
-.. tip::
-
-    Developers should format their code using black and isort locally using the commands:
-
-    .. code-block:: bash
-
-        black --exclude "coxeter/[polytri|bentley_ottman]" coxeter/ tests/
-        isort -rc coxeter/ tests/
-
-.. _black: https://black.readthedocs.io/
-.. _isort: https://timothycrosley.github.io/isort/
 
 Documentation
 -------------
