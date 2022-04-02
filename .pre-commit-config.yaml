@@ -1,7 +1,7 @@
 ci:
   autoupdate_schedule: quarterly
 
-# TODO: Add mypy, pyupgrade, and check-yaml
+# TODO: Add mypy, pyupgrade
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: 'v4.1.0'
@@ -13,7 +13,7 @@ repos:
       - id: check-builtin-literals
       - id: check-executables-have-shebangs
       - id: check-json
-      #- id: check-yaml
+      - id: check-yaml
       - id: debug-statements
       - id: requirements-txt-fixer
   - repo: https://github.com/PyCQA/isort

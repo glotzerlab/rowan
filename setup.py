@@ -31,12 +31,15 @@ setup(
     zip_safe=True,
     install_requires=["numpy>=1.15"],
     python_requires=">=3.6, <4",
+    extras_require={"mapping": "scipy>=1.0.0"},
     classifiers=[
         "Development Status :: 6 - Mature",
         "License :: OSI Approved :: BSD License",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Scientific/Engineering :: Mathematics",
     ],
 )
