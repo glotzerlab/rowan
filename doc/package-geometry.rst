@@ -13,7 +13,7 @@ geometry
     rowan.geometry.intrinsic_distance
     rowan.geometry.sym_intrinsic_distance
     rowan.geometry.angle
- 
+
 .. rubric:: Details
 
 .. automodule:: rowan.geometry

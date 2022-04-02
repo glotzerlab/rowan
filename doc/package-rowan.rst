@@ -33,11 +33,9 @@ rowan
     rowan.isfinite
     rowan.isinf
     rowan.isnan
- 
+
 .. rubric:: Details
 
 .. automodule:: rowan
     :synopsis: Core contents of rowan
     :members:
-
-

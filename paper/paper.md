@@ -64,7 +64,7 @@ this performance difference is offset by ``rowan``'s relative ease of
 installation and incorporation. The package avoids any hard dependencies other
 than NumPy itself and directly uses NumPy arrays, making ``rowan`` an
 unobtrusive dependency with essentially zero barrier for introduction into
-existing code bases. 
+existing code bases.
 
 ![Performance Comparison](Performance.pdf){ height=750px }
 

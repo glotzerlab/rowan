@@ -8,7 +8,7 @@ random
 
     rowan.random.rand
     rowan.random.random_sample
- 
+
 .. rubric:: Details
 
 .. automodule:: rowan.random
