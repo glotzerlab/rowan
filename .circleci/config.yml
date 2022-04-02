@@ -73,8 +73,8 @@ workflows:
   testing:
     jobs:
       - complete:
-        post-steps:
-          - codecov/upload
+          post-steps:
+            - codecov/upload
   deploy:
     jobs:
       - build_and_deploy:
