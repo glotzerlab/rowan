@@ -22,8 +22,7 @@ references:
             mkdir -p ./venv
             python -m virtualenv ./venv --clear
             . venv/bin/activate
-            python -m pip install --progress-bar off -U pip>=20.3
-            python -m pip install --progress-bar off -U coverage codecov numpy scipy
+            python -m pip install --progress-bar off -U coverage numpy scipy
 
       - run:
           name: run tests
@@ -31,10 +30,6 @@ references:
             # Run with coverage
             . venv/bin/activate
             python -m coverage run -m unittest discover tests -v
-            apt-get -yq update
-            apt-get -yq install curl
-            bash <(curl -s https://codecov.io/bash)
-            coverage xml
 
   pypi_wheels: &pypi_wheels
     steps:
@@ -47,7 +42,6 @@ references:
             mkdir -p ./venv
             python -m virtualenv ./venv --clear
             . venv/bin/activate
-            python -m pip install --progress-bar off -U pip>=20.3
             python -m pip install --progress-bar off -U coverage codecov numpy scipy
 
       - run:
@@ -56,7 +50,7 @@ references:
             . venv/bin/activate
             python -m unittest discover tests -v
             python --version
-            python -m pip8 --version
+            python -m pip --version
             python -m pip install --progress-bar off --user -U twine wheel setuptools
             python -m twine --version
             python -m wheel version
@@ -78,7 +72,9 @@ workflows:
   version: 2
   testing:
     jobs:
-      - complete
+      - complete:
+        - post-steps:
+          - codecov/upload
   deploy:
     jobs:
       - build_and_deploy:
