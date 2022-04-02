@@ -65,7 +65,7 @@ To install the package from PyPI, execute:
 
 .. code-block:: bash
 
-    $ pip install rowan --user
+    $ pip install rowan
 
 To install the package from conda, first add the **conda-forge** channel and
 then install rowan:
@@ -88,6 +88,10 @@ The minimum requirements for using rowan are:
 
 * Python >= 3.6
 * NumPy >= 1.15
+
+To use the mapping subpackage, rowan also requires
+
+* SciPy >= 1.0
 
 Quickstart
 ----------
