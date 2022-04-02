@@ -20,7 +20,7 @@ class TestMapping(unittest.TestCase):
         np.random.seed(0)
 
         for i in range(1, 12):
-            num_points = 2 ** i
+            num_points = 2**i
 
             points = np.random.rand(num_points, 3)
             rotation = random.rand(1)
@@ -48,7 +48,7 @@ class TestMapping(unittest.TestCase):
         np.random.seed(0)
 
         for i in range(1, 12):
-            num_points = 2 ** i
+            num_points = 2**i
 
             points = np.random.rand(num_points, 3)
             rotation = random.rand(1)
@@ -76,7 +76,7 @@ class TestMapping(unittest.TestCase):
         np.random.seed(0)
 
         for i in range(1, 12):
-            num_points = 2 ** i
+            num_points = 2**i
 
             points = np.random.rand(num_points, 3)
             rotation = random.rand(1)
@@ -103,7 +103,7 @@ class TestMapping(unittest.TestCase):
         np.random.seed(0)
 
         for i in range(1, 12):
-            num_points = 2 ** i
+            num_points = 2**i
 
             points = np.random.rand(num_points, 3)
             rotation = random.rand(1)
@@ -162,7 +162,7 @@ class TestMapping(unittest.TestCase):
 
         # First test using unique matching, which should work
         for i in range(2, 6):
-            num_points = 2 ** i
+            num_points = 2**i
 
             points = np.random.rand(num_points, 3)
             rotation = from_axis_angle([0.3, 0.3, 0.3], 0.3)
@@ -193,7 +193,7 @@ class TestMapping(unittest.TestCase):
 
         # First test using unique matching, which should work.
         for i in range(2, 6):
-            num_points = 2 ** i
+            num_points = 2**i
 
             points = np.random.rand(num_points, 3)
             rotation = from_axis_angle([0.3, 0.3, 0.3], 0.3)
