@@ -79,7 +79,7 @@ jobs:
             mkdir -p ./venv
             python -m virtualenv ./venv --clear
             . venv/bin/activate
-            python -m pip install --progress-bar off -U -r requirements/requirements-oldest.txt
+            python -m pip install --progress-bar off -U -r requirements-oldest.txt
             python -m pip install --progress-bar off -U pytest
       - run:
           name: run tests
