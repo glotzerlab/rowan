@@ -101,14 +101,12 @@ jobs:
           name: Deploy dist and wheels
           command: |
             . venv/bin/activate
-            python -m unittest discover tests -v
+            python -m pytest -v tests
             python --version
             python -m pip --version
-            python -m pip install --progress-bar off --user -U twine wheel setuptools
+            python -m pip install --progress-bar off --user -U twine build
             python -m twine --version
-            python -m wheel version
-            python setup.py sdist
-            python setup.py bdist_wheel
+            python -m build .
             twine upload --username ${PYPI_USERNAME} --password ${PYPI_PASSWORD} dist/*
 
 workflows:
