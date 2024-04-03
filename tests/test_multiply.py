@@ -4,6 +4,7 @@ import os
 import unittest
 
 import numpy as np
+import pytest
 
 import rowan
 
@@ -25,11 +26,11 @@ class TestMultiply(unittest.TestCase):
         """Simplest case of quaternion multiplication."""
         # Multiply zeros
         product = rowan.multiply(zero, zero)
-        self.assertTrue(np.all(product == np.array([0, 0, 0, 0])))
+        assert np.all(product == np.array([0, 0, 0, 0]))
 
         # Multiply ones
         product = rowan.multiply(one, one)
-        self.assertTrue(np.all(product == np.array([1, 0, 0, 0])))
+        assert np.all(product == np.array([1, 0, 0, 0]))
 
     def test_2d_array(self):
         """Multiplying arrays of quaternions."""
@@ -38,23 +39,19 @@ class TestMultiply(unittest.TestCase):
 
         # Multiply zeros
         product = rowan.multiply(zeros, zeros)
-        self.assertTrue(
-            np.all(
-                product == np.repeat(np.array([0, 0, 0, 0])[np.newaxis, :], 10, axis=0),
-            ),
+        assert np.all(
+            product == np.repeat(np.array([0, 0, 0, 0])[np.newaxis, :], 10, axis=0)
         )
 
         # Multiply ones
         product = rowan.multiply(ones, ones)
-        self.assertTrue(
-            np.all(
-                product == np.repeat(np.array([1, 0, 0, 0])[np.newaxis, :], 10, axis=0),
-            ),
+        assert np.all(
+            product == np.repeat(np.array([1, 0, 0, 0])[np.newaxis, :], 10, axis=0)
         )
 
         # Complex random array
         product = rowan.multiply(input1, input2)
-        self.assertTrue(np.allclose(product, stored_product))
+        assert np.allclose(product, stored_product)
 
     def test_3d_array(self):
         """Multiplying higher dimensional arrays of quaternions."""
@@ -79,11 +76,11 @@ class TestMultiply(unittest.TestCase):
 
         # Zeros
         product = rowan.multiply(zeros, zeros)
-        self.assertTrue(np.all(product == expected_product_zeros))
+        assert np.all(product == expected_product_zeros)
 
         # Ones
         product = rowan.multiply(ones, ones)
-        self.assertTrue(np.all(product == expected_product_ones))
+        assert np.all(product == expected_product_ones)
 
         # Complex random array
         num_reps = input1.shape[0]
@@ -92,9 +89,7 @@ class TestMultiply(unittest.TestCase):
             np.reshape(input1, expanded_shape),
             np.reshape(input2, expanded_shape),
         )
-        self.assertTrue(
-            np.allclose(product, np.reshape(stored_product, expanded_shape)),
-        )
+        assert np.allclose(product, np.reshape(stored_product, expanded_shape))
 
     def test_broadcast(self):
         """Ensure broadcasting works."""
@@ -102,10 +97,10 @@ class TestMultiply(unittest.TestCase):
         shape = (45, 3, 13, 4)
         many_zeros = np.zeros(shape)
         product = rowan.multiply(many_zeros, zero)
-        self.assertTrue(product.shape == shape)
+        assert product.shape == shape
 
         # Two nonconforming array sizes
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.multiply(many_zeros, np.repeat(zero[np.newaxis, :], 2, axis=0))
 
         # Require broadcasting in multiple dimensions
@@ -113,7 +108,7 @@ class TestMultiply(unittest.TestCase):
         zeros_B = np.zeros((3, 5, 1, 1, 9, 4))
         shape = (3, 5, 3, 8, 9, 4)
         product = rowan.multiply(zeros_A, zeros_B)
-        self.assertTrue(product.shape == shape)
+        assert product.shape == shape
 
         # Test some actual products
         num_first = 2
@@ -124,7 +119,7 @@ class TestMultiply(unittest.TestCase):
         for i in range(num_first):
             for j in range(num_second):
                 single_prod = rowan.multiply(i1[i, 0, :], i2[0, j, :])
-                self.assertTrue(np.all(product[i, j, :] == single_prod))
+                assert np.all(product[i, j, :] == single_prod)
 
     def test_divide(self):
         """Ensure division works."""
@@ -134,8 +129,6 @@ class TestMultiply(unittest.TestCase):
             x = np.random.random_sample(shape_i)
             for shape_j in shapes:
                 y = np.random.random_sample(shape_j)
-                self.assertTrue(
-                    np.allclose(
-                        rowan.divide(x, y), rowan.multiply(x, rowan.inverse(y))
-                    ),
+                assert np.allclose(
+                    rowan.divide(x, y), rowan.multiply(x, rowan.inverse(y))
                 )

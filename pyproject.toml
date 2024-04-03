@@ -39,10 +39,11 @@ include = ["rowan*"]
 namespaces = false
 
 [tool.ruff.lint]
-select = ["E", "W", "F", "C", "I", "D", "UP", "COM", "A", "B", "C4", "RET", "SLF"]
+select = ["E", "W", "F", "C", "I", "D", "UP", "COM", "A", "B", "C4", "RET", "SLF", "PT"]
 ignore = [
     "COM812",  # Conflicts with ruff formatter
     "B904",  # We don't always want to raise from another exception
+    "PT011",  # Checking exception messages is undesirable
 ]
 
 [tool.ruff.lint.pydocstyle]
