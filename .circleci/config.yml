@@ -101,7 +101,7 @@ jobs:
           name: Deploy dist and wheels
           command: |
             . venv/bin/activate
-            python -m unittest discover tests -v
+            python -m pytest -v tests
             python --version
             python -m pip --version
             python -m pip install --progress-bar off --user -U twine build
