@@ -72,6 +72,7 @@ def expb(q, b):
 
     Args:
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
+        b ((...) :class:`numpy.ndarray`): Scalars to use as bases.
 
     Returns:
         (..., 4) :class:`numpy.ndarray`: Exponentials of ``q``.
@@ -181,7 +182,7 @@ def logb(q, b):
 
     Args:
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
-        n ((...) :class:`numpy.ndarray`): Scalars to use as log bases.
+        b ((...) :class:`numpy.ndarray`): Scalars to use as log bases.
 
     Returns:
         (..., 4) :class:`numpy.ndarray`: Logarithms of ``q``.
@@ -601,7 +602,7 @@ def from_euler(alpha, beta, gamma, convention="zyx", axis_type="intrinsic"):
         convention (str):
             One of the 12 valid conventions xzx, xyx, yxy, yzy, zyz, zxz, xzy, xyz, yxz,
             yzx, zyx, zxy.
-        axes (str):
+        axis_type (str):
             Whether to use extrinsic or intrinsic rotations.
 
     Returns:
@@ -715,7 +716,7 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
             Quaternions to transform.
         convention (str):
             One of the 6 valid conventions zxz, xyx, yzy, zyz, xzx, yxy.
-        axes (str):
+        axis_type (str):
             Whether to use extrinsic or intrinsic.
 
     Returns:
@@ -905,7 +906,10 @@ def from_matrix(mat, require_orthogonal=True):
         https://doi.org/10.2514/2.4654
 
     Args:
-        mat ((..., 3, 3) :class:`numpy.ndarray`): An array of rotation matrices.
+        mat ((..., 3, 3) :class:`numpy.ndarray`):
+            An array of rotation matrices.
+        require_orthogonal (bool):
+            Whether to require that the input matrices are orthogonal.
 
     Returns:
         (..., 4) :class:`numpy.ndarray`: The corresponding rotation quaternions.
@@ -956,7 +960,10 @@ def to_matrix(q, require_unit=True):
     <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix>`_.
 
     Args:
-        q ((..., 4) :class:`numpy.ndarray`): An array of quaternions.
+        q ((..., 4) :class:`numpy.ndarray`):
+            An array of quaternions.
+        require_unit (bool):
+            Whether to require that the input quaternions are unit quaternions.
 
     Returns:
         (..., 3, 3) :class:`numpy.ndarray`: The corresponding rotation matrices.
@@ -1164,7 +1171,7 @@ def isfinite(q):
     return np.all(np.isfinite(q), axis=-1)
 
 
-def allclose(p, q, **kwargs):
+def allclose(p, q, **kwargs):  # noqa: D417
     r"""Check whether two sets of quaternions are all close.
 
     This is a direct wrapper of the corresponding NumPy function.
@@ -1185,7 +1192,7 @@ def allclose(p, q, **kwargs):
     return np.allclose(p, q, **kwargs)
 
 
-def isclose(p, q, **kwargs):
+def isclose(p, q, **kwargs):  # noqa: D417
     r"""Element-wise check of whether two sets of quaternions are close.
 
     This function is a simple wrapper that checks using the

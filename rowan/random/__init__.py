@@ -28,7 +28,7 @@ def rand(*args):
     function that takes a tuple as input, use :func:`random_sample` instead.
 
     Args:
-        shape (tuple): The shape of the array to generate.
+        args (tuple): The shape of the array to generate.
 
     Return:
         :class:`numpy.ndarray`:

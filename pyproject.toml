@@ -39,4 +39,7 @@ include = ["rowan*"]
 namespaces = false
 
 [tool.ruff.lint]
-select = ["E", "W", "F", "C", "I"]
+select = ["E", "W", "F", "C", "I", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
