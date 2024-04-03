@@ -756,7 +756,7 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
     # intrinsic angle ordering and just reversed for extrinsic.
     if axis_type == "extrinsic":
         convention = convention[::-1]
-    elif not axis_type == "intrinsic":
+    elif axis_type != "intrinsic":
         raise ValueError("The axis type must be either extrinsic or intrinsic")
 
     # We have to hardcode the different convention possibilities since they all
