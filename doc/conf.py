@@ -64,7 +64,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "rowan"
-copyright = "2017-2020, The Regents of the University of Michigan"
+copyright = "2017-2020, The Regents of the University of Michigan"  # noqa: A001
 author = "Vyas Ramasubramani"
 
 # The version info for the project you're documenting, acts as replacement for
