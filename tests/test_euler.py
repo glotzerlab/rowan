@@ -1,7 +1,5 @@
 """Test converting quaternions to and from Euler angles."""
 
-from __future__ import absolute_import, division, print_function
-
 import os
 import unittest
 
@@ -147,9 +145,7 @@ class TestEuler(unittest.TestCase):
                             np.isclose(out - quats, 0), np.isclose(out + quats, 0)
                         )
                     ),
-                    msg="Failed for convention {}, axis type {}".format(
-                        convention, axis_type
-                    ),
+                    msg=f"Failed for convention {convention}, axis type {axis_type}",
                 )
 
     def test_to_from_euler(self):
@@ -185,9 +181,7 @@ class TestEuler(unittest.TestCase):
                             np.isclose(out + angles_euler, 0),
                         )
                     ),
-                    msg="Failed for convention {}, axis type {}".format(
-                        convention, axis_type
-                    ),
+                    msg=f"Failed for convention {convention}, axis type {axis_type}",
                 )
 
         for convention in conventions_tb:
@@ -210,9 +204,7 @@ class TestEuler(unittest.TestCase):
                             np.isclose(out + angles_tb, 0),
                         )
                     ),
-                    msg="Failed for convention {}, axis type {}".format(
-                        convention, axis_type
-                    ),
+                    msg=f"Failed for convention {convention}, axis type {axis_type}",
                 )
 
     def test_zero_beta(self):
@@ -392,24 +384,15 @@ class TestEuler(unittest.TestCase):
                             test_rotation = rowan.rotate(converted, test_vector)
                             self.assertTrue(
                                 np.allclose(correct_rotation, test_rotation, atol=1e-6),
-                                msg="""
-                                       Failed for convention {},
-                                       axis type {},
-                                       alpha = {},
-                                       beta = {}.
-                                       Expected quaternion: {}.
-                                       Calculated: {}.
-                                       Expected vector: {}.
-                                       Calculated vector: {}.""".format(
-                                    convention,
-                                    axis_type,
-                                    alpha,
-                                    beta,
-                                    quat,
-                                    converted,
-                                    correct_rotation,
-                                    test_rotation,
-                                ),
+                                msg=f"""
+                                       Failed for convention {convention},
+                                       axis type {axis_type},
+                                       alpha = {alpha},
+                                       beta = {beta}.
+                                       Expected quaternion: {quat}.
+                                       Calculated: {converted}.
+                                       Expected vector: {correct_rotation}.
+                                       Calculated vector: {test_rotation}.""",
                             )
 
                     # For completeness, also test with broadcasting.

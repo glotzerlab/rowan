@@ -1,7 +1,5 @@
 """Test exponential, log, and powers of quaternions."""
 
-from __future__ import absolute_import, division, print_function
-
 import os
 import unittest
 
@@ -53,7 +51,7 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             self.assertTrue(
                 np.allclose(rowan.exp(x), answers[str(shape)]),
-                msg="Failed for shape {}".format(shape),
+                msg=f"Failed for shape {shape}",
             )
 
     def test_log(self):
@@ -86,7 +84,7 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             self.assertTrue(
                 np.allclose(rowan.log(x), answers[str(shape)]),
-                msg="Failed for shape {}".format(shape),
+                msg=f"Failed for shape {shape}",
             )
 
     def test_logb(self):
@@ -106,7 +104,7 @@ class TestExp(unittest.TestCase):
                 np.allclose(
                     rowan.logb(x, base_test), answers[str(shape)] / np.log(base_test)
                 ),
-                msg="Failed for shape {}".format(shape),
+                msg=f"Failed for shape {shape}",
             )
 
     def test_log10(self):
@@ -121,7 +119,7 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             self.assertTrue(
                 np.allclose(rowan.log10(x), answers[str(shape)] / np.log(10)),
-                msg="Failed for shape {}".format(shape),
+                msg=f"Failed for shape {shape}",
             )
 
     def test_power(self):
@@ -142,6 +140,6 @@ class TestExp(unittest.TestCase):
             for i in range(1, max_power + 1):
                 self.assertTrue(
                     np.allclose(rowan.power(x, i), cur_ans),
-                    msg="Failed for shape {}".format(shape),
+                    msg=f"Failed for shape {shape}",
                 )
                 cur_ans = rowan.multiply(cur_ans, x)
