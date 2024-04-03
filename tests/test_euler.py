@@ -350,7 +350,7 @@ class TestEuler(unittest.TestCase):
         # cases. In practice we get the same results since we're sweeping alpha
         # values in the tests below, but it's useful to set this up precisely.
         mats_tb_extrinsic = [
-            (m[0][::-1], "extrinsic", lambda alpha, beta, m=m: m[2](-alpha, beta))
+            (m[0][::-1], "extrinsic", lambda alpha, beta: m[2](-alpha, beta))  # noqa
             for m in mats_tb_intrinsic
         ]
 
