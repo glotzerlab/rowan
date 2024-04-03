@@ -1,11 +1,10 @@
 """Test converting quaternions to and from rotation matrices."""
 
-from __future__ import absolute_import, division, print_function
-
 import os
 import unittest
 
 import numpy as np
+import pytest
 
 import rowan
 
@@ -25,60 +24,53 @@ class TestMatrix(unittest.TestCase):
 
     def test_from_matrix(self):
         """Test conversion from a matrix to a quaternion."""
-        self.assertTrue(np.all(rowan.from_matrix(np.eye(3)) == one))
+        assert np.all(rowan.from_matrix(np.eye(3)) == one)
 
-        with self.assertRaises(ValueError):
-            self.assertTrue(np.allclose(rowan.from_matrix(2 * np.eye(3))))
+        with pytest.raises(ValueError):
+            assert np.allclose(rowan.from_matrix(2 * np.eye(3)))
 
         mat = np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0]])
 
-        self.assertTrue(
-            np.logical_or(
-                np.allclose(rowan.from_matrix(mat), half),
-                np.allclose(rowan.from_matrix(mat), -half),
-            )
+        assert np.logical_or(
+            np.allclose(rowan.from_matrix(mat), half),
+            np.allclose(rowan.from_matrix(mat), -half),
         )
 
         mat = np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]])
         v = np.copy(half)
         v[3] *= -1
-        self.assertTrue(np.allclose(rowan.from_matrix(mat), v))
+        assert np.allclose(rowan.from_matrix(mat), v)
 
     def test_to_matrix(self):
         """Test conversion from a quaternion to a matrix."""
         v = np.copy(zero)
-        with self.assertRaises(ZeroDivisionError):
+        with pytest.raises(ZeroDivisionError):
             rowan.to_matrix(v)
 
         v = 2 * np.ones(4)
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.to_matrix(v)
 
         v = np.copy(one)
-        self.assertTrue(np.all(rowan.to_matrix(v) == np.eye(3)))
+        assert np.all(rowan.to_matrix(v) == np.eye(3))
 
         v = np.copy(half)
-        self.assertTrue(
-            np.allclose(rowan.to_matrix(v), np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0]]))
+        assert np.allclose(
+            rowan.to_matrix(v), np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0]])
         )
 
         v[3] *= -1
-        self.assertTrue(
-            np.allclose(
-                rowan.to_matrix(v), np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]])
-            )
+        assert np.allclose(
+            rowan.to_matrix(v), np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]])
         )
 
     def test_to_from_matrix(self):
         """Test conversion from a quaternion to a matrix and back."""
         # The equality is only guaranteed up to a sign
         converted = rowan.from_matrix(rowan.to_matrix(input1))
-        self.assertTrue(
-            np.all(
-                np.logical_or(
-                    np.isclose(input1 - converted, 0),
-                    np.isclose(input1 + converted, 0),
-                )
+        assert np.all(
+            np.logical_or(
+                np.isclose(input1 - converted, 0), np.isclose(input1 + converted, 0)
             )
         )
 
@@ -88,4 +80,4 @@ class TestMatrix(unittest.TestCase):
 
         matrices = rowan.to_matrix(input1)
         matrix_rotated = np.einsum("ijk,ki->ij", matrices, vector_inputs.T)
-        self.assertTrue(np.allclose(matrix_rotated, quat_rotated))
+        assert np.allclose(matrix_rotated, quat_rotated)

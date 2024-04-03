@@ -1,11 +1,10 @@
 """Test the rotation of quaternions for various array sizes."""
 
-from __future__ import absolute_import, division, print_function
-
 import os
 import unittest
 
 import numpy as np
+import pytest
 
 import rowan
 
@@ -28,7 +27,7 @@ class TestRotate(unittest.TestCase):
 
     def test_single_quaternion(self):
         """Testing trivial rotations."""
-        self.assertTrue(np.all(rowan.rotate(one, one_vector) == one_vector))
+        assert np.all(rowan.rotate(one, one_vector) == one_vector)
 
     def test_2d_array(self):
         """Rotating sets of vectors by sets of quaternions."""
@@ -36,12 +35,10 @@ class TestRotate(unittest.TestCase):
         one_vectors = np.repeat(one_vector[np.newaxis, :], 10, axis=0)
 
         # Simple tests
-        self.assertTrue(np.all(rowan.rotate(ones, one_vectors) == one_vectors))
+        assert np.all(rowan.rotate(ones, one_vectors) == one_vectors)
 
         # Complex random array
-        self.assertTrue(
-            np.allclose(rowan.rotate(input1, vector_inputs), stored_rotation)
-        )
+        assert np.allclose(rowan.rotate(input1, vector_inputs), stored_rotation)
 
     def test_3d_array(self):
         """Rotating higher dimensional arrays of vectors by arrays of quaternions."""
@@ -49,14 +46,16 @@ class TestRotate(unittest.TestCase):
         expanded_shape = (num_reps // 5, 5, 4)
         expanded_shape_vec = (num_reps // 5, 5, 3)
         ones = np.reshape(
-            np.repeat(one[np.newaxis, :], num_reps, axis=0), expanded_shape
+            np.repeat(one[np.newaxis, :], num_reps, axis=0),
+            expanded_shape,
         )
         one_vectors = np.reshape(
-            np.repeat(one_vector[np.newaxis, :], num_reps, axis=0), expanded_shape_vec
+            np.repeat(one_vector[np.newaxis, :], num_reps, axis=0),
+            expanded_shape_vec,
         )
 
         # Simple tests
-        self.assertTrue(np.all(rowan.rotate(ones, one_vectors) == one_vectors))
+        assert np.all(rowan.rotate(ones, one_vectors) == one_vectors)
 
         # Complex random array
         num_reps = input1.shape[0]
@@ -66,10 +65,8 @@ class TestRotate(unittest.TestCase):
             np.reshape(input1, expanded_shape),
             np.reshape(vector_inputs, expanded_shape_vec),
         )
-        self.assertTrue(
-            np.allclose(
-                rotation_result, np.reshape(stored_rotation, expanded_shape_vec)
-            )
+        assert np.allclose(
+            rotation_result, np.reshape(stored_rotation, expanded_shape_vec)
         )
 
     def test_broadcast(self):
@@ -80,10 +77,10 @@ class TestRotate(unittest.TestCase):
         many_ones = np.zeros(shape)
         many_ones[..., 0] = 1
         output = rowan.rotate(many_ones, zero_vector)
-        self.assertTrue(output.shape == shape_out)
+        assert output.shape == shape_out
 
         # Two nonconforming array sizes
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.rotate(many_ones, np.repeat(zero_vector[np.newaxis, :], 2, axis=0))
 
         # Require broadcasting in multiple dimensions
@@ -92,7 +89,7 @@ class TestRotate(unittest.TestCase):
         zeros_vec = np.zeros((3, 5, 1, 1, 9, 3))
         shape = (3, 5, 3, 8, 9, 3)
         product = rowan.rotate(ones_quat, zeros_vec)
-        self.assertTrue(product.shape == shape)
+        assert product.shape == shape
 
         # Test complex rotations
         num_first = 8
@@ -103,4 +100,4 @@ class TestRotate(unittest.TestCase):
         for i in range(num_first):
             for j in range(num_second):
                 single_rot = rowan.rotate(i1[i, 0, :], i2[0, j, :])
-                self.assertTrue(np.all(output[i, j, :] == single_rot))
+                assert np.all(output[i, j, :] == single_rot)

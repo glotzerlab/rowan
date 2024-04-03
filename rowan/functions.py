@@ -72,6 +72,7 @@ def expb(q, b):
 
     Args:
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
+        b ((...) :class:`numpy.ndarray`): Scalars to use as bases.
 
     Returns:
         (..., 4) :class:`numpy.ndarray`: Exponentials of ``q``.
@@ -181,7 +182,7 @@ def logb(q, b):
 
     Args:
         q ((..., 4) :class:`numpy.ndarray`): Array of quaternions.
-        n ((...) :class:`numpy.ndarray`): Scalars to use as log bases.
+        b ((...) :class:`numpy.ndarray`): Scalars to use as log bases.
 
     Returns:
         (..., 4) :class:`numpy.ndarray`: Logarithms of ``q``.
@@ -329,7 +330,8 @@ def multiply(qi, qj):
     output = np.empty(np.broadcast(qi, qj).shape)
 
     output[..., 0] = qi[..., 0] * qj[..., 0] - np.sum(
-        qi[..., 1:] * qj[..., 1:], axis=-1
+        qi[..., 1:] * qj[..., 1:],
+        axis=-1,
     )
     output[..., 1:] = (
         qi[..., 0, np.newaxis] * qj[..., 1:]
@@ -552,8 +554,7 @@ def _vector_bisector(v1, v2):
         result[ap] = np.cross(v1_norm[ap], cross_element)
 
         return result
-    else:
-        return _normalize_vec(v1_norm + v2_norm)
+    return _normalize_vec(v1_norm + v2_norm)
 
 
 def vector_vector_rotation(v1, v2):
@@ -601,7 +602,7 @@ def from_euler(alpha, beta, gamma, convention="zyx", axis_type="intrinsic"):
         convention (str):
             One of the 12 valid conventions xzx, xyx, yxy, yzy, zyz, zxz, xzy, xyz, yxz,
             yzx, zyx, zxy.
-        axes (str):
+        axis_type (str):
             Whether to use extrinsic or intrinsic rotations.
 
     Returns:
@@ -619,7 +620,7 @@ def from_euler(alpha, beta, gamma, convention="zyx", axis_type="intrinsic"):
     if len(convention) > 3 or (set(convention) - set("xyz")):
         raise ValueError(
             "All acceptable conventions must be 3 \
-character strings composed only of x, y, and z"
+character strings composed only of x, y, and z",
         )
 
     basis_axes = {
@@ -715,7 +716,7 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
             Quaternions to transform.
         convention (str):
             One of the 6 valid conventions zxz, xyx, yzy, zyz, xzx, yxy.
-        axes (str):
+        axis_type (str):
             Whether to use extrinsic or intrinsic.
 
     Returns:
@@ -755,7 +756,7 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
     # intrinsic angle ordering and just reversed for extrinsic.
     if axis_type == "extrinsic":
         convention = convention[::-1]
-    elif not axis_type == "intrinsic":
+    elif axis_type != "intrinsic":
         raise ValueError("The axis type must be either extrinsic or intrinsic")
 
     # We have to hardcode the different convention possibilities since they all
@@ -905,7 +906,10 @@ def from_matrix(mat, require_orthogonal=True):
         https://doi.org/10.2514/2.4654
 
     Args:
-        mat ((..., 3, 3) :class:`numpy.ndarray`): An array of rotation matrices.
+        mat ((..., 3, 3) :class:`numpy.ndarray`):
+            An array of rotation matrices.
+        require_orthogonal (bool):
+            Whether to require that the input matrices are orthogonal.
 
     Returns:
         (..., 4) :class:`numpy.ndarray`: The corresponding rotation quaternions.
@@ -921,7 +925,7 @@ def from_matrix(mat, require_orthogonal=True):
             "Not all of your matrices are orthogonal. \
 Please ensure that there are no improper rotations. \
 If this was intentional, set require_orthogonal to \
-False when calling this function."
+False when calling this function.",
         )
 
     K = np.zeros(mat.shape[:-2] + (4, 4))
@@ -956,7 +960,10 @@ def to_matrix(q, require_unit=True):
     <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix>`_.
 
     Args:
-        q ((..., 4) :class:`numpy.ndarray`): An array of quaternions.
+        q ((..., 4) :class:`numpy.ndarray`):
+            An array of quaternions.
+        require_unit (bool):
+            Whether to require that the input quaternions are unit quaternions.
 
     Returns:
         (..., 3, 3) :class:`numpy.ndarray`: The corresponding rotation matrices.
@@ -973,11 +980,11 @@ def to_matrix(q, require_unit=True):
     s = norm(q)
     if np.any(s == 0.0):
         raise ZeroDivisionError("At least one element of q has approximately zero norm")
-    elif require_unit and not np.allclose(s, 1.0):
+    if require_unit and not np.allclose(s, 1.0):
         raise ValueError(
             "Not all quaternions in q are unit quaternions. \
 If this was intentional, please set require_unit to False when \
-calling this function."
+calling this function.",
         )
     m = np.empty(q.shape[:-1] + (3, 3))
     s **= -1.0  # For consistency with Wikipedia notation
@@ -1057,7 +1064,9 @@ def to_axis_angle(q):
     # Avoid divide by zero issues; these values will not be used
     sines[sines == 0] = 1
     axes = np.where(
-        angles[..., np.newaxis] != 0, q[..., 1:] / sines[..., np.newaxis], 0
+        angles[..., np.newaxis] != 0,
+        q[..., 1:] / sines[..., np.newaxis],
+        0,
     )
 
     return axes, angles
@@ -1164,7 +1173,7 @@ def isfinite(q):
     return np.all(np.isfinite(q), axis=-1)
 
 
-def allclose(p, q, **kwargs):
+def allclose(p, q, **kwargs):  # noqa: D417
     r"""Check whether two sets of quaternions are all close.
 
     This is a direct wrapper of the corresponding NumPy function.
@@ -1185,7 +1194,7 @@ def allclose(p, q, **kwargs):
     return np.allclose(p, q, **kwargs)
 
 
-def isclose(p, q, **kwargs):
+def isclose(p, q, **kwargs):  # noqa: D417
     r"""Element-wise check of whether two sets of quaternions are close.
 
     This function is a simple wrapper that checks using the

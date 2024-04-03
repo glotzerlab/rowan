@@ -1,11 +1,11 @@
 """Test converting quaternions to and from Euler angles."""
 
-from __future__ import absolute_import, division, print_function
-
 import os
+import textwrap
 import unittest
 
 import numpy as np
+import pytest
 
 import rowan
 
@@ -24,95 +24,80 @@ class TestEuler(unittest.TestCase):
     def test_from_euler(self):
         """Convert Euler angles to quaternions."""
         alpha, beta, gamma = [0, 0, 0]
-        self.assertTrue(
-            np.all(rowan.from_euler(alpha, beta, gamma) == np.array([1, 0, 0, 0]))
-        )
+        assert np.all(rowan.from_euler(alpha, beta, gamma) == np.array([1, 0, 0, 0]))
 
         alpha, beta, gamma = [np.pi / 2, np.pi / 2, 0]
-        self.assertTrue(
-            np.allclose(
-                rowan.from_euler(alpha, beta, gamma, "zyx", "intrinsic"),
-                np.array([0.5, -0.5, 0.5, 0.5]),
-            )
+        assert np.allclose(
+            rowan.from_euler(alpha, beta, gamma, "zyx", "intrinsic"),
+            np.array([0.5, -0.5, 0.5, 0.5]),
         )
 
         # Confirm broadcasting works from different Euler angles
         alpha, beta, gamma = [[0, np.pi / 2], [0, np.pi / 2], 0]
-        self.assertTrue(
-            np.allclose(
-                rowan.from_euler(alpha, beta, gamma),
-                np.array([[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]]),
-            )
+        assert np.allclose(
+            rowan.from_euler(alpha, beta, gamma),
+            np.array([[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]]),
         )
 
         alpha = [[0, np.pi / 2], [0, np.pi / 2]]
         beta = [0, np.pi / 2]
         gamma = 0
-        self.assertTrue(
-            np.allclose(
-                rowan.from_euler(alpha, beta, gamma),
-                np.array(
-                    [
-                        [[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]],
-                        [[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]],
-                    ]
-                ),
-            )
+        assert np.allclose(
+            rowan.from_euler(alpha, beta, gamma),
+            np.array(
+                [
+                    [[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]],
+                    [[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]],
+                ]
+            ),
         )
 
         # More complicated test, checks 2d arrays and more complex angles
         alpha = euler_angles[:, 0]
         beta = euler_angles[:, 1]
         gamma = euler_angles[:, 2]
-        self.assertTrue(
-            np.allclose(
-                rowan.from_euler(alpha, beta, gamma, "zyz", "intrinsic"),
-                euler_quaternions,
-            )
+        assert np.allclose(
+            rowan.from_euler(alpha, beta, gamma, "zyz", "intrinsic"), euler_quaternions
         )
 
         # Ensure proper errors are raised
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.from_euler(alpha, beta, gamma, "foo", "intrinsic")
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.from_euler(alpha, beta, gamma, "foo", "extrinsic")
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.from_euler(alpha, beta, gamma, "zyz", "bar")
 
     def test_to_euler(self):
         """Test conversion to Euler angles."""
         v = one
-        self.assertTrue(np.all(rowan.to_euler(v) == np.array([0, 0, 0])))
+        assert np.all(rowan.to_euler(v) == np.array([0, 0, 0]))
 
         v = np.array([0.5, 0.5, 0.5, 0.5])
-        self.assertTrue(
-            np.all(rowan.to_euler(v) == np.array([np.pi / 2, 0, np.pi / 2]))
-        )
+        assert np.all(rowan.to_euler(v) == np.array([np.pi / 2, 0, np.pi / 2]))
 
         # More complicated test, checks 2d arrays
         # and more complex angles
-        self.assertTrue(
-            np.allclose(
-                rowan.to_euler(euler_quaternions, "zyz", "intrinsic"), euler_angles
-            )
+        assert np.allclose(
+            rowan.to_euler(euler_quaternions, "zyz", "intrinsic"), euler_angles
         )
 
         # Ensure proper errors are raised
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.to_euler(euler_quaternions, "foo", "intrinsic")
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.to_euler(euler_quaternions, "foo", "extrinsic")
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.to_euler(euler_quaternions, "zyz", "bar")
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.to_euler(2 * one)
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             rowan.to_euler(zero)
 
     def test_from_to_euler(self):
@@ -139,18 +124,17 @@ class TestEuler(unittest.TestCase):
             for axis_type in axis_types:
                 euler = rowan.to_euler(quats, convention, axis_type)
                 out = rowan.from_euler(
-                    euler[..., 0], euler[..., 1], euler[..., 2], convention, axis_type
+                    euler[..., 0],
+                    euler[..., 1],
+                    euler[..., 2],
+                    convention,
+                    axis_type,
                 )
-                self.assertTrue(
-                    np.all(
-                        np.logical_or(
-                            np.isclose(out - quats, 0), np.isclose(out + quats, 0)
-                        )
-                    ),
-                    msg="Failed for convention {}, axis type {}".format(
-                        convention, axis_type
-                    ),
-                )
+                assert np.all(
+                    np.logical_or(
+                        np.isclose(out - quats, 0), np.isclose(out + quats, 0)
+                    )
+                ), f"Failed for convention {convention}, axis type {axis_type}"
 
     def test_to_from_euler(self):
         """2-way conversion starting from quaternions."""
@@ -178,17 +162,12 @@ class TestEuler(unittest.TestCase):
                     convention,
                     axis_type,
                 )
-                self.assertTrue(
-                    np.all(
-                        np.logical_or(
-                            np.isclose(out - angles_euler, 0),
-                            np.isclose(out + angles_euler, 0),
-                        )
-                    ),
-                    msg="Failed for convention {}, axis type {}".format(
-                        convention, axis_type
-                    ),
-                )
+                assert np.all(
+                    np.logical_or(
+                        np.isclose(out - angles_euler, 0),
+                        np.isclose(out + angles_euler, 0),
+                    )
+                ), f"Failed for convention {convention}, axis type {axis_type}"
 
         for convention in conventions_tb:
             for axis_type in axis_types:
@@ -203,17 +182,11 @@ class TestEuler(unittest.TestCase):
                     convention,
                     axis_type,
                 )
-                self.assertTrue(
-                    np.all(
-                        np.logical_or(
-                            np.isclose(out - angles_tb, 0),
-                            np.isclose(out + angles_tb, 0),
-                        )
-                    ),
-                    msg="Failed for convention {}, axis type {}".format(
-                        convention, axis_type
-                    ),
-                )
+                assert np.all(
+                    np.logical_or(
+                        np.isclose(out - angles_tb, 0), np.isclose(out + angles_tb, 0)
+                    )
+                ), f"Failed for convention {convention}, axis type {axis_type}"
 
     def test_zero_beta(self):
         """Check cases where beta is 0."""
@@ -352,7 +325,7 @@ class TestEuler(unittest.TestCase):
         # cases. In practice we get the same results since we're sweeping alpha
         # values in the tests below, but it's useful to set this up precisely.
         mats_tb_extrinsic = [
-            (m[0][::-1], "extrinsic", lambda alpha, beta: m[2](-alpha, beta))
+            (m[0][::-1], "extrinsic", lambda alpha, beta: m[2](-alpha, beta))  # noqa
             for m in mats_tb_intrinsic
         ]
 
@@ -386,31 +359,23 @@ class TestEuler(unittest.TestCase):
                             quaternions.append(quat)
                             euler = rowan.to_euler(quat, convention, axis_type)
                             converted = rowan.from_euler(
-                                *euler, convention=convention, axis_type=axis_type
+                                *euler,
+                                convention=convention,
+                                axis_type=axis_type,
                             )
                             correct_rotation = rowan.rotate(quat, test_vector)
                             test_rotation = rowan.rotate(converted, test_vector)
-                            self.assertTrue(
-                                np.allclose(correct_rotation, test_rotation, atol=1e-6),
-                                msg="""
-                                       Failed for convention {},
-                                       axis type {},
-                                       alpha = {},
-                                       beta = {}.
-                                       Expected quaternion: {}.
-                                       Calculated: {}.
-                                       Expected vector: {}.
-                                       Calculated vector: {}.""".format(
-                                    convention,
-                                    axis_type,
-                                    alpha,
-                                    beta,
-                                    quat,
-                                    converted,
-                                    correct_rotation,
-                                    test_rotation,
-                                ),
-                            )
+                            assert np.allclose(
+                                correct_rotation, test_rotation, atol=1e-06
+                            ), textwrap.dedent("""\
+                                Failed for convention {convention},
+                                axis type {axis_type},
+                                alpha = {alpha},
+                                beta = {beta}.
+                                Expected quaternion: {quat}.
+                                Calculated: {converted}.
+                                Expected vector: {correct_rotation}.
+                                Calculated vector: {test_rotation}.""")
 
                     # For completeness, also test with broadcasting.
                     quaternions = np.asarray(quaternions).reshape(-1, 4)
@@ -422,10 +387,8 @@ class TestEuler(unittest.TestCase):
                         convention,
                         axis_type,
                     )
-                    self.assertTrue(
-                        np.allclose(
-                            rowan.rotate(quaternions, test_vector),
-                            rowan.rotate(converted, test_vector),
-                            atol=1e-6,
-                        )
+                    assert np.allclose(
+                        rowan.rotate(quaternions, test_vector),
+                        rowan.rotate(converted, test_vector),
+                        atol=1e-06,
                     )

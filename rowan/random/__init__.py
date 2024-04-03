@@ -28,7 +28,7 @@ def rand(*args):
     function that takes a tuple as input, use :func:`random_sample` instead.
 
     Args:
-        shape (tuple): The shape of the array to generate.
+        args (tuple): The shape of the array to generate.
 
     Return:
         :class:`numpy.ndarray`:
@@ -41,8 +41,7 @@ def rand(*args):
     """
     if len(args) == 0:
         return random_sample()
-    else:
-        return random_sample(args)
+    return random_sample(args)
 
 
 def random_sample(size=None):
