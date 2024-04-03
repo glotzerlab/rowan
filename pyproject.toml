@@ -33,3 +33,7 @@ mapping = [
 
 [project.urls]
 Homepage = "https://github.com/glotzerlab/rowan"
+
+[tool.setuptools.packages.find]
+include = ["rowan*"]
+namespaces = false
