@@ -1,7 +1,7 @@
 ci:
   autoupdate_schedule: quarterly
 
-# TODO: Add mypy, pyupgrade
+# TODO: Add mypy
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: 'v4.5.0'
