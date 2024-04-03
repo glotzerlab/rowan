@@ -18,7 +18,7 @@ class TestDistance(unittest.TestCase):
     def setUp(self):
         """Get the data file used for all methods."""
         self.saved_data = np.load(
-            os.path.join(os.path.dirname(__file__), "files/test_geometry.npz")
+            os.path.join(os.path.dirname(__file__), "files/test_geometry.npz"),
         )
 
     def test_distance(self):
@@ -56,7 +56,7 @@ class TestDistance(unittest.TestCase):
         self.assertTrue(np.all(geometry.riemann_exp_map(zero, zero) == 0))
         self.assertTrue(np.all(geometry.riemann_exp_map(one, zero) == one))
         self.assertTrue(
-            np.allclose(geometry.riemann_exp_map(one, one), [np.exp(1), 0, 0, 0])
+            np.allclose(geometry.riemann_exp_map(one, one), [np.exp(1), 0, 0, 0]),
         )
 
         x1 = np.stack((zero, one))
@@ -73,7 +73,7 @@ class TestDistance(unittest.TestCase):
         self.assertTrue(np.all(geometry.riemann_log_map(zero, zero) == inf_array))
         self.assertTrue(np.all(geometry.riemann_log_map(one, zero) == inf_array))
         self.assertTrue(
-            np.allclose(geometry.riemann_log_map(one, one), [np.log(1), 0, 0, 0])
+            np.allclose(geometry.riemann_log_map(one, one), [np.log(1), 0, 0, 0]),
         )
 
         x1 = np.stack((zero, one))
@@ -113,7 +113,8 @@ class TestDistance(unittest.TestCase):
         self.assertTrue(np.all(geometry.sym_intrinsic_distance(x2, x1) == np.inf))
 
         my_ans = geometry.sym_intrinsic_distance(
-            self.saved_data["p"], self.saved_data["q"]
+            self.saved_data["p"],
+            self.saved_data["q"],
         )
         self.assertTrue(np.allclose(self.saved_data["sym_intrinsic_distance"], my_ans))
 

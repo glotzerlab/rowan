@@ -330,7 +330,8 @@ def multiply(qi, qj):
     output = np.empty(np.broadcast(qi, qj).shape)
 
     output[..., 0] = qi[..., 0] * qj[..., 0] - np.sum(
-        qi[..., 1:] * qj[..., 1:], axis=-1
+        qi[..., 1:] * qj[..., 1:],
+        axis=-1,
     )
     output[..., 1:] = (
         qi[..., 0, np.newaxis] * qj[..., 1:]
@@ -620,7 +621,7 @@ def from_euler(alpha, beta, gamma, convention="zyx", axis_type="intrinsic"):
     if len(convention) > 3 or (set(convention) - set("xyz")):
         raise ValueError(
             "All acceptable conventions must be 3 \
-character strings composed only of x, y, and z"
+character strings composed only of x, y, and z",
         )
 
     basis_axes = {
@@ -925,7 +926,7 @@ def from_matrix(mat, require_orthogonal=True):
             "Not all of your matrices are orthogonal. \
 Please ensure that there are no improper rotations. \
 If this was intentional, set require_orthogonal to \
-False when calling this function."
+False when calling this function.",
         )
 
     K = np.zeros(mat.shape[:-2] + (4, 4))
@@ -984,7 +985,7 @@ def to_matrix(q, require_unit=True):
         raise ValueError(
             "Not all quaternions in q are unit quaternions. \
 If this was intentional, please set require_unit to False when \
-calling this function."
+calling this function.",
         )
     m = np.empty(q.shape[:-1] + (3, 3))
     s **= -1.0  # For consistency with Wikipedia notation
@@ -1064,7 +1065,9 @@ def to_axis_angle(q):
     # Avoid divide by zero issues; these values will not be used
     sines[sines == 0] = 1
     axes = np.where(
-        angles[..., np.newaxis] != 0, q[..., 1:] / sines[..., np.newaxis], 0
+        angles[..., np.newaxis] != 0,
+        q[..., 1:] / sines[..., np.newaxis],
+        0,
     )
 
     return axes, angles

@@ -22,7 +22,7 @@ class TestCalculus(unittest.TestCase):
         x = np.array([np.sqrt(2) / 2, np.sqrt(2) / 2, 0, 0])
         v = np.array([0.1, 0.1, 0.1])
         ans = np.array(
-            [-0.035355339059327383, 0.035355339059327383, 0.0, 0.070710678118654766]
+            [-0.035355339059327383, 0.035355339059327383, 0.0, 0.070710678118654766],
         )
 
         self.assertTrue(np.allclose(calculus.derivative(x, v), ans))

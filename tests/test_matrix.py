@@ -34,7 +34,7 @@ class TestMatrix(unittest.TestCase):
             np.logical_or(
                 np.allclose(rowan.from_matrix(mat), half),
                 np.allclose(rowan.from_matrix(mat), -half),
-            )
+            ),
         )
 
         mat = np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]])
@@ -57,14 +57,17 @@ class TestMatrix(unittest.TestCase):
 
         v = np.copy(half)
         self.assertTrue(
-            np.allclose(rowan.to_matrix(v), np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0]]))
+            np.allclose(
+                rowan.to_matrix(v), np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0]])
+            ),
         )
 
         v[3] *= -1
         self.assertTrue(
             np.allclose(
-                rowan.to_matrix(v), np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]])
-            )
+                rowan.to_matrix(v),
+                np.array([[0, 1, 0], [0, 0, -1], [-1, 0, 0]]),
+            ),
         )
 
     def test_to_from_matrix(self):
@@ -76,8 +79,8 @@ class TestMatrix(unittest.TestCase):
                 np.logical_or(
                     np.isclose(input1 - converted, 0),
                     np.isclose(input1 + converted, 0),
-                )
-            )
+                ),
+            ),
         )
 
     def test_rotation(self):

@@ -37,7 +37,7 @@ class TestMapping(unittest.TestCase):
                     np.logical_or(
                         np.allclose(rotation, q),
                         np.allclose(rotation, -q),
-                    )
+                    ),
                 )
                 self.assertTrue(np.allclose(translation, t))
             self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
@@ -64,7 +64,7 @@ class TestMapping(unittest.TestCase):
                     np.logical_or(
                         np.allclose(rotation, q),
                         np.allclose(rotation, -q),
-                    )
+                    ),
                 )
                 self.assertTrue(np.allclose(translation, t))
 
@@ -92,7 +92,7 @@ class TestMapping(unittest.TestCase):
                     np.logical_or(
                         np.allclose(rotation, q),
                         np.allclose(rotation, -q),
-                    )
+                    ),
                 )
                 self.assertTrue(np.allclose(translation, t))
             self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
@@ -119,7 +119,7 @@ class TestMapping(unittest.TestCase):
                     np.logical_or(
                         np.allclose(rotation, q),
                         np.allclose(rotation, -q),
-                    )
+                    ),
                 )
                 self.assertTrue(np.allclose(translation, t))
             self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
@@ -150,7 +150,7 @@ class TestMapping(unittest.TestCase):
         ]
 
         self.assertTrue(
-            np.allclose(ordered_recovered_points, ordered_transformed_points)
+            np.allclose(ordered_recovered_points, ordered_transformed_points),
         )
 
     def test_icp_exact(self):
@@ -179,11 +179,11 @@ class TestMapping(unittest.TestCase):
                     np.logical_or(
                         np.allclose(rotation, q),
                         np.allclose(rotation, -q),
-                    )
+                    ),
                 )
                 self.assertTrue(np.allclose(translation, t))
             self.assertTrue(
-                np.allclose(transformed_points, rotate(q, points[indices]) + t)
+                np.allclose(transformed_points, rotate(q, points[indices]) + t),
             )
 
     def test_icp_mismatched(self):

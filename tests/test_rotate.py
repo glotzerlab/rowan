@@ -38,7 +38,7 @@ class TestRotate(unittest.TestCase):
 
         # Complex random array
         self.assertTrue(
-            np.allclose(rowan.rotate(input1, vector_inputs), stored_rotation)
+            np.allclose(rowan.rotate(input1, vector_inputs), stored_rotation),
         )
 
     def test_3d_array(self):
@@ -47,10 +47,12 @@ class TestRotate(unittest.TestCase):
         expanded_shape = (num_reps // 5, 5, 4)
         expanded_shape_vec = (num_reps // 5, 5, 3)
         ones = np.reshape(
-            np.repeat(one[np.newaxis, :], num_reps, axis=0), expanded_shape
+            np.repeat(one[np.newaxis, :], num_reps, axis=0),
+            expanded_shape,
         )
         one_vectors = np.reshape(
-            np.repeat(one_vector[np.newaxis, :], num_reps, axis=0), expanded_shape_vec
+            np.repeat(one_vector[np.newaxis, :], num_reps, axis=0),
+            expanded_shape_vec,
         )
 
         # Simple tests
@@ -66,8 +68,9 @@ class TestRotate(unittest.TestCase):
         )
         self.assertTrue(
             np.allclose(
-                rotation_result, np.reshape(stored_rotation, expanded_shape_vec)
-            )
+                rotation_result,
+                np.reshape(stored_rotation, expanded_shape_vec),
+            ),
         )
 
     def test_broadcast(self):

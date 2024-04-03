@@ -17,11 +17,11 @@ class TestVectorVector(unittest.TestCase):
         vec3 = np.array([0, 0, 1])
         quat = rowan.vector_vector_rotation(vec1, vec2)
         self.assertTrue(
-            np.allclose(quat, np.array([[0, np.sqrt(2) / 2, np.sqrt(2) / 2, 0]]))
+            np.allclose(quat, np.array([[0, np.sqrt(2) / 2, np.sqrt(2) / 2, 0]])),
         )
         quat = rowan.vector_vector_rotation(vec1, vec3)
         self.assertTrue(
-            np.allclose(quat, np.array([[0, np.sqrt(2) / 2, 0, np.sqrt(2) / 2]]))
+            np.allclose(quat, np.array([[0, np.sqrt(2) / 2, 0, np.sqrt(2) / 2]])),
         )
 
     def test_ap(self):
@@ -33,7 +33,7 @@ class TestVectorVector(unittest.TestCase):
         vec2 = np.array([0, 1, 0])
         quat = rowan.vector_vector_rotation(vec1, vec2)
         self.assertTrue(
-            np.allclose(rowan.rotate(quat, vec1), vec2 / np.linalg.norm(vec2, axis=-1))
+            np.allclose(rowan.rotate(quat, vec1), vec2 / np.linalg.norm(vec2, axis=-1)),
         )
 
         vec1 = np.array([1, 0, 0])
@@ -43,7 +43,7 @@ class TestVectorVector(unittest.TestCase):
             np.allclose(
                 rowan.rotate(quat, vec1),
                 vec2 / np.linalg.norm(vec2, axis=-1)[:, np.newaxis],
-            )
+            ),
         )
 
         vec1 = np.array([0, 1, 0])
@@ -53,7 +53,7 @@ class TestVectorVector(unittest.TestCase):
             np.allclose(
                 rowan.rotate(quat, vec1),
                 vec2 / np.linalg.norm(vec2, axis=-1)[:, np.newaxis],
-            )
+            ),
         )
 
     def test_broadcast(self):
@@ -68,7 +68,7 @@ class TestVectorVector(unittest.TestCase):
             [
                 [0, np.sqrt(2) / 2, np.sqrt(2) / 2, 0],
                 [0, np.sqrt(2) / 2, 0, np.sqrt(2) / 2],
-            ]
+            ],
         )
 
         # Test both directions of single array broadcasting

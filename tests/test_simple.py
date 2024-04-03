@@ -50,7 +50,7 @@ class TestSimple(unittest.TestCase):
             quats = np.random.random_sample(shape)
             norms = np.linalg.norm(quats, axis=-1)
             self.assertTrue(
-                np.all(rowan.normalize(quats) == quats / norms[..., np.newaxis])
+                np.all(rowan.normalize(quats) == quats / norms[..., np.newaxis]),
             )
 
     def test_equal(self):

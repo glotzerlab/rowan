@@ -40,16 +40,16 @@ class TestMultiply(unittest.TestCase):
         product = rowan.multiply(zeros, zeros)
         self.assertTrue(
             np.all(
-                product == np.repeat(np.array([0, 0, 0, 0])[np.newaxis, :], 10, axis=0)
-            )
+                product == np.repeat(np.array([0, 0, 0, 0])[np.newaxis, :], 10, axis=0),
+            ),
         )
 
         # Multiply ones
         product = rowan.multiply(ones, ones)
         self.assertTrue(
             np.all(
-                product == np.repeat(np.array([1, 0, 0, 0])[np.newaxis, :], 10, axis=0)
-            )
+                product == np.repeat(np.array([1, 0, 0, 0])[np.newaxis, :], 10, axis=0),
+            ),
         )
 
         # Complex random array
@@ -61,10 +61,12 @@ class TestMultiply(unittest.TestCase):
         num_reps = 20
         expanded_shape = (int(num_reps / 5), 5, 4)
         zeros = np.reshape(
-            np.repeat(zero[np.newaxis, :], num_reps, axis=0), expanded_shape
+            np.repeat(zero[np.newaxis, :], num_reps, axis=0),
+            expanded_shape,
         )
         ones = np.reshape(
-            np.repeat(one[np.newaxis, :], num_reps, axis=0), expanded_shape
+            np.repeat(one[np.newaxis, :], num_reps, axis=0),
+            expanded_shape,
         )
         expected_product_zeros = np.reshape(
             np.repeat(np.array([0, 0, 0, 0])[np.newaxis, :], num_reps, axis=0),
@@ -87,10 +89,11 @@ class TestMultiply(unittest.TestCase):
         num_reps = input1.shape[0]
         expanded_shape = (int(num_reps / 5), 5, 4)
         product = rowan.multiply(
-            np.reshape(input1, expanded_shape), np.reshape(input2, expanded_shape)
+            np.reshape(input1, expanded_shape),
+            np.reshape(input2, expanded_shape),
         )
         self.assertTrue(
-            np.allclose(product, np.reshape(stored_product, expanded_shape))
+            np.allclose(product, np.reshape(stored_product, expanded_shape)),
         )
 
     def test_broadcast(self):
@@ -132,5 +135,7 @@ class TestMultiply(unittest.TestCase):
             for shape_j in shapes:
                 y = np.random.random_sample(shape_j)
                 self.assertTrue(
-                    np.allclose(rowan.divide(x, y), rowan.multiply(x, rowan.inverse(y)))
+                    np.allclose(
+                        rowan.divide(x, y), rowan.multiply(x, rowan.inverse(y))
+                    ),
                 )

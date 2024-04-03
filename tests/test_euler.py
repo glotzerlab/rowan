@@ -23,7 +23,7 @@ class TestEuler(unittest.TestCase):
         """Convert Euler angles to quaternions."""
         alpha, beta, gamma = [0, 0, 0]
         self.assertTrue(
-            np.all(rowan.from_euler(alpha, beta, gamma) == np.array([1, 0, 0, 0]))
+            np.all(rowan.from_euler(alpha, beta, gamma) == np.array([1, 0, 0, 0])),
         )
 
         alpha, beta, gamma = [np.pi / 2, np.pi / 2, 0]
@@ -31,7 +31,7 @@ class TestEuler(unittest.TestCase):
             np.allclose(
                 rowan.from_euler(alpha, beta, gamma, "zyx", "intrinsic"),
                 np.array([0.5, -0.5, 0.5, 0.5]),
-            )
+            ),
         )
 
         # Confirm broadcasting works from different Euler angles
@@ -40,7 +40,7 @@ class TestEuler(unittest.TestCase):
             np.allclose(
                 rowan.from_euler(alpha, beta, gamma),
                 np.array([[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]]),
-            )
+            ),
         )
 
         alpha = [[0, np.pi / 2], [0, np.pi / 2]]
@@ -53,9 +53,9 @@ class TestEuler(unittest.TestCase):
                     [
                         [[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]],
                         [[1, 0, 0, 0], [0.5, -0.5, 0.5, 0.5]],
-                    ]
+                    ],
                 ),
-            )
+            ),
         )
 
         # More complicated test, checks 2d arrays and more complex angles
@@ -66,7 +66,7 @@ class TestEuler(unittest.TestCase):
             np.allclose(
                 rowan.from_euler(alpha, beta, gamma, "zyz", "intrinsic"),
                 euler_quaternions,
-            )
+            ),
         )
 
         # Ensure proper errors are raised
@@ -86,15 +86,16 @@ class TestEuler(unittest.TestCase):
 
         v = np.array([0.5, 0.5, 0.5, 0.5])
         self.assertTrue(
-            np.all(rowan.to_euler(v) == np.array([np.pi / 2, 0, np.pi / 2]))
+            np.all(rowan.to_euler(v) == np.array([np.pi / 2, 0, np.pi / 2])),
         )
 
         # More complicated test, checks 2d arrays
         # and more complex angles
         self.assertTrue(
             np.allclose(
-                rowan.to_euler(euler_quaternions, "zyz", "intrinsic"), euler_angles
-            )
+                rowan.to_euler(euler_quaternions, "zyz", "intrinsic"),
+                euler_angles,
+            ),
         )
 
         # Ensure proper errors are raised
@@ -137,13 +138,18 @@ class TestEuler(unittest.TestCase):
             for axis_type in axis_types:
                 euler = rowan.to_euler(quats, convention, axis_type)
                 out = rowan.from_euler(
-                    euler[..., 0], euler[..., 1], euler[..., 2], convention, axis_type
+                    euler[..., 0],
+                    euler[..., 1],
+                    euler[..., 2],
+                    convention,
+                    axis_type,
                 )
                 self.assertTrue(
                     np.all(
                         np.logical_or(
-                            np.isclose(out - quats, 0), np.isclose(out + quats, 0)
-                        )
+                            np.isclose(out - quats, 0),
+                            np.isclose(out + quats, 0),
+                        ),
                     ),
                     msg=f"Failed for convention {convention}, axis type {axis_type}",
                 )
@@ -179,7 +185,7 @@ class TestEuler(unittest.TestCase):
                         np.logical_or(
                             np.isclose(out - angles_euler, 0),
                             np.isclose(out + angles_euler, 0),
-                        )
+                        ),
                     ),
                     msg=f"Failed for convention {convention}, axis type {axis_type}",
                 )
@@ -202,7 +208,7 @@ class TestEuler(unittest.TestCase):
                         np.logical_or(
                             np.isclose(out - angles_tb, 0),
                             np.isclose(out + angles_tb, 0),
-                        )
+                        ),
                     ),
                     msg=f"Failed for convention {convention}, axis type {axis_type}",
                 )
@@ -378,7 +384,9 @@ class TestEuler(unittest.TestCase):
                             quaternions.append(quat)
                             euler = rowan.to_euler(quat, convention, axis_type)
                             converted = rowan.from_euler(
-                                *euler, convention=convention, axis_type=axis_type
+                                *euler,
+                                convention=convention,
+                                axis_type=axis_type,
                             )
                             correct_rotation = rowan.rotate(quat, test_vector)
                             test_rotation = rowan.rotate(converted, test_vector)
@@ -410,5 +418,5 @@ class TestEuler(unittest.TestCase):
                             rowan.rotate(quaternions, test_vector),
                             rowan.rotate(converted, test_vector),
                             atol=1e-6,
-                        )
+                        ),
                     )

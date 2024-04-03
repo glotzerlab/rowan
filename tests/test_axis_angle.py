@@ -25,7 +25,7 @@ class TestFromAxisAngle(unittest.TestCase):
         quats = rowan.from_axis_angle(v, theta)
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(
-            np.allclose(quats, np.array([[0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]))
+            np.allclose(quats, np.array([[0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])),
         )
 
     def test_multiple(self):
@@ -42,9 +42,9 @@ class TestFromAxisAngle(unittest.TestCase):
                         [0, 1, 0, 0],
                         [np.sqrt(2) / 2, 0, np.sqrt(2) / 2, 0],
                         [np.sqrt(3) / 2, 0, 0, 1 / 2],
-                    ]
+                    ],
                 ),
-            )
+            ),
         )
 
     def test_complex(self):
@@ -56,7 +56,7 @@ class TestFromAxisAngle(unittest.TestCase):
                     [0, 1, 0, 0],
                     [np.sqrt(2) / 2, 0, np.sqrt(2) / 2, 0],
                     [np.sqrt(3) / 2, 0, 0, 1 / 2],
-                ]
+                ],
             )[np.newaxis, np.newaxis, ...]
             .repeat(2, axis=0)
             .repeat(2, axis=1)
@@ -92,7 +92,8 @@ class TestFromAxisAngle(unittest.TestCase):
 
         # Broadcasting in both
         quats = rowan.from_axis_angle(
-            v_reduced[:, np.newaxis, ...], theta_reduced[np.newaxis, :, ...]
+            v_reduced[:, np.newaxis, ...],
+            theta_reduced[np.newaxis, :, ...],
         )
         self.assertTrue(quats.shape[:-1] == v.shape[:-1])
         self.assertTrue(np.allclose(quats, expected_output))

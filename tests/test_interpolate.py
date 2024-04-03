@@ -26,7 +26,7 @@ class TestInterpolate(unittest.TestCase):
                 [1.0, 0.0, 0.0, 0.0],
                 [0.70710678, 0.70710678, 0.0, 0.0],
                 [0.92387953, 0.38268343, 0.0, 0.0],
-            ]
+            ],
         )
         self.assertTrue(np.allclose(interpolate.slerp(one, root_two, 0), ans[0, :]))
         self.assertTrue(np.allclose(interpolate.slerp(one, root_two, 1), ans[1, :]))
@@ -41,10 +41,12 @@ class TestInterpolate(unittest.TestCase):
         self.assertTrue(
             np.allclose(
                 interpolate.slerp(
-                    test1, test1, np.array([0, 1, 0.5])[:, np.newaxis, np.newaxis]
+                    test1,
+                    test1,
+                    np.array([0, 1, 0.5])[:, np.newaxis, np.newaxis],
                 ),
                 np.stack((test1, test1, test1)),
-            )
+            ),
         )
 
     def test_slerp_prime(self):
@@ -60,18 +62,18 @@ class TestInterpolate(unittest.TestCase):
                     interpolate.slerp(root_two, one, 0.5),
                     rowan.log(rowan.multiply(rowan.conjugate(root_two), one)),
                 ),
-            )
+            ),
         )
 
     def test_squad(self):
         """Test spherical quadratic interpolation."""
         self.assertTrue(np.all(interpolate.squad(one, one, one, one, 0) == one))
         self.assertTrue(
-            np.allclose(interpolate.squad(one, one, one, root_two, 1), root_two)
+            np.allclose(interpolate.squad(one, one, one, root_two, 1), root_two),
         )
         self.assertTrue(
             np.allclose(
                 interpolate.squad(one, one, one, root_two, 0.5),
                 np.array([0.98078528, 0.19509032, 0, 0.0]),
-            )
+            ),
         )

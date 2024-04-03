@@ -452,7 +452,7 @@ def icp(  # noqa: C901
         except ImportError:
             raise ImportError(
                 "Running with unique_match requires scipy. "
-                "Please install scipy and try again."
+                "Please install scipy and try again.",
             )
     else:
         try:
@@ -464,7 +464,7 @@ def icp(  # noqa: C901
             raise ImportError(
                 "Running without unique_match requires "
                 "scikit-learn. Please install sklearn and try "
-                "again."
+                "again.",
             )
 
     # Copy points so we have originals available.

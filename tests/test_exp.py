@@ -21,8 +21,9 @@ class TestExp(unittest.TestCase):
         x = np.array([0, 1, 1, 1])
         self.assertTrue(
             np.allclose(
-                rowan.exp(x), np.array([-0.16055654, 0.5698601, 0.5698601, 0.5698601])
-            )
+                rowan.exp(x),
+                np.array([-0.16055654, 0.5698601, 0.5698601, 0.5698601]),
+            ),
         )
 
         self.assertTrue(
@@ -32,16 +33,16 @@ class TestExp(unittest.TestCase):
                     (
                         np.array([-0.16055654, 0.5698601, 0.5698601, 0.5698601]),
                         np.array([np.exp(1), 0, 0, 0]),
-                    )
+                    ),
                 ),
-            )
+            ),
         )
 
         self.assertTrue(np.allclose(rowan.exp10(one), rowan.exp(one * np.log(10))))
 
         base = 2
         self.assertTrue(
-            np.allclose(rowan.expb(one, base), rowan.exp(one * np.log(base)))
+            np.allclose(rowan.expb(one, base), rowan.exp(one * np.log(base))),
         )
 
         np.random.seed(0)
@@ -61,8 +62,8 @@ class TestExp(unittest.TestCase):
         self.assertTrue(
             np.all(
                 rowan.log(np.stack((one, zero)))
-                == np.stack((zero, np.array([-np.inf, 0, 0, 0])))
-            )
+                == np.stack((zero, np.array([-np.inf, 0, 0, 0]))),
+            ),
         )
         x = np.array([0, 1, 1, 1])
         self.assertTrue(
@@ -72,9 +73,9 @@ class TestExp(unittest.TestCase):
                     (
                         np.array([0.54930614, 0.90689968, 0.90689968, 0.90689968]),
                         np.array([-np.inf, 0, 0, 0]),
-                    )
+                    ),
                 ),
-            )
+            ),
         )
 
         np.random.seed(0)
@@ -92,7 +93,7 @@ class TestExp(unittest.TestCase):
         base_test = 3
         self.assertTrue(np.all(rowan.logb(one, base_test) == zero))
         self.assertTrue(
-            np.all(rowan.logb(zero, base_test) == np.array([-np.inf, 0, 0, 0]))
+            np.all(rowan.logb(zero, base_test) == np.array([-np.inf, 0, 0, 0])),
         )
 
         np.random.seed(0)
@@ -102,7 +103,8 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             self.assertTrue(
                 np.allclose(
-                    rowan.logb(x, base_test), answers[str(shape)] / np.log(base_test)
+                    rowan.logb(x, base_test),
+                    answers[str(shape)] / np.log(base_test),
                 ),
                 msg=f"Failed for shape {shape}",
             )
