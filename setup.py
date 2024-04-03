@@ -1,4 +1,5 @@
 """Installation script for rowan."""
+
 import os
 
 from setuptools import find_packages, setup
