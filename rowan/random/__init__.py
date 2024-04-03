@@ -41,8 +41,7 @@ def rand(*args):
     """
     if len(args) == 0:
         return random_sample()
-    else:
-        return random_sample(args)
+    return random_sample(args)
 
 
 def random_sample(size=None):

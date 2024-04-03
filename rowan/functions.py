@@ -554,8 +554,7 @@ def _vector_bisector(v1, v2):
         result[ap] = np.cross(v1_norm[ap], cross_element)
 
         return result
-    else:
-        return _normalize_vec(v1_norm + v2_norm)
+    return _normalize_vec(v1_norm + v2_norm)
 
 
 def vector_vector_rotation(v1, v2):
@@ -981,7 +980,7 @@ def to_matrix(q, require_unit=True):
     s = norm(q)
     if np.any(s == 0.0):
         raise ZeroDivisionError("At least one element of q has approximately zero norm")
-    elif require_unit and not np.allclose(s, 1.0):
+    if require_unit and not np.allclose(s, 1.0):
         raise ValueError(
             "Not all quaternions in q are unit quaternions. \
 If this was intentional, please set require_unit to False when \
