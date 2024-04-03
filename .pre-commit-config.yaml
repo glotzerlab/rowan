@@ -1,7 +1,7 @@
 ci:
   autoupdate_schedule: quarterly
 
-# TODO: Add mypy, pyupgrade
+# TODO: Add mypy
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: 'v4.5.0'
@@ -16,15 +16,8 @@ repos:
       - id: check-yaml
       - id: debug-statements
       - id: requirements-txt-fixer
-  - repo: https://github.com/PyCQA/isort
-    rev: '5.13.2'
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.4
     hooks:
-      - id: isort
-  - repo: https://github.com/psf/black
-    rev: '24.3.0'
-    hooks:
-      - id: black
-  - repo: https://github.com/PyCQA/pydocstyle
-    rev: '6.3.0'
-    hooks:
-      - id: pydocstyle
+      - id: ruff
+        args: ["--fix"]
