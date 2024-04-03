@@ -37,3 +37,6 @@ Homepage = "https://github.com/glotzerlab/rowan"
 [tool.setuptools.packages.find]
 include = ["rowan*"]
 namespaces = false
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "C", "I"]
