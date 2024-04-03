@@ -87,11 +87,11 @@ If you wish, you may also install rowan by cloning `the repository <https://gith
 The minimum requirements for using rowan are:
 
 * Python >= 3.8
-* NumPy >= 1.14
+* NumPy >= 1.21
 
 To use the mapping subpackage, rowan also requires
 
-* SciPy >= 1.1
+* SciPy >= 1.7
 
 Quickstart
 ----------
