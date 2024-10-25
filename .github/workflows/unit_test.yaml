@@ -34,9 +34,10 @@ jobs:
       with:
         python-version: ${{ matrix.python }}
     - name: Set up Python environment
-      uses: glotzerlab/workflows/setup-uv@5cfac9da9cb78e16ae97a9119b6fd13c1c2d6f5e # 0.1.0
+      uses: glotzerlab/workflows/setup-uv@33f1cd458d4d39d0101cfa67d13dd3a9e118eefd
       with:
-        lockfile: ".github/workflows/requirements-test.txt"
+        only-binary: ":none:"
+        lockfile: ".github/requirements${{matrix.python-version}}.txt"
     - name: Run tests
       run: python3 -m pytest -v
 
