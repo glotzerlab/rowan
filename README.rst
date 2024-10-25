@@ -6,8 +6,6 @@ rowan
     :local:
 
 |ReadTheDocs|
-|CircleCI|
-|Codecov|
 |PyPI|
 |conda-forge|
 |Zenodo|
@@ -15,10 +13,6 @@ rowan
 
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/rowan/badge/?version=latest
     :target: http://rowan.readthedocs.io/en/latest/?badge=latest
-.. |CircleCI| image:: https://circleci.com/gh/glotzerlab/rowan.svg?style=svg
-    :target: https://circleci.com/gh/glotzerlab/rowan
-.. |Codecov| image:: https://codecov.io/gh/glotzerlab/rowan/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/glotzerlab/rowan
 .. |PyPI| image:: https://img.shields.io/pypi/v/rowan.svg
     :target: https://pypi.org/project/rowan/
 .. |conda-forge| image:: https://img.shields.io/conda/vn/conda-forge/rowan.svg
@@ -130,17 +124,6 @@ To run the packaged unit tests, execute the following line from the root of the 
 
     python -m unittest discover tests
 
-To check test coverage, make sure the coverage module is installed:
-
-.. code-block:: bash
-
-    pip install coverage
-
-and then run the packaged unit tests with the coverage module:
-
-.. code-block:: bash
-
-    coverage run -m unittest discover tests
 
 Running Benchmarks
 ------------------
