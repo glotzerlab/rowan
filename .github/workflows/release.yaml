@@ -30,17 +30,13 @@ jobs:
       run: |
         python --version
         python -m pip install --progress-bar off build
-    - name: Build wheels and sdist
-      run: python -m build --sdist --wheel --outdir dist/ .
+    - name: Build wheel
+      run: python3 -m build --outdir dist/ .
 
     - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:
-        name: wheel
-        path: dist/*.whl
-    - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
-      with:
-        name: sdist
-        path: dist/*.tar.gz
+        name: dist
+        path: dist
 
   upload_pypi:
     name: Publish [PyPI]
