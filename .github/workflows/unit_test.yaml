@@ -37,7 +37,7 @@ jobs:
       uses: glotzerlab/workflows/setup-uv@33f1cd458d4d39d0101cfa67d13dd3a9e118eefd
       with:
         only-binary: ":none:"
-        lockfile: ".github/workflows/requirements${{matrix.python-version}}.txt"
+        lockfile: ".github/workflows/requirements${{matrix.python}}.txt"
     - name: Run tests
       run: python3 -m pytest -v
 
