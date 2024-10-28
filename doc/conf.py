@@ -65,7 +65,7 @@ master_doc = "index"
 # General information about the project.
 project = "rowan"
 year = datetime.date.today().year
-copyright = "2017-{year}, The Regents of the University of Michigan"  # noqa: A001
+copyright = f"2017-{year}, The Regents of the University of Michigan"  # noqa: A001
 author = "Vyas Ramasubramani"
 
 # The version info for the project you're documenting, acts as replacement for

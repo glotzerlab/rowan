@@ -10,3 +10,4 @@ do
 done
 
 uv pip compile --python-version 3.13 --python-platform linux requirements-build.in > requirements-build.txt
+uv pip compile --python-version 3.12 --python-platform linux requirements-doc.in > requirements-doc.txt
