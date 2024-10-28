@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rowan"
-version = "1.3.1"
+version = "1.3.2"
 description = "Perform quaternion operations using NumPy arrays"
 readme = "README.rst"
 license = { file = "LICENSE.txt" }
