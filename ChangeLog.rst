@@ -1,6 +1,19 @@
 The format is based on `Keep a Changelog <http://keepachangelog.com/en/1.0.0/>`_.
 This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html>`_.
 
+1.3.1 - not yet released
+------------------------
+
+Added
++++++
+
+* Test with Python 3.13.
+* Test with NumPy 2.0.
+
+Changed
++++++++
+
+* Require Python >=3.8
 
 v1.3.0 - 2020-06-18
 -------------------
