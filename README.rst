@@ -11,13 +11,13 @@ rowan
 |JOSS|
 
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/rowan/badge/?version=latest
-    :target: http://rowan.readthedocs.io/en/latest/?badge=latest
+   :target: http://rowan.readthedocs.io/en/latest/?badge=latest
 .. |PyPI| image:: https://img.shields.io/pypi/v/rowan.svg
-    :target: https://pypi.org/project/rowan/
+   :target: https://pypi.org/project/rowan/
 .. |conda-forge| image:: https://img.shields.io/conda/vn/conda-forge/rowan.svg
    :target: https://anaconda.org/conda-forge/rowan
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.00787/status.svg
-    :target: https://doi.org/10.21105/joss.00787
+   :target: https://doi.org/10.21105/joss.00787
 
 Welcome to the documentation for rowan, a package for working with quaternions!
 Quaternions, which form a number system with various interesting properties, were originally developed for classical mechanics.
