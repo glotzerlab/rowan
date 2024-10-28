@@ -1,8 +1,8 @@
 The format is based on `Keep a Changelog <http://keepachangelog.com/en/1.0.0/>`_.
 This project adheres to `Semantic Versioning <http://semver.org/spec/v2.0.0.html>`_.
 
-1.3.1 - not yet released
-------------------------
+1.3.1 - 2024-10-28
+------------------
 
 Added
 +++++
