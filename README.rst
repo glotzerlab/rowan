@@ -6,32 +6,18 @@ rowan
     :local:
 
 |ReadTheDocs|
-|CircleCI|
-|Codecov|
 |PyPI|
 |conda-forge|
-|Zenodo|
 |JOSS|
 
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/rowan/badge/?version=latest
-    :target: http://rowan.readthedocs.io/en/latest/?badge=latest
-.. |CircleCI| image:: https://circleci.com/gh/glotzerlab/rowan.svg?style=svg
-    :target: https://circleci.com/gh/glotzerlab/rowan
-.. |Codecov| image:: https://codecov.io/gh/glotzerlab/rowan/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/glotzerlab/rowan
+   :target: http://rowan.readthedocs.io/en/latest/?badge=latest
 .. |PyPI| image:: https://img.shields.io/pypi/v/rowan.svg
-    :target: https://pypi.org/project/rowan/
+   :target: https://pypi.org/project/rowan/
 .. |conda-forge| image:: https://img.shields.io/conda/vn/conda-forge/rowan.svg
    :target: https://anaconda.org/conda-forge/rowan
-.. |Codacy| image:: https://api.codacy.com/project/badge/Grade/2ff6c23cb9be4f77827428a87e0e9cfc
-    :target: https://www.codacy.com/app/vramasub/rowan?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=glotzerlab/rowan&amp;utm_campaign=Badge_Grade
-.. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1323676.svg
-    :target: https://doi.org/10.5281/zenodo.1323676
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.00787/status.svg
-    :target: https://doi.org/10.21105/joss.00787
-.. |pre-commit.ci| image:: https://results.pre-commit.ci/badge/github/glotzerlab/rowan/master.svg
-    :target: https://results.pre-commit.ci/latest/github/glotzerlab/rowan/master
-    :alt: pre-commit.ci status
+   :target: https://doi.org/10.21105/joss.00787
 
 Welcome to the documentation for rowan, a package for working with quaternions!
 Quaternions, which form a number system with various interesting properties, were originally developed for classical mechanics.
@@ -130,17 +116,6 @@ To run the packaged unit tests, execute the following line from the root of the 
 
     python -m unittest discover tests
 
-To check test coverage, make sure the coverage module is installed:
-
-.. code-block:: bash
-
-    pip install coverage
-
-and then run the packaged unit tests with the coverage module:
-
-.. code-block:: bash
-
-    coverage run -m unittest discover tests
 
 Running Benchmarks
 ------------------

@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.9", "3.10", "3.11", "3.12"]
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
     - name: Checkout
@@ -34,9 +34,9 @@ jobs:
       with:
         python-version: ${{ matrix.python }}
     - name: Set up Python environment
-      uses: glotzerlab/workflows/setup-uv@5cfac9da9cb78e16ae97a9119b6fd13c1c2d6f5e # 0.1.0
+      uses: glotzerlab/workflows/setup-uv@e130dd2814c7db5635babe4427dedcbd5aab76d4 # 0.5.0
       with:
-        lockfile: ".github/workflows/requirements-test.txt"
+        lockfile: ".github/workflows/environments/requirements-test-${{matrix.python}}.txt"
     - name: Run tests
       run: python3 -m pytest -v
 

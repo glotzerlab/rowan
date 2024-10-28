@@ -8,7 +8,7 @@ version = "1.3.0"
 description = "Perform quaternion operations using NumPy arrays"
 readme = "README.rst"
 license = { file = "LICENSE.txt" }
-requires-python = ">=3.8, <4"
+requires-python = ">=3.8"
 authors = [
     { name = "Vyas Ramasubramani", email = "vramasub@umich.edu" },
 ]
