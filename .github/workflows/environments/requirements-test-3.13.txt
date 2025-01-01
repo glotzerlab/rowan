@@ -2,7 +2,7 @@
 #    uv pip compile --python-version 3.13 --python-platform linux requirements-test.in
 iniconfig==2.0.0
     # via pytest
-numpy==2.1.3
+numpy==2.2.1
     # via
     #   -r requirements-test.in
     #   scipy
@@ -10,7 +10,7 @@ packaging==24.2
     # via pytest
 pluggy==1.5.0
     # via pytest
-pytest==8.3.3
+pytest==8.3.4
     # via -r requirements-test.in
 scipy==1.14.1
     # via -r requirements-test.in
