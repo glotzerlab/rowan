@@ -4,7 +4,7 @@ exceptiongroup==1.2.2
     # via pytest
 iniconfig==2.0.0
     # via pytest
-numpy==2.2.1
+numpy==2.2.3
     # via
     #   -r requirements-test.in
     #   scipy
@@ -14,7 +14,7 @@ pluggy==1.5.0
     # via pytest
 pytest==8.3.4
     # via -r requirements-test.in
-scipy==1.14.1
+scipy==1.15.2
     # via -r requirements-test.in
 tomli==2.2.1
     # via pytest
