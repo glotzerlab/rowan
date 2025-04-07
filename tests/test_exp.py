@@ -43,9 +43,9 @@ class TestExp(unittest.TestCase):
         answers = np.load(os.path.join(os.path.dirname(__file__), "files/test_exp.npz"))
         for shape in shapes:
             x = np.random.random_sample(shape)
-            assert np.allclose(
-                rowan.exp(x), answers[str(shape)]
-            ), f"Failed for shape {shape}"
+            assert np.allclose(rowan.exp(x), answers[str(shape)]), (
+                f"Failed for shape {shape}"
+            )
 
     def test_log(self):
         """Ensure that quaternion logarithm behaves correctly."""
@@ -71,9 +71,9 @@ class TestExp(unittest.TestCase):
         answers = np.load(os.path.join(os.path.dirname(__file__), "files/test_log.npz"))
         for shape in shapes:
             x = np.random.random_sample(shape)
-            assert np.allclose(
-                rowan.log(x), answers[str(shape)]
-            ), f"Failed for shape {shape}"
+            assert np.allclose(rowan.log(x), answers[str(shape)]), (
+                f"Failed for shape {shape}"
+            )
 
     def test_logb(self):
         """Ensure that quaternion logarithm for any base behaves correctly."""
@@ -100,9 +100,9 @@ class TestExp(unittest.TestCase):
         answers = np.load(os.path.join(os.path.dirname(__file__), "files/test_log.npz"))
         for shape in shapes:
             x = np.random.random_sample(shape)
-            assert np.allclose(
-                rowan.log10(x), answers[str(shape)] / np.log(10)
-            ), f"Failed for shape {shape}"
+            assert np.allclose(rowan.log10(x), answers[str(shape)] / np.log(10)), (
+                f"Failed for shape {shape}"
+            )
 
     def test_power(self):
         """Ensure that quaternion power behaves correctly."""
@@ -120,7 +120,7 @@ class TestExp(unittest.TestCase):
             x = np.random.random_sample(shape)
             cur_ans = x
             for i in range(1, max_power + 1):
-                assert np.allclose(
-                    rowan.power(x, i), cur_ans
-                ), f"Failed for shape {shape}"
+                assert np.allclose(rowan.power(x, i), cur_ans), (
+                    f"Failed for shape {shape}"
+                )
                 cur_ans = rowan.multiply(cur_ans, x)
