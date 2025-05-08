@@ -29,6 +29,10 @@ dependencies = [
 [project.optional-dependencies]
 mapping = [
     "scipy>=1.7",
+    "scikit-learn"
+]
+tests = [
+    "pytest",
 ]
 
 [project.urls]
@@ -44,11 +48,12 @@ ignore = [
     "COM812",  # Conflicts with ruff formatter
     "B904",  # We don't always want to raise from another exception
     "PT011",  # Checking exception messages is undesirable
+    "S101", # Useful in testing
 ]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101"]
 "benchmarks/*.ipynb" = ["D103", "E501", "C400"]
+
