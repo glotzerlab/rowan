@@ -274,20 +274,11 @@ def mean(q):
         >>> rowan.mean([[1, 0, 0, 0], [-1, 0, 0, 0]])
         array([1, 0, 0, 0])
     """
-    q = np.asarray(q)
-    # if q.shape == (4,) or q.shape == (1, 4):
-    #     return q
-
     # NOTE: Markley takes quaternions as columns [xyzw].T, so transposes are flipped
-    # if q.shape == (2, 4):
-    #     # Calculate eigenvector for maximum eigenvalue in closed form
-    #     z = 2.0 * np.abs(np.dot(q[0], q[1]))
-    #     scalar = 1 / np.sqrt(2 + z)
-    #     # sqrt(1/(2+z)) * (q_0 +   sign(   q_0.T @ q_1    ) * q_1)
-    #     return scalar * (q[0] + np.sign(np.dot(q[0], q[1])) * q[1])
+    q = np.asarray(q)
 
     M = q.T @ q
-    np.testing.assert_allclose(M, M.T, atol=1e-8) # Verify matrix is real symmetric
+    np.testing.assert_allclose(M, M.T, atol=1e-12) # Verify matrix is real symmetric
     _, eigenvectors = np.linalg.eigh(M) # eigh returns eigenvalues in ascending order
     return eigenvectors[:, -1]
 
