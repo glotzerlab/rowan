@@ -134,3 +134,16 @@ class TestSimple(unittest.TestCase):
             quats = np.random.random_sample(shape)
             assert rowan.isnan(quats).shape == quats.shape[:-1]
             assert not np.any(rowan.isnan(quats))
+
+    def test_mean(self, N=128):
+        """Test mean taken between quaternions."""
+        qs = rowan.random.rand(N)
+        for q in qs:
+            # Verify mean of one quaternion (or duplicates of the same quat) == q
+            for n in [1, 2, 3]:
+                assert rowan.isclose(q, rowan.mean([q] * n)) or rowan.isclose(
+                    q, -rowan.mean([q] * n)
+                )
+        # Mean of two quaternions can be calculated in closed form
+        for q0, q1 in zip(qs[: N // 2, :], qs[N // 2 :, :], strict=True):
+            pass
