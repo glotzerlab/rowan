@@ -137,6 +137,7 @@ class TestSimple(unittest.TestCase):
 
     def test_mean(self, N=128):
         """Test mean taken between quaternions."""
+        rng = np.random.default_rng(seed=0)
         qs = rowan.random.rand(N)
         for q in qs:
             # Verify mean of one quaternion (or duplicates of the same quat) == q
@@ -144,6 +145,14 @@ class TestSimple(unittest.TestCase):
                 assert rowan.isclose(q, rowan.mean([q] * n)) or rowan.isclose(
                     q, -rowan.mean([q] * n)
                 )
-        # Mean of two quaternions can be calculated in closed form
-        for q0, q1 in zip(qs[: N // 2, :], qs[N // 2 :, :], strict=True):
-            pass
+                assert rowan.isclose(
+                    q, rowan.mean([q] * n, weights=np.ones(n))
+                ) or rowan.isclose(q, -rowan.mean([q] * n, weights=np.ones(n)))
+
+        def mean_two_quats(q0, q1):
+            """Compute the maximum-likelihood mean of two quaternions in closed form."""
+            # TODO
+
+        for w in [None, np.ones(N), rng.random(N)]:
+            for q0, q1 in zip(qs[: N // 2, :], qs[N // 2 :, :], strict=True):
+                pass  # TODO: implement weighted and unweighted version
