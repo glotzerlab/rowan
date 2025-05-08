@@ -154,5 +154,5 @@ class TestSimple(unittest.TestCase):
             # TODO
 
         for w in [None, np.ones(N), rng.random(N)]:
-            for q0, q1 in zip(qs[: N // 2, :], qs[N // 2 :, :], strict=True):
+            for q0, q1 in zip(qs[: N // 2, :], qs[N // 2 :, :]):
                 pass  # TODO: implement weighted and unweighted version
