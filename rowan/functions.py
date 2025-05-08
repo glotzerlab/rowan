@@ -262,7 +262,9 @@ def mean(q, weights=None):
     r"""Compute the mean of an array of quaternions.
 
     This algorithm is based on :cite:`Markley 2007`, and computes the (weighted)
-    average quaternion of an input array.
+    average quaternion of an input array via a maximum likelihood method. Intuitively,
+    this method computes the member of SO(3) that is "most likely" to represent the
+    inputs. For a more rigorous understanding, consult the original work.
 
     Args:
         q ((:, 4) :class:`numpy.ndarray`): Array of quaternions.
@@ -289,9 +291,9 @@ def mean(q, weights=None):
         M.T,
         atol=1e-12,
         err_msg="Matrix is not symmetric! eigh is not valid for this calculation",
-    )  # Verify matrix is real symmetric
-    _, eigenvectors = np.linalg.eigh(M)  # eigh returns eigenvalues in ascending order
-    return eigenvectors[:, -1]
+    )
+    # TODO: should we update/refine the method with Weiszfelt?
+    return np.linalg.eigh(M)[1][:, -1]  # eigh returns eigenvectors sorted by eigenvalue
 
 
 def conjugate(q):
