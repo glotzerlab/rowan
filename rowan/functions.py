@@ -258,13 +258,17 @@ def power(q, n):
     return powers
 
 
-def mean(q):
+def mean(q, weights=None):
     r"""Compute the mean of an array of quaternions.
 
-    This algorithm is based on :cite:`Markley 2007`, and
+    This algorithm is based on :cite:`Markley 2007`, and computes the (weighted)
+    average quaternion of an input array.
 
     Args:
         q ((:, 4) :class:`numpy.ndarray`): Array of quaternions.
+        weights ((:,) :class:`numpy.ndarray`) | None:
+            Scalar weight for each quaternion. Default value = None, which assumes
+            all weights are 1.
 
     Returns:
         (4, ) :class:`numpy.ndarray`: Mean of ``q``.
@@ -275,11 +279,18 @@ def mean(q):
         array([1, 0, 0, 0])
     """
     # NOTE: Markley takes quaternions as columns [xyzw].T, so transposes are flipped
-    q = np.asarray(q)
+    q = np.atleast_2d(q)
+    if len(q.shape) != 2:
+        raise ValueError("Mean must be taken along the 0th axis of an (N, 4) array.")
 
-    M = q.T @ q
-    np.testing.assert_allclose(M, M.T, atol=1e-12) # Verify matrix is real symmetric
-    _, eigenvectors = np.linalg.eigh(M) # eigh returns eigenvalues in ascending order
+    M = (q.T @ q) if weights is None else (q.T @ (q * weights[:, None]))
+    np.testing.assert_allclose(
+        M,
+        M.T,
+        atol=1e-12,
+        err_msg="Matrix is not symmetric! eigh is not valid for this calculation",
+    )  # Verify matrix is real symmetric
+    _, eigenvectors = np.linalg.eigh(M)  # eigh returns eigenvalues in ascending order
     return eigenvectors[:, -1]
 
 
