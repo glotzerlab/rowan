@@ -282,18 +282,9 @@ def mean(q, weights=None):
     """
     # NOTE: Markley takes quaternions as columns [xyzw].T, so transposes are flipped
     q = np.atleast_2d(q)
-    if len(q.shape) != 2:
-        raise ValueError("Mean must be taken along the 0th axis of an (N, 4) array.")
 
     M = (q.T @ q) if weights is None else (q.T @ (q * weights[:, None]))
-    np.testing.assert_allclose(
-        M,
-        M.T,
-        atol=1e-12,
-        err_msg="Matrix is not symmetric! eigh is not valid for this calculation",
-    )
-    # TODO: should we update/refine the method with Weiszfelt?
-    return np.linalg.eigh(M)[1][:, -1]  # eigh returns eigenvectors sorted by eigenvalue
+    return np.linalg.eigh(M)[1][:, -1]  # eigh returns eigenvectors sorted by eigenval
 
 
 def conjugate(q):
