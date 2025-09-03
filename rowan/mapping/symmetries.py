@@ -43,7 +43,7 @@ def generate_tetrahedral_group():
         (0, 0, -1, 0),
         (0, 0, 0, -1),
         *product([-0.5, 0.5], repeat=4),  # 16 quaternions from 1/2 * (±1, ±1, ±1, ±1)
-    }  # TODO: test leaves tetrahedron unchanged?
+    }
     return np.array(sorted(quats))
 
 
@@ -78,33 +78,27 @@ def generate_cyclic_group(n: int, axis: ArrayLike = (0, 0, 1)):
     return from_axis_angle(axis, np.linspace(0, 2 * np.pi, n, endpoint=False)).round(15)
 
 
-def generate_dicyclic_group(n: int, axis: ArrayLike = (0, 0, 1)):
-    """Generates the 4n quaternions of the dicyclic group <D_n>.
+# def generate_dicyclic_group(n: int, axis: ArrayLike = (0, 0, 1)):
+#     """Generates the 4n quaternions of the dicyclic group <D_n>.
 
-    Args:
-        n (int): The index of the cyclic group D_n. The order of the
-                 resulting group will be 4n.
-        axis (np.ndarray): The axis of rotation for the group.
+#     Args:
+#         n (int): The index of the cyclic group D_n. The order of the
+#                  resulting group will be 4n.
+#         axis (np.ndarray): The axis of rotation for the group.
 
-    Returns:
-        np.ndarray: A (4n, 4) array of quaternions.
-    """
-    return np.concatenate(
-        (
-            # 2n quaternions from the cyclic group
-            generate_cyclic_group(n, axis),
-            #     hetas = np.linspace(0, np.pi, n, endpoint=False)
-            # rv = np.pi * np.vstack([np.zeros(n), np.cos(thetas), np.sin(thetas)]).T
-            # g2 = np.roll(rv, axis, axis=1)
-            # from_axis_angle(axis, np.linspace(0, np.pi, n, endpoint=False)) # TODO
-        )
-    )
-
-
-print(len(generate_tetrahedral_group()))
-
-print(generate_cyclic_group(4))
-# print((generate_binary_octahedral_group()))
+#     Returns:
+#         np.ndarray: A (4n, 4) array of quaternions.
+#     """
+#     return np.concatenate(
+#         (
+#             # 2n quaternions from the cyclic group
+#             generate_cyclic_group(n, axis),
+#             #     hetas = np.linspace(0, np.pi, n, endpoint=False)
+#             # rv = np.pi * np.vstack([np.zeros(n), np.cos(thetas), np.sin(thetas)]).T
+#             # g2 = np.roll(rv, axis, axis=1)
+#             # from_axis_angle(axis, np.linspace(0, np.pi, n, endpoint=False)) # TODO
+#         )
+#     )
 
 
 def even_permutations(it: Iterable):
@@ -119,7 +113,6 @@ def even_permutations(it: Iterable):
     return (
         p for p in permutations(it) if not sum(a > b for a, b in combinations(p, 2)) % 2
     )
-    # if sum(a > b for (i, a) in enumerate(p) for b in p[i + 1 :]) % 2 == 0
 
 
 def generate_binary_icosahedral_group():
