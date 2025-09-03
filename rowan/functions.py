@@ -258,6 +258,35 @@ def power(q, n):
     return powers
 
 
+def mean(q, weights=None):
+    r"""Compute the mean of an array of quaternions.
+
+    This algorithm is based on :cite:`Markley 2007`, and computes the (weighted)
+    average quaternion of an input array via a maximum likelihood method. Intuitively,
+    this method computes the member of SO(3) that is "most likely" to represent the
+    inputs. For a more rigorous understanding, consult the original work.
+
+    Args:
+        q ((:, 4) :class:`numpy.ndarray`): Array of quaternions.
+        weights ((:,) :class:`numpy.ndarray`) | None:
+            Scalar weight for each quaternion. Default value = None, which assumes
+            all weights are 1.
+
+    Returns:
+        (4, ) :class:`numpy.ndarray`: Mean of ``q``.
+
+    Example::
+
+        >>> rowan.mean([[1, 0, 0, 0], [-1, 0, 0, 0]])
+        array([1, 0, 0, 0])
+    """
+    # NOTE: Markley takes quaternions as columns [xyzw].T, so transposes are flipped
+    q = np.atleast_2d(q)
+
+    M = (q.T @ q) if weights is None else (q.T @ (q * weights[:, None]))
+    return np.linalg.eigh(M)[1][:, -1]  # eigh returns eigenvectors sorted by eigenval
+
+
 def conjugate(q):
     r"""Conjugates an array of quaternions.
 

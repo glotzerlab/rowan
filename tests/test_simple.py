@@ -134,3 +134,34 @@ class TestSimple(unittest.TestCase):
             quats = np.random.random_sample(shape)
             assert rowan.isnan(quats).shape == quats.shape[:-1]
             assert not np.any(rowan.isnan(quats))
+
+    def test_mean(self):
+        """Test mean taken between quaternions."""
+        n = 128  # Number of quaternions to take mean of
+        rng = np.random.default_rng(seed=0)
+        qs = rowan.random.rand(n)
+        # Verify mean of one quaternion (or duplicates of the same quat) == q_input
+        for q in qs:
+            for n in [1, 2, 3]:
+                assert rowan.isclose(q, rowan.mean([q] * n)) or rowan.isclose(
+                    q, -rowan.mean([q] * n)
+                )
+                assert rowan.isclose(
+                    q, rowan.mean([q] * n, weights=np.ones(n))
+                ) or rowan.isclose(q, -rowan.mean([q] * n, weights=np.ones(n)))
+
+        def mean_two_quats(q0, q1, w0=1, w1=1):
+            """Compute the maximum-likelihood mean of two quaternions in closed form."""
+            z = np.sqrt(np.square(w0 - w1) + 4 * w0 * w1 * np.square(np.dot(q0, q1)))
+            s0 = np.sqrt((w0 * (w0 - w1 + z)) / (z * (w0 + w1 + z)))
+            s1 = np.sqrt((w1 * (w1 - w0 + z)) / (z * (w0 + w1 + z)))
+            return s0 * q0 + np.sign(np.dot(q0, q1)) * s1 * q1
+
+        # Split list of quaternions in half and zip into pairs
+        for w in [np.ones(2), rng.random(2)]:
+            for q0, q1 in zip(qs[: n // 2, :], qs[n // 2 :, :]):
+                assert rowan.isclose(
+                    rowan.mean([q0, q1], weights=w), mean_two_quats(q0, q1, w[0], w[1])
+                ) or rowan.isclose(
+                    rowan.mean([q0, q1], weights=w), -mean_two_quats(q0, q1, w[0], w[1])
+                )
