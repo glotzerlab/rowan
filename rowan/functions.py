@@ -886,7 +886,7 @@ def to_euler(q, convention="zyx", axis_type="intrinsic"):  # noqa: C901
         where_zero = np.isclose(np.cos(beta), 0, atol=atol)
         gamma = np.where(where_zero, 0, np.arctan2(mats[..., 2, 1], mats[..., 2, 2]))
         alpha = np.where(where_zero, 0, np.arctan2(mats[..., 1, 0], mats[..., 0, 0]))
-        zero_terms = np.arctan2(multiplier *-mats[..., 0, 1], mats[..., 1, 1])
+        zero_terms = np.arctan2(multiplier * -mats[..., 0, 1], mats[..., 1, 1])
     elif convention == "zxy":
         beta = np.arcsin(mats[..., 2, 1])
         multiplier = mats[..., 2, 1] if axis_type == "extrinsic" else 1
