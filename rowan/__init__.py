@@ -39,6 +39,7 @@ from .functions import (
     log,
     log10,
     logb,
+    mean,
     multiply,
     norm,
     normalize,
@@ -53,7 +54,7 @@ from .functions import (
 )
 
 # Get the version
-__version__ = "1.3.0"
+__version__ = "1.3.2"
 
 __all__ = [
     "calculus",
@@ -81,6 +82,7 @@ __all__ = [
     "log",
     "logb",
     "log10",
+    "mean",
     "multiply",
     "norm",
     "normalize",

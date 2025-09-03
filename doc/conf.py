@@ -16,6 +16,7 @@ add these directories to sys.path here. If the directory is relative to the
 documentation root, use os.path.abspath to make it absolute, like shown here.
 """
 
+import datetime
 import os
 import sys
 
@@ -38,7 +39,6 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.doctest",
     "sphinx.ext.todo",
-    "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
 ]
 
@@ -64,7 +64,8 @@ master_doc = "index"
 
 # General information about the project.
 project = "rowan"
-copyright = "2017-2020, The Regents of the University of Michigan"
+year = datetime.date.today().year
+copyright = f"2017-{year}, The Regents of the University of Michigan"  # noqa: A001
 author = "Vyas Ramasubramani"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -73,7 +74,7 @@ author = "Vyas Ramasubramani"
 #
 # The full version, including alpha/beta/rc tags.
 
-release = "1.3.0"
+release = "1.3.2"
 
 # The short X.Y version.
 version = release[:3]
@@ -124,7 +125,7 @@ html_sidebars = {
     "**": [
         "relations.html",  # needs 'show_related': True theme option to display
         "searchbox.html",
-    ]
+    ],
 }
 
 

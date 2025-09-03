@@ -102,7 +102,7 @@ def kabsch(X, Y, require_rotation=True):
     Y = np.atleast_2d(Y)
     if X.shape != Y.shape:
         raise ValueError("Input arrays must be the same shape")
-    elif len(X.shape) != 2:
+    if len(X.shape) != 2:
         raise ValueError("Input arrays must be (Nxm) arrays")
     X = np.asarray(X)
     Y = np.asarray(Y)
@@ -167,7 +167,7 @@ def horn(X, Y):
     Y = np.atleast_2d(Y)
     if X.shape != Y.shape:
         raise ValueError("Input arrays must be the same shape")
-    elif len(X.shape) != 2 or X.shape[1] != 3:
+    if len(X.shape) != 2 or X.shape[1] != 3:
         raise ValueError("Input arrays must be (Nx3) arrays")
 
     # The algorithm depends on removing the centroid of the points.
@@ -257,7 +257,7 @@ def davenport(X, Y):
     Y = np.atleast_2d(Y)
     if X.shape != Y.shape:
         raise ValueError("Input arrays must be the same shape")
-    elif len(X.shape) != 2 or X.shape[1] != 3:
+    if len(X.shape) != 2 or X.shape[1] != 3:
         raise ValueError("Input arrays must be (Nx3) arrays")
 
     # The algorithm depends on removing the centroid of the points.
@@ -340,12 +340,10 @@ def procrustes(X, Y, method="best", equivalent_quaternions=None):
         Y = np.atleast_2d(Y)
         if X.shape != Y.shape:
             raise ValueError("Input arrays must be the same shape")
-        elif len(X.shape) != 2:
+        if len(X.shape) != 2:
             raise ValueError("Input arrays must be 2D arrays")
-        if X.shape[1] != 3:
-            method = kabsch
-        else:
-            method = davenport
+
+        method = kabsch if X.shape[1] != 3 else davenport
     if equivalent_quaternions is not None:
         equivalent_quaternions = np.atleast_2d(equivalent_quaternions)
         qs = []
@@ -359,12 +357,11 @@ def procrustes(X, Y, method="best", equivalent_quaternions=None):
             ts.append(t)
         index = np.argmin([angle(q) for q in qs])
         return qs[index], ts[index]
-    else:
-        q, t = method(X, Y)
-        if method == "kabsch":
-            return from_matrix(q), t
-        else:
-            return q, t
+
+    q, t = method(X, Y)
+    if method == "kabsch":
+        return from_matrix(q), t
+    return q, t
 
 
 def icp(  # noqa: C901
@@ -439,12 +436,10 @@ def icp(  # noqa: C901
         Y = np.atleast_2d(Y)
         if X.shape != Y.shape:
             raise ValueError("Input arrays must be the same shape")
-        elif len(X.shape) != 2:
+        if len(X.shape) != 2:
             raise ValueError("Input arrays must be (Nx3) arrays")
-        if X.shape[1] != 3:
-            method = kabsch
-        else:
-            method = davenport
+
+        method = kabsch if X.shape[1] != 3 else davenport
 
     if unique_match:
         try:
@@ -452,7 +447,7 @@ def icp(  # noqa: C901
         except ImportError:
             raise ImportError(
                 "Running with unique_match requires scipy. "
-                "Please install scipy and try again."
+                "Please install scipy and try again.",
             )
     else:
         try:
@@ -463,8 +458,7 @@ def icp(  # noqa: C901
         except ImportError:
             raise ImportError(
                 "Running without unique_match requires "
-                "scikit-learn. Please install sklearn and try "
-                "again."
+                "scikit-learn. Please install scikit-learn and try again.",
             )
 
     # Copy points so we have originals available.
@@ -511,5 +505,4 @@ def icp(  # noqa: C901
         indices = np.argsort(indices)
 
         return R, t, indices
-    else:
-        return R, t
+    return R, t

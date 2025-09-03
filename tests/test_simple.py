@@ -1,5 +1,4 @@
 """Test the simple unary operator of the quaternion package."""
-from __future__ import absolute_import, division, print_function
 
 import unittest
 
@@ -21,7 +20,7 @@ class TestSimple(unittest.TestCase):
             quats = np.random.random_sample(shape)
             quats_conj = quats.copy()
             quats_conj[..., 1:] *= -1
-            self.assertTrue(np.all(rowan.conjugate(quats) == quats_conj))
+            assert np.all(rowan.conjugate(quats) == quats_conj)
 
     def test_inverse(self):
         """Test quaternion inverse."""
@@ -32,7 +31,7 @@ class TestSimple(unittest.TestCase):
             quats_conj = quats.copy()
             quats_conj[..., 1:] *= -1
             quats_conj /= rowan.norm(quats)[..., np.newaxis] ** 2
-            self.assertTrue(np.allclose(rowan.inverse(quats), quats_conj))
+            assert np.allclose(rowan.inverse(quats), quats_conj)
 
     def test_norm(self):
         """Test quaternion norm."""
@@ -41,7 +40,7 @@ class TestSimple(unittest.TestCase):
         for shape in shapes:
             quats = np.random.random_sample(shape)
             norms = np.linalg.norm(quats, axis=-1)
-            self.assertTrue(np.all(rowan.norm(quats) == norms))
+            assert np.all(rowan.norm(quats) == norms)
 
     def test_normalize(self):
         """Test quaternion normalize."""
@@ -50,9 +49,7 @@ class TestSimple(unittest.TestCase):
         for shape in shapes:
             quats = np.random.random_sample(shape)
             norms = np.linalg.norm(quats, axis=-1)
-            self.assertTrue(
-                np.all(rowan.normalize(quats) == quats / norms[..., np.newaxis])
-            )
+            assert np.all(rowan.normalize(quats) == quats / norms[..., np.newaxis])
 
     def test_equal(self):
         """Test quaternion equality."""
@@ -60,9 +57,9 @@ class TestSimple(unittest.TestCase):
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
             quats = np.random.random_sample(shape)
-            self.assertTrue(rowan.equal(quats, quats).shape == quats.shape[:-1])
-            self.assertTrue(np.all(rowan.equal(quats, quats)))
-            self.assertFalse(np.any(rowan.equal(quats, 0)))
+            assert rowan.equal(quats, quats).shape == quats.shape[:-1]
+            assert np.all(rowan.equal(quats, quats))
+            assert not np.any(rowan.equal(quats, 0))
 
     def test_not_equal(self):
         """Test quaternion inequality."""
@@ -70,9 +67,9 @@ class TestSimple(unittest.TestCase):
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
             quats = np.random.random_sample(shape)
-            self.assertTrue(rowan.not_equal(quats, quats).shape == quats.shape[:-1])
-            self.assertFalse(np.all(rowan.not_equal(quats, quats)))
-            self.assertTrue(np.any(rowan.not_equal(quats, 0)))
+            assert rowan.not_equal(quats, quats).shape == quats.shape[:-1]
+            assert not np.all(rowan.not_equal(quats, quats))
+            assert np.any(rowan.not_equal(quats, 0))
 
     def test_allclose(self):
         """Test all quaternion closeness."""
@@ -80,8 +77,8 @@ class TestSimple(unittest.TestCase):
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
             quats = np.random.random_sample(shape)
-            self.assertTrue(rowan.allclose(quats, quats))
-            self.assertTrue(rowan.allclose(quats, quats - 1e-8))
+            assert rowan.allclose(quats, quats)
+            assert rowan.allclose(quats, quats - 1e-08)
 
     def test_isclose(self):
         """Test element-wise quaternion closeness."""
@@ -89,51 +86,82 @@ class TestSimple(unittest.TestCase):
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
             quats = np.random.random_sample(shape)
-            self.assertTrue(rowan.isclose(quats, quats).shape == quats.shape[:-1])
-            self.assertTrue(np.all(rowan.isclose(quats, quats)))
-            self.assertTrue(np.all(rowan.isclose(quats, quats - 1e-8)))
+            assert rowan.isclose(quats, quats).shape == quats.shape[:-1]
+            assert np.all(rowan.isclose(quats, quats))
+            assert np.all(rowan.isclose(quats, quats - 1e-08))
 
     def test_isfinite(self):
         """Test quaternion finiteness."""
         x = np.array([np.inf] * 4)
-        self.assertFalse(rowan.isfinite(x))
+        assert not rowan.isfinite(x)
         x[1:] = 0
-        self.assertFalse(rowan.isfinite(x))
-        self.assertTrue(rowan.isfinite(zero))
+        assert not rowan.isfinite(x)
+        assert rowan.isfinite(zero)
 
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
             quats = np.random.random_sample(shape)
-            self.assertTrue(rowan.isfinite(quats).shape == quats.shape[:-1])
-            self.assertTrue(np.all(rowan.isfinite(quats)))
+            assert rowan.isfinite(quats).shape == quats.shape[:-1]
+            assert np.all(rowan.isfinite(quats))
 
     def test_isinf(self):
         """Test quaternion infiniteness."""
         x = np.array([np.inf] * 4)
-        self.assertTrue(rowan.isinf(x))
+        assert rowan.isinf(x)
         x[1:] = 0
-        self.assertTrue(rowan.isinf(x))
-        self.assertFalse(rowan.isinf(zero))
+        assert rowan.isinf(x)
+        assert not rowan.isinf(zero)
 
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
             quats = np.random.random_sample(shape)
-            self.assertTrue(rowan.isinf(quats).shape == quats.shape[:-1])
-            self.assertTrue(np.all(np.logical_not(rowan.isinf(quats))))
+            assert rowan.isinf(quats).shape == quats.shape[:-1]
+            assert np.all(np.logical_not(rowan.isinf(quats)))
 
     def test_isnan(self):
         """Test quaternions being of numeric type."""
         x = np.array([np.nan] * 4)
-        self.assertTrue(rowan.isnan(x))
+        assert rowan.isnan(x)
         x[1:] = 0
-        self.assertTrue(rowan.isnan(x))
-        self.assertFalse(rowan.isnan(zero))
+        assert rowan.isnan(x)
+        assert not rowan.isnan(zero)
 
         np.random.seed(0)
         shapes = [(4,), (5, 4), (5, 5, 4), (5, 5, 5, 4)]
         for shape in shapes:
             quats = np.random.random_sample(shape)
-            self.assertTrue(rowan.isnan(quats).shape == quats.shape[:-1])
-            self.assertTrue(not np.any(rowan.isnan(quats)))
+            assert rowan.isnan(quats).shape == quats.shape[:-1]
+            assert not np.any(rowan.isnan(quats))
+
+    def test_mean(self):
+        """Test mean taken between quaternions."""
+        n = 128  # Number of quaternions to take mean of
+        rng = np.random.default_rng(seed=0)
+        qs = rowan.random.rand(n)
+        # Verify mean of one quaternion (or duplicates of the same quat) == q_input
+        for q in qs:
+            for n in [1, 2, 3]:
+                assert rowan.isclose(q, rowan.mean([q] * n)) or rowan.isclose(
+                    q, -rowan.mean([q] * n)
+                )
+                assert rowan.isclose(
+                    q, rowan.mean([q] * n, weights=np.ones(n))
+                ) or rowan.isclose(q, -rowan.mean([q] * n, weights=np.ones(n)))
+
+        def mean_two_quats(q0, q1, w0=1, w1=1):
+            """Compute the maximum-likelihood mean of two quaternions in closed form."""
+            z = np.sqrt(np.square(w0 - w1) + 4 * w0 * w1 * np.square(np.dot(q0, q1)))
+            s0 = np.sqrt((w0 * (w0 - w1 + z)) / (z * (w0 + w1 + z)))
+            s1 = np.sqrt((w1 * (w1 - w0 + z)) / (z * (w0 + w1 + z)))
+            return s0 * q0 + np.sign(np.dot(q0, q1)) * s1 * q1
+
+        # Split list of quaternions in half and zip into pairs
+        for w in [np.ones(2), rng.random(2)]:
+            for q0, q1 in zip(qs[: n // 2, :], qs[n // 2 :, :]):
+                assert rowan.isclose(
+                    rowan.mean([q0, q1], weights=w), mean_two_quats(q0, q1, w[0], w[1])
+                ) or rowan.isclose(
+                    rowan.mean([q0, q1], weights=w), -mean_two_quats(q0, q1, w[0], w[1])
+                )

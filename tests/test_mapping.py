@@ -1,5 +1,4 @@
 """Test algorithms for point-cloud mapping."""
-from __future__ import absolute_import, division, print_function
 
 import unittest
 
@@ -34,14 +33,11 @@ class TestMapping(unittest.TestCase):
             # In the case of just two points, the mapping is not unique,
             # so we don't check the mapping itself, just the result.
             if i > 1:
-                self.assertTrue(
-                    np.logical_or(
-                        np.allclose(rotation, q),
-                        np.allclose(rotation, -q),
-                    )
+                assert np.logical_or(
+                    np.allclose(rotation, q), np.allclose(rotation, -q)
                 )
-                self.assertTrue(np.allclose(translation, t))
-            self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
+                assert np.allclose(translation, t)
+            assert np.allclose(transformed_points, rotate(q, points) + t)
 
     def test_horn(self):
         """Perform a rotation and ensure that we can recover it."""
@@ -61,15 +57,12 @@ class TestMapping(unittest.TestCase):
             # In the case of just two points, the mapping is not unique,
             # so we don't check the mapping itself, just the result.
             if i > 1:
-                self.assertTrue(
-                    np.logical_or(
-                        np.allclose(rotation, q),
-                        np.allclose(rotation, -q),
-                    )
+                assert np.logical_or(
+                    np.allclose(rotation, q), np.allclose(rotation, -q)
                 )
-                self.assertTrue(np.allclose(translation, t))
+                assert np.allclose(translation, t)
 
-            self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
+            assert np.allclose(transformed_points, rotate(q, points) + t)
 
     def test_davenport(self):
         """Perform a rotation and ensure that we can recover it."""
@@ -89,14 +82,11 @@ class TestMapping(unittest.TestCase):
             # In the case of just two points, the mapping is not unique,
             # so we don't check the mapping itself, just the result.
             if i > 1:
-                self.assertTrue(
-                    np.logical_or(
-                        np.allclose(rotation, q),
-                        np.allclose(rotation, -q),
-                    )
+                assert np.logical_or(
+                    np.allclose(rotation, q), np.allclose(rotation, -q)
                 )
-                self.assertTrue(np.allclose(translation, t))
-            self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
+                assert np.allclose(translation, t)
+            assert np.allclose(transformed_points, rotate(q, points) + t)
 
     def test_procrustes(self):
         """Perform a rotation and ensure that we can recover it."""
@@ -116,14 +106,11 @@ class TestMapping(unittest.TestCase):
             # In the case of just two points, the mapping is not unique,
             # so we don't check the mapping itself, just the result.
             if i > 1:
-                self.assertTrue(
-                    np.logical_or(
-                        np.allclose(rotation, q),
-                        np.allclose(rotation, -q),
-                    )
+                assert np.logical_or(
+                    np.allclose(rotation, q), np.allclose(rotation, -q)
                 )
-                self.assertTrue(np.allclose(translation, t))
-            self.assertTrue(np.allclose(transformed_points, rotate(q, points) + t))
+                assert np.allclose(translation, t)
+            assert np.allclose(transformed_points, rotate(q, points) + t)
 
     def test_equivalent(self):
         """Perform a rotation and ensure that we can recover it."""
@@ -150,9 +137,7 @@ class TestMapping(unittest.TestCase):
             np.argsort(transformed_points[:, 0])
         ]
 
-        self.assertTrue(
-            np.allclose(ordered_recovered_points, ordered_transformed_points)
-        )
+        assert np.allclose(ordered_recovered_points, ordered_transformed_points)
 
     def test_icp_exact(self):
         """Ensure that ICP is exact for corresponding inputs."""
@@ -176,16 +161,11 @@ class TestMapping(unittest.TestCase):
             # In the case of just two points, the mapping is not unique,
             # so we don't check the mapping itself, just the result.
             if i > 1:
-                self.assertTrue(
-                    np.logical_or(
-                        np.allclose(rotation, q),
-                        np.allclose(rotation, -q),
-                    )
+                assert np.logical_or(
+                    np.allclose(rotation, q), np.allclose(rotation, -q)
                 )
-                self.assertTrue(np.allclose(translation, t))
-            self.assertTrue(
-                np.allclose(transformed_points, rotate(q, points[indices]) + t)
-            )
+                assert np.allclose(translation, t)
+            assert np.allclose(transformed_points, rotate(q, points[indices]) + t)
 
     def test_icp_mismatched(self):
         """See how ICP works for non-corresponding inputs."""
@@ -209,7 +189,7 @@ class TestMapping(unittest.TestCase):
             norms = np.linalg.norm(deltas, axis=-1)
             # We have set some reasonable threshold for testing purposes, this is purely
             # a heuristic since we can't guarantee exact matches
-            self.assertTrue(np.mean(norms) < 0.5)
+            assert np.mean(norms) < 0.5
 
 
 if __name__ == "__main__":

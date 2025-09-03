@@ -6,32 +6,18 @@ rowan
     :local:
 
 |ReadTheDocs|
-|CircleCI|
-|Codecov|
 |PyPI|
 |conda-forge|
-|Zenodo|
 |JOSS|
 
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/rowan/badge/?version=latest
-    :target: http://rowan.readthedocs.io/en/latest/?badge=latest
-.. |CircleCI| image:: https://circleci.com/gh/glotzerlab/rowan.svg?style=svg
-    :target: https://circleci.com/gh/glotzerlab/rowan
-.. |Codecov| image:: https://codecov.io/gh/glotzerlab/rowan/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/glotzerlab/rowan
+   :target: http://rowan.readthedocs.io/en/latest/?badge=latest
 .. |PyPI| image:: https://img.shields.io/pypi/v/rowan.svg
-    :target: https://pypi.org/project/rowan/
+   :target: https://pypi.org/project/rowan/
 .. |conda-forge| image:: https://img.shields.io/conda/vn/conda-forge/rowan.svg
    :target: https://anaconda.org/conda-forge/rowan
-.. |Codacy| image:: https://api.codacy.com/project/badge/Grade/2ff6c23cb9be4f77827428a87e0e9cfc
-    :target: https://www.codacy.com/app/vramasub/rowan?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=glotzerlab/rowan&amp;utm_campaign=Badge_Grade
-.. |Zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.1323676.svg
-    :target: https://doi.org/10.5281/zenodo.1323676
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.00787/status.svg
-    :target: https://doi.org/10.21105/joss.00787
-.. |pre-commit.ci| image:: https://results.pre-commit.ci/badge/github/glotzerlab/rowan/master.svg
-    :target: https://results.pre-commit.ci/latest/github/glotzerlab/rowan/master
-    :alt: pre-commit.ci status
+   :target: https://doi.org/10.21105/joss.00787
 
 Welcome to the documentation for rowan, a package for working with quaternions!
 Quaternions, which form a number system with various interesting properties, were originally developed for classical mechanics.
@@ -39,7 +25,7 @@ Although they have since been largely displaced from this application by vector 
 Quaternions are now commonly used for this purpose in various fields, including computer graphics and attitude control.
 
 The package is built entirely on top of NumPy and represents quaternions using NumPy arrays, meaning that all functions support arbitrarily high-dimensional arrays of quaternions.
-Quaternions are encoded as arrays of shape ```(..., 4)`, with the convention that the final dimension of an array ``(a, b, c, d)`` represents the quaternion ``a + bi + cj + dk``.
+Quaternions are encoded as arrays of shape ``(..., 4)``, with the convention that the final dimension of an array ``(a, b, c, d)`` represents the quaternion ``a + bi + cj + dk``.
 This package provides tools for standard algebraic operations on quaternions as well as a number of additional tools for *e.g.* measuring distances between quaternions, interpolating between them, and performing basic point-cloud mapping.
 A particular focus of the rowan package is working with unit quaternions, which are a popular means of representing rotations in 3D.
 In order to provide a unified framework for working with the various rotation formalisms in 3D, rowan allows easy interconversion between these formalisms.
@@ -86,12 +72,12 @@ If you wish, you may also install rowan by cloning `the repository <https://gith
 
 The minimum requirements for using rowan are:
 
-* Python >= 3.6
-* NumPy >= 1.15
+* Python >= 3.8
+* NumPy >= 1.21
 
 To use the mapping subpackage, rowan also requires
 
-* SciPy >= 1.0
+* SciPy >= 1.7
 
 Quickstart
 ----------
@@ -130,17 +116,6 @@ To run the packaged unit tests, execute the following line from the root of the 
 
     python -m unittest discover tests
 
-To check test coverage, make sure the coverage module is installed:
-
-.. code-block:: bash
-
-    pip install coverage
-
-and then run the packaged unit tests with the coverage module:
-
-.. code-block:: bash
-
-    coverage run -m unittest discover tests
 
 Running Benchmarks
 ------------------
