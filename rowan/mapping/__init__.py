@@ -58,14 +58,12 @@ import numpy as np
 
 from ..functions import from_matrix, rotate, to_matrix
 from ..geometry import angle
-from .symmetries import SymmetricallyEquivalentQuaternions
 
 __all__ = [
     "kabsch",
     "davenport",
     "procrustes",
     "icp",
-    "SymmetricallyEquivalentQuaternions",
 ]
 
 
