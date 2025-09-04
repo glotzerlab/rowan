@@ -123,7 +123,12 @@ def generate_icosahedral_group():
 
 
 class SymmetricallyEquivalentQuaternions(np.ndarray):
-    """Equivalent quaternions for a particular point group."""
+    """Equivalent quaternions for a particular point group.
+
+    This class is a read-only subclass of `np.ndarray` that holds the set of
+    quaternions representing the symmetry operations of a specific point group
+    ('T', 'O', or 'I').
+    """
 
     def __new__(cls, data, group):  # noqa: D102
         obj = np.asarray(data).view(cls)
@@ -131,14 +136,42 @@ class SymmetricallyEquivalentQuaternions(np.ndarray):
         obj._group = group  # noqa: SLF001
         return obj
 
-    def __array_finalize__(self, obj):  # noqa: D105
+    def __array_finalize__(self, obj):
+        """Finalize the array, ensuring attributes are passed on."""
         if obj is None:
             return
         self._group = getattr(obj, "_group", None)
 
     @classmethod
     def create_group(cls, group: str):
-        """Create the symmetrically equivalent orientations for the provided group."""
+        """Create the set of symmetrically equivalent quaternions.
+
+        Parameters
+        ----------
+        group : {'T', 'O', 'I'}
+            The name of the point group. Must be one of {'T', 'O', 'I'}.
+
+        Returns:
+        --------
+        SymmetricallyEquivalentQuaternions
+            An instance containing the quaternions for the specified group.
+
+        Raises:
+        -------
+        ValueError
+            If the `group` string is not one of the valid options.
+
+        Examples:
+        ---------
+        >>> tetrahedral_quats = SymmetricallyEquivalentQuaternions.create_group("T")
+        >>> print(tetrahedral_quats._group)
+        T
+        >>> print(len(tetrahedral_quats))
+        24
+
+        >>> assert np.array_equal(tetrahedral_quats[0], [1,0,0,0])
+
+        """
         if group == "T":
             return cls(data=generate_tetrahedral_group(), group=group)
         if group == "O":
