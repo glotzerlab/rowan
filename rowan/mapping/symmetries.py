@@ -144,10 +144,10 @@ class SymmetricallyEquivalentQuaternions(np.ndarray):
 
     @classmethod
     def create_group(cls, group: str):
-        """Create the set of symmetrically equivalent quaternions for a point group.
+        """Create the set of symmetrically equivalent quaternions for a rotation group.
 
         Args:
-            group ({'T', 'O', 'I'}): Array of quaternions.
+            group ({'T', 'O', 'I'}): Schönflies notation for the group.
 
         Returns:
             (..., 4) :class:`numpy.ndarray`:
