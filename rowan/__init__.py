@@ -52,6 +52,7 @@ from .functions import (
     to_matrix,
     vector_vector_rotation,
 )
+from .mapping.symmetries import SymmetricallyEquivalentQuaternions
 
 # Get the version
 __version__ = "1.3.2"
@@ -94,4 +95,5 @@ __all__ = [
     "to_euler",
     "to_matrix",
     "vector_vector_rotation",
+    "SymmetricallyEquivalentQuaternions",
 ]
