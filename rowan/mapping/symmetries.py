@@ -156,10 +156,17 @@ class SymmetricallyEquivalentQuaternions(np.ndarray):
         Example::
             >>> from rowan import SymmetricallyEquivalentQuaternions
             >>> tetrahedral_quats = SymmetricallyEquivalentQuaternions.create_group("T")
-            >>> print(len(tetrahedral_quats))
-            24
+            >>> tetrahedral_quats.shape
+            (24, 4)
             >>> assert np.array_equal(tetrahedral_quats[0], [1,0,0,0])
-
+            >>> SymmetricallyEquivalentQuaternions.create_group("T")[:]
+            [[ 1.   0.   0.   0. ]
+             [-1.   0.   0.   0. ]
+             [ 0.   1.   0.   0. ]
+             ...
+             [ 0.5  0.5 -0.5  0.5]
+             [ 0.5  0.5  0.5 -0.5]
+             [ 0.5  0.5  0.5  0.5]]
         """
         if group == "T":
             return cls(data=generate_tetrahedral_group(), group=group)
