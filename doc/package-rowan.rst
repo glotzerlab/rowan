@@ -33,6 +33,7 @@ rowan
     rowan.isfinite
     rowan.isinf
     rowan.isnan
+    rowan.SymmetricallyEquivalentQuaternions
 
 .. rubric:: Details
 
