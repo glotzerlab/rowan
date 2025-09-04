@@ -2,6 +2,8 @@
 #    uv pip compile --python-version 3.13 --python-platform linux requirements-test.in
 iniconfig==2.1.0
     # via pytest
+more-itertools==10.8.0
+    # via -r requirements-test.in
 numpy==2.3.2
     # via
     #   -r requirements-test.in
@@ -12,7 +14,7 @@ pluggy==1.6.0
     # via pytest
 pygments==2.19.2
     # via pytest
-pytest==8.4.1
+pytest==8.4.2
     # via -r requirements-test.in
 scipy==1.16.1
     # via -r requirements-test.in
