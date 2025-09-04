@@ -137,7 +137,7 @@ class SymmetricallyEquivalentQuaternions(np.ndarray):
         self._group = getattr(obj, "_group", None)
 
     @classmethod
-    def __class_getitem__(cls, group: str):
+    def create_group(cls, group: str):
         """Create the symmetrically equivalent orientations for the provided group."""
         if group == "T":
             return cls(data=generate_tetrahedral_group(), group=group)

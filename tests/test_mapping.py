@@ -214,7 +214,7 @@ class TestMapping(unittest.TestCase):
             (0.5, 0.5, 0.5),
         ]  # Verts in sorted order
 
-        quats = mapping.SymmetricallyEquivalentQuaternions["T"]
+        quats = mapping.SymmetricallyEquivalentQuaternions.create_group("T")
         assert len(quats) == 24
         for quat in quats:
             res = sorted(rotate(quat, tet).tolist())
@@ -239,7 +239,7 @@ class TestMapping(unittest.TestCase):
         """Verify our symmetrically equivalent quaternions are correct."""
         cube = [*product([-0.5, 0.5], repeat=3)]  # Verts in sorted order
 
-        quats = mapping.SymmetricallyEquivalentQuaternions["O"]
+        quats = mapping.SymmetricallyEquivalentQuaternions.create_group("O")
         assert len(quats) == 48
         for quat in quats:
             res = sorted(rotate(quat, cube).tolist())
@@ -274,7 +274,7 @@ class TestMapping(unittest.TestCase):
         #     axis=0,
         # )
 
-        quats = mapping.SymmetricallyEquivalentQuaternions["I"]
+        quats = mapping.SymmetricallyEquivalentQuaternions.create_group("I")
         assert len(quats) == 120
 
         # TODO: we get the correct vertices, but the ordering is difficult to ensure.
