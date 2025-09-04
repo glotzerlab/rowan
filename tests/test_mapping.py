@@ -13,6 +13,18 @@ one = np.array([1, 0, 0, 0])
 half = np.array([0.5, 0.5, 0.5, 0.5])
 
 
+def _cyclic_permutations(a):
+    def make_permutation_generator(a, forward=True):
+        """Return a list of functions that roll an array by 0,1,2...n."""
+        n = len(a)
+        sign = -1 if forward else 1
+        return [
+            lambda arr, k=j: arr[(sign * k) :] + arr[: (sign * k)] for j in range(n)
+        ]
+
+    return [op(a) for op in make_permutation_generator(a)]
+
+
 class TestMapping(unittest.TestCase):
     """Test mapping functions."""
 
@@ -202,7 +214,7 @@ class TestMapping(unittest.TestCase):
             (0.5, 0.5, 0.5),
         ]  # Verts in sorted order
 
-        quats = mapping._generate_tetrahedral_group()
+        quats = mapping.SymmetricallyEquivalentQuaternions["T"]
         assert len(quats) == 24
         for quat in quats:
             res = sorted(rotate(quat, tet).tolist())
@@ -227,7 +239,7 @@ class TestMapping(unittest.TestCase):
         """Verify our symmetrically equivalent quaternions are correct."""
         cube = [*product([-0.5, 0.5], repeat=3)]  # Verts in sorted order
 
-        quats = mapping._generate_octahedral_group()
+        quats = mapping.SymmetricallyEquivalentQuaternions["O"]
         assert len(quats) == 48
         for quat in quats:
             res = sorted(rotate(quat, cube).tolist())
@@ -251,18 +263,18 @@ class TestMapping(unittest.TestCase):
 
     def test_symmetric_quaternions_icosahedral(self):
         """Verify our symmetrically equivalent quaternions are correct."""
-        φ = (1 + np.sqrt(5)) / 2
-        icos = np.sort(
-            [
-                *mapping._cyclic_permutations([0, -1, -φ]),
-                *mapping._cyclic_permutations([0, -1, φ]),
-                *mapping._cyclic_permutations([0, 1, -φ]),
-                *mapping._cyclic_permutations([0, 1, φ]),
-            ],
-            axis=0,
-        )
+        # φ = (1 + np.sqrt(5)) / 2
+        # icos = np.sort(
+        #     [
+        #         *_cyclic_permutations([0, -1, -φ]),
+        #         *_cyclic_permutations([0, -1, φ]),
+        #         *_cyclic_permutations([0, 1, -φ]),
+        #         *_cyclic_permutations([0, 1, φ]),
+        #     ],
+        #     axis=0,
+        # )
 
-        quats = mapping._generate_icosahedral_group()
+        quats = mapping.SymmetricallyEquivalentQuaternions["I"]
         assert len(quats) == 120
 
         # TODO: we get the correct vertices, but the ordering is difficult to ensure.

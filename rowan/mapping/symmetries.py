@@ -7,19 +7,8 @@ import numpy as np
 from more_itertools import distinct_permutations
 from numpy.typing import ArrayLike
 
-from ..functions import from_axis_angle
-
-
-def _cyclic_permutations(a):
-    def make_permutation_generator(a, forward=True):
-        """Return a list of functions that roll an array by 0,1,2...n"""
-        n = len(a)
-        sign = -1 if forward else 1
-        return [
-            lambda arr, k=j: arr[(sign * k) :] + arr[: (sign * k)] for j in range(n)
-        ]
-
-    return [op(a) for op in make_permutation_generator(a)]
+# from ..functions import from_axis_angle
+from rowan.functions import from_axis_angle
 
 
 def sign_changes(even: bool = True, d: int = 3):
@@ -133,6 +122,38 @@ def generate_icosahedral_group():
     )
 
 
-print(len(generate_icosahedral_group()))
-# print(generate_binary_icosahedral_group())
-# TODO: test against Scipy, and make sure objects are invariant
+class SymmetricallyEquivalentQuaternions(np.ndarray):
+    """Equivalent quaternions for a particular point group."""
+
+    def __new__(cls, data, group):  # noqa: D102
+        obj = np.asarray(data).view(cls)
+        obj.flags.writeable = False
+        obj._group = group  # noqa: SLF001
+        return obj
+
+    def __array_finalize__(self, obj):  # noqa: D105
+        if obj is None:
+            return
+        self._group = getattr(obj, "_group", None)
+
+    @classmethod
+    def __class_getitem__(cls, group: str):
+        """Create the symmetrically equivalent orientations for the provided group."""
+        if group == "T":
+            return cls(data=generate_tetrahedral_group(), group=group)
+        if group == "O":
+            return cls(data=generate_octahedral_group(), group=group)
+        if group == "I":
+            return cls(data=generate_icosahedral_group(), group=group)
+        msg = f"Unknown group '{group}' does not match valid options {{'T', 'O', 'I'}}"
+        raise ValueError(msg)
+
+    def __str__(self):  # noqa: D105
+        arrstr = np.array2string(self, floatmode="maxprec", threshold=24, precision=9)
+        return (
+            f"SymmetricallyEquivalentQuaternions['{self._group}'] "
+            f"(order {len(self)}):\n{arrstr}"
+        )
+
+    def __repr__(self):  # noqa: D105
+        return self.__str__()

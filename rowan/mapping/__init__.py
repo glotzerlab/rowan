@@ -58,16 +58,15 @@ import numpy as np
 
 from ..functions import from_matrix, rotate, to_matrix
 from ..geometry import angle
-from .symmetries import _cyclic_permutations
-from .symmetries import generate_icosahedral_group as _generate_icosahedral_group
-from .symmetries import (
-    generate_octahedral_group as _generate_octahedral_group,
-)
-from .symmetries import (
-    generate_tetrahedral_group as _generate_tetrahedral_group,
-)
+from .symmetries import SymmetricallyEquivalentQuaternions
 
-__all__ = ["kabsch", "davenport", "procrustes", "icp"]
+__all__ = [
+    "kabsch",
+    "davenport",
+    "procrustes",
+    "icp",
+    "SymmetricallyEquivalentQuaternions",
+]
 
 
 def kabsch(X, Y, require_rotation=True):
