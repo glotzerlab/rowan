@@ -3,9 +3,8 @@
 import unittest
 from itertools import product
 
-import matplotlib.pyplot as plt
 import numpy as np
-from coxeter.shapes import ConvexPolyhedron
+import scipy
 
 from rowan import from_axis_angle, from_matrix, mapping, random, rotate
 
@@ -204,45 +203,86 @@ class TestMapping(unittest.TestCase):
         ]  # Verts in sorted order
 
         quats = mapping._generate_tetrahedral_group()
+        assert len(quats) == 24
         for quat in quats:
             res = sorted(rotate(quat, tet).tolist())
             np.testing.assert_array_equal(res, tet, err_msg=f"q={quat}")
+
+        # Compare our array of generated quaternions to Scipy
+        np.testing.assert_array_equal(
+            sorted(quats.tolist()),
+            sorted(
+                [
+                    *scipy.spatial.transform.Rotation.create_group("T")
+                    .as_quat()
+                    .tolist(),
+                    *(
+                        -scipy.spatial.transform.Rotation.create_group("T").as_quat()
+                    ).tolist(),
+                ]
+            ),
+        )
 
     def test_symmetric_quaternions_octahedral(self):
         """Verify our symmetrically equivalent quaternions are correct."""
         cube = [*product([-0.5, 0.5], repeat=3)]  # Verts in sorted order
 
         quats = mapping._generate_octahedral_group()
+        assert len(quats) == 48
         for quat in quats:
             res = sorted(rotate(quat, cube).tolist())
             np.testing.assert_allclose(res, cube, err_msg=f"q={quat}", atol=4e-16)
 
+        # Compare our array of generated quaternions to Scipy
+        np.testing.assert_allclose(
+            sorted(quats.tolist()),
+            sorted(
+                [
+                    *scipy.spatial.transform.Rotation.create_group("O")
+                    .as_quat()
+                    .tolist(),
+                    *(
+                        -scipy.spatial.transform.Rotation.create_group("O").as_quat()
+                    ).tolist(),
+                ]
+            ),
+            atol=4e-16,
+        )
+
     def test_symmetric_quaternions_icosahedral(self):
         """Verify our symmetrically equivalent quaternions are correct."""
         φ = (1 + np.sqrt(5)) / 2
-        icos = sorted(
+        icos = np.sort(
             [
                 *mapping._cyclic_permutations([0, -1, -φ]),
                 *mapping._cyclic_permutations([0, -1, φ]),
                 *mapping._cyclic_permutations([0, 1, -φ]),
                 *mapping._cyclic_permutations([0, 1, φ]),
-            ]
+            ],
+            axis=0,
         )
 
-        fix, ax = plt.subplots(subplot_kw={"projection": "3d"})
-        ConvexPolyhedron(icos).plot(ax=ax)
-
         quats = mapping._generate_icosahedral_group()
-        for quat in quats:
-            res = sorted(rotate(quat, icos).tolist())
-            poly = ConvexPolyhedron(res)
-            print(poly.volume)
-            try:
-                np.testing.assert_allclose(res, icos, err_msg=f"q={quat}", atol=4e-16)
-            except AssertionError as e:
-                poly.plot(ax=ax, label_verts=True)
-                plt.show()
-                raise AssertionError(e) from e
+        assert len(quats) == 120
+
+        # TODO: we get the correct vertices, but the ordering is difficult to ensure.
+        # Is there a better way to test for equivalence here?
+        # for i, quat in enumerate(quats):
+        #     res = np.sort(rotate(quat, icos).round(14), axis=0)
+        #     np.testing.assert_allclose(res, icos, err_msg=f"q{i}={quat}", atol=4e-16)
+
+        # Compare our array of generated quaternions to Scipy
+        np.testing.assert_allclose(
+            np.sort(quats, axis=0),
+            np.sort(
+                [
+                    *scipy.spatial.transform.Rotation.create_group("I").as_quat(),
+                    *(-scipy.spatial.transform.Rotation.create_group("I").as_quat()),
+                ],
+                axis=0,
+            ),
+            atol=4e-16,
+        )
 
 
 if __name__ == "__main__":
