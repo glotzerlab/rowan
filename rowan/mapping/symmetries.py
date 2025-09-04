@@ -144,32 +144,21 @@ class SymmetricallyEquivalentQuaternions(np.ndarray):
 
     @classmethod
     def create_group(cls, group: str):
-        """Create the set of symmetrically equivalent quaternions.
+        """Create the set of symmetrically equivalent quaternions for a point group.
 
-        Parameters
-        ----------
-        group : {'T', 'O', 'I'}
-            The name of the point group. Must be one of {'T', 'O', 'I'}.
+        Args:
+            group ({'T', 'O', 'I'}): Array of quaternions.
 
         Returns:
-        --------
-        SymmetricallyEquivalentQuaternions
-            An instance containing the quaternions for the specified group.
+            (..., 4) :class:`numpy.ndarray`:
+                Eqivalent quaternions ``q`` for the provided point group.
 
-        Raises:
-        -------
-        ValueError
-            If the `group` string is not one of the valid options.
-
-        Examples:
-        ---------
-        >>> tetrahedral_quats = SymmetricallyEquivalentQuaternions.create_group("T")
-        >>> print(tetrahedral_quats._group)
-        T
-        >>> print(len(tetrahedral_quats))
-        24
-
-        >>> assert np.array_equal(tetrahedral_quats[0], [1,0,0,0])
+        Example::
+            >>> from rowan import SymmetricallyEquivalentQuaternions
+            >>> tetrahedral_quats = SymmetricallyEquivalentQuaternions.create_group("T")
+            >>> print(len(tetrahedral_quats))
+            24
+            >>> assert np.array_equal(tetrahedral_quats[0], [1,0,0,0])
 
         """
         if group == "T":
