@@ -1,8 +1,11 @@
 """Test algorithms for point-cloud mapping."""
 
 import unittest
+from itertools import product
 
+import matplotlib.pyplot as plt
 import numpy as np
+from coxeter.shapes import ConvexPolyhedron
 
 from rowan import from_axis_angle, from_matrix, mapping, random, rotate
 
@@ -190,6 +193,56 @@ class TestMapping(unittest.TestCase):
             # We have set some reasonable threshold for testing purposes, this is purely
             # a heuristic since we can't guarantee exact matches
             assert np.mean(norms) < 0.5
+
+    def test_symmetric_quaternions_tetrahedral(self):
+        """Verify our symmetrically equivalent quaternions are correct."""
+        tet = [
+            (-0.5, -0.5, 0.5),
+            (-0.5, 0.5, -0.5),
+            (0.5, -0.5, -0.5),
+            (0.5, 0.5, 0.5),
+        ]  # Verts in sorted order
+
+        quats = mapping._generate_tetrahedral_group()
+        for quat in quats:
+            res = sorted(rotate(quat, tet).tolist())
+            np.testing.assert_array_equal(res, tet, err_msg=f"q={quat}")
+
+    def test_symmetric_quaternions_octahedral(self):
+        """Verify our symmetrically equivalent quaternions are correct."""
+        cube = [*product([-0.5, 0.5], repeat=3)]  # Verts in sorted order
+
+        quats = mapping._generate_octahedral_group()
+        for quat in quats:
+            res = sorted(rotate(quat, cube).tolist())
+            np.testing.assert_allclose(res, cube, err_msg=f"q={quat}", atol=4e-16)
+
+    def test_symmetric_quaternions_icosahedral(self):
+        """Verify our symmetrically equivalent quaternions are correct."""
+        φ = (1 + np.sqrt(5)) / 2
+        icos = sorted(
+            [
+                *mapping._cyclic_permutations([0, -1, -φ]),
+                *mapping._cyclic_permutations([0, -1, φ]),
+                *mapping._cyclic_permutations([0, 1, -φ]),
+                *mapping._cyclic_permutations([0, 1, φ]),
+            ]
+        )
+
+        fix, ax = plt.subplots(subplot_kw={"projection": "3d"})
+        ConvexPolyhedron(icos).plot(ax=ax)
+
+        quats = mapping._generate_icosahedral_group()
+        for quat in quats:
+            res = sorted(rotate(quat, icos).tolist())
+            poly = ConvexPolyhedron(res)
+            print(poly.volume)
+            try:
+                np.testing.assert_allclose(res, icos, err_msg=f"q={quat}", atol=4e-16)
+            except AssertionError as e:
+                poly.plot(ax=ax, label_verts=True)
+                plt.show()
+                raise AssertionError(e) from e
 
 
 if __name__ == "__main__":

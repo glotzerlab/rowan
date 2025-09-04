@@ -4,17 +4,17 @@ from itertools import combinations, permutations, product
 from typing import Iterable
 
 import numpy as np
+from more_itertools import distinct_permutations
 from numpy.typing import ArrayLike
 
-from rowan import from_axis_angle
+from ..functions import from_axis_angle
 
 
-def cyclic_permutations(a):
-    """Generate the cyclic permutations of an array a."""
-
-    def make_permutation_generator(a):
-        """Return a list of functions that roll an array by 0,1,2...n."""
-        n, sign = 1, len(a)
+def _cyclic_permutations(a):
+    def make_permutation_generator(a, forward=True):
+        """Return a list of functions that roll an array by 0,1,2...n"""
+        n = len(a)
+        sign = -1 if forward else 1
         return [
             lambda arr, k=j: arr[(sign * k) :] + arr[: (sign * k)] for j in range(n)
         ]
@@ -32,35 +32,35 @@ def sign_changes(even: bool = True, d: int = 3):
 
 def generate_tetrahedral_group():
     """Generates the 24 quaternions of the chiral tetrahedral group <T>."""
-    quats = {
+    quats = [
         # 8 (4+4) quaternions from permutationsof (±1, 0, 0, 0)
         (1, 0, 0, 0),
-        (0, 1, 0, 0),
-        (0, 0, 1, 0),
-        (0, 0, 0, 1),
         (-1, 0, 0, 0),
+        (0, 1, 0, 0),
         (0, -1, 0, 0),
+        (0, 0, 1, 0),
         (0, 0, -1, 0),
+        (0, 0, 0, 1),
         (0, 0, 0, -1),
         *product([-0.5, 0.5], repeat=4),  # 16 quaternions from 1/2 * (±1, ±1, ±1, ±1)
-    }
-    return np.array(sorted(quats))
+    ]
+    return np.array(quats)
 
 
 def generate_octahedral_group():
     """Generates the 48 quaternions of the octahedral group."""
     c = 1 / np.sqrt(2)
 
-    quats = {
-        # 24 elements of the tetrahedral group
-        *(tuple(x) for x in generate_tetrahedral_group()),
-        # 24 quaternions from permutations of 1/√2 * (±1, ±1, 0, 0)
-        *permutations([c, c, 0, 0]),
-        *permutations([c, -c, 0, 0]),
-        *permutations([-c, -c, 0, 0]),
-    }
-
-    return np.array(sorted(quats))
+    return np.array(
+        [
+            # 24 elements of the tetrahedral group
+            *generate_tetrahedral_group(),
+            # 24 quaternions from distinct permutations of 1/√2 * (±1, ±1, 0, 0)
+            *distinct_permutations([c, c, 0, 0]),
+            *distinct_permutations([c, -c, 0, 0]),
+            *distinct_permutations([-c, -c, 0, 0]),
+        ]
+    )
 
 
 def generate_cyclic_group(n: int, axis: ArrayLike = (0, 0, 1)):
@@ -115,22 +115,24 @@ def even_permutations(it: Iterable):
     )
 
 
-def generate_binary_icosahedral_group():
+def generate_icosahedral_group():
     """Generates the 48 quaternions of the octahedral group."""
     φ = (1 + np.sqrt(5)) / 2
 
-    quats = {
-        # 24 elements of the tetrahedral group
-        *(tuple(x) for x in generate_tetrahedral_group()),
-        # 96 quaternions from even permutations of 1/2 * (0, ±1, ±1/φ, ±φ)
-        *(
-            q
-            for a, b, c in product([1 / 2, -1 / 2], repeat=3)
-            for q in even_permutations([0, a, b / φ, c * φ])
-        ),
-    }
-    return np.array(sorted(quats))
+    return np.array(
+        [
+            # 24 elements of the tetrahedral group
+            *generate_tetrahedral_group(),
+            # 96 quaternions from even permutations of 1/2 * (0, ±1, ±1/φ, ±φ)
+            *(
+                q
+                for a, b, c in product([1 / 2, -1 / 2], repeat=3)
+                for q in even_permutations([0, a, b / φ, c * φ])
+            ),
+        ]
+    )
 
 
-print(len(generate_binary_icosahedral_group()))
+print(len(generate_icosahedral_group()))
+# print(generate_binary_icosahedral_group())
 # TODO: test against Scipy, and make sure objects are invariant
