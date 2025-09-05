@@ -2,7 +2,7 @@
 
 .. toctree::
     :maxdepth: 2
-    :caption: Modules:
+    :caption: Modules
 
     package-rowan
     package-calculus
