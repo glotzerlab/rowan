@@ -2,9 +2,6 @@
 rowan
 =====
 
-.. contents::
-    :local:
-
 |ReadTheDocs|
 |PyPI|
 |conda-forge|

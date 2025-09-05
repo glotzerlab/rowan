@@ -1,9 +1,5 @@
 .. include:: ../README.rst
 
-
-Table of Contents
-=================
-
 .. toctree::
     :maxdepth: 2
     :caption: Modules:
@@ -15,15 +11,16 @@ Table of Contents
     package-mapping
     package-random
 
+
 .. toctree::
-    :maxdepth: 1
-    :caption: Reference:
+   :maxdepth: 1
+   :caption: Reference
 
-    development
-    license
-    changelog
-    credits
-
+   genindex
+   development
+   changelog
+   credits
+   license
 
 Indices and tables
 ==================
