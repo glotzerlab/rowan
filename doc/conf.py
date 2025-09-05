@@ -98,43 +98,6 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 todo_include_todos = True
 
 
-# -- Options for HTML output ----------------------------------------------
-
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = "furo"
-
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#
-# html_theme_options = {}
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['_static']
-
-# Custom sidebar templates, must be a dictionary that maps document names
-# to template names.
-#
-# This is required for the alabaster theme
-# refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-# html_sidebars = {
-#     "**": [
-#         "relations.html",  # needs 'show_related': True theme option to display
-#         "searchbox.html",
-#     ],
-# }
-
-
-# -- Options for HTMLHelp output ------------------------------------------
-
-# Output file base name for HTML help builder.
-htmlhelp_basename = "rowandoc"
-
-
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
@@ -186,3 +149,11 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
+
+# -- Options for HTML output ----------------------------------------------
+html_theme = "furo"
+html_theme_options = {
+    "sidebar_hide_name": False,
+}
+html_static_path = ["_static"]
+htmlhelp_basename = "rowandoc"
