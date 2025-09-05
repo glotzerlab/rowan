@@ -2,17 +2,17 @@
 rowan
 =====
 
-|ReadTheDocs|
 |PyPI|
 |conda-forge|
+|ReadTheDocs|
 |JOSS|
 
-.. |ReadTheDocs| image:: https://readthedocs.org/projects/rowan/badge/?version=latest
-   :target: http://rowan.readthedocs.io/en/latest/?badge=latest
 .. |PyPI| image:: https://img.shields.io/pypi/v/rowan.svg
    :target: https://pypi.org/project/rowan/
 .. |conda-forge| image:: https://img.shields.io/conda/vn/conda-forge/rowan.svg
    :target: https://anaconda.org/conda-forge/rowan
+.. |ReadTheDocs| image:: https://readthedocs.org/projects/rowan/badge/?version=latest
+   :target: http://rowan.readthedocs.io/en/latest/?badge=latest
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.00787/status.svg
    :target: https://doi.org/10.21105/joss.00787
 
