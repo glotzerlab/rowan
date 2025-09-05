@@ -261,10 +261,12 @@ def power(q, n):
 def mean(q, weights=None):
     r"""Compute the mean of an array of quaternions.
 
-    This algorithm is based on :cite:`Markley 2007`, and computes the (weighted)
+    This algorithm is based on `Markley 2007`_, and computes the (weighted)
     average quaternion of an input array via a maximum likelihood method. Intuitively,
     this method computes the member of SO(3) that is "most likely" to represent the
     inputs. For a more rigorous understanding, consult the original work.
+
+    .. _Markley 2007: https://www.acsu.buffalo.edu/~johnc/ave_quat07.pdf
 
     Args:
         q ((:, 4) :class:`numpy.ndarray`): Array of quaternions.

@@ -2,20 +2,17 @@
 rowan
 =====
 
-.. contents::
-    :local:
-
-|ReadTheDocs|
 |PyPI|
 |conda-forge|
+|ReadTheDocs|
 |JOSS|
 
-.. |ReadTheDocs| image:: https://readthedocs.org/projects/rowan/badge/?version=latest
-   :target: http://rowan.readthedocs.io/en/latest/?badge=latest
 .. |PyPI| image:: https://img.shields.io/pypi/v/rowan.svg
    :target: https://pypi.org/project/rowan/
 .. |conda-forge| image:: https://img.shields.io/conda/vn/conda-forge/rowan.svg
    :target: https://anaconda.org/conda-forge/rowan
+.. |ReadTheDocs| image:: https://readthedocs.org/projects/rowan/badge/?version=latest
+   :target: http://rowan.readthedocs.io/en/latest/?badge=latest
 .. |JOSS| image:: http://joss.theoj.org/papers/10.21105/joss.00787/status.svg
    :target: https://doi.org/10.21105/joss.00787
 
@@ -49,14 +46,14 @@ Installation
 The recommended methods for installing rowan are using **pip** or **conda**.
 To install the package from PyPI, execute:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ pip install rowan
 
 To install the package from conda, first add the **conda-forge** channel and
 then install rowan:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ conda config --add channels conda-forge
     $ conda install rowan
@@ -64,11 +61,11 @@ then install rowan:
 
 If you wish, you may also install rowan by cloning `the repository <https://github.com/glotzerlab/rowan>`_ and running the setup script:
 
-.. code-block:: bash
+.. code-block:: console
 
     $ git clone https://github.com/glotzerlab/rowan.git
     $ cd rowan
-    $ python setup.py install --user
+    $ pip install -e .
 
 The minimum requirements for using rowan are:
 
@@ -112,7 +109,7 @@ Continuous integrated testing is performed using CircleCI on these Python versio
 
 To run the packaged unit tests, execute the following line from the root of the repository:
 
-.. code-block:: bash
+.. code-block:: console
 
     python -m unittest discover tests
 
@@ -130,13 +127,13 @@ You can also build this documentation from source if you clone the repository.
 The documentation is written in `reStructuredText <http://docutils.sourceforge.net/rst.html>`_ and compiled using `Sphinx <http://www.sphinx-doc.org/en/master/>`_.
 To build from source, first install Sphinx:
 
-.. code-block:: bash
+.. code-block:: console
 
-    pip install sphinx sphinx_rtd_theme
+    pip install sphinx furo
 
 You can then use Sphinx to create the actual documentation in either PDF or HTML form by running the following commands in the rowan root directory:
 
-.. code-block:: bash
+.. code-block:: console
 
     cd doc
     make html # For html output
