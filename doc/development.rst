@@ -39,14 +39,14 @@ Code contributions should keep these ideals in mind and adhere to the following 
     During continuous integration, the code is checked automatically with `pre-commit`_.
     To run these checks locally, you can install and run pre-commit like so:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         python -m pip install pre-commit
         pre-commit run --all-files
 
     To avoid having commits fail in case you forget to run this, you can set up a git pre-commit hook using `pre-commit`_:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         pre-commit install
 
