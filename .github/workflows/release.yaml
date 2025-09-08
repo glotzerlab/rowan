@@ -25,7 +25,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
       with:
-        python-version: 3.12
+        python-version: 3.13
     - name: Set up Python environment
       uses: glotzerlab/workflows/setup-uv@a36a97114c60241b26217ce92abbb64621ac67c7 # 0.6.0
       with:
