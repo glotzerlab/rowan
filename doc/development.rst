@@ -36,21 +36,10 @@ Code contributions should keep these ideals in mind and adhere to the following 
 
 .. tip::
 
-    During continuous integration, the code is checked automatically with `pre-commit`_.
-    To run these checks locally, you can install and run pre-commit like so:
-
-    .. code-block:: bash
-
-        python -m pip install pre-commit
-        pre-commit run --all-files
-
-    To avoid having commits fail in case you forget to run this, you can set up a git pre-commit hook using `pre-commit`_:
-
-    .. code-block:: bash
-        pre-commit install
+    During continuous integration, the code is checked automatically with `prek`_.
 
 .. _Flake8: http://flake8.pycqa.org/en/latest/
-.. _pre-commit: https://pre-commit.com/
+.. _prek: https://prek.j178.dev/
 
 .. note::
 
@@ -98,6 +87,7 @@ To make a new release of rowan, follow the following steps:
    release-2.3.1.
 #. Make any final changes as desired on this branch. Push the changes and
    ensure all tests are passing as expected on the new branch.
+#. Run `prek autoupdate`.
 #. Once the branch is completely finalized, run bumpversion with the
    appropriate type (patch, minor, major) so that the version now matches the
    version number in the branch name.

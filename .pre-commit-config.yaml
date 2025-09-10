@@ -1,6 +1,3 @@
-ci:
-  autoupdate_schedule: quarterly
-
 # TODO: Add mypy
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
