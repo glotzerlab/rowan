@@ -50,13 +50,14 @@ Source Code Conventions
 -----------------------
 
 The **rowan** package adheres to a relatively strict set of style guidelines.
-All code in **rowan** should be formatted using `black`_; a notable consequence of this is that the recommended max line length is 88, not the more common 80.
-Imports should be formatted using `isort`_.
+All code in **rowan** should be formatted using `ruff`_; a notable consequence of this is that the recommended max line length is 88, not the more common 80.
+Imports should be formatted using `ruff`_.
 For guidance on the style, see `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ and the `Google Python Style Guide <https://google.github.io/styleguide/pyguide.html>`_, but any ambiguities should be resolved automatically by running black.
 All code should also follow the principles in `PEP 20 <https://www.python.org/dev/peps/pep-0020/>`_.
 In particular, always prefer simple, explicit code where possible, avoiding unnecessary convolution or complicated code that could be written more simply.
 Avoid writing code in a manner that will be difficult for others to understand.
 
+.. _ruff: https://docs.astral.sh/ruff/
 
 Documentation
 -------------
