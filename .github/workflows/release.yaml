@@ -41,7 +41,7 @@ jobs:
   upload_pypi:
     name: Publish [PyPI]
     needs: [build_wheel]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       id-token: write
     steps:
