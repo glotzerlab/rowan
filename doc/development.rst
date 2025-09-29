@@ -36,21 +36,10 @@ Code contributions should keep these ideals in mind and adhere to the following 
 
 .. tip::
 
-    During continuous integration, the code is checked automatically with `pre-commit`_.
-    To run these checks locally, you can install and run pre-commit like so:
-
-    .. code-block:: bash
-
-        python -m pip install pre-commit
-        pre-commit run --all-files
-
-    To avoid having commits fail in case you forget to run this, you can set up a git pre-commit hook using `pre-commit`_:
-
-    .. code-block:: bash
-        pre-commit install
+    During continuous integration, the code is checked automatically with `prek`_.
 
 .. _Flake8: http://flake8.pycqa.org/en/latest/
-.. _pre-commit: https://pre-commit.com/
+.. _prek: https://prek.j178.dev/
 
 .. note::
 
@@ -61,13 +50,14 @@ Source Code Conventions
 -----------------------
 
 The **rowan** package adheres to a relatively strict set of style guidelines.
-All code in **rowan** should be formatted using `black`_; a notable consequence of this is that the recommended max line length is 88, not the more common 80.
-Imports should be formatted using `isort`_.
+All code in **rowan** should be formatted using `ruff`_; a notable consequence of this is that the recommended max line length is 88, not the more common 80.
+Imports should be formatted using `ruff`_.
 For guidance on the style, see `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ and the `Google Python Style Guide <https://google.github.io/styleguide/pyguide.html>`_, but any ambiguities should be resolved automatically by running black.
 All code should also follow the principles in `PEP 20 <https://www.python.org/dev/peps/pep-0020/>`_.
 In particular, always prefer simple, explicit code where possible, avoiding unnecessary convolution or complicated code that could be written more simply.
 Avoid writing code in a manner that will be difficult for others to understand.
 
+.. _ruff: https://docs.astral.sh/ruff/
 
 Documentation
 -------------
@@ -98,6 +88,7 @@ To make a new release of rowan, follow the following steps:
    release-2.3.1.
 #. Make any final changes as desired on this branch. Push the changes and
    ensure all tests are passing as expected on the new branch.
+#. Run `prek autoupdate`.
 #. Once the branch is completely finalized, run bumpversion with the
    appropriate type (patch, minor, major) so that the version now matches the
    version number in the branch name.
