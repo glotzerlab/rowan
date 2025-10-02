@@ -18,7 +18,7 @@ imagesize==1.4.1
     # via sphinx
 jinja2==3.1.6
     # via sphinx
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via jinja2
 packaging==25.0
     # via sphinx
