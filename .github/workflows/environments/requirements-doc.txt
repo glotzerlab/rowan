@@ -4,27 +4,27 @@ alabaster==1.0.0
     # via sphinx
 babel==2.17.0
     # via sphinx
-certifi==2025.6.15
+certifi==2025.10.5
     # via requests
-charset-normalizer==3.4.2
+charset-normalizer==3.4.4
     # via requests
 docutils==0.21.2
     # via
     #   sphinx
     #   sphinx-rtd-theme
-idna==3.10
+idna==3.11
     # via requests
 imagesize==1.4.1
     # via sphinx
 jinja2==3.1.6
     # via sphinx
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via jinja2
 packaging==25.0
     # via sphinx
 pygments==2.19.2
     # via sphinx
-requests==2.32.4
+requests==2.32.5
     # via sphinx
 roman-numerals-py==3.1.0
     # via sphinx
