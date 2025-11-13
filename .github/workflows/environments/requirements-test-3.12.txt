@@ -12,7 +12,7 @@ pluggy==1.6.0
     # via pytest
 pygments==2.19.2
     # via pytest
-pytest==8.4.2
+pytest==9.0.1
     # via -r requirements-test.in
 scipy==1.16.3
     # via -r requirements-test.in
