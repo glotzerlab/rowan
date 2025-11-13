@@ -174,10 +174,10 @@ class SymmetricallyEquivalentQuaternions(np.ndarray):
             return cls(data=generate_octahedral_group(), group=group)
         if group == "I":
             return cls(data=generate_icosahedral_group(), group=group)
-        # if group[0] == "C":
-        #     return cls(
-        #         data=generate_cyclic_group(int(group[1:]), axis=axis), group=group
-        #     )
+        if group[0] == "C":
+            return cls(
+                data=generate_cyclic_group(int(group[1:]), axis=[0, 0, 1]), group=group
+            )
         msg = (
             f"Unknown group '{group}' does not match valid options "
             "{{'T', 'O', 'I'}}"
