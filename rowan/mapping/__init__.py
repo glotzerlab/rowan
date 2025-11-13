@@ -59,7 +59,12 @@ import numpy as np
 from ..functions import from_matrix, rotate, to_matrix
 from ..geometry import angle
 
-__all__ = ["kabsch", "davenport", "procrustes", "icp"]
+__all__ = [
+    "kabsch",
+    "davenport",
+    "procrustes",
+    "icp",
+]
 
 
 def kabsch(X, Y, require_rotation=True):

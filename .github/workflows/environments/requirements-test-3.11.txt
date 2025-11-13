@@ -2,6 +2,8 @@
 #    uv pip compile --python-version=3.11 requirements-test.in --output-file=requirements-test-3.11.txt
 iniconfig==2.3.0
     # via pytest
+more-itertools==10.8.0
+    # via -r requirements-test.in
 numpy==2.3.4
     # via
     #   -r requirements-test.in
