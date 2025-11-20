@@ -2,7 +2,7 @@
 #    uv pip compile --python-version=3.11 requirements-test.in --output-file=requirements-test-3.11.txt
 iniconfig==2.3.0
     # via pytest
-numpy==2.3.4
+numpy==2.3.5
     # via
     #   -r requirements-test.in
     #   scipy
