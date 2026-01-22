@@ -8,7 +8,7 @@ numpy==2.2.6
     # via
     #   -r requirements-test.in
     #   scipy
-packaging==25.0
+packaging==26.0
     # via pytest
 pluggy==1.6.0
     # via pytest
