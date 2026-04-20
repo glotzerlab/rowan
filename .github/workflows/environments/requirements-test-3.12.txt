@@ -2,15 +2,15 @@
 #    uv pip compile --python-version=3.12 requirements-test.in --output-file=requirements-test-3.12.txt
 iniconfig==2.3.0
     # via pytest
-numpy==2.4.3
+numpy==2.4.4
     # via
     #   -r requirements-test.in
     #   scipy
-packaging==26.0
+packaging==26.1
     # via pytest
 pluggy==1.6.0
     # via pytest
-pygments==2.19.2
+pygments==2.20.0
     # via pytest
 pytest==9.0.3
     # via -r requirements-test.in
