@@ -57,36 +57,3 @@ def quaternion_fibonacci_lattice(n):
     result = np.empty((4, n))
     result[...] = r0 * np.sin(α), r0 * np.cos(α), r1 * np.sin(β), r1 * np.cos(β)
     return result.T
-
-
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-    import spatula
-
-    import rowan
-
-    n = 2000
-    q = quaternion_fibonacci_lattice(n)
-
-    dists = rowan.geometry.sym_intrinsic_distance(q, q[:, None])
-    dists[np.diag_indices(n)] = np.nan
-
-    fig, ax = plt.subplots(1, 3, figsize=(12, 3), sharex=True, sharey=False)
-    # , subplot_kw={"projection": "3d"})
-
-    print(dists[np.isfinite(dists)])
-    ax[0].hist(np.nanmedian(dists, axis=0), bins=64, density=True, color="#71618D")
-    ax[0].set(title="Median Distance (Fib)", yticks=[])
-
-    qlat = spatula.optimize.Mesh.from_grid(n_axes=100, n_angles=20)._points
-    latists = rowan.geometry.sym_intrinsic_distance(qlat, qlat[:, None])
-    latists[np.diag_indices(n)] = np.nan
-    ax[1].hist(np.nanmedian(latists, axis=0), bins=64, density=True, color="#71618D")
-    ax[1].set(title="Median Distance (Tammes)", yticks=[])
-
-    qrand = rowan.random.rand(n)
-    randists = rowan.geometry.sym_intrinsic_distance(qrand, qrand[:, None])
-    randists[np.diag_indices(n)] = np.nan
-    ax[2].hist(np.nanmedian(randists, axis=0), bins=64, density=True, color="#71618D")
-    ax[2].set(title="Median Distance (rand)", yticks=[])
-    plt.show()
