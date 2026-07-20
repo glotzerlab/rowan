@@ -4,15 +4,15 @@ alabaster==1.0.0
     # via sphinx
 babel==2.18.0
     # via sphinx
-certifi==2026.5.20
+certifi==2026.6.17
     # via requests
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
     # via requests
 docutils==0.22.4
     # via
     #   sphinx
     #   sphinx-rtd-theme
-idna==3.16
+idna==3.18
     # via requests
 imagesize==2.0.0
     # via sphinx
@@ -28,7 +28,7 @@ requests==2.34.2
     # via sphinx
 roman-numerals==4.1.0
     # via sphinx
-snowballstemmer==3.1.0
+snowballstemmer==3.1.1
     # via sphinx
 sphinx==9.1.0
     # via
