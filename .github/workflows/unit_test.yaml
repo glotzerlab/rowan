@@ -20,7 +20,7 @@ defaults:
 jobs:
   unit_test:
     name: Unit test [py${{ matrix.python }}]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
@@ -45,7 +45,7 @@ jobs:
     name: Unit test
     if: always()
     needs: [unit_test]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     steps:
     - run: jq --exit-status 'all(.result == "success")' <<< '${{ toJson(needs) }}'
